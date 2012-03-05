@@ -1,0 +1,112 @@
+﻿using System;
+using System.IO;
+using AsteroidOutpost.Entities;
+using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Networking;
+using AsteroidOutpost.Screens;
+
+namespace AsteroidOutpost
+{
+	// May the
+	public class Force : ISerializable
+	{
+		// be with you
+
+		protected AsteroidOutpostScreen theGame;
+
+		private int id = -1;
+		private int minerals;
+		private Team team;
+
+		[EventReplication(EventReplication.ServerToClients)]
+		public event Action<ForceMineralsChangedEventArgs> MineralsChangedEvent;
+
+
+		public Force(AsteroidOutpostScreen theGame, int theID, int initialMinerals, Team theTeam)
+		{
+			this.theGame = theGame;
+			id = theID;
+			minerals = Math.Max(initialMinerals, 0);
+			team = theTeam;
+		}
+
+
+		public Force(BinaryReader br)
+		{
+			id = br.ReadInt32();
+			minerals = br.ReadInt32();
+			team = (Team)br.ReadInt32();
+		}
+
+		public void Serialize(BinaryWriter bw)
+		{
+			bw.Write(id);
+			bw.Write(minerals);
+			bw.Write((int)team);
+		}
+
+
+		/// <summary>
+		/// After deserializing, this should be called to link this object to other objects
+		/// </summary>
+		/// <param name="theGame"></param>
+		public void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		{
+			this.theGame = theGame;
+		}
+
+
+		public void SetMinerals(int value)
+		{
+			SetMinerals(value, theGame.IsServer);
+		}
+
+		public void SetMinerals(int value, bool authoritative)
+		{
+			if(!authoritative)
+			{
+				return;
+			}
+
+
+			int delta = value - minerals;
+			minerals = value;
+			if (minerals < 0) { minerals = 0; }
+
+			if (MineralsChangedEvent != null && delta != 0)
+			{
+				MineralsChangedEvent(new ForceMineralsChangedEventArgs(this, minerals, delta));
+			}
+		}
+
+		public int GetMinerals()
+		{
+			return minerals;
+		}
+
+		
+		public Team Team
+		{
+			get { return team; }
+		}
+
+
+		/// <summary>
+		/// Gets the Force's ID
+		/// </summary>
+		public int ID
+		{
+			get { return id; }
+		}
+	}
+
+	
+	public enum Team
+	{
+		Team1,
+		Team2,
+		AI,
+		Neutral
+	}
+	
+}

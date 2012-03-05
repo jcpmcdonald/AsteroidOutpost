@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectGuid>{3E84C120-1C2F-4F21-A1F9-63A18FFC30A6}</ProjectGuid>
+    <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AsteroidOutpost</RootNamespace>
+    <AssemblyName>Asteroid Outpost</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
+    <XnaPlatform>Windows</XnaPlatform>
+    <XnaCrossPlatformGroupID>9317c71b-38c1-4bd9-a915-1104b64b84ff</XnaCrossPlatformGroupID>
+    <ApplicationIcon>Game.ico</ApplicationIcon>
+    <Thumbnail>GameThumbnail.png</Thumbnail>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ManifestCertificateThumbprint>C287112DE165DE9456E3BA60B9FF5144F070EC27</ManifestCertificateThumbprint>
+    <ManifestKeyFile>AsteroidDefense_TemporaryKey.pfx</ManifestKeyFile>
+    <GenerateManifests>false</GenerateManifests>
+    <SignManifests>false</SignManifests>
+    <TargetZone>LocalIntranet</TargetZone>
+    <XnaUpgrade>
+    </XnaUpgrade>
+    <XnaOutputType>Game</XnaOutputType>
+    <XnaProfile>HiDef</XnaProfile>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>WorkingDirectory\binDebug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;WINDOWS UNLIMITED_FPS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>false</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>WorkingDirectory\bin\</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>True</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Monitor 2|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>WorkingDirectory\binDebugMonitor2\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;WINDOWS UNLIMITED_FPS</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\x86\Debug\AsteroidOutpost.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>AsteroidOutpost.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Input.Touch, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="mscorlib">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actor.cs" />
+    <Compile Include="AIActor.cs" />
+    <Compile Include="Entities\Accumulator.cs" />
+    <Compile Include="Entities\Beacon.cs" />
+    <Compile Include="Entities\Component.cs" />
+    <Compile Include="Entities\HitPoints.cs" />
+    <Compile Include="Entities\PositionOffset.cs" />
+    <Compile Include="Entities\ProgressBar.cs" />
+    <Compile Include="IQuantifiable.cs" />
+    <Compile Include="Entities\Eventing\LocalEvents.cs" />
+    <Compile Include="Entities\Eventing\ReflectiveEvents.cs" />
+    <Compile Include="Entities\FloatingText.cs" />
+    <Compile Include="Entities\FreeText.cs" />
+    <Compile Include="Entities\IUpdatable.cs" />
+    <Compile Include="Entities\Position.cs" />
+    <Compile Include="Entities\Ring.cs" />
+    <Compile Include="Entities\Radius.cs" />
+    <Compile Include="GlobalRandom.cs" />
+    <Compile Include="IActorIDProvider.cs" />
+    <Compile Include="ICanKillSelf.cs" />
+    <Compile Include="IComponentList.cs" />
+    <Compile Include="IPowerGridNode.cs" />
+    <Compile Include="IPowerProducer.cs" />
+    <Compile Include="Entities\Linker.cs" />
+    <Compile Include="Networking\AOReflectiveIncomingMessage.cs" />
+    <Compile Include="Networking\AOReflectiveOutgoingMessage.cs" />
+    <Compile Include="Networking\ClientJoinedGameHandlerArgs.cs" />
+    <Compile Include="Networking\IReflectionTarget.cs" />
+    <Compile Include="Networking\ISerializable.cs" />
+    <Compile Include="Networking\EventReplicationAttribute.cs" />
+    <Compile Include="Networking\ClientConnectedHandlerArgs.cs" />
+    <Compile Include="Networking\ReflectiveEventArgs.cs" />
+    <Compile Include="PowerGrid.cs" />
+    <Compile Include="Entities\PowerLinker.cs" />
+    <Compile Include="Scenarios\RandomScenario.cs" />
+    <Compile Include="Scenarios\Scenario.cs" />
+    <Compile Include="Scenarios\TutorialScenario.cs" />
+    <Compile Include="Screens\AsteroidOutpostScreen.cs" />
+    <Compile Include="Screens\Credits\CreditsScreen.cs" />
+    <Compile Include="Screens\Credits\ExplodingWord.cs" />
+    <Compile Include="Screens\Credits\MovableCharacter.cs" />
+    <Compile Include="Screens\HeadsUpDisplay\Console.cs" />
+    <Compile Include="Screens\HeadsUpDisplay\AOHUD.cs" />
+    <Compile Include="Screens\HeadsUpDisplay\SelectionInfo.cs" />
+    <Compile Include="Entities\Structures\ConstructableEntity.cs" />
+    <Compile Include="Entities\Structures\LaserTower.cs" />
+    <Compile Include="Entities\Structures\Miner.cs" />
+    <Compile Include="Entities\Units\Ship.cs" />
+    <Compile Include="Entities\Units\Ship1.cs" />
+    <Compile Include="Entities\Upgrade.cs" />
+    <Compile Include="Entities\Weapons\Laser.cs" />
+    <Compile Include="Entities\Weapons\Weapon.cs" />
+    <Compile Include="Force.cs" />
+    <Compile Include="Networking\AOIncomingMessage.cs" />
+    <Compile Include="Networking\AONetwork.cs" />
+    <Compile Include="Networking\BinaryStreamExtensions.cs" />
+    <Compile Include="Networking\AOOutgoingMessage.cs" />
+    <Compile Include="Networking\Network.cs" />
+    <Compile Include="Screens\LayeredStarField.cs" />
+    <Compile Include="Screens\LobbyScreen.cs" />
+    <Compile Include="Screens\LobbyScreen.Designer.cs">
+      <DependentUpon>LobbyScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\MainMenuScreen.cs" />
+    <Compile Include="Screens\AOMenuScreen.cs" />
+    <Compile Include="Screens\MainMenuScreen.Designer.cs">
+      <DependentUpon>MainMenuScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\MissionSelectScreen.cs" />
+    <Compile Include="Screens\MissionSelectScreen.Designer.cs">
+      <DependentUpon>MissionSelectScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\ServerBrowserScreen.cs" />
+    <Compile Include="Screens\ServerBrowserScreen.Designer.cs">
+      <DependentUpon>ServerBrowserScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\ServerHostScreen.cs" />
+    <Compile Include="Screens\ServerHostScreen.Designer.cs">
+      <DependentUpon>ServerHostScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
+    <Compile Include="Screens\StarField.cs" />
+    <Compile Include="TextureDictionary.cs" />
+    <Compile Include="Screens\HeadsUpDisplay\Radar.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="AOGame.cs" />
+    <Compile Include="Entities\Animation.cs" />
+    <Compile Include="Entities\AnimationSet.cs" />
+    <Compile Include="Entities\IMappable.cs" />
+    <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\Structures\Asteroid.cs" />
+    <Compile Include="Entities\Structures\LaserMiner.cs" />
+    <Compile Include="Entities\Structures\PowerNode.cs" />
+    <Compile Include="Entities\Structures\SolarStation.cs" />
+    <Compile Include="WaveFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Game.ico" />
+    <Content Include="GameThumbnail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <NestedContentProject Include="Content\Content.contentproj">
+      <Project>d5e6c1be-ddf9-4fe0-9adf-7957db9bc883</Project>
+      <Visible>False</Visible>
+    </NestedContentProject>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Xna.Framework.3.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft XNA Framework Redistributable 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Xna.Framework.4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft XNA Framework Redistributable 4.0</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AsteroidOutpostUML.cd" />
+    <None Include="Properties\app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Primitives2D\Primitives2D.csproj">
+      <Project>{39AD1482-1881-4852-A05D-DC61B0D3446A}</Project>
+      <Name>Primitives2D</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QuadTree\QuadTree.csproj">
+      <Project>{FE3B63BD-7671-43EA-B2CA-04BAC399FEB9}</Project>
+      <Name>QuadTree</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XNAHUD\XNAHUD.csproj">
+      <Project>{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}</Project>
+      <Name>XNAHUD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XNASpriteLib\XNASpriteLib.csproj">
+      <Project>{1C2746A5-941A-45A4-88ED-149ACED08984}</Project>
+      <Name>XNASpriteLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="Content\Asteroid OutpostContent.contentproj">
+      <Project>{D5E6C1BE-DDF9-4FE0-9ADF-7957DB9BC883}</Project>
+      <Name>Asteroid OutpostContent %28Content%29</Name>
+      <XnaReferenceType>Content</XnaReferenceType>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

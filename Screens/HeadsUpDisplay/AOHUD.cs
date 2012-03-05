@@ -1,0 +1,1036 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using AsteroidOutpost.Entities;
+using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Entities.Structures;
+using C3.XNA;
+using C3.XNA.Controls;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using AsteroidOutpost.Entities.Units;
+using System.Diagnostics;
+using Microsoft.Xna.Framework.Input;
+
+
+namespace AsteroidOutpost.Screens.HeadsUpDisplay
+{
+	/// <summary>
+	/// The HUD is how the user interacts with the game
+	/// </summary>
+	public class AOHUD : HUD, IComponentList
+	{
+		
+		Vector2 focusWorldPoint;
+		Vector2? middleMouseGrabPoint;
+		ConstructableEntity creating;				// Are they creating an entity?
+
+
+		readonly List<Entity> selectedEntities = new List<Entity>();
+		public event Action<MultiEntityEventArgs> SelectionChanged;
+
+
+		private readonly AsteroidOutpostScreen theGame;
+		private float scaleFactor = 1.0f;			// 1.0 = no scaling, 0.5 = zoomed in, 2.0 = zoomed out
+		private float desiredScaleFactor = 1.0f;
+
+		// These are entities that are drawn in the HUD layer
+		private readonly List<Component> components = new List<Component>(10);
+
+		private Form inGameMenu;
+		private Actor localActor;
+		private bool isDraggingScreen;
+
+
+		private Dictionary<Keys, EventHandler> hotkeys = new Dictionary<Keys, EventHandler>();
+
+
+		private SoundEffect constructionSound;
+
+
+		// Local event only
+		//public event EntityEventHandler StartedConstructionEvent;
+		public event Action<EntityEventArgs> CancelledConstructionEvent;
+
+
+		/// <summary>
+		/// Construct a HUD
+		/// </summary>
+		/// <param name="theScreenManager">The screenManager that </param>
+		/// <param name="gameScreen">A reference to the game object</param>
+		public AOHUD(ScreenManager theScreenManager, AsteroidOutpostScreen gameScreen)
+			: base(theScreenManager)
+		{
+			theGame = gameScreen;
+		}
+
+
+		/// <summary>
+		/// LoadContent will be called once per game and is the place to load all of your content.
+		/// </summary>
+		/// <param name="spriteBatch">The related sprite batch</param>
+		/// <param name="content">The content manager to load your content with</param>
+		public override void LoadContent(SpriteBatch spriteBatch, ContentManager content)
+		{
+			TextureDictionary.Add("Cursor");
+			TextureDictionary.Add("HUD");
+			TextureDictionary.Add("Buttons");
+
+			constructionSound = content.Load<SoundEffect>(@"Sound Effects\BuildStructure");
+
+			Form radarPanel = CreateRadarPanel(0, ScreenMan.Viewport.Height - 220);
+			//createConstuctionPanel(0, (int)radarPanel.LocationAbs.Y - 220);				// Only make this when I have an actor
+			CreateSelectionInfoPanel(radarPanel.Width, ScreenMan.Viewport.Height - 150);
+			inGameMenu = CreateInGameMenu((ScreenMan.Viewport.Width / 2) - 65, (ScreenMan.Viewport.Height / 2) - 50);
+
+			base.LoadContent(spriteBatch, content);
+		}
+
+
+		public void AddComponent(Component component)
+		{
+			components.Add(component);
+		}
+
+
+		/// <summary>
+		/// Looks up a component by ID
+		/// This method is thread safe
+		/// </summary>
+		/// <param name="id">The ID to look up</param>
+		/// <returns>The component with the given ID, or null if the entity is not found</returns>
+		public Component GetComponent(int id)
+		{
+			// I don't think this method should ever be called locally because none of the entities here will have IDs
+			Debugger.Break();
+			return null;
+		}
+
+		#region Create Panels
+
+		/// <summary>
+		/// Create the Radar in its own panel
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		private Form CreateRadarPanel(int x, int y)
+		{
+			Form radarPanel = new Form("Radar", x, y, 200, 220);
+			Radar radar = new Radar(theGame, this, 0, 0, 200, 200);
+			radarPanel.AddControl(radar);
+
+			AddControl(radarPanel);
+			return radarPanel;
+		}
+
+
+
+		/// <summary>
+		/// Create the construction panel and related buttons
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		private Form CreateConstuctionPanel(int x, int y)
+		{
+			Form constructionPanel = new Form("Construction Menu", x, y, 150, 150);
+			Button btnPower = new Button("Power", 5, 5, 140, 20);
+			Button btnPowerNode = new Button("Power Node", 5, 35, 140, 20);
+			Button btnMiner = new Button("Miner", 5, 65, 140, 20);
+			Button btnLaserTower = new Button("Laser Tower", 5, 95, 140, 20);
+
+			// Attach the button handlers
+			btnPower.Click += btnPower_Clicked;
+			btnPowerNode.Click += btnPowerNode_Clicked;
+			btnMiner.Click += btnMiner_Clicked;
+			btnLaserTower.Click += btnLaserTower_Clicked;
+
+			// Set up some hotkeys
+			hotkeys.Add(Keys.P, btnPower_Clicked);
+			hotkeys.Add(Keys.N, btnPowerNode_Clicked);
+			hotkeys.Add(Keys.M, btnMiner_Clicked);
+			hotkeys.Add(Keys.L, btnLaserTower_Clicked);
+
+			// Add the buttons to the construction panel
+			constructionPanel.AddControl(btnPower);
+			constructionPanel.AddControl(btnPowerNode);
+			constructionPanel.AddControl(btnMiner);
+			constructionPanel.AddControl(btnLaserTower);
+
+			AddControl(constructionPanel);
+			return constructionPanel;
+		}
+
+
+		/// <summary>
+		/// Create the selection info in its own panel
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
+		private Form CreateSelectionInfoPanel(int x, int y)
+		{
+			Form selectionPanel = new Form("Selection Info", x, y, 700, 150);
+			SelectionInfo selectionInfo = new SelectionInfo(theGame, 5, 5, 690, 120, this, selectedEntities);
+			selectionPanel.AddControl(selectionInfo);
+
+			AddControl(selectionPanel);
+			return selectionPanel;
+		}
+
+
+		/// <summary>
+		/// Create the in-game menu and related buttons
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <returns></returns>
+		private Form CreateInGameMenu(int x, int y)
+		{
+			Form gameMenu = new Form("In-Game Menu", x, y, 130, 80);
+			Button btnExitGame = new Button("Exit Game", 5, 5, 120, 20);
+			Button btnCloseInGameMenu = new Button("Cancel", 5, 35, 120, 20);
+
+			btnExitGame.Click += btnExitGame_Clicked;
+			btnCloseInGameMenu.Click += btnCloseInGameMenu_Clicked;
+
+			gameMenu.Visible = false;
+			gameMenu.AddControl(btnExitGame);
+			gameMenu.AddControl(btnCloseInGameMenu);
+
+			AddControl(gameMenu);
+			return gameMenu;
+		}
+
+		#endregion
+
+
+		void btnCloseInGameMenu_Clicked(object sender, EventArgs e)
+		{
+			inGameMenu.Visible = false;
+			theGame.Paused = false;
+		}
+
+
+		void btnExitGame_Clicked(object sender, EventArgs e)
+		{
+			//exitRequested = true;
+			ScreenMan.Exit();
+		}
+
+
+		/// <summary>
+		/// Update the Screen status.
+		/// </summary>
+		/// <param name="deltaTime">The game time</param>
+		/// <param name="theMouse"></param>
+		/// <param name="theKeyboard"></param>
+		public override void Update(TimeSpan deltaTime, EnhancedMouseState theMouse, EnhancedKeyboardState theKeyboard)
+		{
+			base.Update(deltaTime, theMouse, theKeyboard);
+
+
+			if (theMouse.ScrollWheelDelta != 0)
+			{
+				ScaleFactor = desiredScaleFactor + (theMouse.ScrollWheelDelta / 120.0f) * (scaleFactor * -0.2f);
+			}
+			else if (scaleFactor != desiredScaleFactor)
+			{
+				// Smooth the zooming in and out
+				float absDiff = Math.Abs(scaleFactor - desiredScaleFactor);
+				float scaleDelta = absDiff * 5.0f * (float)deltaTime.TotalSeconds;
+
+				Vector2 zoomPointWorldBefore = ScreenToWorld(theMouse.X, theMouse.Y);
+
+				if (absDiff < (0.001 * desiredScaleFactor) ||
+					(scaleFactor > desiredScaleFactor && (scaleFactor - scaleDelta) < desiredScaleFactor) ||
+					(scaleFactor < desiredScaleFactor && (scaleFactor + scaleDelta) > desiredScaleFactor))
+				{
+					scaleFactor = desiredScaleFactor;
+				}
+				else if(scaleFactor > desiredScaleFactor)
+				{
+					scaleFactor -= scaleDelta;
+				}
+				else
+				{
+					scaleFactor += scaleDelta;
+				}
+
+				// Make your mouse focus on the same point before and after the zoom for some awesome (yet trippy) zooming
+				Vector2 zoomPointWorldAfter = ScreenToWorld(theMouse.X, theMouse.Y);
+				focusWorldPoint -= zoomPointWorldAfter - zoomPointWorldBefore;
+
+			}
+
+
+			// Take a screenshot
+			if (theKeyboard[Keys.F12] == EnhancedKeyState.JUST_RELEASED)
+			{
+				ScreenMan.TakeScreenshot();
+			}
+
+
+			if (theKeyboard[Keys.Escape] == EnhancedKeyState.JUST_PRESSED)
+			{
+				if (creating != null)
+				{
+					CancelConstruction();
+				}
+				else
+				{
+					// Pause/Unpause the game
+					theGame.Paused = !theGame.Paused;
+					inGameMenu.Visible = !inGameMenu.Visible;
+					GiveFocus(inGameMenu);
+				}
+			}
+
+
+			// Handle the hotkeys
+			foreach(Keys pressed in theKeyboard.GetJustPressedKeys())
+			{
+				if(hotkeys.ContainsKey(pressed))
+				{
+					hotkeys[pressed](this, EventArgs.Empty);
+				}
+			}
+
+
+#if DEBUG
+			// Make a new bad guy when a key is pressed for debugging
+			if (theKeyboard[Keys.F8] == EnhancedKeyState.JUST_RELEASED)
+			{
+				Actor aiActor = null;
+				foreach (Actor actor in theGame.Actors)
+				{
+					if (actor.Role == ActorRole.AI)
+					{
+						aiActor = actor;
+						break;
+					}
+				}
+				
+				Debug.Assert(aiActor != null, "There is no AI actor in the game");
+				// Allow them to ignore the assert without crashing the game
+				// ReSharper disable ConditionIsAlwaysTrueOrFalse
+				if (aiActor != null)
+				// ReSharper restore ConditionIsAlwaysTrueOrFalse
+				{
+					//theGame.AddComponent(new Ship1(aiActor.PrimaryForce, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f) + new Vector2(1600, -10600)));
+					theGame.AddComponent(new Ship1(theGame, theGame, aiActor.PrimaryForce, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f) + new Vector2(600, -600)));
+				}
+			}
+#endif
+
+
+			// Move the current creating
+			if(creating != null)
+			{
+				// Update the creating entity to be be where the mouse is
+				creating.Position.Center = ScreenToWorld(theMouse.X, theMouse.Y);
+			}
+			
+			
+			// Move the screen
+			if (isDraggingScreen && theMouse.MiddleButton == EnhancedButtonState.PRESSED)
+			{
+				// Let them grab  the screen with the middle mouse button
+				if(middleMouseGrabPoint == null)
+				{
+					// Store the map location of the grab
+					//middleMouseGrabPoint = ScreenToWorld(mouse.X, mouse.Y);
+				}
+				else
+				{
+					// Move the focus screen such that the mouse will be above their grab point
+					Vector2 diff = Vector2.Subtract(middleMouseGrabPoint.Value, ScreenToWorld(theMouse.X, theMouse.Y));
+					focusWorldPoint = Vector2.Add(diff, focusWorldPoint);
+				}
+			}
+			else
+			{
+				//middleMouseGrabPoint = null;
+				
+				
+				// Move the screen if they move the mouse to the edge, or press the arrow keys
+				double screenMovementRate = 0.450 * scaleFactor;			// * 1000 = pixels/second
+				if ((theMouse.X >= 0 && theMouse.X < 15) || theKeyboard.IsKeyDown(Keys.Left))
+				{
+					focusWorldPoint.X -= (float)(screenMovementRate * deltaTime.TotalMilliseconds);
+				}
+				else if ((theMouse.X > size.Width - 15 && theMouse.X <= size.Width) || theKeyboard.IsKeyDown(Keys.Right))
+				{
+					focusWorldPoint.X += (float)(screenMovementRate * deltaTime.TotalMilliseconds);
+				}
+				if ((theMouse.Y >= 0 && theMouse.Y < 15) || theKeyboard.IsKeyDown(Keys.Up))
+				{
+					focusWorldPoint.Y -= (float)(screenMovementRate * deltaTime.TotalMilliseconds);
+				}
+				else if ((theMouse.Y > size.Height - 15 && theMouse.Y <= size.Height) || theKeyboard.IsKeyDown(Keys.Down))
+				{
+					focusWorldPoint.Y += (float)(screenMovementRate * deltaTime.TotalMilliseconds);
+				}
+			}
+
+
+			if (!theGame.Paused)
+			{
+				// Update the entities
+				List<Component> deleteList = new List<Component>();
+				// TODO: This should not require a regular for loop, and I should not be modifying the component list during this loop
+				for (int index = 0; index < components.Count; index++)
+				{
+					var component = components[index];
+					if (!component.IsDead())
+					{
+						component.Update(deltaTime);
+					}
+					if (component.IsDead())
+					{
+						deleteList.Add(component);
+					}
+				}
+
+				// Delete any entities that need to be deleted
+				foreach (var entity in deleteList)
+				{
+					components.Remove(entity);
+				}
+			}
+		}
+
+
+		private void CancelConstruction()
+		{
+			if (CancelledConstructionEvent != null)
+			{
+				CancelledConstructionEvent(new EntityEventArgs(creating));
+			}
+			
+			// Cancel whatever they are creating
+			creating = null;
+		}
+
+
+		/// <summary>
+		/// Draw the back of the selection circle around each of the selected entities
+		/// </summary>
+		/// <param name="spriteBatch">The sprite batch to use</param>
+		/// <param name="tint">The color to tint this</param>
+		private void DrawSelectionCirclesBack(SpriteBatch spriteBatch, Color tint)
+		{
+			foreach (Entity selectedEntity in selectedEntities)
+			{
+				if (scaleFactor < 2)
+				{
+					float sizeRatio = ((selectedEntity.Radius.Value) / 45f);
+					spriteBatch.Draw(TextureDictionary.Get("ellipse50back"),
+					                 theGame.WorldToScreen(selectedEntity.Position.Center - (new Vector2(60, 60) * sizeRatio)),
+					                 null,
+					                 ColorPalette.ApplyTint(Color.Green, tint),
+					                 0,
+					                 Vector2.Zero,
+					                 sizeRatio / theGame.ScaleFactor,
+					                 SpriteEffects.None,
+					                 0);
+				}
+				else if(scaleFactor < 4)
+				{
+					float sizeRatio = ((selectedEntity.Radius.Value) / 45f) * 2;
+					spriteBatch.Draw(TextureDictionary.Get("ellipse25back"),
+					                 theGame.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
+					                 null,
+					                 ColorPalette.ApplyTint(Color.Green, tint),
+					                 0,
+					                 Vector2.Zero,
+					                 sizeRatio / theGame.ScaleFactor,
+					                 SpriteEffects.None,
+					                 0);
+				}
+				else
+				{
+				}
+			}
+		}
+
+
+		/// <summary>
+		/// Draw the front of the selection circle around each of the selected entities
+		/// </summary>
+		/// <param name="spriteBatch">The sprite batch to use</param>
+		/// <param name="tint">The color to tint this</param>
+		private void DrawSelectionCirclesFront(SpriteBatch spriteBatch, Color tint)
+		{
+			foreach (Entity selectedEntity in selectedEntities)
+			{
+				if (scaleFactor < 2)
+				{
+					float sizeRatio = ((selectedEntity.Radius.Value) / 45f);
+					spriteBatch.Draw(TextureDictionary.Get("ellipse50front"),
+					                 theGame.WorldToScreen(selectedEntity.Position.Center - (new Vector2(60, 60) * sizeRatio)),
+					                 null,
+					                 ColorPalette.ApplyTint(Color.Green, tint),
+					                 0,
+					                 Vector2.Zero,
+					                 sizeRatio / theGame.ScaleFactor,
+					                 SpriteEffects.None,
+					                 0);
+				}
+				else if(scaleFactor < 4)
+				{
+					float sizeRatio = ((selectedEntity.Radius.Value) / 45f) * 2;
+					spriteBatch.Draw(TextureDictionary.Get("ellipse25front"),
+					                 theGame.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
+					                 null,
+					                 ColorPalette.ApplyTint(Color.Green, tint),
+					                 0,
+					                 Vector2.Zero,
+					                 sizeRatio / theGame.ScaleFactor,
+					                 SpriteEffects.None,
+					                 0);
+				}
+				else
+				{
+					float sizeRatio = ((selectedEntity.Radius.Value) / 45f) * 2;
+					spriteBatch.Draw(TextureDictionary.Get("ellipse25bold"),
+					                 theGame.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
+					                 null,
+					                 ColorPalette.ApplyTint(Color.Green, tint),
+					                 0,
+					                 Vector2.Zero,
+					                 sizeRatio / theGame.ScaleFactor,
+					                 SpriteEffects.None,
+					                 0);
+				}
+			}
+		}
+
+
+
+		/// <summary>
+		/// Draw the back of the HUD
+		/// </summary>
+		/// <param name="spriteBatch">The sprite batch to use</param>
+		/// <param name="tint">The color to tint this</param>
+		public void DrawBack(SpriteBatch spriteBatch, Color tint)
+		{
+			DrawSelectionCirclesBack(spriteBatch, tint);
+		}
+		
+		
+		/// <summary>
+		/// Draw the front of the HUD
+		/// </summary>
+		/// <param name="spriteBatch">The sprite batch to use</param>
+		/// <param name="tint">The color to tint this</param>
+		public void DrawFront(SpriteBatch spriteBatch, Color tint)
+		{
+
+			foreach (var entity in components)
+			{
+				entity.Draw(spriteBatch, 1, tint);
+			}
+
+			DrawSelectionCirclesFront(spriteBatch, tint);
+
+			if(creating != null)
+			{
+				// Draw with a red tint if it's an invalid spot to build
+				if (creating.IsValidToBuildHere())
+				{
+					creating.Draw(spriteBatch, 1, tint);
+				}
+				else
+				{
+					creating.Draw(spriteBatch, 1, ColorPalette.ApplyTint(new Color(255, 50, 50, 255), tint));
+				}
+			}
+
+			if (LocalActor != null)
+			{
+				// TODO: Add these to some kind of control
+				spriteBatch.DrawString(Fonts.ControlFont, "Minerals:", new Vector2(10, 10), ColorPalette.ApplyTint(Color.White, tint), 0.0f, new Vector2(0, 0), 1f, SpriteEffects.None, 0.0f);
+				spriteBatch.DrawString(Fonts.ControlFont, "" + (int)(LocalActor.PrimaryForce.GetMinerals() + 0.5), new Vector2(90, 10), ColorPalette.ApplyTint(Color.Gray, tint), 0.0f, new Vector2(0, 0), 1f, SpriteEffects.None, 0.0f);
+			}
+
+
+			// If we are paused, draw a big "PAUSED" on the screen
+			if (theGame.Paused)
+			{
+				spriteBatch.DrawString(Fonts.ControlFont, "** PAUSED **", new Vector2((size.Width / 2.0f) - 75, size.Height / 5.0f), Color.White);
+			}
+
+
+			base.Draw(spriteBatch, tint);
+			
+			
+#if DEBUG
+			// Draw the current frame rate
+			string str = String.Format("{0} FPS", CurrentFrameRate);
+			spriteBatch.DrawString(Fonts.ControlFont, str, new Vector2(200, 10), ColorPalette.ApplyTint(Color.White, tint), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+#endif
+			
+			// Draw the mouse last (so that it shows up on top)
+			spriteBatch.Draw(TextureDictionary.Get("Cursor"), new Vector2(ScreenMan.Mouse.X - 20, ScreenMan.Mouse.Y - 20), Color.White);
+		}
+		
+		
+		public Vector2 ScreenToWorld(Vector2 point)
+		{
+			return ScreenToWorld(point.X, point.Y);
+		}
+		public Vector2 ScreenToWorld(float x, float y)
+		{
+			float deltaX = x - (size.Width / 2f);
+			float deltaY = y - (size.Height / 2f);
+
+			deltaX = deltaX * scaleFactor / (float)Math.Sqrt(3);
+			deltaY = deltaY * scaleFactor;
+
+			return new Vector2(focusWorldPoint.X + deltaX, focusWorldPoint.Y + deltaY);
+		}
+		
+		
+		public Vector2 WorldToScreen(Vector2 point)
+		{
+			return WorldToScreen(point.X, point.Y);
+		}
+		public Vector2 WorldToScreen(float x, float y)
+		{
+			float deltaX = x - focusWorldPoint.X;
+			float deltaY = y - focusWorldPoint.Y;
+
+			deltaX = deltaX / scaleFactor * (float)Math.Sqrt(3);
+			deltaY = deltaY / scaleFactor;
+
+			return new Vector2(size.Width / 2f + deltaX, size.Height / 2f + deltaY);
+		}
+		
+		
+		
+		public Rectangle FocusScreen
+		{
+			get
+			{
+				Vector2 topLeft = ScreenToWorld(0, 0);
+				Vector2 bottomRight = ScreenToWorld(size.Width, size.Height);
+				
+				return new Rectangle((int)(topLeft.X + 0.5),
+				                     (int)(topLeft.Y + 0.5),
+				                     (int)(bottomRight.X - topLeft.X + 0.5),
+				                     (int)(bottomRight.Y - topLeft.Y + 0.5));
+			}
+		}
+
+		public Vector2 FocusWorldPoint
+		{
+			get
+			{
+				return focusWorldPoint;
+			}
+			set
+			{
+				focusWorldPoint = value;
+			}
+		}
+
+		
+		public Actor LocalActor
+		{
+			get { return localActor; }
+			set
+			{
+				if(value != null)
+				{
+					if(localActor == null)
+					{
+						CreateConstuctionPanel(0, size.Height - 370);
+					}
+					localActor = value;
+				}
+				else
+				{
+					// TODO: Delete the construction panel
+				}
+			}
+		}
+
+		public float ScaleFactor
+		{
+			get
+			{
+				return scaleFactor;
+			}
+			set
+			{
+				if(value <= 0.5f)
+				{
+					//scaleFactor = 0.5f;
+					desiredScaleFactor = 0.5f;
+				}
+				else if (value >= 7.0f)
+				{
+					//scaleFactor = 7.0f;
+					desiredScaleFactor = 7.0f;
+				}
+				else
+				{
+					//scaleFactor = value;
+					desiredScaleFactor = value;
+				}
+			}
+		}
+
+		public float Scale(float value)
+		{
+			return value / scaleFactor;
+		}
+
+		public Vector2 Scale(Vector2 value)
+		{
+			return value / scaleFactor;
+		}
+
+		#region Button Handlers
+
+		private void btnPower_Clicked(object sender, EventArgs e)
+		{
+			if (!theGame.Paused)
+			{
+				if(creating != null)
+				{
+					CancelConstruction();
+				}
+
+				// Create a new power station
+				creating = new SolarStation(theGame, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(ScreenMan.Mouse.X, ScreenMan.Mouse.Y)));
+
+				CreateRangeRingsForConstruction(creating);
+				CreatePowerLinker(creating);
+			}
+		}
+
+
+		private void btnPowerNode_Clicked(object sender, EventArgs e)
+		{
+			if (!theGame.Paused)
+			{
+				if (creating != null)
+				{
+					CancelConstruction();
+				}
+
+				// Create a new power node
+				creating = new PowerNode(theGame, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(ScreenMan.Mouse.X, ScreenMan.Mouse.Y)));
+
+				CreateRangeRingsForConstruction(creating);
+				CreatePowerLinker(creating);
+			}
+		}
+		
+		private void btnMiner_Clicked(object sender, EventArgs e)
+		{
+			if (!theGame.Paused)
+			{
+				if (creating != null)
+				{
+					CancelConstruction();
+				}
+
+				// Create a new power station
+				creating = new LaserMiner(theGame, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(ScreenMan.Mouse.X, ScreenMan.Mouse.Y)));
+
+				CreateRangeRingsForConstruction(creating);
+				CreatePowerLinker(creating);
+
+				LaserMiner laserMiner = creating as LaserMiner;
+				Linker linker = new Linker(theGame, this, localActor.PrimaryForce, creating.Position);
+				linker.Links.Add(new Tuple<Predicate<Entity>, Color, float>(entity => entity is Asteroid, Color.Green, laserMiner.MiningRange));
+
+				CancelledConstructionEvent += linker.KillSelf;
+				//theGame.StructureStartedEventPreAuth += linker.KillSelf;
+				components.Add(linker);
+			}
+		}
+
+		void btnLaserTower_Clicked(object sender, EventArgs e)
+		{
+			if (!theGame.Paused)
+			{
+				if (creating != null)
+				{
+					CancelConstruction();
+				}
+
+				// Create a new power station
+				creating = new LaserTower(theGame, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(ScreenMan.Mouse.X, ScreenMan.Mouse.Y)));
+
+				CreateRangeRingsForConstruction(creating);
+				CreatePowerLinker(creating);
+			}
+		}
+
+
+		private List<ICanKillSelf> CreateRangeRings(ConstructableEntity entity)
+		{
+			var createdSuicidals = new List<ICanKillSelf>(6);
+			var rangeRingDefinitions = new List<Tuple<int, Color, string>>(10);
+			entity.GetRangeRings(ref rangeRingDefinitions);
+
+			foreach (var rangeRingDefinition in rangeRingDefinitions)
+			{
+				Ring ring = new Ring(theGame,
+				                     this,
+				                     LocalActor.PrimaryForce,
+				                     entity.Position,
+				                     rangeRingDefinition.Item1,
+				                     rangeRingDefinition.Item2);
+				components.Add(ring);
+				createdSuicidals.Add(ring);
+
+				PositionOffset positionOffset = new PositionOffset(theGame, this, localActor.PrimaryForce, entity.Position, new Vector2(-25, -rangeRingDefinition.Item1 - 17));
+				FreeText text = new FreeText(theGame,
+				                             this,
+				                             LocalActor.PrimaryForce,
+				                             positionOffset,
+				                             rangeRingDefinition.Item3,
+				                             rangeRingDefinition.Item2);
+				components.Add(positionOffset);
+				components.Add(text);
+				createdSuicidals.Add(text);
+			}
+
+			return createdSuicidals;
+		}
+
+
+		private void CreateRangeRingsForConstruction(ConstructableEntity entity)
+		{
+			foreach (var suicidal in CreateRangeRings(entity))
+			{
+				// TODO: I think these events will continue to hold on to the dying entity long after its dead and it will prevent garbage collection
+				CancelledConstructionEvent += suicidal.KillSelf;
+				//theGame.StructureStartedEventPreAuth += suicidal.KillSelf;
+			}
+		}
+
+
+		private void CreateRangeRingsForSelection(ConstructableEntity entity)
+		{
+			foreach (var suicidal in CreateRangeRings(entity))
+			{
+				// TODO: I think these events will continue to hold on to the dying entity long after its dead and it will prevent garbage collection
+				SelectionChanged += suicidal.KillSelf;
+			}
+		}
+
+
+		private void CreatePowerLinker(ConstructableEntity entity)
+		{
+			PowerLinker powerLinker = new PowerLinker(theGame, this, localActor.PrimaryForce, entity);
+			CancelledConstructionEvent += powerLinker.KillSelf;
+			//theGame.StructureStartedEventPreAuth += powerLinker.KillSelf;
+			components.Add(powerLinker);
+		}
+		
+		#endregion
+
+
+		/// <summary>
+		/// Handle mouse up everywhere except the controls
+		/// </summary>
+		protected override void OnMouseUp(EnhancedMouseState mouse, MouseButton mouseButton, ref bool handled)
+		{
+			bool clickHandled = false;
+
+			if (mouseButton == MouseButton.MIDDLE)
+			{
+				middleMouseGrabPoint = null;
+				isDraggingScreen = false;
+			}
+
+			if (mouseButton == MouseButton.LEFT)
+			{
+
+				if (creating != null)
+				{
+					// Have we just tried to build this guy?
+					if (mouse.LeftButton == EnhancedButtonState.JUST_RELEASED && creating.IsValidToBuildHere())
+					{
+						// Yes, build this now!
+						BuildStructure();
+						clickHandled = true;
+					}
+				}
+
+				if (!clickHandled)
+				{
+					// Did we click on a unit?
+					Vector2 mouseMapCoords = ScreenToWorld(mouse.X, mouse.Y);
+
+					// Grab a possible list of clicked entities by using a square-area search
+					List<Entity> possiblyClickedEntities = theGame.EntitiesInArea(new Rectangle((int)(mouseMapCoords.X + 0.5), (int)(mouseMapCoords.Y + 0.5), 1, 1));
+					foreach (Entity entity in possiblyClickedEntities)
+					{
+						// Make sure the unit was clicked
+						if (entity.Radius.IsIntersecting(mouseMapCoords, 1))
+						{
+							selectedEntities.Clear();
+							selectedEntities.Add(entity);
+							entity.DyingEvent += SelectedEntityDying;
+
+							OnSelectionChanged();
+
+							clickHandled = true;
+						}
+					}
+				}
+
+				if (!clickHandled)
+				{
+					if (selectedEntities.Count > 0)
+					{
+						// Deselect the selected unit(s)
+
+						foreach (Entity entity in selectedEntities)
+						{
+							entity.DyingEvent -= SelectedEntityDying;
+						}
+
+						selectedEntities.Clear();
+
+						OnSelectionChanged();
+					}
+				}
+			}
+		}
+
+
+		private void BuildStructure()
+		{
+			constructionSound.Play(Math.Min(1, theGame.Scale(1f)), 0, 0);
+
+			// Reflectively look up what they are making, and create an other one of the same thing in the game
+			Type creatingType = creating.GetType();
+			ConstructorInfo creatingTypeConstuctructor = creatingType.GetConstructor(new Type[] { typeof(AsteroidOutpostScreen), typeof(IComponentList), typeof(Force), typeof(Vector2) });
+
+			if (creatingTypeConstuctructor == null)
+			{
+				System.Console.WriteLine("Failed to find a constructor for the current constructable! Unable to construct entity");
+				Debugger.Break(); // John, there's a problem with the reflection above. Fix it!
+				return;
+			}
+
+			ConstructableEntity toBuild = (ConstructableEntity)creatingTypeConstuctructor.Invoke(new object[]{theGame, theGame, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(ScreenMan.Mouse.X, ScreenMan.Mouse.Y))});
+
+			toBuild.StartConstruction();
+			theGame.AddComponent(toBuild);
+
+
+			// TODO: Find a better place to put this, but I don't think the LaserMiner should know about this
+			// Maybe add an accumulator definition retriever to the entity? Just like the rings?
+			LaserMiner laserMiner = toBuild as LaserMiner;
+			if (laserMiner != null)
+			{
+				PositionOffset miningAccumPosition = new PositionOffset(theGame,
+				                                                        this,
+				                                                        localActor.PrimaryForce,
+				                                                        laserMiner.Position,
+				                                                        new Vector2(-5, -20));
+				Accumulator miningAccumulator = new Accumulator(theGame,
+				                                                this,
+				                                                localActor.PrimaryForce,
+				                                                miningAccumPosition,
+				                                                new Color(100, 255, 100, 255),
+				                                                450,
+				                                                new Vector2(0, -15),
+				                                                120);
+				laserMiner.AccumulationEvent += miningAccumulator.Accumulate;
+				AddComponent(miningAccumPosition);
+				AddComponent(miningAccumulator);
+			}
+
+			PositionOffset healthAccumPosisiton = new PositionOffset(theGame,
+				                                                        this,
+				                                                        localActor.PrimaryForce,
+				                                                        toBuild.Position,
+				                                                        new Vector2(-5, -20));
+			Accumulator healthAccumulator = new Accumulator(theGame,
+				                                            this,
+				                                            localActor.PrimaryForce,
+				                                            healthAccumPosisiton,
+				                                            new Color(200, 50, 50, 255),
+				                                            450,
+				                                            new Vector2(0, -15),
+				                                            120);
+			toBuild.HitPoints.HitPointsChangedEvent += healthAccumulator.Accumulate;
+			AddComponent(healthAccumPosisiton);
+			AddComponent(healthAccumulator);
+
+			ProgressBar progressBar = new ProgressBar(theGame, this, localActor.PrimaryForce, toBuild.Position, new Vector2(0, toBuild.Radius.Value - 6), toBuild.Radius.Value * 2, 6, Color.Gray, Color.RoyalBlue);
+			progressBar.Max = toBuild.MineralsToConstruct;
+			toBuild.ConstructionProgressChangedEvent += progressBar.SetProgress;
+			toBuild.ConstructionCompletedEvent += progressBar.KillSelf;
+			AddComponent(progressBar);
+
+			ProgressBar healthBar = new ProgressBar(theGame, this, localActor.PrimaryForce, toBuild.Position, new Vector2(0, toBuild.Radius.Value), toBuild.Radius.Value * 2, 6, Color.Gray, Color.Green);
+			healthBar.Max = toBuild.HitPoints.GetTotal();
+			healthBar.Progress = healthBar.Max;
+			toBuild.HitPoints.HitPointsChangedEvent += healthBar.SetProgress;
+			toBuild.HitPoints.DyingEvent += healthBar.KillSelf;
+			AddComponent(healthBar);
+
+
+			if (!ScreenMan.Keyboard.IsKeyDown(Keys.LeftShift) && !ScreenMan.Keyboard.IsKeyDown(Keys.RightShift))
+			{
+				CancelConstruction();
+			}
+		}
+
+
+		protected void OnSelectionChanged()
+		{
+			if (SelectionChanged != null)
+			{
+				SelectionChanged(new MultiEntityEventArgs(selectedEntities));
+			}
+
+			foreach (var selectedEntity in selectedEntities)
+			{
+				ConstructableEntity constructableEntity = selectedEntity as ConstructableEntity;
+				if (constructableEntity != null)
+				{
+					CreateRangeRingsForSelection(constructableEntity);
+				}
+			}
+		}
+
+
+		protected override void OnMouseDown(EnhancedMouseState theMouse, MouseButton theMouseButton, ref bool handled)
+		{
+			// TODO: Start a multi-select, BUT only actually do something about it after they move... lets say 10px away from this location
+			if (theMouseButton == MouseButton.MIDDLE)
+			{
+				isDraggingScreen = true;
+				middleMouseGrabPoint = ScreenToWorld(theMouse.X, theMouse.Y);
+			}
+		}
+
+
+		private void SelectedEntityDying(EntityReflectiveEventArgs e)
+		{
+			// Remove any deleted entities from the selection list
+			Entity dyingEntity = e.Component as Entity;
+			if (dyingEntity != null)
+			{
+				selectedEntities.Remove(dyingEntity);
+				dyingEntity.DyingEvent -= SelectedEntityDying;
+
+				// Tell anyone who is interested in a selection change
+				OnSelectionChanged();
+			}
+		}
+	}
+}

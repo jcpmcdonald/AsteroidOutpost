@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AsteroidOutpost.StarField">
+    <Position X="12.25" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEABAAIAAAgiABAQAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Screens\StarField.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AsteroidOutpost.Entities.Structures.Asteroid">
+    <Position X="22.25" Y="16.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAkAEQCAAKBQAADAEAAAAAAACAQAABAQ=</HashCode>
+      <FileName>Entities\Structures\Asteroid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AsteroidOutpost.Entities.Entity">
+    <Position X="15" Y="10.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>BAQAAAAAAAAAggAggMAAIAQAACgAABAMAEAABACQQEA=</HashCode>
+      <FileName>Entities\Entity.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="animator" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AsteroidOutpost.Entities.Structures.ConstructableEntity">
+    <Position X="18.75" Y="8.75" Width="3" />
+    <AssociationLine Name="allUpgrades" Type="AsteroidOutpost.Entities.Upgrade">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.411" Y="0.372" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="constructedUpgrades" Type="AsteroidOutpost.Entities.Upgrade">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.466" Y="0.187" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>CiYQUAAAgHmOAoAZECAAISNIASECAAIBIECICAAkhBA=</HashCode>
+      <FileName>Entities\Structures\ConstructableEntity.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="currentUpgrade" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="allUpgrades" />
+      <Field Name="constructedUpgrades" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AsteroidOutpost.Entities.Upgrade">
+    <Position X="18.75" Y="3.75" Width="2.5" />
+    <NestedTypes>
+      <Delegate Name="AsteroidOutpost.Entities.Upgrade.UpgradeComplete" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Entities\Upgrade.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIEgAAKAIAAAAAQgAAAEAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Entities\Upgrade.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="prerequisites" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AsteroidOutpost.Entities.Units.Ship">
+    <Position X="22.5" Y="5" Width="1.5" />
+    <AssociationLine Name="target" Type="AsteroidOutpost.Entities.Entity">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.052" Y="0.558" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAQAgAAAAEAAAIBAAACAAACAAIAAAIEAAAAAAAEI=</HashCode>
+      <FileName>Entities\Units\Ship.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="target" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AsteroidOutpost.Entities.Units.Ship1">
+    <Position X="25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAkAAACAAAAQACBQAAINAAAAAACAAAAQ=</HashCode>
+      <FileName>Entities\Units\Ship1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AsteroidOutpost.Entities.Structures.PowerNode">
+    <Position X="25.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAACAgAAACAAAAQAABAAAAAAAAACAAAABAQ=</HashCode>
+      <FileName>Entities\Structures\PowerNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AsteroidOutpost.Entities.Structures.Miner">
+    <Position X="23.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAhCACAAAAAAAAAAAABAA=</HashCode>
+      <FileName>Entities\Structures\Miner.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="nearbyAsteroids" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AsteroidOutpost.Entities.Structures.LaserMiner">
+    <Position X="27.5" Y="13.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAIAQAIAACAgIAAOCIAASIADAQAEAHIEBWAAIQBEQ=</HashCode>
+      <FileName>Entities\Structures\LaserMiner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AsteroidOutpost.Entities.Structures.SolarStation">
+    <Position X="30.25" Y="8.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAECAAICAgAgACgAAAQAADAAAYABAAICAAAABAQ=</HashCode>
+      <FileName>Entities\Structures\SolarStation.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AsteroidOutpost.Networking.AONetwork">
+    <Position X="6.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAghQASAOBEoBKoCIAAAJpgAgQBICQAAIAkRABABYA=</HashCode>
+      <FileName>Networking\AONetwork.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="incomingMessageQueue" />
+      <Field Name="outgoingMessageQueue" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AsteroidOutpost.Networking.AOIncomingMessage">
+    <Position X="3.5" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Networking\AOIncomingMessage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AsteroidOutpost.Networking.AOOutgoingMessage">
+    <Position X="3.5" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Networking\AOOutgoingMessage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AsteroidOutpost.Networking.Network">
+    <Position X="6.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIgAAAAAGAAAEAggAAABAAwAAQEAAAgBAAAEAAAAIA=</HashCode>
+      <FileName>Networking\Network.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AsteroidOutpost.Screens.AsteroidOutpostScreen">
+    <Position X="9.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>UA0gVEgAgAAIgwAgAIoADAACGCQAAAAgBAMgQgYKNTc=</HashCode>
+      <FileName>Screens\AsteroidOutpostScreen.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="starField" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="quadTree" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AsteroidOutpost.Screens.HeadsUpDisplay.AOHUD">
+    <Position X="14.25" Y="24.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAwAQBAABKgIAASgAgasLCEQCAAAQEEBIIAmQAACnBQ=</HashCode>
+      <FileName>Screens\HeadsUpDisplay\AOHUD.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="C3.XNA.Controls.Screen">
+    <Position X="18.25" Y="21.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="C3.XNA.Controls.Form">
+    <Position X="18.75" Y="26" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="AsteroidOutpost.Screens.HeadsUpDisplay.SelectionInfo">
+    <Position X="21" Y="26" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAoAAAgAAAAAACCAAAAAAAAAAAIAAQAAAAAA=</HashCode>
+      <FileName>Screens\HeadsUpDisplay\SelectionInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="C3.XNA.Controls.Container">
+    <Position X="21" Y="22.5" Width="2" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="AsteroidOutpost.Screens.HeadsUpDisplay.Radar" Collapsed="true">
+    <Position X="31.25" Y="23" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgIAAAAAgAAAAAAAAAAABAAAAAAIIAQAAACAAA=</HashCode>
+      <FileName>Screens\HeadsUpDisplay\Radar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="C3.XNA.Controls.TexturedButton" Collapsed="true">
+    <Position X="33.25" Y="24" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="C3.XNA.Controls.Button" Collapsed="true">
+    <Position X="31.25" Y="24" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="C3.XNA.Controls.Control">
+    <Position X="28.75" Y="22.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="C3.XNA.Controls.TextBox" Collapsed="true">
+    <Position X="31.25" Y="27" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="C3.XNA.Controls.HUD" Collapsed="true">
+    <Position X="14.25" Y="23.5" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="C3.XNA.Controls.ListBox">
+    <Position X="23.5" Y="26" Width="2.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="C3.XNA.Controls.ListHeader">
+    <Position X="31.25" Y="28.25" Width="2" />
+    <TypeIdentifier />
+    <ShowAsCollectionAssociation>
+      <Property Name="ColumnHeaders" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="C3.XNA.Controls.ColumnHeader" Collapsed="true">
+    <Position X="34.5" Y="28.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="C3.XNA.Controls.Panel">
+    <Position X="26.5" Y="26" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="XNASpriteLib.SpriteAnimator">
+    <Position X="11.25" Y="8" Width="2.25" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="AsteroidOutpost.Networking.AOReflectiveIncomingMessage">
+    <Position X="1.5" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgQAAAAAAAAAAAAAAAIAQAAAAAKAAAA=</HashCode>
+      <FileName>Networking\AOReflectiveIncomingMessage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AsteroidOutpost.Networking.AOReflectiveOutgoingMessage">
+    <Position X="1.5" Y="18.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAACEAAA=</HashCode>
+      <FileName>Networking\AOReflectiveOutgoingMessage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="C3.XNA.Controls.IListRow">
+    <Position X="23.5" Y="29.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

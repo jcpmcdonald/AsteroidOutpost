@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<sprite name="My" fps="10">
+	<set name="Default" fpsMultiplier="1" />
+	<animation name="Idle">
+		<nextAnimations />
+	</animation>
+	<orientation name="0" />
+	<orientation name="5.625" />
+	<orientation name="11.25" />
+	<orientation name="16.875" />
+	<orientation name="22.5" />
+	<orientation name="28.125" />
+	<orientation name="33.75" />
+	<orientation name="39.375" />
+	<orientation name="45" />
+	<orientation name="50.625" />
+	<orientation name="56.25" />
+	<orientation name="61.875" />
+	<orientation name="67.5" />
+	<orientation name="73.125" />
+	<orientation name="78.75" />
+	<orientation name="84.375" />
+	<orientation name="90" />
+	<orientation name="95.625" />
+	<orientation name="101.25" />
+	<orientation name="106.875" />
+	<orientation name="112.5" />
+	<orientation name="118.125" />
+	<orientation name="123.75" />
+	<orientation name="129.375" />
+	<orientation name="135" />
+	<orientation name="140.625" />
+	<orientation name="146.25" />
+	<orientation name="151.875" />
+	<orientation name="157.5" />
+	<orientation name="163.125" />
+	<orientation name="168.75" />
+	<orientation name="174.375" />
+	<orientation name="180" />
+	<orientation name="185.625" />
+	<orientation name="191.25" />
+	<orientation name="196.875" />
+	<orientation name="202.5" />
+	<orientation name="208.125" />
+	<orientation name="213.75" />
+	<orientation name="219.375" />
+	<orientation name="225" />
+	<orientation name="230.625" />
+	<orientation name="236.25" />
+	<orientation name="241.875" />
+	<orientation name="247.5" />
+	<orientation name="253.125" />
+	<orientation name="258.75" />
+	<orientation name="264.375" />
+	<orientation name="270" />
+	<orientation name="275.625" />
+	<orientation name="281.25" />
+	<orientation name="286.875" />
+	<orientation name="292.5" />
+	<orientation name="298.125" />
+	<orientation name="303.75" />
+	<orientation name="309.375" />
+	<orientation name="315" />
+	<orientation name="320.625" />
+	<orientation name="326.25" />
+	<orientation name="331.875" />
+	<orientation name="337.5" />
+	<orientation name="343.125" />
+	<orientation name="348.75" />
+	<orientation name="354.375" />
+	<sequence set="Default" animation="Idle" orientation="0">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="0" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="5.625">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="150" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="11.25">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="300" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="16.875">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="450" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="22.5">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="600" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="28.125">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="750" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="33.75">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="900" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="39.375">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1050" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="45">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1200" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="50.625">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1350" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="56.25">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1500" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="61.875">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1650" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="67.5">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1800" y="0" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="73.125">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="0" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="78.75">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="150" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="84.375">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="300" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="90">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="450" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="95.625">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="600" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="101.25">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="750" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="106.875">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="900" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="112.5">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1050" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="118.125">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1200" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="123.75">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1350" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="129.375">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1500" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="135">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1650" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="140.625">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1800" y="150" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="146.25">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="0" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="151.875">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="150" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="157.5">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="300" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="163.125">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="450" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="168.75">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="600" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="174.375">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="750" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="180">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="900" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="185.625">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1050" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="191.25">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1200" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="196.875">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1350" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="202.5">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1500" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="208.125">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1650" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="213.75">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1800" y="300" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="219.375">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="0" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="225">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="150" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="230.625">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="300" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="236.25">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="450" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="241.875">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="600" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="247.5">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="750" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="253.125">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="900" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="258.75">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1050" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="264.375">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1200" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="270">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1350" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="275.625">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1500" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="281.25">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1650" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="286.875">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1800" y="450" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="292.5">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="0" y="600" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="298.125">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="150" y="600" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="303.75">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="300" y="600" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="309.375">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="450" y="600" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="315">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="600" y="600" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="320.625">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="750" y="600" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="326.25">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="900" y="600" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="331.875">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1050" y="600" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="337.5">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1200" y="600" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="343.125">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1350" y="600" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="348.75">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1500" y="600" w="150" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="354.375">
+		<frame image="..\Sprites\LaserMiner.png">
+			<anchor x="75" y="75" />
+			<rectangle x="1650" y="600" w="150" h="150" />
+		</frame>
+	</sequence>
+</sprite>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<sprite name="My" fps="10">
+	<set name="Default" fpsMultiplier="1" />
+	<animation name="Idle">
+		<nextAnimations />
+	</animation>
+	<orientation name="0" />
+	<orientation name="11.25" />
+	<orientation name="22.5" />
+	<orientation name="33.75" />
+	<orientation name="45" />
+	<orientation name="56.25" />
+	<orientation name="67.5" />
+	<orientation name="78.75" />
+	<orientation name="90" />
+	<orientation name="101.25" />
+	<orientation name="112.5" />
+	<orientation name="123.75" />
+	<orientation name="135" />
+	<orientation name="146.25" />
+	<orientation name="157.5" />
+	<orientation name="168.75" />
+	<orientation name="180" />
+	<orientation name="191.25" />
+	<orientation name="202.5" />
+	<orientation name="213.75" />
+	<orientation name="225" />
+	<orientation name="236.25" />
+	<orientation name="247.5" />
+	<orientation name="258.75" />
+	<orientation name="270" />
+	<orientation name="281.25" />
+	<orientation name="292.5" />
+	<orientation name="303.75" />
+	<orientation name="315" />
+	<orientation name="326.25" />
+	<orientation name="337.5" />
+	<orientation name="348.75" />
+	<sequence set="Default" animation="Idle" orientation="0">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="0" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="11.25">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="30" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="22.5">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="60" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="33.75">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="90" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="45">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="120" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="56.25">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="150" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="67.5">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="180" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="78.75">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="210" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="90">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="240" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="101.25">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="270" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="112.5">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="300" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="123.75">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="330" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="135">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="360" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="146.25">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="390" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="157.5">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="420" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="168.75">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="450" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="180">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="480" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="191.25">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="510" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="202.5">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="540" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="213.75">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="570" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="225">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="600" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="236.25">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="630" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="247.5">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="660" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="258.75">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="690" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="270">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="720" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="281.25">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="750" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="292.5">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="780" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="303.75">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="810" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="315">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="840" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="326.25">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="870" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="337.5">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="900" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="348.75">
+		<frame image="..\Sprites\LaserTower.png">
+			<anchor x="15" y="75" />
+			<rectangle x="930" y="0" w="30" h="150" />
+		</frame>
+	</sequence>
+</sprite>
