@@ -488,7 +488,7 @@ namespace AsteroidOutpost.Screens
 
 		public void CreatePowerGrid(Force force)
 		{
-			powerGrid.Add(force.ID, new PowerGrid(this, this));
+			powerGrid.Add(force.ID, new PowerGrid(this));
 			if(isServer)
 			{
 				network.EnqueueMessage(new AOReflectiveOutgoingMessage(-2,

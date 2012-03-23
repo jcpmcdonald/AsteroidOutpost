@@ -15,15 +15,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AsteroidOutpost
 {
-	public class PowerGrid : Component
+	public class PowerGrid
 	{
+		private AsteroidOutpostScreen theGame;
+
 		public const int PowerConductingDistance = 220;
 		private readonly Dictionary<IPowerGridNode, List<IPowerGridNode>> powerNodes = new Dictionary<IPowerGridNode, List<IPowerGridNode>>(32);
 
 
-		public PowerGrid(AsteroidOutpostScreen theGame, IComponentList componentList)
-			: base(theGame, componentList)
+		public PowerGrid(AsteroidOutpostScreen theGame)
 		{
+			this.theGame = theGame;
 		}
 
 
