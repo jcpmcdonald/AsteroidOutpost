@@ -169,7 +169,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 		public void SetMineralsLeftToConstruct(float value)
 		{
-			int delta = (int)mineralsLeftToConstruct - (int)Math.Max(value, 0);
+			int delta = (int)Math.Ceiling(mineralsLeftToConstruct) - (int)Math.Max(Math.Ceiling(value), 0);
 			mineralsLeftToConstruct = Math.Max(value, 0);
 			
 			// Tell all my friends
