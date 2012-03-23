@@ -15,7 +15,7 @@ namespace AsteroidOutpost
 		public Settings()
 		{
 			// Load some default values
-			MusicVolume = 0.00f;//0.80f;
+			MusicVolume = 0.0f;//0.80f;
 			DisplayRangeNames = true;
 		}
 

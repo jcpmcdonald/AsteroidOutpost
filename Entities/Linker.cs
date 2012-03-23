@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
@@ -20,8 +21,8 @@ namespace AsteroidOutpost.Entities
 		private List<Tuple<Predicate<Entity>, Color, float>> links = new List<Tuple<Predicate<Entity>, Color, float>>();
 
 
-		public Linker(AsteroidOutpostScreen theGame, IComponentList componentList, Force theOwningForce, Position position)
-			: base(theGame, componentList, theOwningForce)
+		public Linker(AsteroidOutpostScreen theGame, IComponentList componentList, Position position)
+			: base(theGame, componentList)
 		{
 			this.position = position;
 		}

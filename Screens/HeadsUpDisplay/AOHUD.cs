@@ -4,6 +4,7 @@ using System.Reflection;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Entities.Structures;
+using AsteroidOutpost.Interfaces;
 using C3.XNA;
 using C3.XNA.Controls;
 using Microsoft.Xna.Framework;
@@ -52,7 +53,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 		// Local event only
 		//public event EntityEventHandler StartedConstructionEvent;
-		public event Action<EntityEventArgs> CancelledConstructionEvent;
+		public event Action<EntityEventArgs> CancelledCreationEvent;
 
 
 		/// <summary>
@@ -276,7 +277,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			{
 				if (creating != null)
 				{
-					CancelConstruction();
+					OnCancelCreation();
 				}
 				else
 				{
@@ -319,7 +320,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
 				{
 					//theGame.AddComponent(new Ship1(aiActor.PrimaryForce, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f) + new Vector2(1600, -10600)));
-					theGame.AddComponent(new Ship1(theGame, theGame, aiActor.PrimaryForce, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f) + new Vector2(600, -600)));
+					theGame.Add(new Ship1(theGame, theGame, aiActor.PrimaryForce, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f) + new Vector2(600, -600)));
 				}
 			}
 #endif
@@ -402,11 +403,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		}
 
 
-		private void CancelConstruction()
+		private void OnCancelCreation()
 		{
-			if (CancelledConstructionEvent != null)
+			if (CancelledCreationEvent != null)
 			{
-				CancelledConstructionEvent(new EntityEventArgs(creating));
+				CancelledCreationEvent(new EntityEventArgs(creating));
 			}
 			
 			// Cancel whatever they are creating
@@ -701,7 +702,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			{
 				if(creating != null)
 				{
-					CancelConstruction();
+					OnCancelCreation();
 				}
 
 				// Create a new power station
@@ -719,7 +720,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			{
 				if (creating != null)
 				{
-					CancelConstruction();
+					OnCancelCreation();
 				}
 
 				// Create a new power node
@@ -736,7 +737,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			{
 				if (creating != null)
 				{
-					CancelConstruction();
+					OnCancelCreation();
 				}
 
 				// Create a new power station
@@ -746,10 +747,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				CreatePowerLinker(creating);
 
 				LaserMiner laserMiner = creating as LaserMiner;
-				Linker linker = new Linker(theGame, this, localActor.PrimaryForce, creating.Position);
+				Linker linker = new Linker(theGame, this, creating.Position);
 				linker.Links.Add(new Tuple<Predicate<Entity>, Color, float>(entity => entity is Asteroid, Color.Green, laserMiner.MiningRange));
 
-				CancelledConstructionEvent += linker.KillSelf;
+				CancelledCreationEvent += linker.KillSelf;
 				//theGame.StructureStartedEventPreAuth += linker.KillSelf;
 				components.Add(linker);
 			}
@@ -761,7 +762,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			{
 				if (creating != null)
 				{
-					CancelConstruction();
+					OnCancelCreation();
 				}
 
 				// Create a new power station
@@ -783,17 +784,15 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			{
 				Ring ring = new Ring(theGame,
 				                     this,
-				                     LocalActor.PrimaryForce,
 				                     entity.Position,
 				                     rangeRingDefinition.Item1,
 				                     rangeRingDefinition.Item2);
 				components.Add(ring);
 				createdSuicidals.Add(ring);
 
-				PositionOffset positionOffset = new PositionOffset(theGame, this, localActor.PrimaryForce, entity.Position, new Vector2(-25, -rangeRingDefinition.Item1 - 17));
+				PositionOffset positionOffset = new PositionOffset(theGame, this, entity.Position, new Vector2(-25, -rangeRingDefinition.Item1 - 17));
 				FreeText text = new FreeText(theGame,
 				                             this,
-				                             LocalActor.PrimaryForce,
 				                             positionOffset,
 				                             rangeRingDefinition.Item3,
 				                             rangeRingDefinition.Item2);
@@ -811,7 +810,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			foreach (var suicidal in CreateRangeRings(entity))
 			{
 				// TODO: I think these events will continue to hold on to the dying entity long after its dead and it will prevent garbage collection
-				CancelledConstructionEvent += suicidal.KillSelf;
+				CancelledCreationEvent += suicidal.KillSelf;
 				//theGame.StructureStartedEventPreAuth += suicidal.KillSelf;
 			}
 		}
@@ -830,7 +829,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		private void CreatePowerLinker(ConstructableEntity entity)
 		{
 			PowerLinker powerLinker = new PowerLinker(theGame, this, localActor.PrimaryForce, entity);
-			CancelledConstructionEvent += powerLinker.KillSelf;
+			CancelledCreationEvent += powerLinker.KillSelf;
 			//theGame.StructureStartedEventPreAuth += powerLinker.KillSelf;
 			components.Add(powerLinker);
 		}
@@ -926,7 +925,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			ConstructableEntity toBuild = (ConstructableEntity)creatingTypeConstuctructor.Invoke(new object[]{theGame, theGame, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(ScreenMan.Mouse.X, ScreenMan.Mouse.Y))});
 
 			toBuild.StartConstruction();
-			theGame.AddComponent(toBuild);
+			theGame.Add(toBuild);
 
 
 			// TODO: Find a better place to put this, but I don't think the LaserMiner should know about this
@@ -936,12 +935,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			{
 				PositionOffset miningAccumPosition = new PositionOffset(theGame,
 				                                                        this,
-				                                                        localActor.PrimaryForce,
 				                                                        laserMiner.Position,
 				                                                        new Vector2(-5, -20));
 				Accumulator miningAccumulator = new Accumulator(theGame,
 				                                                this,
-				                                                localActor.PrimaryForce,
 				                                                miningAccumPosition,
 				                                                new Color(100, 255, 100, 255),
 				                                                450,
@@ -954,12 +951,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 			PositionOffset healthAccumPosisiton = new PositionOffset(theGame,
 				                                                        this,
-				                                                        localActor.PrimaryForce,
 				                                                        toBuild.Position,
 				                                                        new Vector2(-5, -20));
 			Accumulator healthAccumulator = new Accumulator(theGame,
 				                                            this,
-				                                            localActor.PrimaryForce,
 				                                            healthAccumPosisiton,
 				                                            new Color(200, 50, 50, 255),
 				                                            450,
@@ -969,13 +964,14 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			AddComponent(healthAccumPosisiton);
 			AddComponent(healthAccumulator);
 
-			ProgressBar progressBar = new ProgressBar(theGame, this, localActor.PrimaryForce, toBuild.Position, new Vector2(0, toBuild.Radius.Value - 6), toBuild.Radius.Value * 2, 6, Color.Gray, Color.RoyalBlue);
+			ProgressBar progressBar = new ProgressBar(theGame, this, toBuild.Position, new Vector2(0, toBuild.Radius.Value - 6), toBuild.Radius.Value * 2, 6, Color.Gray, Color.RoyalBlue);
 			progressBar.Max = toBuild.MineralsToConstruct;
 			toBuild.ConstructionProgressChangedEvent += progressBar.SetProgress;
 			toBuild.ConstructionCompletedEvent += progressBar.KillSelf;
+			toBuild.HitPoints.DyingEvent += progressBar.KillSelf;
 			AddComponent(progressBar);
 
-			ProgressBar healthBar = new ProgressBar(theGame, this, localActor.PrimaryForce, toBuild.Position, new Vector2(0, toBuild.Radius.Value), toBuild.Radius.Value * 2, 6, Color.Gray, Color.Green);
+			ProgressBar healthBar = new ProgressBar(theGame, this, toBuild.Position, new Vector2(0, toBuild.Radius.Value), toBuild.Radius.Value * 2, 6, Color.Gray, Color.Green);
 			healthBar.Max = toBuild.HitPoints.GetTotal();
 			healthBar.Progress = healthBar.Max;
 			toBuild.HitPoints.HitPointsChangedEvent += healthBar.SetProgress;
@@ -985,7 +981,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 			if (!ScreenMan.Keyboard.IsKeyDown(Keys.LeftShift) && !ScreenMan.Keyboard.IsKeyDown(Keys.RightShift))
 			{
-				CancelConstruction();
+				OnCancelCreation();
 			}
 		}
 
@@ -1022,7 +1018,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		private void SelectedEntityDying(EntityReflectiveEventArgs e)
 		{
 			// Remove any deleted entities from the selection list
-			Entity dyingEntity = e.Component as Entity;
+			Entity dyingEntity = e.Entity;
 			if (dyingEntity != null)
 			{
 				selectedEntities.Remove(dyingEntity);

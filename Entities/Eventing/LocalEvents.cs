@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AsteroidOutpost.Interfaces;
 
 namespace AsteroidOutpost.Entities.Eventing
 {
@@ -29,8 +30,8 @@ namespace AsteroidOutpost.Entities.Eventing
 	public class EntityUpgradeEventArgs : EntityEventArgs
 	{
 
-		public EntityUpgradeEventArgs(Component component, Upgrade theUpgrade)
-			: base(component)
+		public EntityUpgradeEventArgs(Entity entity, Upgrade theUpgrade)
+			: base(entity)
 		{
 			Upgrade = theUpgrade;
 		}
@@ -41,22 +42,24 @@ namespace AsteroidOutpost.Entities.Eventing
 
 	public class EntityEventArgs : EventArgs
 	{
-		public EntityEventArgs(Component component)
+		public EntityEventArgs(Entity entity)
+		{
+			Entity = entity;
+		}
+
+
+		public Entity Entity { get; private set; }
+	}
+
+
+	public class ComponentEventArgs : EventArgs
+	{
+		public ComponentEventArgs(Component component)
 		{
 			Component = component;
 		}
 
 
 		public Component Component { get; private set; }
-	}
-
-
-	public class EntityDyingEventArgs : EntityReflectiveEventArgs
-	{
-		//public EntityDyingEventArgs(Entity theEntity) : base(theEntity, "SetHitPoints", new object[] { 0.0f, true })
-		public EntityDyingEventArgs(Component component)
-			: base(component, "SetDead", new object[] { true, true })
-		{
-		}
 	}
 }

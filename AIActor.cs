@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Units;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 
 namespace AsteroidOutpost

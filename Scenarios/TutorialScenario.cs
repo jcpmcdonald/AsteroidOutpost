@@ -78,7 +78,7 @@ namespace AsteroidOutpost.Scenarios
 
 			// Create your starting solar station
 			SolarStation startingStation = new SolarStation(theGame, theGame, localActor.PrimaryForce, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f));
-			theGame.AddComponent(startingStation);
+			theGame.Add(startingStation);
 			startingStation.StartConstruction();
 			startingStation.IsConstructing = false;
 
@@ -139,7 +139,7 @@ namespace AsteroidOutpost.Scenarios
 					}
 				}
 				//int size = (int)((200 * rand.NextDouble()) + (200 * rand.NextDouble())+ (200 * rand.NextDouble()) + (5000 * rand.NextDouble()));
-				theGame.AddComponent(asteroid);
+				theGame.Add(asteroid);
 			}
 
 
@@ -162,7 +162,7 @@ namespace AsteroidOutpost.Scenarios
 
 			Beacon minerBeacon = new Beacon(theGame, theGame, localForce, new Vector2((theGame.MapWidth / 2.0f) + 200, theGame.MapHeight / 2.0f), 40);
 			beacons.Add(minerBeacon);
-			theGame.AddComponent(minerBeacon);
+			theGame.Add(minerBeacon);
 
 			theGame.HUD.AddControl(frmInstructions);
 		}
@@ -172,7 +172,7 @@ namespace AsteroidOutpost.Scenarios
 			switch (progress)
 			{
 			case 1:
-				if (e.Component is SolarStation)
+				if (e.Entity is SolarStation)
 				{
 					if (e.Upgrade.Name == "Level 2")
 					{
@@ -196,7 +196,7 @@ namespace AsteroidOutpost.Scenarios
 			switch(progress)
 			{
 			case 0:
-				LaserMiner miner = e.Component as LaserMiner;
+				LaserMiner miner = e.Entity as LaserMiner;
 				if (miner != null)
 				{
 					// miner.ConnectedPowerSources().Count > 0 &&
@@ -221,7 +221,7 @@ namespace AsteroidOutpost.Scenarios
 
 
 			case 2:
-				if(e.Component is LaserTower)
+				if (e.Entity is LaserTower)
 				{
 					lasersBuilt++;
 					if(lasersBuilt == 3)

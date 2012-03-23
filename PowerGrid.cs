@@ -6,6 +6,7 @@ using System.Text;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Entities.Structures;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
@@ -19,8 +20,8 @@ namespace AsteroidOutpost
 		private readonly Dictionary<IPowerGridNode, List<IPowerGridNode>> powerNodes = new Dictionary<IPowerGridNode, List<IPowerGridNode>>(32);
 
 
-		public PowerGrid(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce)
-			: base(theGame, componentList, owningForce)
+		public PowerGrid(AsteroidOutpostScreen theGame, IComponentList componentList)
+			: base(theGame, componentList)
 		{
 		}
 
@@ -113,7 +114,7 @@ namespace AsteroidOutpost
 
 		public void NodeDying(EntityReflectiveEventArgs e)
 		{
-			IPowerGridNode node = e.Component as IPowerGridNode;
+			IPowerGridNode node = e.Entity as IPowerGridNode;
 			if (node != null)
 			{
 				Disconnect(node);

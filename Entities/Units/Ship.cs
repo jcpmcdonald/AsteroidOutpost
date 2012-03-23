@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
@@ -72,7 +73,7 @@ namespace AsteroidOutpost.Entities.Units
 
 			if (targetID >= 0)
 			{
-				target = theGame.GetComponent(targetID) as Entity;
+				target = theGame.GetEntity(targetID);
 			}
 			else
 			{
@@ -96,7 +97,7 @@ namespace AsteroidOutpost.Entities.Units
 			Entity newTarget = null;
 			if(entityID >= 0)
 			{
-				newTarget = theGame.GetComponent(entityID) as Entity;
+				newTarget = theGame.GetEntity(entityID);
 			}
 			if (newTarget != null)
 			{
@@ -113,7 +114,6 @@ namespace AsteroidOutpost.Entities.Units
 		{
 			if (!authoritative)
 			{
-				// GET OUT! And I never want to see you again
 				return;
 			}
 

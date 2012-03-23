@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using AsteroidOutpost.Entities.Eventing;
 using Microsoft.Xna.Framework;
 
-namespace AsteroidOutpost
+namespace AsteroidOutpost.Interfaces
 {
 	internal interface IPowerGridNode
 	{

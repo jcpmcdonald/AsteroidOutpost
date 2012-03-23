@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using C3.XNA;
@@ -13,7 +14,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AsteroidOutpost.Entities
 {
-	public class Component : ISerializable, ICanKillSelf, IReflectionTarget
+	public class Component : ISerializable, ICanKillSelf, IIdentifiable
 	{
 		protected AsteroidOutpostScreen theGame;
 
@@ -21,25 +22,20 @@ namespace AsteroidOutpost.Entities
 		protected int id = -1;
 		private bool deleteMe;
 
-		protected Force owningForce;
-		private int postDeserializeOwningForceID;		// For serialization linking, don't use this
-
 
 		// Events
 		[EventReplication(EventReplication.ServerToClients)]
-		public event Action<EntityDyingEventArgs> DyingEvent;
+		public event Action<ComponentDyingEventArgs> DyingEvent;
 
 
-		public Component(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce)
+		public Component(AsteroidOutpostScreen theGame, IComponentList componentList)
 		{
 			this.theGame = theGame;
-			this.owningForce = owningForce;
 		}
 
 		protected Component(BinaryReader br)
 		{
 			id = br.ReadInt32();
-			postDeserializeOwningForceID = br.ReadInt32();
 		}
 
 
@@ -50,16 +46,6 @@ namespace AsteroidOutpost.Entities
 		public virtual void Serialize(BinaryWriter bw)
 		{
 			bw.Write(id);
-
-			if (owningForce != null)
-			{
-				bw.Write(owningForce.ID);
-			}
-			else
-			{
-				Debugger.Break();
-				bw.Write(-1);
-			}
 		}
 
 
@@ -70,16 +56,6 @@ namespace AsteroidOutpost.Entities
 		public virtual void PostDeserializeLink(AsteroidOutpostScreen theGame)
 		{
 			this.theGame = theGame;
-
-			if (postDeserializeOwningForceID >= 0)
-			{
-				// Find the force with this ID
-				owningForce = theGame.GetForce(postDeserializeOwningForceID);
-			}
-			else
-			{
-				owningForce = null;
-			}
 		}
 
 
@@ -98,7 +74,7 @@ namespace AsteroidOutpost.Entities
 
 		public void KillSelf(EventArgs e)
 		{
-			// This should only be a local entity, so I am authoritative
+			// This should only be a local event, so I am authoritative
 			SetDead(true, true);
 		}
 
@@ -132,7 +108,7 @@ namespace AsteroidOutpost.Entities
 			// Tell everyone that's interested in my death
 			if (DyingEvent != null)
 			{
-				DyingEvent(new EntityDyingEventArgs(this));
+				DyingEvent(new ComponentDyingEventArgs(this));
 			}
 		}
 

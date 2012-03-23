@@ -36,7 +36,7 @@ namespace AsteroidOutpost
 			while (aiCreated < pointValue)
 			{
 				// Make something
-				theGame.AddComponent(new Ship1(theGame, theGame, aiActor.PrimaryForce, roughPosition));
+				theGame.Add(new Ship1(theGame, theGame, aiActor.PrimaryForce, roughPosition));
 				aiCreated += 100;
 			}
 

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
@@ -20,8 +21,8 @@ namespace AsteroidOutpost.Entities
 		private int textureSize;
 		private float sizeRatio;
 
-		public Ring(AsteroidOutpostScreen theGame, IComponentList componentList, Force theOwningForce, Position position, int radius, Color color)
-			: base(theGame, componentList, theOwningForce)
+		public Ring(AsteroidOutpostScreen theGame, IComponentList componentList, Position position, int radius, Color color)
+			: base(theGame, componentList)
 		{
 			this.position = position;
 			this.radius = radius;

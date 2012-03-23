@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using C3.XNA;
@@ -49,7 +50,7 @@ namespace AsteroidOutpost.Entities.Structures
 			}
 			radius = radius * 10;
 			sizePercent = radius / 100.0f;
-			Radius = new Radius(theGame, componentList, owningForce, Position, (int)(sizePercent * 25));
+			Radius = new Radius(theGame, componentList, Position, (int)(sizePercent * 25));
 			componentList.AddComponent(Radius);
 			
 			// And select a random asteroid type

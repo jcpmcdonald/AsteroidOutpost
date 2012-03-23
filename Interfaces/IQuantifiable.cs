@@ -1,4 +1,4 @@
-﻿namespace AsteroidOutpost
+﻿namespace AsteroidOutpost.Interfaces
 {
 	public interface IQuantifiable
 	{

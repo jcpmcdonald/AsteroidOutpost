@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using AsteroidOutpost.Entities.Weapons;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
@@ -86,7 +87,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 			if (targetID >= 0)
 			{
-				target = theGame.GetComponent(targetID) as Entity;
+				target = theGame.GetEntity(targetID);
 			}
 			else
 			{

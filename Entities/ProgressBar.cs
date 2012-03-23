@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
@@ -25,10 +26,10 @@ namespace AsteroidOutpost.Entities
 		private Color foregroundColor;
 
 
-		public ProgressBar(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, Position position, Vector2 positionOffset, int length, int thickness, Color backgroundColor, Color foregroundColor)
-			: base(theGame, componentList, owningForce)
+		public ProgressBar(AsteroidOutpostScreen theGame, IComponentList componentList, Position position, Vector2 positionOffset, int length, int thickness, Color backgroundColor, Color foregroundColor)
+			: base(theGame, componentList)
 		{
-			this.position = new PositionOffset(theGame, componentList, owningForce, position, positionOffset);
+			this.position = new PositionOffset(theGame, componentList, position, positionOffset);
 			componentList.AddComponent(this.position);
 
 			this.length = length;
@@ -38,10 +39,10 @@ namespace AsteroidOutpost.Entities
 		}
 
 
-		public ProgressBar(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, Vector2 position, int length, int thickness, Color backgroundColor, Color foregroundColor)
-			: base(theGame, componentList, owningForce)
+		public ProgressBar(AsteroidOutpostScreen theGame, IComponentList componentList, Vector2 position, int length, int thickness, Color backgroundColor, Color foregroundColor)
+			: base(theGame, componentList)
 		{
-			this.position = new Position(theGame, componentList, owningForce, position);
+			this.position = new Position(theGame, componentList, position);
 			componentList.AddComponent(this.position);
 
 			this.length = length;

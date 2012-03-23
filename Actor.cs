@@ -88,7 +88,11 @@ namespace AsteroidOutpost
 			get { return forces; }
 			set
 			{
-				Debug.Assert(value.Count >= 1, "Actors must control at least 1 Force at all times");
+				if(value.Count == 0)
+				{
+					Console.WriteLine("Actors must control at least 1 Force at all times");
+					Debugger.Break();
+				}
 				forces = value;
 			}
 		}

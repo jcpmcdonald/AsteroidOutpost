@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using C3.XNA;

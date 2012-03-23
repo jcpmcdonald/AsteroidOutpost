@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AsteroidOutpost.Entities;
+﻿using AsteroidOutpost.Entities;
 
-namespace AsteroidOutpost
+namespace AsteroidOutpost.Interfaces
 {
 	public interface IComponentList
 	{

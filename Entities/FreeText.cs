@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using C3.XNA;
@@ -16,8 +17,8 @@ namespace AsteroidOutpost.Entities
 		private String text;
 		protected Color color;
 
-		public FreeText(AsteroidOutpostScreen theGame, IComponentList componentList, Force theOwningForce, Position position, string text, Color color)
-			: base(theGame, componentList, theOwningForce)
+		public FreeText(AsteroidOutpostScreen theGame, IComponentList componentList, Position position, string text, Color color)
+			: base(theGame, componentList)
 		{
 			this.text = text;
 			this.position = position;

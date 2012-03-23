@@ -102,23 +102,22 @@ namespace AsteroidOutpost.Networking
 					int count = br.ReadInt32();
 					parameters[i] = br.ReadBytes(count);
 				}
-				else if (types[i].IsSubclassOf(typeof(Component)))
+				else if (types[i].IsSubclassOf(typeof(Component)) ||
+						types[i].IsSubclassOf(typeof(Entity)) ||
+						types[i] == typeof(Force) || 
+					    types[i] == typeof(Actor) ||
+					    types[i] == typeof(AIActor))
 				{
-					// Use reflection to make a new component of... whatever type was sent to us
+					// Use reflection to make a new object of... whatever type was sent to us
 					ConstructorInfo componentConstructor = types[i].GetConstructor(new Type[] { typeof(BinaryReader) });
 					parameters[i] = componentConstructor.Invoke(new object[] { br });
-				}
-				else if (types[i] == typeof(Force) || types[i] == typeof(Actor) || types[i] == typeof(AIActor))
-				{
-					// Use reflection to make a new force
-					ConstructorInfo entityConstructor = types[i].GetConstructor(new Type[] { typeof(BinaryReader) });
-					parameters[i] = entityConstructor.Invoke(new object[] { br });
 				}
 				else
 				{
 					// Note to self: If this is encountered, it will leave some number of garbage bytes in the stream and cause
 					// the rest of the stream to become corrupted
-					Debug.Assert(false, GetType() + " needs an other handler for deserializing type: " + types[i]);
+					Console.WriteLine(GetType() + " needs an other handler for deserializing type: " + types[i]);
+					Debugger.Break();
 				}
 			}
 		}
@@ -146,7 +145,7 @@ namespace AsteroidOutpost.Networking
 			else
 			{
 				// For all other IDs, look up the corresponding Entity
-				targetObject = theGame.GetComponent(targetObjectID);
+				targetObject = theGame.GetTarget(targetObjectID);
 
 				if (targetObject == null)
 				{

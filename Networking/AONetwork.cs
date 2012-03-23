@@ -219,7 +219,7 @@ namespace AsteroidOutpost.Networking
 
 				if(obj is Entity)
 				{
-					theGame.AddComponent((Entity)obj, true);
+					theGame.Add((Entity)obj, true);
 				}
 				else
 				{
@@ -321,7 +321,7 @@ namespace AsteroidOutpost.Networking
 				// Make an initial SolarStation for the other player
 				SolarStation startingStation = new SolarStation(theGame, theGame, clientForce, new Vector2(theGame.MapWidth / 2.0f + 300, theGame.MapHeight / 2.0f));
 				startingStation.IsConstructing = false;
-				theGame.AddComponent(startingStation);
+				theGame.Add(startingStation);
 			}
 			catch (Exception ex)
 			{
@@ -913,7 +913,7 @@ namespace AsteroidOutpost.Networking
 					}
 				}
 
-				theGame.AddComponent(startingStation);
+				theGame.Add(startingStation);
 
 				// Set this guy's focus to his start location
 				new AOReflectiveOutgoingMessage(theGame.ID, "SetFocus", new object[] { startingStation.Position.Center }).Serialize(clientWriter);

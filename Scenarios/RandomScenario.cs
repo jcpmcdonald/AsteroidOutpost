@@ -61,7 +61,7 @@ namespace AsteroidOutpost.Scenarios
 
 			// Create your starting solar station
 			SolarStation startingStation = new SolarStation(theGame, theGame, localActor.PrimaryForce, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f));
-			theGame.AddComponent(startingStation);
+			theGame.Add(startingStation);
 			startingStation.StartConstruction();
 			startingStation.IsConstructing = false;
 
@@ -123,7 +123,7 @@ namespace AsteroidOutpost.Scenarios
 					}
 				}
 				//int size = (int)((200 * rand.NextDouble()) + (200 * rand.NextDouble())+ (200 * rand.NextDouble()) + (5000 * rand.NextDouble()));
-				theGame.AddComponent(asteroid);
+				theGame.Add(asteroid);
 			}
 			
 		}

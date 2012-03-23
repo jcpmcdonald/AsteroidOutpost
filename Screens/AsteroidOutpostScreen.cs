@@ -5,6 +5,7 @@ using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Entities.Structures;
 using AsteroidOutpost.Entities.Units;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Scenarios;
 using AsteroidOutpost.Screens.HeadsUpDisplay;
@@ -20,7 +21,8 @@ namespace AsteroidOutpost.Screens
 	{
 		private LayeredStarField layeredStarField;
 		private QuadTree<Entity> quadTree;
-		private Dictionary<int, Component> entityDictionary = new Dictionary<int, Component>(4000);		// Note: This variable must be kept thread-safe
+		private Dictionary<int, Component> componentDictionary = new Dictionary<int, Component>(6000);		// Note: This variable must be kept thread-safe
+		private Dictionary<int, Entity> entityDictionary = new Dictionary<int, Entity>(2000);		// Note: This variable must be kept thread-safe
 		private Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
 		private AOHUD hud;
 		private Scenario scenario;
@@ -97,14 +99,40 @@ namespace AsteroidOutpost.Screens
 		}
 
 
-
 		/// <summary>
 		/// Adds the component to the game. If the game is a client, this will send a request to the server instead
 		/// </summary>
 		/// <param name="component">The component to add to the game</param>
 		public void AddComponent(Component component)
 		{
-			AddComponent(component, isServer);
+			Add(component, isServer);
+		}
+
+
+		/// <summary>
+		/// Adds the identifiable item to the game. If the game is a client, this will send a request to the server instead
+		/// </summary>
+		/// <param name="obj">The identifiable item to add to the game</param>
+		public void Add(IIdentifiable obj)
+		{
+			Entity entity = obj as Entity;
+			if (entity != null)
+			{
+				Add(entity, isServer);
+			}
+			else
+			{
+				Component component = obj as Component;
+				if (component != null)
+				{
+					Add(component, isServer);
+				}
+				else
+				{
+					// We were unable to add the item to the game
+					Debugger.Break();
+				}
+			}
 		}
 
 
@@ -113,10 +141,8 @@ namespace AsteroidOutpost.Screens
 		/// </summary>
 		/// <param name="component">The component to add to the game</param>
 		/// <param name="isAuthoritative">If true, indicates that this instance of the game is a server OR that we have been told to do this by the server</param>
-		public void AddComponent(Component component, bool isAuthoritative)
+		public void Add(Component component, bool isAuthoritative)
 		{
-			Entity entity = component as Entity;
-
 			if (component != null)
 			{
 				if (isAuthoritative)
@@ -129,31 +155,17 @@ namespace AsteroidOutpost.Screens
 							component.ID = PopNextComponentID();
 						}
 
-						network.EnqueueMessage(new AOReflectiveOutgoingMessage(-2,
-						                                                       "AddComponent",
-						                                                       new object[]{component, true}));
-						if (StructureStartedEventPreAuth != null && entity != null)
-						{
-							StructureStartedEventPreAuth(new EntityEventArgs(entity));
-						}
+						network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
+						                                                       "Add",
+																			   new object[] { component, true }));
 					}
 					// Tell the network to listen to anything that may happen
 					network.ListenToEvents(component);
 
-					if (entity != null)
-					{
-						// Add this to the quad tree for rapid area-based lookups
-						quadTree.Add(entity);
-					}
-
 					// Add this to a dictionary for quick ID-based lookups
-					lock (entityDictionary)
+					lock (componentDictionary)
 					{
-						entityDictionary.Add(component.ID, component);
-					}
-					if (StructureStartedEventPostAuth != null && entity != null)
-					{
-						StructureStartedEventPostAuth(new EntityEventArgs(entity));
+						componentDictionary.Add(component.ID, component);
 					}
 				}
 				else
@@ -162,10 +174,69 @@ namespace AsteroidOutpost.Screens
 					component.ID = PopNextComponentID();
 
 					// Ask the server to make it
-					network.EnqueueMessage(new AOReflectiveOutgoingMessage(-2,
-					                                                       "AddComponent",
-					                                                       new object[]{component}));
-					if (StructureStartedEventPreAuth != null && entity != null)
+					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
+					                                                       "Add",
+																		   new object[] { component }));
+				}
+			}
+		}
+
+
+		/// <summary>
+		/// Adds the entity to the game. If isAuthoritative is set to false, this will send a request to the server instead
+		/// </summary>
+		/// <param name="entity">The entity to add to the game</param>
+		/// <param name="isAuthoritative">If true, indicates that this instance of the game is a server OR that we have been told to do this by the server</param>
+		public void Add(Entity entity, bool isAuthoritative)
+		{
+			if (entity != null)
+			{
+				if (isAuthoritative)
+				{
+					if (isServer)
+					{
+						if (entity.ID == -1)
+						{
+							// Assign an ID and replicate this object to the clients
+							entity.ID = PopNextComponentID();
+						}
+
+						network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
+																			   "Add",
+																			   new object[] { entity, true }));
+
+						// If we are the server, we do both the pre and post auth events back to back  (post auth is below)
+						if (StructureStartedEventPreAuth != null)
+						{
+							StructureStartedEventPreAuth(new EntityEventArgs(entity));
+						}
+					}
+					// Tell the network to listen to anything that may happen
+					network.ListenToEvents(entity);
+
+					// Add this to the quad tree for rapid area-based lookups
+					quadTree.Add(entity);
+
+					// Add this to a dictionary for quick ID-based lookups
+					lock (componentDictionary)
+					{
+						entityDictionary.Add(entity.ID, entity);
+					}
+					if (StructureStartedEventPostAuth != null)
+					{
+						StructureStartedEventPostAuth(new EntityEventArgs(entity));
+					}
+				}
+				else
+				{
+					// Assign an ID
+					entity.ID = PopNextComponentID();
+
+					// Ask the server to make it
+					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
+																		   "Add",
+																		   new object[] { entity }));
+					if (StructureStartedEventPreAuth != null)
 					{
 						StructureStartedEventPreAuth(new EntityEventArgs(entity));
 					}
@@ -215,22 +286,72 @@ namespace AsteroidOutpost.Screens
 
 
 		/// <summary>
-		/// Looks up a component by ID
+		/// Looks up a entity by ID
 		/// This method is thread safe
 		/// </summary>
 		/// <param name="id">The ID to look up</param>
-		/// <returns>The component with the given ID, or null if the entity is not found</returns>
-		public Component GetComponent(int id)
+		/// <returns>The entity with the given ID, or null if the entity is not found</returns>
+		public Entity GetEntity(int id)
 		{
 			lock (entityDictionary)
 			{
-				if(entityDictionary.ContainsKey(id))
+				if (entityDictionary.ContainsKey(id))
 				{
 					return entityDictionary[id];
 				}
 
-				Debugger.Break();
+				//Debugger.Break();
 				return null;
+			}
+		}
+
+
+		/// <summary>
+		/// Looks up a component by ID
+		/// This method is thread safe
+		/// </summary>
+		/// <param name="id">The ID to look up</param>
+		/// <returns>The component with the given ID, or null if the component is not found</returns>
+		public Component GetComponent(int id)
+		{
+			lock (componentDictionary)
+			{
+				if (componentDictionary.ContainsKey(id))
+				{
+					return componentDictionary[id];
+				}
+
+				//Debugger.Break();
+				return null;
+			}
+		}
+
+
+		/// <summary>
+		/// Looks up a component by ID
+		/// This method is thread safe
+		/// </summary>
+		/// <param name="id">The ID to look up</param>
+		/// <returns>The component with the given ID, or null if the component is not found</returns>
+		public IReflectionTarget GetTarget(int id)
+		{
+			Component component = GetComponent(id);
+			if(component != null)
+			{
+				return component;
+			}
+			else
+			{
+				Entity entity = GetEntity(id);
+				if(entity != null)
+				{
+					return entity;
+				}
+				else
+				{
+					Debugger.Break();
+					return null;
+				}
 			}
 		}
 
@@ -366,7 +487,7 @@ namespace AsteroidOutpost.Screens
 
 		public void CreatePowerGrid(Force force)
 		{
-			powerGrid.Add(force.ID, new PowerGrid(this, this, force));
+			powerGrid.Add(force.ID, new PowerGrid(this, this));
 			if(isServer)
 			{
 				network.EnqueueMessage(new AOReflectiveOutgoingMessage(-2,
@@ -490,9 +611,9 @@ namespace AsteroidOutpost.Screens
 				}
 
 
-				// Update the components
-				List<Component> deleteList = new List<Component>();
-				foreach (Component component in entityDictionary.Values)
+				// Update the components and entities
+				List<Component> deadComponents = new List<Component>();
+				foreach (Component component in componentDictionary.Values)
 				{
 					if (!component.IsDead())
 					{
@@ -500,30 +621,43 @@ namespace AsteroidOutpost.Screens
 					}
 					if (component.IsDead())
 					{
-						deleteList.Add(component);
-					}
-
-					
-					// TODO: Find a way to listen for move events instead of always updating the position
-					Entity entity = component as Entity;
-					if (entity != null)
-					{
-						quadTree.Move(entity);
+						deadComponents.Add(component);
 					}
 				}
 
-				// Delete any entities that need to be deleted
-				foreach (Component component in deleteList)
+				List<Entity> deadEntities = new List<Entity>();
+				foreach (Entity entity in entityDictionary.Values)
 				{
-					Entity entity = component as Entity;
-					if (entity != null)
+					if (!entity.IsDead())
 					{
-						quadTree.Remove(entity);
+						entity.Update(deltaTime);
+					}
+					if (entity.IsDead())
+					{
+						deadEntities.Add(entity);
 					}
 
-					lock (entityDictionary)
+
+					// TODO: Find a way to listen for move events instead of always updating the position
+					quadTree.Move(entity);
+				}
+
+				// Delete any components or entities that need to be deleted
+				foreach (Component deadComponent in deadComponents)
+				{
+					lock (componentDictionary)
 					{
-						entityDictionary.Remove(component.ID);
+						componentDictionary.Remove(deadComponent.ID);
+					}
+				}
+
+				foreach (Entity deadEntity in deadEntities)
+				{
+					quadTree.Remove(deadEntity);
+
+					lock (componentDictionary)
+					{
+						componentDictionary.Remove(deadEntity.ID);
 					}
 				}
 

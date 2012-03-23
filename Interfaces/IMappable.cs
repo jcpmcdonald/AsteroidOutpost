@@ -1,4 +1,4 @@
-﻿namespace AsteroidOutpost.Entities
+﻿namespace AsteroidOutpost.Interfaces
 {
 	interface IMappable
 	{

@@ -4,6 +4,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
@@ -15,17 +16,51 @@ namespace AsteroidOutpost.Entities
 	{
 		private readonly IPowerGridNode relatedPowerNode;
 
+		protected Force owningForce;
+		private int postDeserializeOwningForceID;		// For serialization linking, don't use this
 
-		public PowerLinker(AsteroidOutpostScreen theGame, IComponentList componentList, Force theOwningForce, IPowerGridNode powerGridNode)
-			: base(theGame, componentList, theOwningForce)
+
+		public PowerLinker(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, IPowerGridNode powerGridNode)
+			: base(theGame, componentList)
 		{
-			this.relatedPowerNode = powerGridNode;
+			relatedPowerNode = powerGridNode;
+
+			this.owningForce = owningForce;
 		}
 
 
 		public PowerLinker(BinaryReader br)
 			: base(br)
 		{
+			postDeserializeOwningForceID = br.ReadInt32();
+		}
+
+		public override void Serialize(BinaryWriter bw)
+		{
+			// Always serialize the base first because we can't pick the deserialization order
+			base.Serialize(bw);
+
+			if (owningForce == null)
+			{
+				// I don't think this should ever be the case
+				Debugger.Break();
+				bw.Write(-1);
+			}
+			bw.Write(owningForce.ID);
+		}
+
+		/// <summary>
+		/// After deserializing, this should be called to link this object to other objects
+		/// </summary>
+		/// <param name="theGame"></param>
+		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		{
+			owningForce = theGame.GetForce(postDeserializeOwningForceID);
+			if (owningForce == null)
+			{
+				// I think something is wrong, there should always be an owning force
+				Debugger.Break();
+			}
 		}
 
 

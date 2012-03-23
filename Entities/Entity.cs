@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
@@ -12,8 +13,18 @@ using XNASpriteLib;
 
 namespace AsteroidOutpost.Entities
 {
-	public abstract class Entity : Component, IQuadStorable, ISerializable, IReflectionTarget, IUpdatable
+	public abstract class Entity : IQuadStorable, ISerializable, IIdentifiable, IUpdatable, IKillable
 	{
+		protected AsteroidOutpostScreen theGame;
+
+		// This ID will uniquely identify this object in the game
+		protected int id = -1;
+		private bool deleteMe;
+
+		protected Force owningForce;
+		private int postDeserializeOwningForceID;		// For serialization linking, don't use this
+
+
 		// Attributes
 		protected SpriteAnimator animator;
 		private bool solid = true;
@@ -26,14 +37,22 @@ namespace AsteroidOutpost.Entities
 		private int postDeserializeSizeID;			// For serialization linking, don't use this
 		private int postDeserializeHitPointsID;		// For serialization linking, don't use this
 
+
+
+		// Events
+		[EventReplication(EventReplication.ServerToClients)]
+		public event Action<EntityDyingEventArgs> DyingEvent;
+
 		
 		protected Entity(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, Vector2 center, int radius, int totalHitPoints)
-			: base(theGame, componentList, owningForce)
 		{
-			Position = new Position(theGame, componentList, owningForce, center);
-			Radius = new Radius(theGame, componentList, owningForce, Position, radius);
-			HitPoints = new HitPoints(theGame, componentList, owningForce, totalHitPoints);
-			HitPoints.DyingEvent += KillSelf;
+			this.theGame = theGame;
+			this.owningForce = owningForce;
+
+			Position = new Position(theGame, componentList, center);
+			Radius = new Radius(theGame, componentList, Position, radius);
+			HitPoints = new HitPoints(theGame, componentList, totalHitPoints);
+			//HitPoints.DyingEvent += KillSelf;
 
 			componentList.AddComponent(Position);
 			componentList.AddComponent(Radius);
@@ -42,11 +61,13 @@ namespace AsteroidOutpost.Entities
 
 		//*
 		protected Entity(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, Vector2 center, int totalHitPoints)
-			: base(theGame, componentList, owningForce)
 		{
-			Position = new Position(theGame, componentList, owningForce, center);
-			HitPoints = new HitPoints(theGame, componentList, owningForce, totalHitPoints);
-			HitPoints.DyingEvent += KillSelf;
+			this.theGame = theGame;
+			this.owningForce = owningForce;
+
+			Position = new Position(theGame, componentList, center);
+			HitPoints = new HitPoints(theGame, componentList, totalHitPoints);
+			//HitPoints.DyingEvent += KillSelf;
 
 			componentList.AddComponent(Position);
 			componentList.AddComponent(HitPoints);
@@ -61,8 +82,10 @@ namespace AsteroidOutpost.Entities
 		/// </summary>
 		/// <param name="br">The BinaryReader to Deserialize from</param>
 		protected Entity(BinaryReader br)
-			: base(br)
 		{
+			id = br.ReadInt32();
+			postDeserializeOwningForceID = br.ReadInt32();
+
 			postDeserializePositionID = br.ReadInt32();
 			postDeserializeSizeID = br.ReadInt32();
 			postDeserializeHitPointsID = br.ReadInt32();
@@ -73,10 +96,17 @@ namespace AsteroidOutpost.Entities
 		/// Serialize this Entity
 		/// </summary>
 		/// <param name="bw">The BinaryWriter to stream to</param>
-		public override void Serialize(BinaryWriter bw)
+		public virtual void Serialize(BinaryWriter bw)
 		{
-			// Always serialize the base first because we can't pick the deserialization order
-			base.Serialize(bw);
+			bw.Write(id);
+
+			if (owningForce == null)
+			{
+				// I don't think this should ever be the case
+				Debugger.Break();
+				bw.Write(-1);
+			}
+			bw.Write(owningForce.ID);
 
 			bw.Write(position.ID);
 			bw.Write(radius.ID);
@@ -88,15 +118,23 @@ namespace AsteroidOutpost.Entities
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
 		/// <param name="theGame"></param>
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		public virtual void PostDeserializeLink(AsteroidOutpostScreen theGame)
 		{
-			base.PostDeserializeLink(theGame);
+			this.theGame = theGame;
 
+			owningForce = theGame.GetForce(postDeserializeOwningForceID);
+			if(owningForce == null)
+			{
+				// I think something is wrong, there should always be an owning force
+				Debugger.Break();
+			}
+
+			
 			position = theGame.GetComponent(postDeserializePositionID) as Position;
 			radius = theGame.GetComponent(postDeserializeSizeID) as Radius;
 			hitPoints = theGame.GetComponent(postDeserializeHitPointsID) as HitPoints;
 
-			if(Position == null || Radius == null)
+			if (position == null || radius == null || hitPoints == null)
 			{
 				Debugger.Break();
 			}
@@ -112,7 +150,7 @@ namespace AsteroidOutpost.Entities
 		/// Updates this component
 		/// </summary>
 		/// <param name="deltaTime">The amount of time that has passed since the last frame</param>
-		public override void Update(TimeSpan deltaTime)
+		public virtual void Update(TimeSpan deltaTime)
 		{
 			if (animator != null)
 			{
@@ -127,7 +165,7 @@ namespace AsteroidOutpost.Entities
 		/// <param name="spriteBatch">The sprite batch to draw to</param>
 		/// <param name="scaleModifier">The scale modifier to use</param>
 		/// <param name="tint">The tint to use</param>
-		public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
+		public virtual void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
 		{
 			// draw the unit
 			if (animator != null)
@@ -194,7 +232,21 @@ namespace AsteroidOutpost.Entities
 		}
 
 		#endregion
-		
+
+
+
+		/// <summary>
+		/// Gets the Entity's ID
+		/// </summary>
+		public int ID
+		{
+			get { return id; }
+			set
+			{
+				id = value;
+			}
+		}
+
 		
 		/// <summary>
 		/// Gets the name of this entity
@@ -276,6 +328,40 @@ namespace AsteroidOutpost.Entities
 			protected set
 			{
 				hitPoints = value;
+			}
+		}
+
+
+		/// <summary>
+		/// Gets whether this Entity should be deleted after this update cycle
+		/// </summary>
+		public bool IsDead()
+		{
+			return deleteMe;
+		}
+
+		/// <summary>
+		/// Sets whether this Entity should be deleted after this update cycle
+		/// </summary>
+		public void SetDead(bool delMe)
+		{
+			SetDead(delMe, theGame.IsServer);
+		}
+
+
+		public void SetDead(bool delMe, bool authoritative)
+		{
+			if (!authoritative)
+			{
+				return;
+			}
+
+			deleteMe = delMe;
+
+			// Tell everyone that's interested in my death
+			if (DyingEvent != null)
+			{
+				DyingEvent(new EntityDyingEventArgs(this));
 			}
 		}
 	}

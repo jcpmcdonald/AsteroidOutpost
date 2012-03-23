@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
@@ -17,8 +18,8 @@ namespace AsteroidOutpost.Entities
 		private int postDeserializePositionID;		// For serialization linking, don't use this
 
 
-		public Radius(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, Position position, int radius)
-			: base(theGame, componentList, owningForce)
+		public Radius(AsteroidOutpostScreen theGame, IComponentList componentList, Position position, int radius)
+			: base(theGame, componentList)
 		{
 			Value = radius;
 			this.position = position;

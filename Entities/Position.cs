@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
@@ -20,14 +21,14 @@ namespace AsteroidOutpost.Entities
 		public event Action<EntityMovedEventArgs> MovedEvent;
 
 
-		public Position(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, Vector2 center)
-			: base(theGame, componentList, owningForce)
+		public Position(AsteroidOutpostScreen theGame, IComponentList componentList, Vector2 center)
+			: base(theGame, componentList)
 		{
 			offset = center;
 		}
  
-		public Position(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, Vector2 center, Vector2 velocity)
-			: base(theGame, componentList, owningForce)
+		public Position(AsteroidOutpostScreen theGame, IComponentList componentList, Vector2 center, Vector2 velocity)
+			: base(theGame, componentList)
 		{
 			offset = center;
 			this.velocity = velocity;

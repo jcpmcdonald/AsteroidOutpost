@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using C3.XNA;
@@ -12,7 +13,6 @@ namespace AsteroidOutpost.Entities.Structures
 {
 	public abstract class ConstructableEntity : Entity, IPowerGridNode
 	{
-		public const int powerConductingDistance = PowerGrid.PowerConductingDistance;  // TODO: remove this
 		private const float powerUsageRate = 12.0f;
 		private const float mineralUsageRate = 30.0f;
 		
@@ -169,10 +169,32 @@ namespace AsteroidOutpost.Entities.Structures
 
 		public void SetMineralsLeftToConstruct(float value)
 		{
-			mineralsLeftToConstruct = value;
-			if (value <= 0.0)
+			int delta = (int)mineralsLeftToConstruct - (int)Math.Max(value, 0);
+			mineralsLeftToConstruct = Math.Max(value, 0);
+			
+			// Tell all my friends
+			if (ConstructionProgressChangedEvent != null)
 			{
-				isConstructing = false;
+				ConstructionProgressChangedEvent(new EntityConstructionProgressEventArgs(this, mineralsLeftToConstruct, delta));
+			}
+
+
+			if (mineralsLeftToConstruct <= 0)
+			{
+				mineralsToUpgrade = 0;
+				mineralsLeftToConstruct = 0;
+
+				// This construction is complete
+				IsConstructing = false;
+
+				if (AnyConstructionCompletedEvent != null)
+				{
+					AnyConstructionCompletedEvent(new EntityEventArgs(this));
+				}
+				if (ConstructionCompletedEvent != null)
+				{
+					ConstructionCompletedEvent(new EntityEventArgs(this));
+				}
 			}
 		}
 
@@ -444,99 +466,38 @@ namespace AsteroidOutpost.Entities.Structures
 					float mineralsToUse = mineralUsageRate * (float)deltaTime.TotalSeconds;
 					int delta;
 
-					// Check that we have enough power
+					// Check that we have enough power in the grid
 					if(theGame.PowerGrid(owningForce).HasPower(this, powerToUse))
 					{
-						int mineralsBefore = (int)mineralsLeftToConstruct;
-						mineralsLeftToConstruct -= mineralsToUse;
-						delta = mineralsBefore - (int)mineralsLeftToConstruct;
+						// Check to see if the mineralsLeftToConstruct would pass an integer boundary
+						delta = (int)Math.Ceiling(mineralsLeftToConstruct) - (int)Math.Ceiling(mineralsLeftToConstruct - mineralsToUse);
 						if (delta != 0)
 						{
-							if (owningForce.GetMinerals() > delta)
+							// If the force doesn't have enough minerals, we will halt the construction here until it does 
+							if (owningForce.GetMinerals() >= delta)
 							{
-								// Consume the power
+								// Consume the resources
 								theGame.PowerGrid(owningForce).GetPower(this, powerToUse);
-
-								// Tell all my friends
-								if (ConstructionProgressChangedEvent != null)
-								{
-									ConstructionProgressChangedEvent(new EntityConstructionProgressEventArgs(this, Math.Max(mineralsLeftToConstruct, 0), delta));
-								}
+								SetMineralsLeftToConstruct(mineralsLeftToConstruct - mineralsToUse);
 
 								// Set the force's minerals
 								owningForce.SetMinerals(owningForce.GetMinerals() - delta);
-
-
-								if (mineralsLeftToConstruct <= 0.0)
-								{
-									mineralsToUpgrade = 0;
-									mineralsLeftToConstruct = 0.0f;
-
-									// This construction is complete
-									IsConstructing = false;
-
-									if (AnyConstructionCompletedEvent != null)
-									{
-										AnyConstructionCompletedEvent(new EntityEventArgs(this));
-									}
-									if(ConstructionCompletedEvent != null)
-									{
-										ConstructionCompletedEvent(new EntityEventArgs(this));
-									}
-								}
 							}
 							else
 							{
-								// Undo the transaction
-								mineralsLeftToConstruct += mineralsToUse;
+								// Construction Halts, no progress, no consumption
 							}
 						}
-					}
-
-
-
-					/*
-
-					// BUG: There is a disconnect between the check for minerals (below) and the actual consumption of minerals. Could cause weird behaviour
-					if (owningForce.GetMinerals() > mineralsToUse && theGame.PowerGrid(owningForce).GetPower(this, powerToUse))
-					{
-						// Use some minerals toward my construction
-						int mineralsBefore = (int)mineralsLeftToConstruct;
-						mineralsLeftToConstruct -= mineralsToUse;
-						delta = mineralsBefore - (int)mineralsLeftToConstruct;
-
-						// If the minerals left to construct has increased by a whole number, subtract it from the force's minerals
-						if (mineralsBefore > (int)mineralsLeftToConstruct)
+						else
 						{
-							owningForce.SetMinerals(owningForce.GetMinerals() - delta);
+							// We have not passed an integer boundary, so just keep track of the change locally
+							// We'll get around to subtracting this from the force's minerals when we pass an integer boundary
+							mineralsLeftToConstruct -= mineralsToUse;
+
+							// We should consume our little tidbit of power though:
+							theGame.PowerGrid(owningForce).GetPower(this, powerToUse);
 						}
 					}
-
-
-
-					if (mineralsLeftToConstruct <= 0.0)
-					{
-						mineralsToUpgrade = 0;
-						mineralsLeftToConstruct = 0.0f;
-						changed = true;
-						
-						// This construction is complete
-						IsConstructing = false;
-
-						if(StructureFinishedEvent != null)
-						{
-							StructureFinishedEvent(new EntityEventArgs(this));
-						}
-					}
-
-
-					// Tell all my friends
-					if(changed && ConstructionProgressChangedEvent != null)
-					{
-						ConstructionProgressChangedEvent(new EntityConstructionProgressEventArgs(this, mineralsLeftToConstruct));
-					}
-					*/
-
 				}
 				else
 				{
@@ -676,7 +637,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 		public virtual void GetRangeRings(ref List<Tuple<int, Color, String>> rangeRingDefinition)
 		{
-			rangeRingDefinition.Add(Tuple.Create(powerConductingDistance, new Color(200, 200, 200), "Power Range"));
+			rangeRingDefinition.Add(Tuple.Create(PowerGrid.PowerConductingDistance, new Color(200, 200, 200), "Power Range"));
 		}
 
 

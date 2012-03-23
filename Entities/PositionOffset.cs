@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 
@@ -16,14 +17,14 @@ namespace AsteroidOutpost.Entities
 		private int postDeserializeParentID;		// For serialization linking, don't use this
 
 
-		public PositionOffset(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, Position parentPosition, Vector2 offset)
-			: base(theGame, componentList, owningForce, offset)
+		public PositionOffset(AsteroidOutpostScreen theGame, IComponentList componentList, Position parentPosition, Vector2 offset)
+			: base(theGame, componentList, offset)
 		{
 			parent = parentPosition;
 		}
 
-		public PositionOffset(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, Position parentPosition, Vector2 offset, Vector2 velocity)
-			: base(theGame, componentList, owningForce, offset, velocity)
+		public PositionOffset(AsteroidOutpostScreen theGame, IComponentList componentList, Position parentPosition, Vector2 offset, Vector2 velocity)
+			: base(theGame, componentList, offset, velocity)
 		{
 			parent = parentPosition;
 		}

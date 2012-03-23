@@ -84,6 +84,10 @@ namespace AsteroidOutpost.Networking
 				{
 					((Component)parameter).Serialize(bw);
 				}
+				else if (parameter is Entity)
+				{
+					((Entity)parameter).Serialize(bw);
+				}
 				else if (parameter is Force)
 				{
 					((Force)parameter).Serialize(bw);
@@ -94,7 +98,8 @@ namespace AsteroidOutpost.Networking
 				}
 				else
 				{
-					Debug.Assert(false, GetType() + " needs an other handler for serializing type: " + parameterType);
+					Console.WriteLine(GetType() + " needs an other handler for serializing type: " + parameterType);
+					Debugger.Break();
 				}
 			}
 		}

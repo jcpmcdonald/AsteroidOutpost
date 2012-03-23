@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
@@ -16,8 +17,8 @@ namespace AsteroidOutpost.Entities
 		private readonly float fade;
 		private Color fadeTint = Color.White;
 
-		public FloatingText(AsteroidOutpostScreen theGame, IComponentList componentList, Force theOwningForce, Position position, string text, Color color, float fade)
-			: base(theGame, componentList, theOwningForce, position, text, color)
+		public FloatingText(AsteroidOutpostScreen theGame, IComponentList componentList, Position position, string text, Color color, float fade)
+			: base(theGame, componentList, position, text, color)
 		{
 			this.fade = fade;
 		}
@@ -39,7 +40,7 @@ namespace AsteroidOutpost.Entities
 
 			cumulativeTime += deltaTime;
 
-			byte fadeAmount = (byte)((fade * cumulativeTime.TotalSeconds) + 0.5);
+			int fadeAmount = (int)((fade * cumulativeTime.TotalSeconds) + 0.5);
 			fadeTint.R = (byte)Math.Max(0, 255 - fadeAmount);
 			fadeTint.G = (byte)Math.Max(0, 255 - fadeAmount);
 			fadeTint.B = (byte)Math.Max(0, 255 - fadeAmount);

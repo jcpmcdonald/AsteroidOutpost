@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 
@@ -26,8 +27,8 @@ namespace AsteroidOutpost.Entities
 
 
 
-		public Accumulator(AsteroidOutpostScreen theGame, IComponentList componentList, Force theOwningForce, Position position, Color color, int postTimeMilis, Vector2 velocity, float fade)
-			: base(theGame, componentList, theOwningForce)
+		public Accumulator(AsteroidOutpostScreen theGame, IComponentList componentList, Position position, Color color, int postTimeMilis, Vector2 velocity, float fade)
+			: base(theGame, componentList)
 		{
 			this.componentList = componentList;
 			this.position = position;
@@ -86,10 +87,10 @@ namespace AsteroidOutpost.Entities
 					Position textPos = new Position(theGame, componentList, owningForce, position.Center, velocity);
 					/*/
 					// Follow the parent's position
-					Position textPos = new PositionOffset(theGame, componentList, owningForce, position, Vector2.Zero, velocity);
+					Position textPos = new PositionOffset(theGame, componentList, position, Vector2.Zero, velocity);
 					//*/
 
-					FloatingText floatingText = new FloatingText(theGame, componentList, owningForce, textPos, accumulator.ToString("+0;-0;+0"), color, fade);
+					FloatingText floatingText = new FloatingText(theGame, componentList, textPos, accumulator.ToString("+0;-0;+0"), color, fade);
 					theGame.HUD.AddComponent(textPos);
 					theGame.HUD.AddComponent(floatingText);
 
