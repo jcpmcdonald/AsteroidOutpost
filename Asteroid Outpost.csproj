@@ -129,11 +129,11 @@
     <Compile Include="Actor.cs" />
     <Compile Include="AIActor.cs" />
     <Compile Include="Components\Accumulator.cs" />
-    <Compile Include="Components\Beacon.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\HitPoints.cs" />
     <Compile Include="Components\PositionOffset.cs" />
     <Compile Include="Components\ProgressBar.cs" />
+    <Compile Include="Entities\Beacon.cs" />
     <Compile Include="Interfaces\IIdentifiable.cs" />
     <Compile Include="Interfaces\IKillable.cs" />
     <Compile Include="Interfaces\IQuantifiable.cs" />
@@ -174,7 +174,6 @@
     <Compile Include="Screens\HeadsUpDisplay\SelectionInfo.cs" />
     <Compile Include="Entities\Structures\ConstructableEntity.cs" />
     <Compile Include="Entities\Structures\LaserTower.cs" />
-    <Compile Include="Entities\Structures\Miner.cs" />
     <Compile Include="Entities\Units\Ship.cs" />
     <Compile Include="Entities\Units\Ship1.cs" />
     <Compile Include="Entities\Upgrade.cs" />
@@ -209,7 +208,6 @@
       <DependentUpon>ServerHostScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="Screens\StarField.cs" />
     <Compile Include="TextureDictionary.cs" />
     <Compile Include="Screens\HeadsUpDisplay\Radar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

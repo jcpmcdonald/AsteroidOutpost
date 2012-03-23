@@ -14,7 +14,7 @@ using XNASpriteLib;
 
 namespace AsteroidOutpost.Entities
 {
-	public abstract class Entity : IQuadStorable, ISerializable, IIdentifiable, IUpdatable, IKillable
+	public abstract class Entity : IQuadStorable, ISerializable, IIdentifiable, IUpdatable, ICanKillSelf
 	{
 		protected AsteroidOutpostScreen theGame;
 
@@ -53,14 +53,13 @@ namespace AsteroidOutpost.Entities
 			Position = new Position(theGame, componentList, center);
 			Radius = new Radius(theGame, componentList, Position, radius);
 			HitPoints = new HitPoints(theGame, componentList, totalHitPoints);
-			//HitPoints.DyingEvent += KillSelf;
+			HitPoints.DyingEvent += KillSelf;
 
 			componentList.AddComponent(Position);
 			componentList.AddComponent(Radius);
 			componentList.AddComponent(HitPoints);
 		}
 
-		//*
 		protected Entity(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, Vector2 center, int totalHitPoints)
 		{
 			this.theGame = theGame;
@@ -68,12 +67,11 @@ namespace AsteroidOutpost.Entities
 
 			Position = new Position(theGame, componentList, center);
 			HitPoints = new HitPoints(theGame, componentList, totalHitPoints);
-			//HitPoints.DyingEvent += KillSelf;
+			HitPoints.DyingEvent += KillSelf;
 
 			componentList.AddComponent(Position);
 			componentList.AddComponent(HitPoints);
 		}
-		//*/
 
 
 		#region Serializing and Deserializing
@@ -330,6 +328,13 @@ namespace AsteroidOutpost.Entities
 			{
 				hitPoints = value;
 			}
+		}
+
+
+		public void KillSelf(EventArgs e)
+		{
+			// This should only be a local event, so I am authoritative
+			SetDead(true, true);
 		}
 
 
