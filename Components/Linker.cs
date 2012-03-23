@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using AsteroidOutpost.Entities;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AsteroidOutpost.Entities
+namespace AsteroidOutpost.Components
 {
 	/// <summary>
 	/// Displays links to stuff: Linker. Don't complain

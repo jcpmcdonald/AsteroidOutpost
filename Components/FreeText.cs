@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
+using AsteroidOutpost.Entities;
 using AsteroidOutpost.Interfaces;
-using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AsteroidOutpost.Entities
+namespace AsteroidOutpost.Components
 {
 	public class FreeText : Component
 	{

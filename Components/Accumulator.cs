@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 
-namespace AsteroidOutpost.Entities
+namespace AsteroidOutpost.Components
 {
 	public class Accumulator : Component
 	{

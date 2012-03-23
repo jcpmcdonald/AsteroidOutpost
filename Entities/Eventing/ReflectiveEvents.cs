@@ -2,6 +2,7 @@
 
 
 using System;
+using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities.Structures;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;

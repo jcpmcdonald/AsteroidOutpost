@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
+using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 
-namespace AsteroidOutpost.Entities
+namespace AsteroidOutpost.Components
 {
 	public class HitPoints : Component
 	{

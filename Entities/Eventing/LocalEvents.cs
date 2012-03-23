@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AsteroidOutpost.Components;
 using AsteroidOutpost.Interfaces;
 
 namespace AsteroidOutpost.Entities.Eventing

@@ -1,4 +1,5 @@
-﻿using AsteroidOutpost.Entities;
+﻿using AsteroidOutpost.Components;
+using AsteroidOutpost.Entities;
 
 namespace AsteroidOutpost.Interfaces
 {

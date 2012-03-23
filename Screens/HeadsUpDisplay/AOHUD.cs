@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Entities.Structures;

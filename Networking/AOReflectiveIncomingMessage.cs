@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;

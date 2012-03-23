@@ -128,30 +128,30 @@
   <ItemGroup>
     <Compile Include="Actor.cs" />
     <Compile Include="AIActor.cs" />
-    <Compile Include="Entities\Accumulator.cs" />
-    <Compile Include="Entities\Beacon.cs" />
-    <Compile Include="Entities\Component.cs" />
-    <Compile Include="Entities\HitPoints.cs" />
-    <Compile Include="Entities\PositionOffset.cs" />
-    <Compile Include="Entities\ProgressBar.cs" />
+    <Compile Include="Components\Accumulator.cs" />
+    <Compile Include="Components\Beacon.cs" />
+    <Compile Include="Components\Component.cs" />
+    <Compile Include="Components\HitPoints.cs" />
+    <Compile Include="Components\PositionOffset.cs" />
+    <Compile Include="Components\ProgressBar.cs" />
     <Compile Include="Interfaces\IIdentifiable.cs" />
     <Compile Include="Interfaces\IKillable.cs" />
     <Compile Include="Interfaces\IQuantifiable.cs" />
     <Compile Include="Entities\Eventing\LocalEvents.cs" />
     <Compile Include="Entities\Eventing\ReflectiveEvents.cs" />
-    <Compile Include="Entities\FloatingText.cs" />
-    <Compile Include="Entities\FreeText.cs" />
+    <Compile Include="Components\FloatingText.cs" />
+    <Compile Include="Components\FreeText.cs" />
     <Compile Include="Interfaces\IUpdatable.cs" />
-    <Compile Include="Entities\Position.cs" />
-    <Compile Include="Entities\Ring.cs" />
-    <Compile Include="Entities\Radius.cs" />
+    <Compile Include="Components\Position.cs" />
+    <Compile Include="Components\Ring.cs" />
+    <Compile Include="Components\Radius.cs" />
     <Compile Include="GlobalRandom.cs" />
     <Compile Include="Interfaces\IActorIDProvider.cs" />
     <Compile Include="Interfaces\ICanKillSelf.cs" />
     <Compile Include="Interfaces\IComponentList.cs" />
     <Compile Include="Interfaces\IPowerGridNode.cs" />
     <Compile Include="Interfaces\IPowerProducer.cs" />
-    <Compile Include="Entities\Linker.cs" />
+    <Compile Include="Components\Linker.cs" />
     <Compile Include="Networking\AOReflectiveIncomingMessage.cs" />
     <Compile Include="Networking\AOReflectiveOutgoingMessage.cs" />
     <Compile Include="Networking\ClientJoinedGameHandlerArgs.cs" />
@@ -161,7 +161,7 @@
     <Compile Include="Networking\ClientConnectedHandlerArgs.cs" />
     <Compile Include="Networking\ReflectiveEventArgs.cs" />
     <Compile Include="PowerGrid.cs" />
-    <Compile Include="Entities\PowerLinker.cs" />
+    <Compile Include="Components\PowerLinker.cs" />
     <Compile Include="Scenarios\RandomScenario.cs" />
     <Compile Include="Scenarios\Scenario.cs" />
     <Compile Include="Scenarios\TutorialScenario.cs" />
@@ -304,9 +304,7 @@
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Components\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Entities;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AsteroidOutpost.Entities
+namespace AsteroidOutpost.Components
 {
 	public class Ring : Component
 	{

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Entities.Structures;

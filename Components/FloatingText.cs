@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AsteroidOutpost.Entities
+namespace AsteroidOutpost.Components
 {
 	public class FloatingText : FreeText
 	{
