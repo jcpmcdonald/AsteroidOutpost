@@ -1,0 +1,10 @@
+syntax: regexp
+WorkingDirectory/bin*
+WorkingDirectory/screenshots/*
+syntax: glob
+publish/*
+*.suo
+*.user
+*/bin/*
+Installer/*
+obj/*
