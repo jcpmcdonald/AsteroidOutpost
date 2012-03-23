@@ -370,5 +370,10 @@ namespace AsteroidOutpost.Entities
 				DyingEvent(new EntityDyingEventArgs(this));
 			}
 		}
+
+		public override string ToString()
+		{
+			return base.ToString() + " (" + position.Center.X + ", " + position.Center.Y + ")";
+		}
 	}
 }
