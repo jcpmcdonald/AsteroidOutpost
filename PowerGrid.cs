@@ -22,6 +22,8 @@ namespace AsteroidOutpost
 		public const int PowerConductingDistance = 220;
 		private readonly Dictionary<IPowerGridNode, List<IPowerGridNode>> powerNodes = new Dictionary<IPowerGridNode, List<IPowerGridNode>>(32);
 
+		private List<Tuple<IPowerGridNode, IPowerGridNode>> recentlyActiveLinks = new List<Tuple<IPowerGridNode, IPowerGridNode>>();
+
 
 		public PowerGrid(AsteroidOutpostScreen theGame)
 		{
@@ -180,9 +182,20 @@ namespace AsteroidOutpost
 		/// <returns>Returns true if successful, false otherwise</returns>
 		internal bool GetPower(IPowerGridNode startingLocation, float amount)
 		{
-			IPowerProducer powerProducer = GetProducerWithPower(startingLocation, amount);
+			List<IPowerGridNode> path;
+			IPowerProducer powerProducer = GetProducerWithPower(startingLocation, amount, out path);
 			if(powerProducer != null)
 			{
+				for (int iNode = 1; iNode < path.Count; iNode++)
+				{
+					var linkToAdd = new Tuple<IPowerGridNode, IPowerGridNode>(path[iNode - 1], path[iNode]);
+					var linkToAddVariant = new Tuple<IPowerGridNode, IPowerGridNode>(path[iNode], path[iNode - 1]);
+					if (!recentlyActiveLinks.Contains(linkToAdd) && !recentlyActiveLinks.Contains(linkToAddVariant))
+					{
+						recentlyActiveLinks.Add(linkToAdd);
+					}
+				}
+
 				return powerProducer.GetPower(amount);
 			}
 			return false;
@@ -266,11 +279,133 @@ namespace AsteroidOutpost
 		}
 
 
+		private IPowerProducer GetProducerWithPower(IPowerGridNode startingLocation, float amount, out List<IPowerGridNode> path)
+		{
+			// NOTE: This sorted list should be a Min Heap for best performance
+			SortedList<float, IPowerGridNode> toVisit = new SortedList<float, IPowerGridNode>(powerNodes.Count);
+			Dictionary<IPowerGridNode, bool> visited = new Dictionary<IPowerGridNode, bool>(powerNodes.Count);
+			toVisit.Add(0, startingLocation);
+
+			return GetProducerWithPower(ref toVisit, amount, ref visited, out path);
+		}
+
+
+		private IPowerProducer GetProducerWithPower(ref SortedList<float, IPowerGridNode> toVisit,
+		                                            float amount,
+		                                            ref Dictionary<IPowerGridNode, bool> visited,
+		                                            out List<IPowerGridNode> path)
+		{
+			if(toVisit.Count == 0)
+			{
+				// We have exhausted the power grid and there was no power to be had
+				path = null;
+				return null;
+			}
+
+			IPowerGridNode cursor = toVisit.Values[0];
+			float cursorDistance = toVisit.Keys[0];
+			visited.Add(cursor, true);
+			toVisit.RemoveAt(0);
+
+			IPowerProducer producer;
+			if (cursor.ProducesPower)
+			{
+				// OOoo, a power source
+				producer = cursor as IPowerProducer;
+				if (producer != null && producer.AvailablePower >= amount)
+				{
+					// Power discovered, quit
+					path = new List<IPowerGridNode>{ cursor };
+					return producer;
+				}
+			}
+
+			// Add of my unvisited neighbours to the list, sorted by distance
+			foreach (var linkedNode in powerNodes[cursor])
+			{
+				if (!visited.ContainsKey(linkedNode) && linkedNode.PowerStateActive)
+				{
+					// Get the distance from the starting location to the linked node
+					float nodeDistance = cursorDistance + Vector2.Distance(cursor.PowerLinkPointAbsolute, linkedNode.PowerLinkPointAbsolute);
+
+					// Find out if the linked node already exists in the toVisit list
+					int indexOfNode = toVisit.IndexOfValue(linkedNode);
+					if (toVisit.ContainsValue(linkedNode))
+					{
+						// See if the new path is shorter
+						if (toVisit.Keys[indexOfNode] > nodeDistance)
+						{
+							// Replace this node, we're closer
+							toVisit.RemoveAt(indexOfNode);
+							toVisit.Add(nodeDistance, linkedNode);
+						}
+					}
+					else
+					{
+						// There is no existing path the linked node, add one
+						toVisit.Add(nodeDistance, linkedNode);
+					}
+				}
+			}
+
+
+			producer = GetProducerWithPower(ref toVisit, amount, ref visited, out path);
+			if(path != null)
+			{
+				path.Add(cursor);
+			}
+			return producer;
+		}
+
+
+		public void Update(TimeSpan deltaTime)
+		{
+			/*
+			var deleteList = new List<Tuple<IPowerGridNode, IPowerGridNode>>();
+			foreach (var link in recentlyActiveLinks.Keys)
+			{
+				recentlyActiveLinks[link] = recentlyActiveLinks[link].Subtract(deltaTime);
+				if (recentlyActiveLinks[link] <= TimeSpan.Zero)
+				{
+					deleteList.Add(link);
+				}
+			}
+
+			foreach (var link in deleteList)
+			{
+				recentlyActiveLinks.Remove(link);
+			}
+			 * */
+		}
+
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
+			Color color;
+
 			// TODO: This allocates a bunch of memory each draw, fix this!
 			List<Tuple<IPowerGridNode, IPowerGridNode>> linksAlreadyDrawn = new List<Tuple<IPowerGridNode, IPowerGridNode>>(powerNodes.Count * 6);
+
+
+			// Draw all of the active links first
+			foreach (var linkToDraw in recentlyActiveLinks)
+			{
+				if (!linksAlreadyDrawn.Contains(linkToDraw))
+				{
+					color = new Color((int)(150 + theGame.Scale(50)), (int)(150 + theGame.Scale(50)), 0, (int)(150 + theGame.Scale(50)));
+
+					spriteBatch.DrawLine(theGame.WorldToScreen(linkToDraw.Item1.PowerLinkPointAbsolute),
+											 theGame.WorldToScreen(linkToDraw.Item2.PowerLinkPointAbsolute),
+											 color);
+
+					linksAlreadyDrawn.Add(linkToDraw);
+					linksAlreadyDrawn.Add(new Tuple<IPowerGridNode, IPowerGridNode>(linkToDraw.Item2, linkToDraw.Item1));
+				}
+			}
+
+			// Wipe the recent list
+			recentlyActiveLinks.Clear();
+
 
 			foreach (var nodeA in powerNodes.Keys)
 			{
@@ -279,15 +414,13 @@ namespace AsteroidOutpost
 					var linkToDraw = new Tuple<IPowerGridNode, IPowerGridNode>(nodeA, nodeB);
 					if (!linksAlreadyDrawn.Contains(linkToDraw))
 					{
-
-						Color color;
 						if (nodeA.PowerStateActive && nodeB.PowerStateActive)
 						{
-							color = new Color((int)(80 + theGame.Scale(130)), (int)(80 + theGame.Scale(130)), 0, (int)(50 + theGame.Scale(130)));
+							color = new Color((int)(70 + theGame.Scale(50)), (int)(70 + theGame.Scale(50)), 0, (int)(70 + theGame.Scale(50)));
 						}
 						else
 						{
-							color = new Color((int)(80 + theGame.Scale(130)), (int)(0 + theGame.Scale(130)), 0, (int)(0 + theGame.Scale(130)));
+							color = new Color((int)(80 + theGame.Scale(50)), (int)(0 + theGame.Scale(50)), 0, (int)(0 + theGame.Scale(50)));
 						}
 
 						spriteBatch.DrawLine(theGame.WorldToScreen(nodeA.PowerLinkPointAbsolute),
