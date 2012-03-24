@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadTree", "..\QuadTree\Qua
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Primitives2D", "..\Primitives2D\Primitives2D.csproj", "{39AD1482-1881-4852-A05D-DC61B0D3446A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAHUD", "..\XNAHUD\XNAHUD.csproj", "{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAHUD", "..\XNA Screen Manager\XNAHUD.csproj", "{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asteroid OutpostContent", "Content\Asteroid OutpostContent.contentproj", "{D5E6C1BE-DDF9-4FE0-9ADF-7957DB9BC883}"
 EndProject
@@ -19,9 +19,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadTreeUnitTests", "..\Qua
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadTreeVisualTest", "..\QuadTree\QuadTreeVisualTest\QuadTreeVisualTest.csproj", "{776E09CC-C322-4102-8A43-58F4B1B0E525}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAHUDTester", "..\XNAHUD\XNAHUDTester\XNAHUDTester.csproj", "{99B19DDA-8463-47FE-9B6A-77793D10B527}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAHUDTester", "..\XNA Screen Manager\XNAHUDTester\XNAHUDTester.csproj", "{99B19DDA-8463-47FE-9B6A-77793D10B527}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAHUDTesterContent", "..\XNAHUD\XNAHUDTester\Content\XNAHUDTesterContent.contentproj", "{987BF8D0-7FB0-4A58-9B49-B06444C8BD92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAHUDTesterContent", "..\XNA Screen Manager\XNAHUDTester\Content\XNAHUDTesterContent.contentproj", "{987BF8D0-7FB0-4A58-9B49-B06444C8BD92}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadTreeNormalUsageExampleContent", "..\QuadTree\QuadTreeNormalUsageExample\Content\QuadTreeNormalUsageExampleContent.contentproj", "{76C468BF-88E9-4566-A430-71D0C77462DA}"
 EndProject

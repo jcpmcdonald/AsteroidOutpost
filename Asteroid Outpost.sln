@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadTree", "..\QuadTree\Qua
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Primitives2D", "..\Primitives2D\Primitives2D.csproj", "{39AD1482-1881-4852-A05D-DC61B0D3446A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAHUD", "..\XNAHUD\XNAHUD.csproj", "{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAHUD", "..\XNA Screen Manager\XNAHUD.csproj", "{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asteroid OutpostContent", "Content\Asteroid OutpostContent.contentproj", "{D5E6C1BE-DDF9-4FE0-9ADF-7957DB9BC883}"
 EndProject

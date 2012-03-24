@@ -286,7 +286,7 @@
       <Project>{FE3B63BD-7671-43EA-B2CA-04BAC399FEB9}</Project>
       <Name>QuadTree</Name>
     </ProjectReference>
-    <ProjectReference Include="..\XNAHUD\XNAHUD.csproj">
+    <ProjectReference Include="..\XNA Screen Manager\XNAHUD.csproj">
       <Project>{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}</Project>
       <Name>XNAHUD</Name>
     </ProjectReference>
