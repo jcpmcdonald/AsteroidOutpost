@@ -5,30 +5,31 @@ Visual C# 2010 or greater (express works): http://www.microsoft.com/visualstudio
 XNA Game Studio 4.0: http://www.microsoft.com/download/en/details.aspx?id=23714
 
 
-This project relies on four other projects, three on SourceForge and one on Google Code. You will need to checkout all projects into the same root directory as Asteroid Outpost.
+This project relies on four other projects, three Mercurial repositories on Bitbucket and one SVN project on Google Code. You will need to checkout all projects into the same root directory as Asteroid Outpost.
 
 The required projects are:
-QuadTree: https://sourceforge.net/projects/quadtree/
-2D XNA Primitive Shapes Library: https://sourceforge.net/projects/primitives2d/
-2D XNA HUD: https://sourceforge.net/projects/xnahud/
+QuadTree: https://bitbucket.org/jcpmcdonald/quadtree
+2D XNA Primitives: https://bitbucket.org/jcpmcdonald/2d-xna-primitives
+XNA Screen Manager: https://bitbucket.org/jcpmcdonald/xna-screen-manager
 XNASpriteLib: http://code.google.com/p/xnaspritelib/
 
-I would recommend using Tortoise SVN that can be downloaded for free here: http://tortoisesvn.net/
+For the mercurial repositories, I would recommend using Tortoise Hg that can be downloaded for free here: http://tortoisehg.bitbucket.org/
+For SVN, I would recommend using Tortoise SVN that can be downloaded for free here: http://tortoisesvn.net/
 
-The respective SVN paths are:
-https://quadtree.svn.sourceforge.net/svnroot/quadtree/trunk
-https://primitives2d.svn.sourceforge.net/svnroot/primitives2d/trunk
-https://xnahud.svn.sourceforge.net/svnroot/xnahud/trunk
-http://xnaspritelib.googlecode.com/svn/trunk/
+The respective repository paths are:
+Mercurial: https://bitbucket.org/jcpmcdonald/quadtree
+Mercurial: https://bitbucket.org/jcpmcdonald/2d-xna-primitives
+Mercurial: https://bitbucket.org/jcpmcdonald/xna-screen-manager
+SVN: http://xnaspritelib.googlecode.com/svn/trunk/
 
-They will need to be placed in directories called "QuadTree", "Primitives2D", "XNAHUD", and "XNASpriteLib" respectively.
+They will need to be placed in directories called "QuadTree", "Primitives2D", "XNAHUD", and "XNA Screen Manager" respectively.
 
 When you are all done, you should have a directory structure that looks like this (solution files are provided below only as a reference):
 
 [Your Projects]/Asteroid Outpost/Asteroid Outpost.sln
 [Your Projects]/QuadTree/QuadTree.sln
 [Your Projects]/Primitives2D/Primitives2D.sln
-[Your Projects]/XNAHUD/XNAHUD.sln
+[Your Projects]/XNA Screen Manager/XNAHUD.sln
 [Your Projects]/XNASpriteLib/XNASpriteLib.sln
 
 
