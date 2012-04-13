@@ -180,9 +180,12 @@ namespace AsteroidOutpost.Screens
 
 					MemoryStream memStream = new MemoryStream();
 					BinaryWriter bw = new BinaryWriter(memStream);
-					bw.Write((UInt64)0x607A0BAD);
-					bw.Write((byte)0);
+					bw.Write(AsteroidOutpostScreen.StreamIdent);
+					bw.Write(AsteroidOutpostScreen.Version);
+					bw.Write((byte)StreamType.RequestServerInfo);
 					bw.Flush();
+
+
 					udpClient.Send(memStream.GetBuffer(), (int)memStream.Length, remoteIpEndPoint);
 					pingTimer.Start();
 
@@ -237,14 +240,26 @@ namespace AsteroidOutpost.Screens
 
 								BinaryReader br = new BinaryReader(new MemoryStream(bytes));
 
-								String serverName = br.ReadString();
-								int currentPlayers = br.ReadInt32();
-								int maxPlayers = br.ReadInt32();
+								UInt32 handshake = br.ReadUInt32();
+								if(handshake != AsteroidOutpostScreen.StreamIdent)
+								{
+									Debugger.Break();
+								}
 
-								SimpleListRow newServer = new SimpleListRow(new String[]{serverName, "", currentPlayers + "/" + maxPlayers, pingTimer.ElapsedMilliseconds + "ms"});
-								// TODO: Attach something to the server list row so we can update it if I use "Refresh" vs "Update"
-								newServer.Tag = remoteIpEndPoint;
-								newServers.Add(newServer);
+								UInt32 version = br.ReadUInt32();
+								StreamType streamType = (StreamType)br.ReadByte();
+
+								if (streamType == StreamType.ServerInfo)
+								{
+									String serverName = br.ReadString();
+									int currentPlayers = br.ReadInt32();
+									int maxPlayers = br.ReadInt32();
+
+									SimpleListRow newServer = new SimpleListRow(new String[]{serverName, "", currentPlayers + "/" + maxPlayers, pingTimer.ElapsedMilliseconds + "ms"});
+									// TODO: Attach something to the server list row so we can update it if I use "Refresh" vs "Update"
+									newServer.Tag = remoteIpEndPoint;
+									newServers.Add(newServer);
+								}
 							}
 						}
 					}

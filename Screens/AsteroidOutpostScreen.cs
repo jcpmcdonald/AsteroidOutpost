@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
+using System.Net.Mime;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
@@ -18,8 +21,20 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AsteroidOutpost.Screens
 {
+
+	public enum StreamType
+	{
+		RequestServerInfo = 0,
+		ServerInfo,
+		GameData
+	}
+
 	public class AsteroidOutpostScreen : Screen, IReflectionTarget, IActorIDProvider, IComponentList
 	{
+		public const UInt32 Version = 2;
+		public const UInt32 StreamIdent = 0x607A0BAD;  // Get it?
+
+
 		private LayeredStarField layeredStarField;
 		private QuadTree<Entity> quadTree;
 		private Dictionary<int, Component> componentDictionary = new Dictionary<int, Component>(6000);		// Note: This variable must be kept thread-safe
@@ -866,6 +881,46 @@ namespace AsteroidOutpost.Screens
 		public void SetFocus(Vector2 focus)
 		{
 			hud.FocusWorldPoint = focus;
+		}
+
+
+		public void Serialize(BinaryWriter bw, bool serializeActors)
+		{
+			// Write the header
+			bw.Write(StreamIdent);
+			bw.Write(Version);
+			bw.Write((byte)StreamType.GameData);
+
+
+			// Serialize the forces and actors
+			bw.Write(forces.Count);
+			foreach (Force force in forces)
+			{
+				force.Serialize(bw);
+			}
+
+
+			bw.Write(Entities.Count);
+			foreach (Entity entity in Entities)
+			{
+				if (entity == null || entity.GetType().AssemblyQualifiedName == null)
+				{
+					Debugger.Break();	// Something is wrong here
+					continue;
+				}
+				bw.Write(entity.GetType().AssemblyQualifiedName);
+				entity.Serialize(bw);
+			}
+
+
+			if (serializeActors)
+			{
+				bw.Write(actors.Count);
+				foreach (Actor actor in actors)
+				{
+					actor.Serialize(bw);
+				}
+			}
 		}
 	}
 }

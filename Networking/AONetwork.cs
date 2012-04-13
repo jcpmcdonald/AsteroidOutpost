@@ -24,7 +24,6 @@ namespace AsteroidOutpost.Networking
 
 	internal class AONetwork : Network, IReflectionTarget
 	{
-
 		private AsteroidOutpostScreen theGame;
 
 		public const int SpecialTargetNetworkingClass = -1;
@@ -242,86 +241,17 @@ namespace AsteroidOutpost.Networking
 				return;
 			}
 
-			
-			// Serialize the existing forces
-			List<AOOutgoingMessage> forceAndActorMessages = new List<AOOutgoingMessage>(10);
-			foreach (Force force in theGame.Forces)
-			{
-				forceAndActorMessages.Add(new AOReflectiveOutgoingMessage(SpecialTargetTheGame,
-				                                                          "AddForce",
-				                                                          new object[]{force}));
-			}
-
-			// Serialize the existing actors
-			foreach (Actor actor in theGame.Actors)
-			{
-				// Make a copy of the actor so that we can set the role to Remote
-				Actor actorCopy = new Actor(theGame, actor.ID, ActorRole.Remote, actor.PrimaryForce);
-				for (int i = 1; i < actor.Forces.Count; i++)
-				{
-					actorCopy.Forces.Add(actor.Forces[i]);
-				}
-				forceAndActorMessages.Add(new AOReflectiveOutgoingMessage(SpecialTargetTheGame,
-				                                                          "AddActor",
-				                                                          new object[]{actorCopy}));
-			}
-				
-
-
-			// Make some streams to send info with
-			MemoryStream entityMemoryStream = new MemoryStream(10000);
-			BinaryWriter binaryEntityMemoryStream = new BinaryWriter(entityMemoryStream);
-
-			// Sync the entire game state
-			foreach (Entity entity in theGame.Entities)
-			{
-				binaryEntityMemoryStream.Write(entity.GetType().AssemblyQualifiedName);
-				entity.Serialize(binaryEntityMemoryStream);
-			}
-
-			AOOutgoingMessage syncMessage = new AOReflectiveOutgoingMessage(SpecialTargetNetworkingClass,
-			                                                                "ReceiveAllEntityStates",
-			                                                                new object[]{theGame.Entities.Count, entityMemoryStream.GetBuffer()});
-
-
-
 			BinaryWriter clientWriter = beginSend(client);
 			try
 			{
-				// First send the force and actor messages since they are the root of everything
-				foreach (AOOutgoingMessage message in forceAndActorMessages)
-				{
-					message.Serialize(clientWriter);
-				}
-
-
-				// Make new actors and forces for the client
-				// TODO: Assign a preset amount of minerals and assign a team based on game mode and whatever else
 				Force clientForce = new Force(theGame, theGame.GetNextForceID(), 1000, Team.Team2);
 				theGame.AddForce(clientForce);
+
+				theGame.Serialize(clientWriter, false);
+
 				Actor clientActor = new Actor(theGame, theGame.GetNextActorID(), ActorRole.Remote, clientForce);
-				theGame.AddActor(clientActor);
-
-				AOOutgoingMessage makeYourForceMessage = new AOReflectiveOutgoingMessage(SpecialTargetTheGame,
-				                                                                         "AddForce",
-				                                                                         new object[]{clientForce});
-				makeYourForceMessage.Serialize(clientWriter);
-
-
-				AOOutgoingMessage makeYourActorMessage = new AOReflectiveOutgoingMessage(SpecialTargetNetworkingClass,
-				                                                                         "CreateActor",
-				                                                                         new object[]{clientActor.ID, (int)ActorRole.Local, clientForce.ID});
-				makeYourActorMessage.Serialize(clientWriter);
-
-						
-
-				syncMessage.Serialize(clientWriter);
-
-				// TODO: Place this somewhere useful, at least not intersecting other stuff
-				// Make an initial SolarStation for the other player
-				SolarStation startingStation = new SolarStation(theGame, theGame, clientForce, new Vector2(theGame.MapWidth / 2.0f + 300, theGame.MapHeight / 2.0f));
-				startingStation.IsConstructing = false;
-				theGame.Add(startingStation);
+				clientWriter.Write(1);
+				clientActor.Serialize(clientWriter);
 			}
 			catch (Exception ex)
 			{
@@ -794,22 +724,28 @@ namespace AsteroidOutpost.Networking
 						// Woot!  A client
 						byte[] bytes = udpServer.Receive(ref remoteIpEndPoint);
 
-						// I hate working with bytes
 						BinaryReader br = new BinaryReader(new MemoryStream(bytes));
-						UInt64 handshake = br.ReadUInt64();
-						if(handshake != 0x607A0BAD)		// Left as a homework assignment
+						UInt32 handshake = br.ReadUInt32();
+						if (handshake != AsteroidOutpostScreen.StreamIdent)
 						{
 							// TODO: See if this actually kills the whole datagram and allows the server to continue normally
 							br.Close();
 						}
 
-						byte requestType = br.ReadByte();	// I lied, bytes are awesome
+						UInt32 version = br.ReadUInt32();
+
+						StreamType requestType = (StreamType)br.ReadByte();
 						switch(requestType)
 						{
-						case 0:
+						case StreamType.RequestServerInfo:
 							// Good, because this is all I can handle
 							MemoryStream memStream = new MemoryStream();
 							BinaryWriter bw = new BinaryWriter(memStream);
+
+							bw.Write(AsteroidOutpostScreen.StreamIdent);
+							bw.Write(AsteroidOutpostScreen.Version);
+							bw.Write((byte)StreamType.ServerInfo);
+
 							bw.Write(serverName);
 							bw.Write(serverPlayerCount);
 							bw.Write(serverPlayerCapacity);

@@ -8,3 +8,5 @@ publish/*
 */bin/*
 Installer/*
 obj/*
+*.vs10x
+*.cachefile
