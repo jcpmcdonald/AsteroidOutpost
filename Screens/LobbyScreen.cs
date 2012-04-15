@@ -83,10 +83,12 @@ namespace AsteroidOutpost.Screens
 				theGame.Network.StartListening(18189);
 
 				btnStartGame.Enabled = true;
+				btnStartGame.Visible = true;
 			}
 			else
 			{
 				btnStartGame.Enabled = false;
+				btnStartGame.Visible = false;
 			}
 
 

@@ -146,13 +146,10 @@ namespace AsteroidOutpost.Entities.Structures
 			
 			//animations.Update(deltaTime);
 
-			if (theGame.IsServer)
+			if (currentPower < MaxPower)
 			{
-				if (currentPower < MaxPower)
-				{
-					// Produce power
-					SetCurrentPower(currentPower + PowerProductionRate * (float)deltaTime.TotalSeconds);
-				}
+				// Produce power
+				SetCurrentPower(currentPower + PowerProductionRate * (float)deltaTime.TotalSeconds);
 			}
 
 			base.Update(deltaTime);

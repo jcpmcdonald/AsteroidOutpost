@@ -15,7 +15,7 @@ namespace AsteroidOutpost.Components
 		private Vector2 velocity;
 
 
-		[EventReplication(EventReplication.ServerToClients)]
+		//[EventReplication(EventReplication.ServerToClients)]
 		public event Action<EntityMovedEventArgs> MovedEvent;
 
 

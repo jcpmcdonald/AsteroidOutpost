@@ -161,39 +161,46 @@ namespace AsteroidOutpost.Screens
 		{
 			if (component != null)
 			{
-				if (isAuthoritative)
-				{
-					if (isServer)
-					{
-						if (component.ID == -1)
-						{
-							// Assign an ID and replicate this object to the clients
-							component.ID = PopNextComponentID();
-						}
-
-						network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
-						                                                       "Add",
-																			   new object[] { component, true }));
-					}
-					// Tell the network to listen to anything that may happen
-					network.ListenToEvents(component);
-
-					// Add this to a dictionary for quick ID-based lookups
-					lock (componentDictionary)
-					{
-						componentDictionary.Add(component.ID, component);
-					}
-				}
-				else
+				
+				if (component.ID == -1)
 				{
 					// Assign an ID
 					component.ID = PopNextComponentID();
+				}
+				else if(isAuthoritative)
+				{
+					lock(componentDictionary)
+					{
+						if(componentDictionary.ContainsKey(component.ID))
+						{
+							// This component already exists
+							return;
+						}
+					}
+				}
 
-					// Ask the server to make it
+				if (isServer)
+				{
 					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
 					                                                       "Add",
-																		   new object[] { component }));
+					                                                       new object[]{component, true}));
 				}
+				else if(!isAuthoritative)
+				{
+					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
+					                                                       "Add",
+					                                                       new object[]{component}));
+				}
+
+				// Tell the network to listen to anything that may happen
+				network.ListenToEvents(component);
+
+				// Add this to a dictionary for quick ID-based lookups
+				lock (componentDictionary)
+				{
+					componentDictionary.Add(component.ID, component);
+				}
+				
 			}
 		}
 
@@ -207,56 +214,64 @@ namespace AsteroidOutpost.Screens
 		{
 			if (entity != null)
 			{
-				if (isAuthoritative)
+				if (entity.ID == -1)
 				{
-					if (isServer)
-					{
-						if (entity.ID == -1)
-						{
-							// Assign an ID and replicate this object to the clients
-							entity.ID = PopNextComponentID();
-						}
-
-						network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
-																			   "Add",
-																			   new object[] { entity, true }));
-
-						// If we are the server, we do both the pre and post auth events back to back  (post auth is below)
-						if (StructureStartedEventPreAuth != null)
-						{
-							StructureStartedEventPreAuth(new EntityEventArgs(entity));
-						}
-					}
-					// Tell the network to listen to anything that may happen
-					network.ListenToEvents(entity);
-
-					// Add this to the quad tree for rapid area-based lookups
-					quadTree.Add(entity);
-
-					// Add this to a dictionary for quick ID-based lookups
-					lock (componentDictionary)
-					{
-						entityDictionary.Add(entity.ID, entity);
-					}
-					if (StructureStartedEventPostAuth != null)
-					{
-						StructureStartedEventPostAuth(new EntityEventArgs(entity));
-					}
-				}
-				else
-				{
-					// Assign an ID
+					// Assign an ID and replicate this object to the clients
 					entity.ID = PopNextComponentID();
-
-					// Ask the server to make it
-					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
-																		   "Add",
-																		   new object[] { entity }));
-					if (StructureStartedEventPreAuth != null)
+				}
+				else if(isAuthoritative && !isServer)
+				{
+					lock(entityDictionary)
 					{
-						StructureStartedEventPreAuth(new EntityEventArgs(entity));
+						if (entityDictionary.ContainsKey(entity.ID))
+						{
+							// This entity already exists locally. Post-auth and exit
+							if (StructureStartedEventPostAuth != null)
+							{
+								StructureStartedEventPostAuth(new EntityEventArgs(entity));
+							}
+
+							return;
+						}
 					}
 				}
+
+				if (isServer)
+				{
+					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
+					                                                       "Add",
+					                                                       new object[]{ entity, true }));
+				}
+				else if(!isAuthoritative)
+				{
+					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
+					                                                       "Add",
+					                                                       new object[]{ entity }));
+				}
+
+
+				// Tell the network to listen to anything that may happen
+				network.ListenToEvents(entity);
+
+				// Add this to the quad tree for rapid area-based lookups
+				quadTree.Add(entity);
+
+				// Add this to a dictionary for quick ID-based lookups
+				lock (entityDictionary)
+				{
+					entityDictionary.Add(entity.ID, entity);
+				}
+
+				// Pre and Post-auth. Post only if we're the server, it happens later on the client
+				if (StructureStartedEventPreAuth != null)
+				{
+					StructureStartedEventPreAuth(new EntityEventArgs(entity));
+				}
+				if (isServer && StructureStartedEventPostAuth != null)
+				{
+					StructureStartedEventPostAuth(new EntityEventArgs(entity));
+				}
+
 			}
 		}
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,6 +18,10 @@ namespace AsteroidOutpost.Entities.Weapons
 
 		protected Weapon(AsteroidOutpostScreen theGame, Entity theOwner)
 		{
+			if(theGame == null)
+			{
+				Debugger.Break();
+			}
 			this.theGame = theGame;
 			owner = theOwner;
 		}

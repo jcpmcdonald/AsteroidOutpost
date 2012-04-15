@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Threading;
@@ -237,28 +238,32 @@ namespace AsteroidOutpost.Networking
 		{
 			if (!theGame.IsServer)
 			{
-				Debug.Fail("Client is trying to SEND the game state");
+				// Client is trying to SEND the game state
+				Debugger.Break();
 				return;
 			}
 
 			BinaryWriter clientWriter = beginSend(client);
 			try
 			{
+				// TODO: Read this hard-coded mineral value from a data file
 				Force clientForce = new Force(theGame, theGame.GetNextForceID(), 1000, Team.Team2);
 				theGame.AddForce(clientForce);
 
 				theGame.Serialize(clientWriter, false);
 
+				Actor AIActor = theGame.Actors.First(a => a.Role == ActorRole.AI);
+
 				Actor clientActor = new Actor(theGame, theGame.GetNextActorID(), ActorRole.Remote, clientForce);
-				clientWriter.Write(1);
+				clientWriter.Write(2);
 				clientActor.Serialize(clientWriter);
+				AIActor.Serialize(clientWriter);
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine("Failed to send the game state: " + ex.Message);
 			}
 			endSend();
-	
 		}
 
 

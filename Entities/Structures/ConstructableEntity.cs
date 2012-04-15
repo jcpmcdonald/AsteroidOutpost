@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Interfaces;
@@ -357,25 +358,26 @@ namespace AsteroidOutpost.Entities.Structures
 				throw new ArgumentNullException("u");
 			}
 
-			if (authoritative)
-			{
-				currentUpgrade = u;
-				mineralsToUpgrade = u.MineralCost;
-				mineralsLeftToUpgrade = u.MineralCost;
-				isUpgrading = true;
+			
+			currentUpgrade = u;
+			mineralsToUpgrade = u.MineralCost;
+			mineralsLeftToUpgrade = u.MineralCost;
+			isUpgrading = true;
 
-				if(UpgradeStartedEvent != null)
-				{
-					UpgradeStartedEvent(new EntityUpgradeStartedEventArgs(this, u));
-				}
+			if(UpgradeStartedEvent != null)
+			{
+				UpgradeStartedEvent(new EntityUpgradeStartedEventArgs(this, u));
 			}
-			else
+
+			if (!authoritative)
 			{
 				// Request an upgrade
-				if (RequestUpgradeEvent != null)
+				if (RequestUpgradeEvent == null)
 				{
-					RequestUpgradeEvent(new EntityRequestUpgradeEventArgs(this, u));
+					// Nobody is listening to our cries
+					Debugger.Break();
 				}
+				RequestUpgradeEvent(new EntityRequestUpgradeEventArgs(this, u));
 			}
 		}
 
@@ -390,32 +392,35 @@ namespace AsteroidOutpost.Entities.Structures
 		{
 			if (currentUpgrade == null || !isUpgrading)
 			{
-				// Note: This may be alright in a laggy network, but for now:
-				throw new ArgumentException("You can't cancel an upgrade if you aren't upgrading");
+				// Note: This may be alright in a laggy network, but for now
+				// You can't cancel an upgrade if you aren't upgrading
+				Debugger.Break();
 			}
 
-			if (authoritative)
+			
+			// Give the user back half of their spent minerals
+			int mineralsToGiveBack = (int)(((mineralsToUpgrade - mineralsLeftToUpgrade) * 0.5) + 0.5);
+			owningForce.SetMinerals(owningForce.GetMinerals() + mineralsToGiveBack);
+
+			mineralsToUpgrade = 0;
+			mineralsLeftToUpgrade = 0.0f;
+			isUpgrading = false;
+
+			if (UpgradeCancelledEvent != null)
 			{
-				// Give the user back half of their spent minerals
-				int mineralsToGiveBack = (int)(((mineralsToUpgrade - mineralsLeftToUpgrade) * 0.5) + 0.5);
-				owningForce.SetMinerals(owningForce.GetMinerals() + mineralsToGiveBack);
-
-				mineralsToUpgrade = 0;
-				mineralsLeftToUpgrade = 0.0f;
-				isUpgrading = false;
-
-				if (UpgradeCancelledEvent != null)
-				{
-					UpgradeCancelledEvent(new EntityUpgradeCancelledEventArgs(this));
-				}
+				UpgradeCancelledEvent(new EntityUpgradeCancelledEventArgs(this));
 			}
-			else
+
+
+			if (!authoritative)
 			{
 				// Request cancel
-				if (RequestUpgradeCancelEvent != null)
+				if (RequestUpgradeCancelEvent == null)
 				{
-					RequestUpgradeCancelEvent(new EntityRequestUpgradeCancelEventArgs(this));
+					// Nobody is listening to our cries
+					Debugger.Break();
 				}
+				RequestUpgradeCancelEvent(new EntityRequestUpgradeCancelEventArgs(this));
 			}
 		}
 
@@ -433,20 +438,23 @@ namespace AsteroidOutpost.Entities.Structures
 				throw new ArgumentException("You can't cancel constructing if you aren't constructing");
 			}
 
+
+			int mineralsToGiveBack = (int)(((MineralsToConstruct - mineralsLeftToConstruct) * 0.5) + 0.5);
+			owningForce.SetMinerals(owningForce.GetMinerals() + mineralsToGiveBack);
+
 			if (authoritative)
 			{
-				int mineralsToGiveBack = (int)(((MineralsToConstruct - mineralsLeftToConstruct) * 0.5) + 0.5);
-				owningForce.SetMinerals(owningForce.GetMinerals() + mineralsToGiveBack);
-
 				SetDead(true);
 			}
 			else
 			{
 				// Request a cancel
-				if(RequestConstructionCancelEvent != null)
+				if(RequestConstructionCancelEvent == null)
 				{
-					RequestConstructionCancelEvent(new EntityRequestConstructionCancelEventArgs(this));
+					// Nobody is listening to our cries
+					Debugger.Break();
 				}
+				RequestConstructionCancelEvent(new EntityRequestConstructionCancelEventArgs(this));
 			}
 		}
 		
@@ -460,48 +468,41 @@ namespace AsteroidOutpost.Entities.Structures
 		{
 			if(IsConstructing)
 			{
-				if (theGame.IsServer)
+				float powerToUse = powerUsageRate * (float)deltaTime.TotalSeconds;
+				float mineralsToUse = mineralUsageRate * (float)deltaTime.TotalSeconds;
+				int delta;
+
+				// Check that we have enough power in the grid
+				if(theGame.PowerGrid(owningForce).HasPower(this, powerToUse))
 				{
-					float powerToUse = powerUsageRate * (float)deltaTime.TotalSeconds;
-					float mineralsToUse = mineralUsageRate * (float)deltaTime.TotalSeconds;
-					int delta;
-
-					// Check that we have enough power in the grid
-					if(theGame.PowerGrid(owningForce).HasPower(this, powerToUse))
+					// Check to see if the mineralsLeftToConstruct would pass an integer boundary
+					delta = (int)Math.Ceiling(mineralsLeftToConstruct) - (int)Math.Ceiling(mineralsLeftToConstruct - mineralsToUse);
+					if (delta != 0)
 					{
-						// Check to see if the mineralsLeftToConstruct would pass an integer boundary
-						delta = (int)Math.Ceiling(mineralsLeftToConstruct) - (int)Math.Ceiling(mineralsLeftToConstruct - mineralsToUse);
-						if (delta != 0)
+						// If the force doesn't have enough minerals, we will halt the construction here until it does 
+						if (owningForce.GetMinerals() >= delta)
 						{
-							// If the force doesn't have enough minerals, we will halt the construction here until it does 
-							if (owningForce.GetMinerals() >= delta)
-							{
-								// Consume the resources
-								theGame.PowerGrid(owningForce).GetPower(this, powerToUse);
-								SetMineralsLeftToConstruct(mineralsLeftToConstruct - mineralsToUse);
+							// Consume the resources
+							theGame.PowerGrid(owningForce).GetPower(this, powerToUse);
+							SetMineralsLeftToConstruct(mineralsLeftToConstruct - mineralsToUse);
 
-								// Set the force's minerals
-								owningForce.SetMinerals(owningForce.GetMinerals() - delta);
-							}
-							else
-							{
-								// Construction Halts, no progress, no consumption
-							}
+							// Set the force's minerals
+							owningForce.SetMinerals(owningForce.GetMinerals() - delta);
 						}
 						else
 						{
-							// We have not passed an integer boundary, so just keep track of the change locally
-							// We'll get around to subtracting this from the force's minerals when we pass an integer boundary
-							mineralsLeftToConstruct -= mineralsToUse;
-
-							// We should consume our little tidbit of power though:
-							theGame.PowerGrid(owningForce).GetPower(this, powerToUse);
+							// Construction Halts, no progress, no consumption
 						}
 					}
-				}
-				else
-				{
-					// TODO: Maybe predict what the server is doing?
+					else
+					{
+						// We have not passed an integer boundary, so just keep track of the change locally
+						// We'll get around to subtracting this from the force's minerals when we pass an integer boundary
+						mineralsLeftToConstruct -= mineralsToUse;
+
+						// We should consume our little tidbit of power though:
+						theGame.PowerGrid(owningForce).GetPower(this, powerToUse);
+					}
 				}
 			}
 			return true;
@@ -518,28 +519,21 @@ namespace AsteroidOutpost.Entities.Structures
 		{
 			if(isUpgrading && currentUpgrade != null)
 			{
-				if (theGame.IsServer)
-				{
-					float powerToUse = powerUsageRate * (float)deltaTime.TotalSeconds;
-					float mineralsToUse = mineralUsageRate * (float)deltaTime.TotalSeconds;
+				float powerToUse = powerUsageRate * (float)deltaTime.TotalSeconds;
+				float mineralsToUse = mineralUsageRate * (float)deltaTime.TotalSeconds;
 
-					// BUG: There is a disconnect between the check for minerals (below) and the actual consumption of minerals. Could cause weird behaviour
-					if (owningForce.GetMinerals() > mineralsToUse && theGame.PowerGrid(owningForce).GetPower(this, powerToUse))
+				// BUG: There is a disconnect between the check for minerals (below) and the actual consumption of minerals. Could cause weird behaviour
+				if (owningForce.GetMinerals() > mineralsToUse && theGame.PowerGrid(owningForce).GetPower(this, powerToUse))
+				{
+					// Use some minerals toward my upgrade
+					int temp = (int)mineralsLeftToConstruct;
+					SetMineralsLeftToUpgrade(mineralsLeftToUpgrade - mineralsToUse);
+
+					// If the minerals left to construct has increased by a whole number, subtract it from the force's minerals
+					if (temp > (int)mineralsLeftToConstruct)
 					{
-						// Use some minerals toward my upgrade
-						int temp = (int)mineralsLeftToConstruct;
-						SetMineralsLeftToUpgrade(mineralsLeftToUpgrade - mineralsToUse);
-
-						// If the minerals left to construct has increased by a whole number, subtract it from the force's minerals
-						if (temp > (int)mineralsLeftToConstruct)
-						{
-							owningForce.SetMinerals(owningForce.GetMinerals() - (temp - (int)mineralsLeftToConstruct));
-						}
+						owningForce.SetMinerals(owningForce.GetMinerals() - (temp - (int)mineralsLeftToConstruct));
 					}
-				}
-				else
-				{
-					// TODO: Maybe predict what the server is doing?
 				}
 			}
 			return true;

@@ -112,10 +112,10 @@ namespace AsteroidOutpost.Entities.Units
 
 		public void SetTarget(Entity entity, bool authoritative)
 		{
-			if (!authoritative)
-			{
-				return;
-			}
+			//if (!authoritative)
+			//{
+			//	return;
+			//}
 
 			// Detach from the old target
 			if (target != null)

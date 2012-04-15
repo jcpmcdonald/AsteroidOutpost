@@ -61,11 +61,6 @@ namespace AsteroidOutpost.Components
 		/// <param name="authoratative">If you are not authoritative, you will be treated like a client with no control</param>
 		public void Set(float value, bool authoratative)
 		{
-			if (!authoratative)
-			{
-				return;
-			}
-
 			int initialHitPoints = (int)hitPoints;
 
 			// Hit points can't go below zero
@@ -79,7 +74,7 @@ namespace AsteroidOutpost.Components
 				HitPointsChangedEvent(new EntityHitPointsChangedEventArgs(this, hitPoints, (int)(hitPoints) - initialHitPoints));
 			}
 
-			if (hitPoints <= 0.0f)
+			if (authoratative && hitPoints <= 0.0f)
 			{
 				// We have just died
 				SetDead(true);

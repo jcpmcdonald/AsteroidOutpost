@@ -127,10 +127,10 @@ namespace AsteroidOutpost.Entities.Structures
 
 		public void SetMinerals(int value, bool authoritative)
 		{
-			if (!authoritative)
-			{
-				return;
-			}
+			//if (!authoritative)
+			//{
+			//	return;
+			//}
 
 
 			bool changed = (currentMinerals != value);

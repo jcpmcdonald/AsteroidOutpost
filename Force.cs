@@ -63,10 +63,10 @@ namespace AsteroidOutpost
 
 		public void SetMinerals(int value, bool authoritative)
 		{
-			if(!authoritative)
-			{
-				return;
-			}
+			//if(!authoritative)
+			//{
+			//	return;
+			//}
 
 
 			int delta = value - minerals;

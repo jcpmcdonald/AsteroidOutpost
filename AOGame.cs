@@ -79,7 +79,7 @@ namespace AsteroidOutpost
 			graphics.SynchronizeWithVerticalRetrace = false;
 #endif
 
-			IsFixedTimeStep = false;
+			//IsFixedTimeStep = false;
 		}
 		
 		
