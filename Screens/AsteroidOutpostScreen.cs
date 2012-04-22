@@ -248,6 +248,11 @@ namespace AsteroidOutpost.Screens
 					                                                       "Add",
 					                                                       new object[]{ entity }));
 				}
+				else
+				{
+					// This should have been handled and escaped from earlier
+					Debugger.Break();
+				}
 
 
 				// Tell the network to listen to anything that may happen
@@ -501,6 +506,18 @@ namespace AsteroidOutpost.Screens
 			get
 			{
 				return network;
+			}
+		}
+
+		public bool DrawQuadTree
+		{
+			get
+			{
+				return drawQuadTree;
+			}
+			set
+			{
+				drawQuadTree = value;
 			}
 		}
 

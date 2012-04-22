@@ -300,7 +300,15 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			}
 
 
-#if DEBUG
+			if ((theKeyboard[Keys.LeftControl] == EnhancedKeyState.PRESSED || theKeyboard[Keys.RightControl] == EnhancedKeyState.PRESSED) &&
+				(theKeyboard[Keys.LeftShift] == EnhancedKeyState.RELEASED && theKeyboard[Keys.RightShift] == EnhancedKeyState.RELEASED &&
+				 theKeyboard[Keys.LeftAlt] == EnhancedKeyState.RELEASED && theKeyboard[Keys.RightAlt] == EnhancedKeyState.RELEASED)
+				&& theKeyboard[Keys.Q] == EnhancedKeyState.JUST_PRESSED)
+			{
+				theGame.DrawQuadTree = !theGame.DrawQuadTree;
+			}
+
+
 			// Make a new bad guy when a key is pressed for debugging
 			if (theKeyboard[Keys.F8] == EnhancedKeyState.JUST_RELEASED)
 			{
@@ -324,7 +332,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					theGame.Add(new Ship1(theGame, theGame, aiActor.PrimaryForce, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f) + new Vector2(600, -600)));
 				}
 			}
-#endif
 
 
 			// Move the current creating
