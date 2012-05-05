@@ -10,17 +10,17 @@ using AsteroidOutpost.Screens;
 
 namespace AsteroidOutpost
 {
-	class AIActor : Actor
+	class AIController : Controller
 	{
-		private IActorIDProvider actorIDProvider;
+		private IControllerIDProvider actorIDProvider;
 
-		public AIActor(AsteroidOutpostScreen theGame, IActorIDProvider actorIDProvider, Force primaryForce)
-			: base(theGame, actorIDProvider.GetNextActorID(), ActorRole.AI, primaryForce)
+		public AIController(AsteroidOutpostScreen theGame, IControllerIDProvider actorIDProvider, Force primaryForce)
+			: base(theGame, ControllerRole.AI, primaryForce)
 		{
 			this.actorIDProvider = actorIDProvider;
 		}
 
-		public AIActor(IActorIDProvider actorIDProvider, BinaryReader br)
+		public AIController(IControllerIDProvider actorIDProvider, BinaryReader br)
 			: base(br)
 		{
 			this.actorIDProvider = actorIDProvider;

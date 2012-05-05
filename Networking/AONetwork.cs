@@ -187,6 +187,7 @@ namespace AsteroidOutpost.Networking
 
 
 
+		/*
 		// TODO: Limit the visibility of this function because it's really only used internally. The problems with doing that are:
 		//		1) This will get called from an Incoming Message
 		//		2) Reflection needs to be able to look this up
@@ -228,6 +229,7 @@ namespace AsteroidOutpost.Networking
 				
 			}
 		}
+		*/
 
 
 		/// <summary>
@@ -236,34 +238,52 @@ namespace AsteroidOutpost.Networking
 		/// <param name="client">The client to send the game state to</param>
 		private void SendGameStateTo(TcpClient client)
 		{
+			BinaryWriter clientWriter = beginSend(client);
+			SendGameStateTo(clientWriter);
+			endSend();
+		}
+
+		private void SendGameStateTo(BinaryWriter clientWriter)
+		{
 			if (!theGame.IsServer)
 			{
-				// Client is trying to SEND the game state
+				Console.WriteLine("Client is trying to SEND the game state");
 				Debugger.Break();
 				return;
 			}
 
-			BinaryWriter clientWriter = beginSend(client);
+			//BinaryWriter clientWriter = beginSend(client);
 			try
 			{
-				// TODO: Read this hard-coded mineral value from a data file
-				Force clientForce = new Force(theGame, theGame.GetNextForceID(), 1000, Team.Team2);
-				theGame.AddForce(clientForce);
+				MemoryStream memStream = new MemoryStream(4096);
+				BinaryWriter bw = new BinaryWriter(memStream);
 
-				theGame.Serialize(clientWriter, false);
+				theGame.Serialize(bw, false);
 
-				Actor AIActor = theGame.Actors.First(a => a.Role == ActorRole.AI);
+				// TODO: Don't hard-code the team here, and make sure there's exactly 1 result. Better yet, associate the force with the client
+				Force clientForce = theGame.GetForcesOnTeam(Team.Team2)[0];
+				Controller clientController = new Controller(theGame, ControllerRole.Remote, clientForce);
+				Controller aiController = theGame.Controllers.First(a => a.Role == ControllerRole.AI);
+				bw.Write(2);
+				clientController.Serialize(bw);
+				aiController.Serialize(bw);
 
-				Actor clientActor = new Actor(theGame, theGame.GetNextActorID(), ActorRole.Remote, clientForce);
-				clientWriter.Write(2);
-				clientActor.Serialize(clientWriter);
-				AIActor.Serialize(clientWriter);
+				// Add a footer so that we can verify the integrity of this block
+				bw.Write(AsteroidOutpostScreen.StreamIdent);
+				bw.Flush();
+
+
+				new AOReflectiveOutgoingMessage(SpecialTargetTheGame, "Deserialize", new object[] { memStream.GetBuffer() }).Serialize(clientWriter);
+
+				// Don't queue the messages because queued messages are sent to everyone
+				//new AOReflectiveOutgoingMessage(SpecialTargetTheGame, "OnClientJoinedGame", new object[] { "Player" + iPlayer }).Serialize(newClient.GetStream());
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine("Failed to send the game state: " + ex.Message);
+				Debugger.Break();
 			}
-			endSend();
+			//endSend();
 		}
 
 
@@ -306,7 +326,7 @@ namespace AsteroidOutpost.Networking
 						for (int iPlayer = 1; iPlayer <= serverPlayerCount; iPlayer++)
 						{
 							// Don't queue the messages because queued messages are sent to everyone
-							new AOReflectiveOutgoingMessage(ID, "OnClientJoinedGame", new object[]{"Player" + iPlayer}).Serialize(newClient.GetStream());
+							new AOReflectiveOutgoingMessage(SpecialTargetNetworkingClass, "OnClientJoinedGame", new object[]{"Player" + iPlayer}).Serialize(newClient.GetStream());
 						}
 
 						// TODO: How on earth do I get their name!?!
@@ -403,16 +423,15 @@ namespace AsteroidOutpost.Networking
 		}
 
 
-		// TODO: Find a more appropriate home for this. Is a static method in the Actor appropriate?
+		// TODO: Find a more appropriate home for this. Is a static method in the Controller appropriate?
 		/// <summary>
-		/// Creates an actor and adds it to the game
+		/// Creates a controller and adds it to the game
 		/// </summary>
-		/// <param name="actorID">The ID for the actor</param>
-		/// <param name="role">The actor's role</param>
-		/// <param name="forceID">The actor's primary force's ID</param>
-		public void CreateActor(int actorID, int role, int forceID)
+		/// <param name="role">The controller's role</param>
+		/// <param name="forceID">The controller's primary force's ID</param>
+		public void CreateController(int role, int forceID)
 		{
-			theGame.AddActor(new Actor(theGame, actorID, (ActorRole)role, theGame.GetForce(forceID)));
+			theGame.AddController(new Controller(theGame, (ControllerRole)role, theGame.GetForce(forceID)));
 		}
 
 
@@ -669,6 +688,7 @@ namespace AsteroidOutpost.Networking
 					else
 					{
 						Console.WriteLine("Server beacon replied: {0}({1})", xmlDoc.Name.LocalName, xmlDoc.Attribute("code"));
+						Debugger.Break();
 					}
 				}
 				//catch (Exception ex)
@@ -739,24 +759,24 @@ namespace AsteroidOutpost.Networking
 
 						UInt32 version = br.ReadUInt32();
 
-						StreamType requestType = (StreamType)br.ReadByte();
-						switch(requestType)
+						StreamType streamType = (StreamType)br.ReadByte();
+						if (streamType != StreamType.RequestServerInfo)
 						{
-						case StreamType.RequestServerInfo:
-							// Good, because this is all I can handle
-							MemoryStream memStream = new MemoryStream();
-							BinaryWriter bw = new BinaryWriter(memStream);
-
-							bw.Write(AsteroidOutpostScreen.StreamIdent);
-							bw.Write(AsteroidOutpostScreen.Version);
-							bw.Write((byte)StreamType.ServerInfo);
-
-							bw.Write(serverName);
-							bw.Write(serverPlayerCount);
-							bw.Write(serverPlayerCapacity);
-							udpServer.Send(memStream.GetBuffer(), (int)memStream.Length, remoteIpEndPoint);
-							break;
+							Debugger.Break();
 						}
+
+						MemoryStream memStream = new MemoryStream();
+						BinaryWriter bw = new BinaryWriter(memStream);
+
+						bw.Write(AsteroidOutpostScreen.StreamIdent);
+						bw.Write(AsteroidOutpostScreen.Version);
+						bw.Write((byte)StreamType.ServerInfo);
+
+						bw.Write(serverName);
+						bw.Write(serverPlayerCount);
+						bw.Write(serverPlayerCapacity);
+						udpServer.Send(memStream.GetBuffer(), (int)memStream.Length, remoteIpEndPoint);
+						break;
 
 					}
 					else
@@ -781,83 +801,33 @@ namespace AsteroidOutpost.Networking
 			foreach (BinaryWriter clientWriter in clientWriters)
 			{
 				count++;
-				int clientStartingID = (Int32.MaxValue / 4) * count;
-				new AOReflectiveOutgoingMessage(theGame.ID, "StartClient", new object[] { clientStartingID }).Serialize(clientWriter);
 
-				Force clientForce = new Force(theGame, theGame.GetNextForceID(), 1000, Team.Team2);
-				theGame.AddForce(clientForce);
-				Actor clientActor = new Actor(theGame, theGame.GetNextActorID(), ActorRole.Remote, clientForce);
-				theGame.AddActor(clientActor);
+				SendGameStateTo(clientWriter);
+
+				int clientStartingID = (Int32.MaxValue / 4) * count;
+				new AOReflectiveOutgoingMessage(SpecialTargetTheGame, "StartClient", new object[] { clientStartingID }).Serialize(clientWriter);
+
+				//Force clientForce = new Force(theGame, theGame.GetNextForceID(), 1000, Team.Team2);
+				//theGame.AddForce(clientForce);
+				//Controller clientController = new Controller(theGame, theGame.GetNextControllerID(), ControllerRole.Remote, clientForce);
+				//theGame.AddController(clientController);
 
 				// Flush the outgoing queue
 				ProcessOutgoingQueue();
 
-				theGame.CreatePowerGrid(clientForce);
-				//new AOReflectiveOutgoingMessage(theGame.ID, "CreatePowerGrid", new object[] { clientForce }).Serialize(clientWriter);
-
-
-				// TODO: Allow targeted messages in the queue and change this to a queue message
-				// Tell this client about their own actor
-				new AOReflectiveOutgoingMessage(SpecialTargetNetworkingClass,
-				                                "CreateActor",
-				                                new object[]{clientActor.ID, (int)ActorRole.Local, clientForce.ID}).Serialize(clientWriter);
-
-				// Tell all the other clients about the actor
-				foreach (BinaryWriter otherClientWriter in clientWriters)
-				{
-					if(clientWriter != otherClientWriter)
-					{
-						new AOReflectiveOutgoingMessage(theGame.ID, "AddActor", new object[]{clientActor}).Serialize(otherClientWriter);
-					}
-				}
-
-
-				// Make an initial SolarStation for the other player
-				SolarStation startingStation = new SolarStation(theGame, theGame, clientForce, Vector2.Zero);
-				startingStation.StartConstruction();
-				startingStation.IsConstructing = false;
+				//theGame.CreatePowerGrid(clientForce);
 				
-				// Make sure we are minimum distance from the other player(s), and that we aren't colliding with something
-				Random rand = new Random();
-				bool findNewHome = true;
-				int attempts = 0;
-				while (findNewHome)
-				{
-					int xDelta = rand.Next(-800, 800);
-					int yDelta = rand.Next(-800, 800);
-					startingStation.Position.Center = new Vector2(theGame.MapWidth / 2.0f + xDelta, theGame.MapHeight / 2.0f + yDelta);
-					findNewHome = false;
 
-					// Ensure no collisions
-					List<Entity> nearbyEntities = theGame.EntitiesInArea(startingStation.Rect);
-					foreach (Entity nearbyEntity in nearbyEntities)
-					{
-						if (startingStation.Radius.IsIntersecting(nearbyEntity.Radius))
-						{
-							findNewHome = true;
-						}
-					}
-
-					// Ensure a minimum distance of 300 units to your neighbours
-					int minDistance = 300 - (attempts * 20);
-					if (!findNewHome && minDistance > 0)
-					{
-						nearbyEntities = theGame.EntitiesInArea((int)startingStation.Position.Center.X - (minDistance / 2), (int)startingStation.Position.Center.Y - (minDistance / 2), minDistance, minDistance);
-						foreach (Entity nearbyEntity in nearbyEntities)
-						{
-							if(nearbyEntity is SolarStation && startingStation.Position.Distance(nearbyEntity.Position) < minDistance)
-							{
-								attempts++;
-								findNewHome = true;
-							}
-						}
-					}
-				}
-
-				theGame.Add(startingStation);
+				/*
+				// TODO: Allow targeted messages in the queue and change this to a queue message
+				// Tell this client about their own controller
+				new AOReflectiveOutgoingMessage(SpecialTargetNetworkingClass,
+				                                "CreateController",
+				                                new object[]{(int)ControllerRole.Local, clientForce.ID}).Serialize(clientWriter);
+				*/
 
 				// Set this guy's focus to his start location
-				new AOReflectiveOutgoingMessage(theGame.ID, "SetFocus", new object[] { startingStation.Position.Center }).Serialize(clientWriter);
+				//new AOReflectiveOutgoingMessage(theGame.ID, "SetFocus", new object[] { startingStation.Position.Center }).Serialize(clientWriter);
 			}
 			endSend();
 		}

@@ -173,37 +173,23 @@ namespace AsteroidOutpost.Networking
 
 				while (DEATH_AND_TAXES)
 				{
-					//try
+					// Doing it this way allows for abortions, >:D
+					if (clientStream.DataAvailable)
 					{
-						// Doing it this way allows for abortions, >:D
-						if (clientStream.DataAvailable)
-						{
-							handleClientMessage(clientStream);
-						}
-						else
-						{
-							// Let up to allow other threads processor time
-							Thread.Sleep(0);
-						}
+						handleClientMessage(clientStream);
+					}
+					else
+					{
+						// Let up to allow other threads processor time
+						Thread.Sleep(0);
+					}
 
 
-						if(!tcpClient.Connected)
-						{
-#if DEBUG
-							Console.WriteLine("Client has disconnected");
-#endif
-							break;
-						}
-					}
-					/*
-					catch(Exception ex)
+					if(!tcpClient.Connected)
 					{
-						// A socket error has occurred, I guess we should terminate?
-						Console.WriteLine(ex.Message);
-						throw;
-						//break;
+						Console.WriteLine("Client has disconnected");
+						break;
 					}
-					*/
 				}
 			}
 			finally

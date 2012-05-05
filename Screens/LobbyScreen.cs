@@ -10,6 +10,8 @@ namespace AsteroidOutpost.Screens
 	{
 		private AsteroidOutpostScreen theGame;
 
+		private int playerCount = 1;
+
 		public LobbyScreen(AsteroidOutpostScreen theGame, ScreenManager theScreenManager, LayeredStarField starField)
 			: base(theScreenManager, starField)
 		{
@@ -26,7 +28,7 @@ namespace AsteroidOutpost.Screens
 
 		void btnStartGame_Click(object sender, C3.XNA.Events.MouseButtonEventArgs e)
 		{
-			theGame.StartServer(new RandomScenario(theGame));
+			theGame.StartServer(new RandomScenario(theGame, playerCount));
 			ScreenMan.SwitchScreens("Game");
 		}
 
@@ -71,6 +73,7 @@ namespace AsteroidOutpost.Screens
 		protected override void StartTransitionToward(TimeSpan deltaTime, EnhancedMouseState theMouse, EnhancedKeyboardState theKeyboard)
 		{
 			lstPlayers.ClearListItems();
+			playerCount = 0;
 
 			theGame.Network.ClientJoinedGame += AONetwork_ClientJoinedGame;
 
@@ -99,6 +102,7 @@ namespace AsteroidOutpost.Screens
 		private void AONetwork_ClientJoinedGame(object sender, ClientJoinedGameHandlerArgs args)
 		{
 			lstPlayers.AddListItem(new SimpleListRow(new String[]{ args.PlayerName }));
+			playerCount++;
 		}
 
 

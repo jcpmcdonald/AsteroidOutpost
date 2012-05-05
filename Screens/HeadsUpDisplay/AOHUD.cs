@@ -42,7 +42,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		private readonly List<Component> components = new List<Component>(10);
 
 		private Form inGameMenu;
-		private Actor localActor;
+		private Controller localActor;
 		private bool isDraggingScreen;
 
 
@@ -312,10 +312,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			// Make a new bad guy when a key is pressed for debugging
 			if (theKeyboard[Keys.F8] == EnhancedKeyState.JUST_RELEASED)
 			{
-				Actor aiActor = null;
-				foreach (Actor actor in theGame.Actors)
+				Controller aiActor = null;
+				foreach (Controller actor in theGame.Controllers)
 				{
-					if (actor.Role == ActorRole.AI)
+					if (actor.Role == ControllerRole.AI)
 					{
 						aiActor = actor;
 						break;
@@ -646,7 +646,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		}
 
 		
-		public Actor LocalActor
+		public Controller LocalActor
 		{
 			get { return localActor; }
 			set

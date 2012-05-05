@@ -14,10 +14,10 @@ namespace AsteroidOutpost
 	{
 		public static void CreateWave(AsteroidOutpostScreen theGame, int pointValue, Vector2 roughPosition)
 		{
-			Actor aiActor = null;
-			foreach (Actor actor in theGame.Actors)
+			Controller aiActor = null;
+			foreach (Controller actor in theGame.Controllers)
 			{
-				if (actor.Role == ActorRole.AI)
+				if (actor.Role == ControllerRole.AI)
 				{
 					aiActor = actor;
 					break;

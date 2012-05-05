@@ -103,8 +103,16 @@ namespace AsteroidOutpost
 	
 	public enum Team
 	{
-		Team1,
+		Team1 = 0,
 		Team2,
+		Team3,
+		Team4,
+		Team5,
+		Team6,
+		Team7,
+		Team8,
+		Team9,
+		Team10,
 		AI,
 		Neutral
 	}

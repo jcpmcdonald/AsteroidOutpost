@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
-using System.Net.Mime;
+using System.Linq;
+using System.Reflection;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
@@ -18,6 +18,7 @@ using C3.XNA.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Console = System.Console;
 
 namespace AsteroidOutpost.Screens
 {
@@ -29,7 +30,7 @@ namespace AsteroidOutpost.Screens
 		GameData
 	}
 
-	public class AsteroidOutpostScreen : Screen, IReflectionTarget, IActorIDProvider, IComponentList
+	public class AsteroidOutpostScreen : Screen, IReflectionTarget, IControllerIDProvider, IComponentList
 	{
 		public const UInt32 Version = 2;
 		public const UInt32 StreamIdent = 0x607A0BAD;  // Get it?
@@ -54,7 +55,7 @@ namespace AsteroidOutpost.Screens
 		private int nextActorID = 0;
 
 
-		private readonly List<Actor> actors = new List<Actor>();
+		private readonly List<Controller> controllers = new List<Controller>();
 		private readonly List<Force> forces = new List<Force>();
 
 		public event Action<EntityEventArgs> StructureStartedEventPreAuth;
@@ -78,13 +79,13 @@ namespace AsteroidOutpost.Screens
 
 
 		/// <summary>
-		/// Gets all of the Actors in the game
+		/// Gets all of the Controllers in the game
 		/// </summary>
-		public IEnumerable<Actor> Actors
+		public IEnumerable<Controller> Controllers
 		{
 			get
 			{
-				return actors;
+				return controllers;
 			}
 		}
 
@@ -131,17 +132,28 @@ namespace AsteroidOutpost.Screens
 		/// <param name="obj">The identifiable item to add to the game</param>
 		public void Add(IIdentifiable obj)
 		{
+			Add(obj, isServer);
+		}
+
+
+		/// <summary>
+		/// Adds the identifiable item to the game. If the game is a client, this will send a request to the server instead
+		/// </summary>
+		/// <param name="obj">The identifiable item to add to the game</param>
+		/// <param name="isAuthoritative">If true, indicates that this instance of the game is a server OR that we have been told to do this by the server</param>
+		public void Add(IIdentifiable obj, bool isAuthoritative)
+		{
 			Entity entity = obj as Entity;
 			if (entity != null)
 			{
-				Add(entity, isServer);
+				Add(entity, isAuthoritative);
 			}
 			else
 			{
 				Component component = obj as Component;
 				if (component != null)
 				{
-					Add(component, isServer);
+					Add(component, isAuthoritative);
 				}
 				else
 				{
@@ -247,11 +259,6 @@ namespace AsteroidOutpost.Screens
 					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
 					                                                       "Add",
 					                                                       new object[]{ entity }));
-				}
-				else
-				{
-					// This should have been handled and escaped from earlier
-					Debugger.Break();
 				}
 
 
@@ -536,12 +543,14 @@ namespace AsteroidOutpost.Screens
 		public void CreatePowerGrid(Force force)
 		{
 			powerGrid.Add(force.ID, new PowerGrid(this));
+			/*
 			if(isServer)
 			{
-				network.EnqueueMessage(new AOReflectiveOutgoingMessage(-2,
+				network.EnqueueMessage(new AOReflectiveOutgoingMessage(ID,
 				                                                       "CreatePowerGrid",
 				                                                       new object[]{ force }));
 			}
+			*/
 		}
 
 
@@ -572,6 +581,8 @@ namespace AsteroidOutpost.Screens
 			isServer = false;
 			ScreenMan.SwitchScreens("Game");
 			hud.FocusWorldPoint = new Vector2(MapWidth / 2f, MapHeight / 2f);
+
+			AddController(new Controller(this, ControllerRole.Local, GetForcesOnTeam(Team.Team2)[0]));
 		}
 
 
@@ -653,7 +664,7 @@ namespace AsteroidOutpost.Screens
 
 
 				// Update the Actors
-				foreach (Actor actor in actors)
+				foreach (Controller actor in controllers)
 				{
 					actor.Update(deltaTime);
 				}
@@ -780,6 +791,20 @@ namespace AsteroidOutpost.Screens
 			return null;
 		}
 
+		public List<Force> GetForcesOnTeam(Team team)
+		{
+			List<Force> forcesOnTeam = new List<Force>(4);
+			foreach (Force force in forces)
+			{
+				if (force.Team == team)
+				{
+					forcesOnTeam.Add(force);
+				}
+			}
+
+			return forcesOnTeam;
+		}
+
 
 
 		public int GetNextEntityID()
@@ -794,7 +819,7 @@ namespace AsteroidOutpost.Screens
 		}
 
 
-		public int GetNextActorID()
+		public int GetNextControllerID()
 		{
 			return nextActorID++;
 		}
@@ -815,12 +840,12 @@ namespace AsteroidOutpost.Screens
 		}
 
 
-		public void AddActor(Actor actor)
+		public void AddController(Controller controller)
 		{
-			actors.Add(actor);
-			if(actor.Role == ActorRole.Local && hud.LocalActor == null)
+			controllers.Add(controller);
+			if(controller.Role == ControllerRole.Local && hud.LocalActor == null)
 			{
-				hud.LocalActor = actor;
+				hud.LocalActor = controller;
 			}
 
 		}
@@ -932,27 +957,140 @@ namespace AsteroidOutpost.Screens
 			}
 
 
-			bw.Write(Entities.Count);
-			foreach (Entity entity in Entities)
+			// serialize the power grids
+			bw.Write(powerGrid.Count);
+			foreach (int gridOwner in powerGrid.Keys)
 			{
-				if (entity == null || entity.GetType().AssemblyQualifiedName == null)
+				bw.Write(gridOwner);
+			}
+
+
+			bw.Write(entityDictionary.Count + componentDictionary.Count);
+			foreach (ISerializable serializableObj in componentDictionary.Values.Concat<ISerializable>(entityDictionary.Values))
+			{
+				if (serializableObj == null || serializableObj.GetType().AssemblyQualifiedName == null)
 				{
-					Debugger.Break();	// Something is wrong here
+					Debugger.Break(); // Something is wrong here
 					continue;
 				}
-				bw.Write(entity.GetType().AssemblyQualifiedName);
-				entity.Serialize(bw);
+				bw.Write(serializableObj.GetType().AssemblyQualifiedName);
+				serializableObj.Serialize(bw);
 			}
 
 
 			if (serializeActors)
 			{
-				bw.Write(actors.Count);
-				foreach (Actor actor in actors)
+				bw.Write(controllers.Count);
+				foreach (Controller actor in controllers)
 				{
 					actor.Serialize(bw);
 				}
+
+
+				// Add a footer so that we can verify the integrity of this block
+				bw.Write(StreamIdent);
 			}
 		}
+
+
+		public void Deserialize(byte[] bytes)
+		{
+			Deserialize(new BinaryReader(new MemoryStream(bytes)));
+		}
+
+
+		public void Deserialize(BinaryReader br)
+		{
+			UInt32 handshake = br.ReadUInt32();
+			if (handshake != AsteroidOutpostScreen.StreamIdent)
+			{
+				String msg = "Failed handshake during game deserialization";
+				Console.WriteLine(msg);
+				Debugger.Break();
+				throw new Exception(msg);
+			}
+
+			UInt32 version = br.ReadUInt32();
+			StreamType streamType = (StreamType)br.ReadByte();
+
+			if(streamType != StreamType.GameData)
+			{
+				Debugger.Break();
+			}
+
+
+			int forceCount = br.ReadInt32();
+			for(int iForce = 0; iForce < forceCount; iForce++)
+			{
+				Force force = new Force(br);
+				AddForce(force);
+				force.PostDeserializeLink(this);
+			}
+
+
+			int powerGridCount = br.ReadInt32();
+			for (int iGrid = 0; iGrid < powerGridCount; iGrid++)
+			{
+				int owningForceID = br.ReadInt32();
+				CreatePowerGrid(GetForce(owningForceID));
+			}
+
+
+			// Unpack all of the entities and components
+			int entityCount = br.ReadInt32();
+			List<ISerializable> createdEntities = new List<ISerializable>(entityCount);
+			for (int iEntity = 0; iEntity < entityCount; iEntity++)
+			{
+				String assemName = br.ReadString();
+
+				// Use reflection to make a new entity of... whatever type was sent to us
+				Type t = Type.GetType(assemName);
+				ConstructorInfo entityConstructor = t.GetConstructor(new Type[] { typeof(BinaryReader) });
+				Object obj = entityConstructor.Invoke(new object[]{ br });
+				ISerializable serializableObj = obj as ISerializable;
+				IIdentifiable identifiableObj = obj as IIdentifiable;
+
+				if(serializableObj != null)
+				{
+					//createdEntities.Add(serializableObj);
+					serializableObj.PostDeserializeLink(this);
+				}
+
+				if(identifiableObj != null)
+				{
+					Add(identifiableObj, true);
+				}
+			}
+
+
+			// Link the entities up
+			foreach (var createdEntity in createdEntities)
+			{
+				createdEntity.PostDeserializeLink(this);
+			}
+
+
+			int controllerCount = br.ReadInt32();
+			for (int iController = 0; iController < controllerCount; iController++)
+			{
+				Controller controller = new Controller(br);
+				AddController(controller);
+				controller.PostDeserializeLink(this);
+			}
+
+			// Read the footer
+			UInt32 footer = br.ReadUInt32();
+			if (footer != AsteroidOutpostScreen.StreamIdent)
+			{
+				String msg = "Failed handshake during game deserialization";
+				Console.WriteLine(msg);
+				Debugger.Break();
+				throw new Exception(msg);
+			}
+		}
+
+
+
+
 	}
 }

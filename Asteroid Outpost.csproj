@@ -126,8 +126,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actor.cs" />
-    <Compile Include="AIActor.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="AIController.cs" />
     <Compile Include="Components\Accumulator.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\HitPoints.cs" />
@@ -146,7 +146,7 @@
     <Compile Include="Components\Ring.cs" />
     <Compile Include="Components\Radius.cs" />
     <Compile Include="GlobalRandom.cs" />
-    <Compile Include="Interfaces\IActorIDProvider.cs" />
+    <Compile Include="Interfaces\IControllerIDProvider.cs" />
     <Compile Include="Interfaces\ICanKillSelf.cs" />
     <Compile Include="Interfaces\IComponentList.cs" />
     <Compile Include="Interfaces\IPowerGridNode.cs" />

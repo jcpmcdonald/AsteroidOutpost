@@ -7,31 +7,31 @@ using AsteroidOutpost.Screens;
 
 namespace AsteroidOutpost
 {
-	public class Actor : ISerializable
+	public class Controller : ISerializable
 	{
 
 		protected AsteroidOutpostScreen theGame;
 
-		private int id;
-		private readonly ActorRole role;
+		//private int id;
+		private readonly ControllerRole role;
 		private List<Force> forces = new List<Force>(1);
 
 		// Deserialized, Pre-linked IDs
 		private List<int> forceIDs = new List<int>(1);
 
 
-		public Actor(AsteroidOutpostScreen theGame, int theID, ActorRole theRole, Force primaryForce)
+		public Controller(AsteroidOutpostScreen theGame, ControllerRole role, Force primaryForce)
 		{
 			this.theGame = theGame;
-			id = theID;
-			role = theRole;
+			//this.id = id;
+			this.role = role;
 			forces.Add(primaryForce);
 		}
 
-		public Actor(BinaryReader br)
+		public Controller(BinaryReader br)
 		{
-			id = br.ReadInt32();
-			role = (ActorRole)br.ReadInt32();
+			//id = br.ReadInt32();
+			role = (ControllerRole)br.ReadInt32();
 
 			int forceCount = br.ReadInt32();
 			for (int i = 0; i < forceCount; i++)
@@ -47,7 +47,7 @@ namespace AsteroidOutpost
 		/// <param name="bw">The binary writer to serialize to</param>
 		public void Serialize(BinaryWriter bw)
 		{
-			bw.Write(id);
+			//bw.Write(id);
 			bw.Write((int)role);
 			bw.Write(forces.Count);
 			foreach(Force force in forces)
@@ -73,7 +73,7 @@ namespace AsteroidOutpost
 		}
 
 
-		public ActorRole Role
+		public ControllerRole Role
 		{
 			get { return role; }
 		}
@@ -90,7 +90,7 @@ namespace AsteroidOutpost
 			{
 				if(value.Count == 0)
 				{
-					Console.WriteLine("Actors must control at least 1 Force at all times");
+					Console.WriteLine("Controllers must control at least 1 Force at all times");
 					Debugger.Break();
 				}
 				forces = value;
@@ -102,21 +102,23 @@ namespace AsteroidOutpost
 		}
 
 
+		/*
 		/// <summary>
-		/// Gets the Actor's ID
+		/// Gets the Controller's ID
 		/// </summary>
 		public int ID
 		{
 			get { return id; }
 		}
+		*/
 	}
 
 
-	public enum ActorRole
+	public enum ControllerRole
 	{
 		Idle,
 		Local,
 		Remote,
-		AI			// Note: Do I need a local AI and a remote AI?
+		AI
 	}
 }

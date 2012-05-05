@@ -435,7 +435,8 @@ namespace AsteroidOutpost.Entities.Structures
 			if (!isConstructing)
 			{
 				// Note: This may be alright in a laggy network, but for now:
-				throw new ArgumentException("You can't cancel constructing if you aren't constructing");
+				Console.WriteLine("You can't cancel constructing if you aren't constructing");
+				Debugger.Break();
 			}
 
 

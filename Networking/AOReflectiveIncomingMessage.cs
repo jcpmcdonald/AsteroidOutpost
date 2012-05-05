@@ -106,8 +106,8 @@ namespace AsteroidOutpost.Networking
 				else if (types[i].IsSubclassOf(typeof(Component)) ||
 						types[i].IsSubclassOf(typeof(Entity)) ||
 						types[i] == typeof(Force) || 
-					    types[i] == typeof(Actor) ||
-					    types[i] == typeof(AIActor))
+					    types[i] == typeof(Controller) ||
+					    types[i] == typeof(AIController))
 				{
 					// Use reflection to make a new object of... whatever type was sent to us
 					ConstructorInfo componentConstructor = types[i].GetConstructor(new Type[] { typeof(BinaryReader) });

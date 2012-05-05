@@ -93,9 +93,9 @@ namespace AsteroidOutpost.Networking
 				{
 					((Force)parameter).Serialize(bw);
 				}
-				else if (parameter is Actor)
+				else if (parameter is Controller)
 				{
-					((Actor)parameter).Serialize(bw);
+					((Controller)parameter).Serialize(bw);
 				}
 				else
 				{

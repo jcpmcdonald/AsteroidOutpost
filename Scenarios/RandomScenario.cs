@@ -18,7 +18,8 @@ namespace AsteroidOutpost.Scenarios
 		private int sequence = 0;
 
 
-		public RandomScenario(AsteroidOutpostScreen theGame) : base(theGame)
+		public RandomScenario(AsteroidOutpostScreen theGame, int playerCount)
+			: base(theGame, playerCount)
 		{
 		}
 
@@ -27,106 +28,36 @@ namespace AsteroidOutpost.Scenarios
 		{
 			elapsedTime = new TimeSpan(0);
 
-			// Set up some forces and actors
-			Force localForce = new Force(theGame, theGame.GetNextForceID(), 1000, Team.Team1);
-			Actor localActor = new Actor(theGame, theGame.GetNextActorID(), ActorRole.Local, localForce);
-			theGame.AddForce(localForce);
-			theGame.AddActor(localActor);
+			GenerateAsteroidField(1000);
 
-			Force aiForce = new Force(theGame, theGame.GetNextForceID(), 1000, Team.AI);
-			Actor aiActor = new AIActor(theGame, theGame, aiForce);
-			theGame.AddForce(aiForce);
-			theGame.AddActor(aiActor);
-
-			// Send both actors to the clients
-			// Make a copy of the actor so that we can set the role to Remote
-			Actor localActorCopy = new Actor(theGame, localActor.ID, ActorRole.Remote, localActor.PrimaryForce);
-			for (int i = 1; i < localActor.Forces.Count; i++)
+			// Set up the player forces and local controller
+			int initialMinerals = 1000;
+			for (int iPlayer = 0; iPlayer < playerCount; iPlayer++)
 			{
-				localActorCopy.Forces.Add(localActor.Forces[i]);
-			}
-
-			Actor aiActorCopy = new Actor(theGame, aiActor.ID, ActorRole.Remote, aiActor.PrimaryForce);
-			for (int i = 1; i < aiActor.Forces.Count; i++)
-			{
-				aiActorCopy.Forces.Add(aiActor.Forces[i]);
-			}
-
-			theGame.CreatePowerGrid(localForce);
+				Force force = new Force(theGame, theGame.GetNextForceID(), initialMinerals, (Team)iPlayer);
+				theGame.AddForce(force);
+				theGame.CreatePowerGrid(force);
+				Vector2 focusPoint = CreateStartingBase(force);
 
 
-			theGame.HUD.FocusWorldPoint = new Vector2(theGame.MapWidth / 2f, theGame.MapHeight / 2f);
-			//hud.LocalActor = localActor;
-
-
-			// Create your starting solar station
-			SolarStation startingStation = new SolarStation(theGame, theGame, localActor.PrimaryForce, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f));
-			theGame.Add(startingStation);
-			startingStation.StartConstruction();
-			startingStation.IsConstructing = false;
-
-
-
-			Force asteroidForce = new Force(theGame, theGame.GetNextForceID(), 0, Team.Neutral);
-			theGame.AddForce(asteroidForce);
-
-			// create a random asteroid field
-			int minX = 0;		// MapX;?
-			int minY = 0;		// MapY;?
-			int maxX = theGame.MapWidth;
-			int maxY = theGame.MapHeight;
-			Random rand = new Random();
-			Asteroid asteroid;
-			for (int i = 0; i < 1000; i++)
-			{
-				int minerals = (int)(61200 * rand.NextDouble());
-				int x = 0;
-				int y = 0;
-				asteroid = null;
-
-				bool findNewHome = true;
-				while (findNewHome)
+				if (iPlayer == 0)
 				{
-					x = (int)((maxX - minX) * rand.NextDouble()) + minX;
-					// Prefer y's that are closer to the x value
-					//y = (int)((maxY - minY) * rand.NextDouble()) + minY;
-					y = x + (int)(((rand.NextDouble() * 10.0) - 5.0) * ((rand.NextDouble() * 10.0) - 5.0) * (theGame.MapWidth / 30.0));
+					theGame.HUD.FocusWorldPoint = focusPoint;
 
-					findNewHome = false;
-					if (y < minY || y > maxY)
-					{
-						// Due to the way we calculate the location of Y, it could be off the map
-						// if it is off the map, we want to make an entirely new location for the asteroid in order to
-						// avoid placement bias
-						findNewHome = true;
-					}
-					else
-					{
-						if (asteroid == null)
-						{
-							asteroid = new Asteroid(theGame, theGame, asteroidForce, new Vector2(x, y), minerals);
-						}
-						else
-						{
-							asteroid.Position.Center = new Vector2(x, y);
-						}
-
-						// Make sure we aren't intersecting with other asteroids
-						List<Entity> nearbyEntities = theGame.EntitiesInArea(asteroid.Rect);
-						foreach (Entity nearbyEntity in nearbyEntities)
-						{
-							if (asteroid.Radius.IsIntersecting(nearbyEntity.Radius))
-							{
-								findNewHome = true;
-							}
-						}
-					}
+					Controller controller = new Controller(theGame, ControllerRole.Local, force);
+					theGame.AddController(controller);
 				}
-				//int size = (int)((200 * rand.NextDouble()) + (200 * rand.NextDouble())+ (200 * rand.NextDouble()) + (5000 * rand.NextDouble()));
-				theGame.Add(asteroid);
 			}
+
+
+			Force aiForce = new Force(theGame, theGame.GetNextForceID(), 0, Team.AI);
+			Controller aiController = new AIController(theGame, theGame, aiForce);
+			theGame.AddForce(aiForce);
+			theGame.AddController(aiController);
 			
 		}
+
+		
 
 
 		public override void Update(TimeSpan deltaTime)

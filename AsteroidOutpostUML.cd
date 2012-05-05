@@ -10,15 +10,15 @@
   <Class Name="AsteroidOutpost.Entities.Entity">
     <Position X="8.5" Y="3.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>BAQoAAAACAAAggAggIAANAQQACgAABAIBMgABBCQAgA=</HashCode>
+      <HashCode>BAQoAAAACAAAggAkgIAANAQQACgAABAIBMgABBCQAgA=</HashCode>
       <FileName>Entities\Entity.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="animator" />
-      <Field Name="hitPoints" />
-      <Field Name="position" />
       <Field Name="owningForce" />
+      <Field Name="animator" />
+      <Field Name="position" />
       <Field Name="radius" />
+      <Field Name="hitPoints" />
     </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
@@ -119,22 +119,22 @@
   <Class Name="AsteroidOutpost.Screens.AsteroidOutpostScreen">
     <Position X="16.75" Y="31.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>cI8gVEgAgAAIgwAgAIoBDAACGCQAAAAgBAOgQgYKNTc=</HashCode>
+      <HashCode>cI8gVEgAgAAIkwAgAIoBDAACGCQAAAAgBAOwQgYLNDc=</HashCode>
       <FileName>Screens\AsteroidOutpostScreen.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="hud" />
-      <Field Name="network" />
       <Field Name="layeredStarField" />
+      <Field Name="hud" />
       <Field Name="scenario" />
+      <Field Name="network" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Field Name="quadTree" />
-      <Field Name="entityDictionary" />
       <Field Name="componentDictionary" />
+      <Field Name="entityDictionary" />
+      <Field Name="powerGrid" />
       <Field Name="actors" />
       <Field Name="forces" />
-      <Field Name="powerGrid" />
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" />
   </Class>
@@ -234,7 +234,7 @@
     <Position X="4.25" Y="10.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAgAAACAAAAQAABAAAIEAAABCAABAAAQ=</HashCode>
-      <FileName>Components\Beacon.cs</FileName>
+      <FileName>Entities\Beacon.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AsteroidOutpost.Components.Accumulator" Collapsed="true">
@@ -317,11 +317,11 @@
       <FileName>Components\Ring.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AsteroidOutpost.Actor">
+  <Class Name="AsteroidOutpost.Controller">
     <Position X="16" Y="27" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAwAAAAAAAAAgAEAEAAEABAAACAAAAAAAMAAAAAIAgA=</HashCode>
-      <FileName>Actor.cs</FileName>
+      <FileName>Controller.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Field Name="forces" />
@@ -346,7 +346,7 @@
   <Class Name="AsteroidOutpost.PowerGrid" Collapsed="true">
     <Position X="14" Y="35.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAIAAAAEEAiAAAAAABIAAEAIAAQAIAIAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAIAAAAEEAiAAAAAABoCAEAIAAQAIAIAAAAAAAAA=</HashCode>
       <FileName>PowerGrid.cs</FileName>
     </TypeIdentifier>
   </Class>

@@ -23,13 +23,13 @@ namespace AsteroidOutpost.Screens
 		void btnEndless_Click(object sender, MouseButtonEventArgs e)
 		{
 			ScreenMan.SwitchScreens("Game");
-			theGame.StartServer(new RandomScenario(theGame));
+			theGame.StartServer(new RandomScenario(theGame, 1));
 		}
 
 		void btnTutorial_Click(object sender, MouseButtonEventArgs e)
 		{
 			ScreenMan.SwitchScreens("Game");
-			theGame.StartServer(new TutorialScenario(theGame));
+			theGame.StartServer(new TutorialScenario(theGame, 1));
 		}
 
 		void btnBack_Click(object sender, MouseButtonEventArgs e)
