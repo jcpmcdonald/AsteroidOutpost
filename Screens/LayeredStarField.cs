@@ -74,11 +74,10 @@ namespace AsteroidOutpost.Screens
 		public override void Draw(SpriteBatch spriteBatch, Color tint)
 		{
 			ScreenMan.GraphicsDevice.Clear(ColorPalette.ApplyTint(Color.Black, tint));
-
+			
 			foreach (var starLayer in starLayers)
 			{
-				Vector2 viewport = new Vector2(spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height); // spriteBatch.GraphicsDevice.Viewport
-				spriteBatch.DrawRectangle(theGame.WorldToScreen(theGame.HUD.FocusWorldPoint) - (viewport / 2f), viewport, Color.Green);
+				Vector2 viewport = new Vector2(spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height);
 
 				int gridsHorizontal = (int)((viewport.X / (starLayer.Item3.Width * 2f)) + 1) + 1;
 				int gridsVertical = (int)((viewport.Y / (starLayer.Item3.Height * 2f)) + 1) + 1;
@@ -86,15 +85,10 @@ namespace AsteroidOutpost.Screens
 				Vector2 start = new Vector2((offset.X * starLayer.Item2) % (starLayer.Item3.Width * 2f),
 				                            (offset.Y * starLayer.Item2) % (starLayer.Item3.Height * 2f)) + theGame.WorldToScreen(theGame.HUD.FocusWorldPoint) - (viewport / 2f);
 
-				//spriteBatch.FillRectangle(start.X, start.Y, 10, 10, Color.Red);
-
 				for (int x = 0; x < gridsHorizontal; x++)
 				{
 					for (int y = 0; y < gridsVertical; y++)
 					{
-
-						//spriteBatch.DrawRectangle(start + new Vector2(x * starLayer.Item3.Width * 2f, y * starLayer.Item3.Height * 2f), new Vector2(starLayer.Item3.Width * 2f, starLayer.Item3.Height * 2f), Color.White);
-
 						spriteBatch.Draw(starLayer.Item1,
 						                 start + new Vector2(x * starLayer.Item3.Width * 2f, y * starLayer.Item3.Height * 2f), //(theGame.HUD.FocusWorldPoint + offset) * starLayer.Item2,
 						                 starLayer.Item3,
