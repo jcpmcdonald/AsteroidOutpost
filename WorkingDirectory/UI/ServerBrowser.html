@@ -1,0 +1,58 @@
+<!DOCTYPE html>  
+
+<html>
+<head>
+<link rel="stylesheet" href="Style.css" type="text/css" />
+<link rel="stylesheet" href="TableStyle.css" type="text/css" />
+<script type="text/javascript" src="jquery-1.7.2.js"></script>
+<script type="text/javascript" src="KeyDefinitions.js"></script>
+<script type="text/javascript" src="ServerBrowser.js"></script>
+</head>
+<body>
+	<div id="Menu">
+		<h1>Asteroid Outpost</h1>
+		
+		<table id="ServerList" cellspacing="0px">
+			<tr class="header">
+				<th class="Text">Server Name</th>
+				<th class="Number">Player Count</th>
+				<th class="Number">Ping</th>
+			</tr>
+			<tr onclick="SelectRow(1)" id="row_1">
+				<td class="Text">
+				My public server
+				</td>
+				<td class="Number">
+				1 - 2
+				</td>
+				<td class="Number">
+				1 - 3
+				</td>
+			</tr>
+			<tr onclick="SelectRow(2)" id="row_2">
+				<td class="Text">
+				2 - 1
+				</td>
+				<td class="Number">
+				2 - 2
+				</td>
+				<td class="Number">
+				2 - 3
+				</td>
+			</tr>
+			<tr onclick="SelectRow(3)" id="row_3">
+				<td class="Text">
+				3 - 1
+				</td>
+				<td class="Number">
+				3 - 2
+				</td>
+				<td class="Number">
+				3 - 3
+				</td>
+			</tr>
+		</table>
+		<h2>Back</h2>
+	</div>
+</body>
+</html>

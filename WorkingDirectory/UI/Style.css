@@ -1,0 +1,29 @@
+
+div
+{
+	/*padding: 0px;*/
+}
+
+body
+{
+	background-color: rgba(0, 0, 0, 1);
+	color: #FFFFFF;
+	
+	-moz-user-select: none;
+	-webkit-user-select: none;
+}
+
+
+h1
+{
+	position: relative;
+	text-align: center;
+}
+
+a
+{
+	color: inherit;
+	text-decoration: inherit;
+}
+
+

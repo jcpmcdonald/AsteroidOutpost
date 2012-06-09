@@ -1,0 +1,95 @@
+
+
+html
+{
+	/* prevent the scrollbars from appearing */
+	overflow:hidden;
+}
+
+#creditsWrapper
+{
+	position: relative;
+}
+
+
+div.credits
+{
+	margin-left: auto;
+	margin-right: auto;
+	width:	50%;
+}
+
+h1.creditsTitle
+{
+	text-align:  center;
+	margin-top:  45px;
+	margin-bottom:  0px;
+}
+
+h2.finalWords
+{
+	text-align:  center;
+	margin-top: 250px;
+}
+
+h2.credit
+{
+	text-align:  center;
+}
+
+
+#topSpacer
+{
+	margin-bottom: 0px;
+}
+
+.scroll
+{
+	-moz-transition: top 30s linear;
+	-webkit-transition: top 30s linear;
+}
+
+
+#topMask
+{
+	z-index: 1000;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background: -moz-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+	background: -webkit-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,1)), color-stop(100%, rgba(0,0,0,0)));
+	height: 200px;
+	width: 100%;
+}
+
+
+#bottomMask
+{
+	position: absolute;
+	z-index: 1000; 
+	left: 0px;
+	bottom: 0px;
+	background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+	background: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,1));
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0,0,0,0)), color-stop(100%, rgba(0,0,0,1)));
+	height: 200px;
+	width: 100%;
+}
+/*
+#bottomBlack
+{
+	position: absolute;
+	left: 0px;
+	top: 1000px;
+	background-color:  green;
+	height: ;
+	width: 100%;
+}
+*/
+
+span.nick
+{
+	font-style: italic;
+}
+

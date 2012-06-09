@@ -1,0 +1,90 @@
+
+body
+{
+	background-image: url("images/2012-05-05NebulaMainScreen.png");
+}
+
+
+#constructionMenu
+{
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	
+	width: 230px;
+	
+	/*display: inline-block;*/
+	padding: 0px;
+	background-color: rgba(100, 100, 100, 0.5);
+	border-radius: 0px 15px 0px 0px;
+	border-color: #bbbbbb;
+	border-style: solid solid none none;
+	border-width: 1px;
+}
+
+.button
+{
+	float: left;
+	width: 100px;
+	height: 80px;
+	
+	background-color: rgba(40, 40, 40, 0.5);
+	
+	border-style: outset;
+	border-width: 2px;
+	border-color: #CCCCCC;
+	
+	margin: 5px;
+	border-radius: 15px;
+}
+
+.buttonPressed
+{
+	border-style: inset;
+	background-position: 2px 2px;
+}
+
+.label
+{
+	padding: 5px;
+	color: #AAAAAA;
+}
+
+.data
+{
+	padding: 5px;
+}
+
+#selectionTitle
+{
+	padding: 5px;
+	font-size: x-large;
+}
+
+#solarStation
+{
+	/*width: 100px;
+	height: 100px;*/
+	
+	/*border-style: outset;*/
+	background-image: url("images/SolarStation.png");
+	background-repeat: no-repeat;
+}
+
+#selectonInfo
+{
+	position: absolute;
+	left: 230px;
+	bottom: 0px;
+	
+	height: 150px;
+	width: 650px;
+	
+	padding: 0px;
+	background-color: rgba(100, 100, 100, 0.5);
+	border-radius: 0px 15px 0px 0px;
+	border-color: #bbbbbb;
+	border-style: solid solid none none;
+	border-width: 1px;
+}
+

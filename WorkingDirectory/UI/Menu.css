@@ -1,0 +1,69 @@
+
+h2
+{
+	margin: 0px;
+	padding: 10px 0px;
+	position: relative;
+	left: 0px;
+	
+	-moz-transition: padding 0.1s, color 0.5s ease-in;
+	-webkit-transition: padding 0.1s, color 0.5s ease-in;
+	
+	color: #888;
+}
+
+h2.selected
+{
+	position: relative;
+	color: #FFF;
+	padding-left: 15px;
+}
+
+
+
+#Menu
+{
+	/*background-color: #0FF;*/
+    margin-left:auto;
+	margin-right:auto;
+	width:90%;
+}
+
+
+
+#MenuItems
+{
+	/*background-color: #F00;*/
+	width: 50%;
+	margin-left: auto;
+	margin-right:  0px;
+}
+
+#selectionMarker
+{
+	position: absolute;
+	height: 12px;
+}
+
+.followSelection
+{
+	-moz-animation: bounceAnim 0.8s infinite alternate ease-in;
+	-moz-transition: top 0.1s, left 0.1s ease-in;
+	
+	-webkit-animation: bounceAnim 0.8s infinite alternate ease-in;
+	-webkit-transition: top 0.1s, left 0.1s ease-in;
+}
+
+
+@-moz-keyframes bounceAnim
+{
+	0%   {padding-left: 0px; height: 10px; padding-top: 1px; }
+	100% {padding-left: 5px; height: 12px; padding-top: 0px; }
+}
+
+
+@-webkit-keyframes bounceAnim
+{
+	0%   {padding-left: 0px; height: 10px; padding-top: 1px; }
+	100% {padding-left: 5px; height: 12px; padding-top: 0px; }
+}

@@ -1,0 +1,32 @@
+
+
+table
+{
+	/*
+	margin: 0px;
+	padding: 0px;
+	*/
+	margin-left:auto;
+	margin-right:auto;
+	width: 800px;
+	background-color: rgba(200, 200, 200, 0.3);
+}
+
+
+tr.header
+{
+	margin: 0px;
+	padding: 0px;
+	background-color: #339;
+}
+
+
+.Text
+{
+	text-align:  left;
+}
+
+.Number
+{
+	text-align:  right;
+}
