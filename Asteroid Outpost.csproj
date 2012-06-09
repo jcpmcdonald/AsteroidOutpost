@@ -278,6 +278,10 @@
     <None Include="Properties\app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AwesomiumXNA\AwesomiumXNA\AwesomiumXNA.csproj">
+      <Project>{251BCEDB-CC58-4266-B087-6D404A4A1785}</Project>
+      <Name>AwesomiumXNA</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Primitives2D\Primitives2D.csproj">
       <Project>{39AD1482-1881-4852-A05D-DC61B0D3446A}</Project>
       <Name>Primitives2D</Name>
@@ -296,7 +300,7 @@
     </ProjectReference>
     <ProjectReference Include="Content\Asteroid OutpostContent.contentproj">
       <Project>{D5E6C1BE-DDF9-4FE0-9ADF-7957DB9BC883}</Project>
-      <Name>Asteroid OutpostContent %28Content%29</Name>
+      <Name>Asteroid OutpostContent %28./Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
   </ItemGroup>
