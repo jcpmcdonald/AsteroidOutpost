@@ -1,21 +1,39 @@
 
 
-var TEST_selectionData =
-		{
-			"name": "Solar Station",
-			"health": 100,
-			"maxhealth": 150,
-			"level": 1,
-			"team": "Team1"
-		};
-
-
-function selectionChanged(newSelection)
+function SelectionChanged(newSelection)
 {
 	$("#selectionTitle").text(newSelection["name"]);
 	$("#health").text(newSelection["health"] + " / " + newSelection["maxhealth"]);
 	$("#level").text(newSelection["level"]);
 	$("#team").text(newSelection["team"]);
+}
+
+function SetResources(newResources)
+{
+	$("#minerals").text(FormatNumber(newResources["minerals"]));
+}
+
+function ShowGameMenu()
+{
+	$("#gameMenu").show();
+}
+
+function HideGameMenu()
+{
+	$("#gameMenu").hide();
+	XNACall("hud.ResumeGame()");
+}
+
+function SetPaused(paused)
+{
+	if(paused)
+	{
+		$("#pauseDisplay").addClass("paused");
+	}
+	else
+	{
+		$("#pauseDisplay").removeClass("paused");
+	}
 }
 
 
@@ -42,6 +60,25 @@ function docMouseUp(event)
 
 $(document).ready(function()
 {
+	if(!InXNA())
+	{
+		$("body").addClass("nebula");
+		SelectionChanged({
+			"name": "Solar Station",
+			"health": 110,
+			"maxhealth": 150,
+			"level": 1,
+			"team": "Team1"
+		});
+		SetResources({"minerals": 1000000});
+	}
+	
+	
+	// Add a call to all the construction buttons 
+	$(".constructionButton").each( function(){
+		$(this).attr("call", "hud.Build" + this.id + "()");
+	});
+	
 	
 	$(".button").mousedown( function(event) {
 		$(this).addClass("buttonPressed");
@@ -70,5 +107,4 @@ $(document).ready(function()
 		mouseUpOverHUD = true;
 	});
 	
-	//selectionChanged(TEST_selectionData);
 });

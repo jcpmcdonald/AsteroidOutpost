@@ -2,6 +2,7 @@
 
 <html>
 <head>
+<meta charset="utf-8">
 <link rel="stylesheet" href="Style.css" type="text/css" />
 <link rel="stylesheet" href="HUD.css" type="text/css" />
 <script type="text/javascript" src="jquery-1.7.2.js"></script>
@@ -10,19 +11,33 @@
 <script type="text/javascript" src="HUD.js"></script>
 </head>
 <body>
-	<div id="constructionMenu">
-		<span id="solarStation" class="button" call="hud.buildSolarPower()"></span>
-		<span id="laserMiner" class="button" call="hud.buildLaserMiner()"></span>
-		<span id="powerNode" class="button" call="hud.buildPowerNode()"></span>
-		<span id="LaserTower" class="button" call="hud.buildLaserTower()"></span>
-		<span id="spare" class="button"></span>
+	<div id="constructionMenu" class="panel">
+		<span id="SolarStation" class="button constructionButton"></span>
+		<span id="LaserMiner" class="button constructionButton"></span>
+		<span id="PowerNode" class="button constructionButton"></span>
+		<span id="LaserTower" class="button constructionButton"></span>
+		<span id="spare" class="button constructionButton"></span>
 	</div>
 	
-	<div id="selectonInfo">
+	<div id="selectonInfo" class="panel">
 		<div id="selectionTitle">&nbsp;</div>
 		<div><span id="lblHealth" class="label">H:</span><span id="health" class="data"></span></div>
 		<div><span id="lblLevel" class="label">L:</span><span id="level" class="data"></span></div>
 		<div><span id="lblTeam" class="label">T:</span><span id="team" class="data"></span></div>
+	</div>
+	
+	<div id="resources" class="panel">
+		<div><span id="lblMinerals" class="label">Minerals:</span><span id="minerals" class="data">0</span></div>
+	</div>
+	
+	<div id="gameMenu" class="panel">
+		<span id="Resume" class="button menuButton" onClick="HideGameMenu()">Resume Game</span>
+		<span id="Resume" class="button menuButton" call="hud.QuitGame()">Main Menu</span>
+		<span id="Resume" class="button menuButton" call="xna.Exit()">Exit Game</span>
+	</div>
+	
+	<div id="pauseDisplay" class="panel">
+		<span id="lblPaused">Game Paused</span>
 	</div>
 </body>
 </html>

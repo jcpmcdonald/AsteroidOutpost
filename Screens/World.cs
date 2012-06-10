@@ -13,6 +13,8 @@ using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Scenarios;
 using AsteroidOutpost.Screens.HeadsUpDisplay;
+using Awesomium.Core;
+using AwesomiumXNA;
 using C3.XNA;
 using C3.XNA.Controls;
 using Microsoft.Xna.Framework;
@@ -39,6 +41,7 @@ namespace AsteroidOutpost.Screens
 
 		private LayeredStarField layeredStarField;
 		private QuadTree<Entity> quadTree;
+		private readonly AwesomiumComponent awesomium;
 		private Dictionary<int, Component> componentDictionary = new Dictionary<int, Component>(6000);		// Note: This variable must be kept thread-safe
 		private Dictionary<int, Entity> entityDictionary = new Dictionary<int, Entity>(2000);		// Note: This variable must be kept thread-safe
 		private Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
@@ -67,6 +70,7 @@ namespace AsteroidOutpost.Screens
 		{
 			network = new AONetwork(this);
 			hud = new AOHUD(game, this);
+			awesomium = game.Awesomium;
 
 			// TODO: Create this on the server, then send the size to the clients
 			quadTree = new QuadTree<Entity>(0, 0, 20000, 20000);
@@ -116,6 +120,7 @@ namespace AsteroidOutpost.Screens
 			{
 				// TODO: Handle this over the network. Should clients be allowed to pause the server?
 				paused = value;
+				awesomium.WebView.CallJavascriptFunction("", "SetPaused", new JSValue(paused));
 			}
 		}
 
@@ -428,7 +433,7 @@ namespace AsteroidOutpost.Screens
 		/// <returns>The World Location</returns>
 		public Vector2 ScreenToWorld(Vector2 point)
 		{
-			return hud.ScreenToWorld(point.X, point.Y);
+			return ScreenToWorld(point.X, point.Y);
 		}
 
 

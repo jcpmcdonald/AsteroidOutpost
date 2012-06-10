@@ -7,6 +7,7 @@ using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Entities.Structures;
 using AsteroidOutpost.Interfaces;
 using Awesomium.Core;
+using AwesomiumXNA;
 using C3.XNA;
 using C3.XNA.Controls;
 using Microsoft.Xna.Framework;
@@ -39,6 +40,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 
 		private readonly World world;
+		private readonly AwesomiumComponent awesomium;
 		private float scaleFactor = 1.0f;			// 1.0 = no scaling, 0.5 = zoomed in, 2.0 = zoomed out
 		private float desiredScaleFactor = 1.0f;
 
@@ -78,14 +80,17 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 
 			// Create callbacks for Awesomium content to communicate with the hud
-			game.Awesomium.WebView.CreateObject("hud");
-			game.Awesomium.WebView.SetObjectCallback("hud", "OnMouseUp", OnMouseUp);
-			game.Awesomium.WebView.SetObjectCallback("hud", "OnMouseDown", OnMouseDown);
+			awesomium = game.Awesomium;
+			awesomium.WebView.CreateObject("hud");
+			awesomium.WebView.SetObjectCallback("hud", "OnMouseUp", OnMouseUp);
+			awesomium.WebView.SetObjectCallback("hud", "OnMouseDown", OnMouseDown);
 
-			game.Awesomium.WebView.SetObjectCallback("hud", "buildSolarPower", btnPower_Clicked);
-			game.Awesomium.WebView.SetObjectCallback("hud", "buildPowerNode", btnPowerNode_Clicked);
-			game.Awesomium.WebView.SetObjectCallback("hud", "buildLaserMiner", btnMiner_Clicked);
-			game.Awesomium.WebView.SetObjectCallback("hud", "buildLaserTower", btnLaserTower_Clicked);
+			awesomium.WebView.SetObjectCallback("hud", "ResumeGame", ResumeGame);
+
+			awesomium.WebView.SetObjectCallback("hud", "BuildSolarStation", btnPower_Clicked);
+			awesomium.WebView.SetObjectCallback("hud", "BuildPowerNode", btnPowerNode_Clicked);
+			awesomium.WebView.SetObjectCallback("hud", "BuildLaserMiner", btnMiner_Clicked);
+			awesomium.WebView.SetObjectCallback("hud", "BuildLaserTower", btnLaserTower_Clicked);
 		}
 
 
@@ -94,15 +99,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// </summary>
 		public new void LoadContent()
 		{
-			//TextureDictionary.Add("HUD");
-			//TextureDictionary.Add("Buttons");
-
 			constructionSound = Game.Content.Load<SoundEffect>(@"Sound Effects\BuildStructure");
-
-			//Form radarPanel = CreateRadarPanel(0, ScreenMan.Viewport.Height - 220);
-			////createConstuctionPanel(0, (int)radarPanel.LocationAbs.Y - 220);				// Only make this when I have an actor
-			//CreateSelectionInfoPanel(radarPanel.Width, ScreenMan.Viewport.Height - 150);
-			//inGameMenu = CreateInGameMenu((ScreenMan.Viewport.Width / 2) - 65, (ScreenMan.Viewport.Height / 2) - 50);
 
 			base.LoadContent();
 		}
@@ -126,104 +123,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			Debugger.Break();
 			return null;
 		}
-
-		
-		//#region Create Panels
-
-		///// <summary>
-		///// Create the Radar in its own panel
-		///// </summary>
-		///// <param name="x"></param>
-		///// <param name="y"></param>
-		//private Form CreateRadarPanel(int x, int y)
-		//{
-		//    Form radarPanel = new Form("Radar", x, y, 200, 220);
-		//    Radar radar = new Radar(world, this, 0, 0, 200, 200);
-		//    radarPanel.AddControl(radar);
-
-		//    AddControl(radarPanel);
-		//    return radarPanel;
-		//}
-
-
-
-		///// <summary>
-		///// Create the construction panel and related buttons
-		///// </summary>
-		///// <param name="x"></param>
-		///// <param name="y"></param>
-		//private Form CreateConstuctionPanel(int x, int y)
-		//{
-		//    Form constructionPanel = new Form("Construction Menu", x, y, 150, 150);
-		//    Button btnPower = new Button("Power", 5, 5, 140, 20);
-		//    Button btnPowerNode = new Button("Power Node", 5, 35, 140, 20);
-		//    Button btnMiner = new Button("Miner", 5, 65, 140, 20);
-		//    Button btnLaserTower = new Button("Laser Tower", 5, 95, 140, 20);
-
-		//    // Attach the button handlers
-		//    btnPower.Click += btnPower_Clicked;
-		//    btnPowerNode.Click += btnPowerNode_Clicked;
-		//    btnMiner.Click += btnMiner_Clicked;
-		//    btnLaserTower.Click += btnLaserTower_Clicked;
-
-		//    // Set up some hotkeys
-		//    hotkeys.Add(Keys.P, btnPower_Clicked);
-		//    hotkeys.Add(Keys.N, btnPowerNode_Clicked);
-		//    hotkeys.Add(Keys.M, btnMiner_Clicked);
-		//    hotkeys.Add(Keys.L, btnLaserTower_Clicked);
-
-		//    // Add the buttons to the construction panel
-		//    constructionPanel.AddControl(btnPower);
-		//    constructionPanel.AddControl(btnPowerNode);
-		//    constructionPanel.AddControl(btnMiner);
-		//    constructionPanel.AddControl(btnLaserTower);
-
-		//    AddControl(constructionPanel);
-		//    return constructionPanel;
-		//}
-
-
-		///// <summary>
-		///// Create the selection info in its own panel
-		///// </summary>
-		///// <param name="x"></param>
-		///// <param name="y"></param>
-		///// <returns></returns>
-		//private Form CreateSelectionInfoPanel(int x, int y)
-		//{
-		//    Form selectionPanel = new Form("Selection Info", x, y, 700, 150);
-		//    SelectionInfo selectionInfo = new SelectionInfo(world, 5, 5, 690, 120, this, selectedEntities);
-		//    selectionPanel.AddControl(selectionInfo);
-
-		//    AddControl(selectionPanel);
-		//    return selectionPanel;
-		//}
-
-
-		///// <summary>
-		///// Create the in-game menu and related buttons
-		///// </summary>
-		///// <param name="x"></param>
-		///// <param name="y"></param>
-		///// <returns></returns>
-		//private Form CreateInGameMenu(int x, int y)
-		//{
-		//    Form gameMenu = new Form("In-Game Menu", x, y, 130, 80);
-		//    Button btnExitGame = new Button("Exit Game", 5, 5, 120, 20);
-		//    Button btnCloseInGameMenu = new Button("Cancel", 5, 35, 120, 20);
-
-		//    btnExitGame.Click += btnExitGame_Clicked;
-		//    btnCloseInGameMenu.Click += btnCloseInGameMenu_Clicked;
-
-		//    gameMenu.Visible = false;
-		//    gameMenu.AddControl(btnExitGame);
-		//    gameMenu.AddControl(btnCloseInGameMenu);
-
-		//    AddControl(gameMenu);
-		//    return gameMenu;
-		//}
-
-		//#endregion
 
 
 		void btnCloseInGameMenu_Clicked(object sender, EventArgs e)
@@ -259,12 +158,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				Vector2 zoomPointWorldBefore = ScreenToWorld(theMouse.X, theMouse.Y);
 
 				if (absDiff < (0.001 * desiredScaleFactor) ||
-					(scaleFactor > desiredScaleFactor && (scaleFactor - scaleDelta) < desiredScaleFactor) ||
-					(scaleFactor < desiredScaleFactor && (scaleFactor + scaleDelta) > desiredScaleFactor))
+				    (scaleFactor > desiredScaleFactor && (scaleFactor - scaleDelta) < desiredScaleFactor) ||
+				    (scaleFactor < desiredScaleFactor && (scaleFactor + scaleDelta) > desiredScaleFactor))
 				{
 					scaleFactor = desiredScaleFactor;
 				}
-				else if(scaleFactor > desiredScaleFactor)
+				else if (scaleFactor > desiredScaleFactor)
 				{
 					scaleFactor -= scaleDelta;
 				}
@@ -295,18 +194,17 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 				else
 				{
-					// Pause/Unpause the game
+					// Make the world stop
 					world.Paused = !world.Paused;
-					//inGameMenu.Visible = !inGameMenu.Visible;
-					//GiveFocus(inGameMenu);
+					awesomium.WebView.CallJavascriptFunction("", world.Paused ? "ShowGameMenu" : "HideGameMenu", new JSValue());
 				}
 			}
 
 
 			// Handle the hotkeys
-			foreach(Keys pressed in theKeyboard.GetJustPressedKeys())
+			foreach (Keys pressed in theKeyboard.GetJustPressedKeys())
 			{
-				if(hotkeys.ContainsKey(pressed))
+				if (hotkeys.ContainsKey(pressed))
 				{
 					hotkeys[pressed](this, EventArgs.Empty);
 				}
@@ -314,9 +212,9 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 
 			if ((theKeyboard[Keys.LeftControl] == EnhancedKeyState.PRESSED || theKeyboard[Keys.RightControl] == EnhancedKeyState.PRESSED) &&
-				(theKeyboard[Keys.LeftShift] == EnhancedKeyState.RELEASED && theKeyboard[Keys.RightShift] == EnhancedKeyState.RELEASED &&
-				 theKeyboard[Keys.LeftAlt] == EnhancedKeyState.RELEASED && theKeyboard[Keys.RightAlt] == EnhancedKeyState.RELEASED)
-				&& theKeyboard[Keys.Q] == EnhancedKeyState.JUST_PRESSED)
+			    (theKeyboard[Keys.LeftShift] == EnhancedKeyState.RELEASED && theKeyboard[Keys.RightShift] == EnhancedKeyState.RELEASED &&
+			     theKeyboard[Keys.LeftAlt] == EnhancedKeyState.RELEASED && theKeyboard[Keys.RightAlt] == EnhancedKeyState.RELEASED)
+			    && theKeyboard[Keys.Q] == EnhancedKeyState.JUST_PRESSED)
 			{
 				world.DrawQuadTree = !world.DrawQuadTree;
 			}
@@ -334,12 +232,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 						break;
 					}
 				}
-				
+
 				Debug.Assert(aiActor != null, "There is no AI actor in the game");
 				// Allow them to ignore the assert without crashing the game
 				// ReSharper disable ConditionIsAlwaysTrueOrFalse
 				if (aiActor != null)
-				// ReSharper restore ConditionIsAlwaysTrueOrFalse
+					// ReSharper restore ConditionIsAlwaysTrueOrFalse
 				{
 					//world.AddComponent(new Ship1(aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(1600, -10600)));
 					world.Add(new Ship1(world, world, aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(600, -600)));
@@ -348,18 +246,18 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 
 			// Move the current creating
-			if(creating != null)
+			if (creating != null)
 			{
 				// Update the creating entity to be be where the mouse is
 				creating.Position.Center = ScreenToWorld(theMouse.X, theMouse.Y);
 			}
-			
-			
+
+
 			// Move the screen
 			if (isDraggingScreen && theMouse.MiddleButton == EnhancedButtonState.PRESSED)
 			{
 				// Let them grab  the screen with the middle mouse button
-				if(middleMouseGrabPoint == null)
+				if (middleMouseGrabPoint == null)
 				{
 					// Store the map location of the grab
 					//middleMouseGrabPoint = ScreenToWorld(mouse.X, mouse.Y);
@@ -374,10 +272,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			else
 			{
 				//middleMouseGrabPoint = null;
-				
-				
+
+
 				// Move the screen if they move the mouse to the edge, or press the arrow keys
-				double screenMovementRate = 0.450 * scaleFactor;			// * 1000 = pixels/second
+				double screenMovementRate = 0.450 * scaleFactor; // * 1000 = pixels/second
 				if ((theMouse.X >= 0 && theMouse.X < 15) || theKeyboard.IsKeyDown(Keys.Left))
 				{
 					focusWorldPoint.X -= (float)(screenMovementRate * deltaTime.TotalMilliseconds);
@@ -420,6 +318,14 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					components.Remove(entity);
 				}
+			}
+
+
+			if (LocalActor != null)
+			{
+				JSObject resources = new JSObject();
+				resources["minerals"] = new JSValue((int)(LocalActor.PrimaryForce.GetMinerals() + 0.5));
+				awesomium.WebView.CallJavascriptFunction("", "SetResources", new JSValue(resources));
 			}
 		}
 
@@ -570,22 +476,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 			}
 
-			if (LocalActor != null)
-			{
-				// TODO: Add these to some kind of control
-				spriteBatch.DrawString(Fonts.ControlFont, "Minerals:", new Vector2(10, 10), ColorPalette.ApplyTint(Color.White, tint), 0.0f, new Vector2(0, 0), 1f, SpriteEffects.None, 0.0f);
-				spriteBatch.DrawString(Fonts.ControlFont, "" + (int)(LocalActor.PrimaryForce.GetMinerals() + 0.5), new Vector2(90, 10), ColorPalette.ApplyTint(Color.Gray, tint), 0.0f, new Vector2(0, 0), 1f, SpriteEffects.None, 0.0f);
-			}
 
-
-			// If we are paused, draw a big "PAUSED" on the screen
-			if (world.Paused)
-			{
-				spriteBatch.DrawString(Fonts.ControlFont, "** PAUSED **", new Vector2((Game.GraphicsDevice.Viewport.Width / 2.0f) - 75, Game.GraphicsDevice.Viewport.Height / 5.0f), Color.White);
-			}
-
-
-			//base.Draw(spriteBatch, tint);
+			//// If we are paused, draw a big "PAUSED" on the screen
+			//if (world.Paused)
+			//{
+			//    spriteBatch.DrawString(Fonts.ControlFont, "** PAUSED **", new Vector2((Game.GraphicsDevice.Viewport.Width / 2.0f) - 75, Game.GraphicsDevice.Viewport.Height / 5.0f), Color.White);
+			//}
 			
 			
 //#if DEBUG
@@ -593,9 +489,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 //            string str = String.Format("{0} FPS", CurrentFrameRate);
 //            spriteBatch.DrawString(Fonts.ControlFont, str, new Vector2(200, 10), ColorPalette.ApplyTint(Color.White, tint), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
 //#endif
-			
-			// Draw the mouse last (so that it shows up on top)
-			spriteBatch.Draw(TextureDictionary.Get("Cursor"), new Vector2(theMouse.X - 20, theMouse.Y - 20), Color.White);
 		}
 		
 		
@@ -1052,6 +945,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				// Tell anyone who is interested in a selection change
 				OnSelectionChanged();
 			}
+		}
+
+
+		private void ResumeGame(Object sender, EventArgs e)
+		{
+			world.Paused = false;
 		}
 	}
 }
