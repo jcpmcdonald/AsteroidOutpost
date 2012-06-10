@@ -70,7 +70,7 @@ $(document).ready(function()
 			"level": 1,
 			"team": "Team1"
 		});
-		SetResources({"minerals": 1000000});
+		SetResources({"minerals": 1000});
 	}
 	
 	
