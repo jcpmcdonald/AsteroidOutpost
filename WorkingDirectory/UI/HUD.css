@@ -174,11 +174,22 @@ body.nebula
 
 #SolarStation
 {
-	/*width: 100px;
-	height: 100px;*/
-	
-	/*border-style: outset;*/
 	background-image: url("images/SolarStation.png");
+	background-repeat: no-repeat;
+}
+#LaserMiner
+{
+	background-image: url("images/LaserMiner.png");
+	background-repeat: no-repeat;
+}
+#PowerNode
+{
+	background-image: url("images/PowerNode.png");
+	background-repeat: no-repeat;
+}
+#LaserTower
+{
+	background-image: url("images/LaserTower.png");
 	background-repeat: no-repeat;
 }
 
