@@ -48,6 +48,7 @@ $(document).ready(function()
 	});
 	$(".button").mouseup( function(event) {
 		$(this).removeClass("buttonPressed");
+		XNACall($(this));
 	});
 	$(".button").mouseleave( function(event) {
 		$(this).removeClass("buttonPressed");

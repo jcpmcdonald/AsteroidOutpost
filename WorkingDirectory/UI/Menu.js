@@ -22,11 +22,7 @@ function changeSelectionTo(menuItem)
 
 function selectionMade(menuItem)
 {
-	if (typeof xna !== 'undefined' &&
-		typeof menuItem.attr("call") !== 'undefined')
-	{
-		eval(menuItem.attr("call"));
-	}
+	XNACall(menuItem.attr("call"));
 	if(typeof menuItem.attr("href") !== 'undefined')
 	{
 		window.location = menuItem.attr("href");

@@ -81,6 +81,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			game.Awesomium.WebView.CreateObject("hud");
 			game.Awesomium.WebView.SetObjectCallback("hud", "OnMouseUp", OnMouseUp);
 			game.Awesomium.WebView.SetObjectCallback("hud", "OnMouseDown", OnMouseDown);
+
+			game.Awesomium.WebView.SetObjectCallback("hud", "buildSolarPower", btnPower_Clicked);
+			game.Awesomium.WebView.SetObjectCallback("hud", "buildPowerNode", btnPowerNode_Clicked);
+			game.Awesomium.WebView.SetObjectCallback("hud", "buildLaserMiner", btnMiner_Clicked);
+			game.Awesomium.WebView.SetObjectCallback("hud", "buildLaserTower", btnLaserTower_Clicked);
 		}
 
 
@@ -849,8 +854,21 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			//world.StructureStartedEventPreAuth += powerLinker.KillSelf;
 			components.Add(powerLinker);
 		}
-		
+
 		#endregion
+
+
+
+		protected void OnMouseDown(object sender, JSCallbackEventArgs e)
+		{
+			MouseButton mouseButton = (MouseButton)e.Arguments[1].ToInteger();
+			// TODO: Start a multi-select, BUT only actually do something about it after they move... lets say 10px away from this location
+			if (mouseButton == MouseButton.MIDDLE)
+			{
+				isDraggingScreen = true;
+				middleMouseGrabPoint = ScreenToWorld(theMouse.X, theMouse.Y);
+			}
+		}
 
 
 		/// <summary>
@@ -860,7 +878,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		{
 			bool mouseUpOverHUD = e.Arguments[0].ToBoolean();
 			MouseButton mouseButton = (MouseButton)e.Arguments[1].ToInteger();
-			bool clickHandled = false;
+			bool clickHandled = mouseUpOverHUD;
 
 			if (mouseButton == MouseButton.MIDDLE)
 			{
@@ -871,7 +889,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			if (mouseButton == MouseButton.LEFT)
 			{
 
-				if (creating != null)
+				if (!clickHandled && creating != null)
 				{
 					// Have we just tried to build this guy?
 					if (/*mouse.LeftButton == EnhancedButtonState.JUST_RELEASED &&*/ creating.IsValidToBuildHere())
@@ -1018,18 +1036,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					CreateRangeRingsForSelection(constructableEntity);
 				}
-			}
-		}
-
-
-		protected void OnMouseDown(object sender, JSCallbackEventArgs e)
-		{
-			MouseButton mouseButton = (MouseButton)e.Arguments[1].ToInteger();
-			// TODO: Start a multi-select, BUT only actually do something about it after they move... lets say 10px away from this location
-			if (mouseButton == MouseButton.MIDDLE)
-			{
-				isDraggingScreen = true;
-				middleMouseGrabPoint = ScreenToWorld(theMouse.X, theMouse.Y);
 			}
 		}
 
