@@ -14,13 +14,13 @@ namespace AsteroidOutpost.Scenarios
 		private String name;
 		private String author;
 
-		protected AsteroidOutpostScreen theGame;
+		protected World world;
 		protected int playerCount;
 
 
-		protected Scenario(AsteroidOutpostScreen theGame, int playerCount)
+		protected Scenario(World world, int playerCount)
 		{
-			this.theGame = theGame;
+			this.world = world;
 			this.playerCount = playerCount;
 		}
 
@@ -38,14 +38,14 @@ namespace AsteroidOutpost.Scenarios
 		/// <param name="asteroidCount">The number of asteroids to create</param>
 		protected virtual void GenerateAsteroidField(int asteroidCount)
 		{
-			Force asteroidForce = new Force(theGame, theGame.GetNextForceID(), 0, Team.Neutral);
-			theGame.AddForce(asteroidForce);
+			Force asteroidForce = new Force(world, world.GetNextForceID(), 0, Team.Neutral);
+			world.AddForce(asteroidForce);
 
 			// create a random asteroid field
 			int minX = 0;		// MapX;?
 			int minY = 0;		// MapY;?
-			int maxX = theGame.MapWidth;
-			int maxY = theGame.MapHeight;
+			int maxX = world.MapWidth;
+			int maxY = world.MapHeight;
 			Random rand = new Random();
 			Asteroid asteroid;
 			for (int i = 0; i < asteroidCount; i++)
@@ -61,7 +61,7 @@ namespace AsteroidOutpost.Scenarios
 					x = (int)((maxX - minX) * rand.NextDouble()) + minX;
 					// Prefer y's that are closer to the x value
 					//y = (int)((maxY - minY) * rand.NextDouble()) + minY;
-					y = x + (int)(((rand.NextDouble() * 10.0) - 5.0) * ((rand.NextDouble() * 10.0) - 5.0) * (theGame.MapWidth / 30.0));
+					y = x + (int)(((rand.NextDouble() * 10.0) - 5.0) * ((rand.NextDouble() * 10.0) - 5.0) * (world.MapWidth / 30.0));
 
 					findNewHome = false;
 					if (y < minY || y > maxY)
@@ -75,7 +75,7 @@ namespace AsteroidOutpost.Scenarios
 					{
 						if (asteroid == null)
 						{
-							asteroid = new Asteroid(theGame, theGame, asteroidForce, new Vector2(x, y), minerals);
+							asteroid = new Asteroid(world, world, asteroidForce, new Vector2(x, y), minerals);
 						}
 						else
 						{
@@ -83,7 +83,7 @@ namespace AsteroidOutpost.Scenarios
 						}
 
 						// Make sure we aren't intersecting with other asteroids
-						List<Entity> nearbyEntities = theGame.EntitiesInArea(asteroid.Rect);
+						List<Entity> nearbyEntities = world.EntitiesInArea(asteroid.Rect);
 						foreach (Entity nearbyEntity in nearbyEntities)
 						{
 							if (asteroid.Radius.IsIntersecting(nearbyEntity.Radius))
@@ -93,7 +93,7 @@ namespace AsteroidOutpost.Scenarios
 						}
 					}
 				}
-				theGame.Add(asteroid);
+				world.Add(asteroid);
 			}
 		}
 
@@ -105,12 +105,12 @@ namespace AsteroidOutpost.Scenarios
 		/// <returns>Returns a location that the camera should be centered on</returns>
 		protected virtual Vector2 CreateStartingBase(Force force)
 		{
-			SolarStation startingStation = new SolarStation(theGame, theGame, force, Vector2.Zero);
+			SolarStation startingStation = new SolarStation(world, world, force, Vector2.Zero);
 			startingStation.StartConstruction();
 			startingStation.IsConstructing = false;
 
 
-			Vector2 origin = new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f);
+			Vector2 origin = new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f);
 			bool findNewHome = true;
 			int attempts = 0;
 			while (findNewHome)
@@ -122,7 +122,7 @@ namespace AsteroidOutpost.Scenarios
 				findNewHome = false;
 
 				// Ensure no collisions
-				List<Entity> nearbyEntities = theGame.EntitiesInArea(startingStation.Rect);
+				List<Entity> nearbyEntities = world.EntitiesInArea(startingStation.Rect);
 				foreach (Entity nearbyEntity in nearbyEntities)
 				{
 					if (startingStation.Radius.IsIntersecting(nearbyEntity.Radius))
@@ -134,7 +134,7 @@ namespace AsteroidOutpost.Scenarios
 				}
 			}
 
-			theGame.Add(startingStation);
+			world.Add(startingStation);
 
 			return startingStation.Position.Center;
 		}

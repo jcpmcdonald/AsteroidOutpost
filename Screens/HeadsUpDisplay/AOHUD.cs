@@ -6,6 +6,7 @@ using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Entities.Structures;
 using AsteroidOutpost.Interfaces;
+using Awesomium.Core;
 using C3.XNA;
 using C3.XNA.Controls;
 using Microsoft.Xna.Framework;
@@ -15,6 +16,7 @@ using Microsoft.Xna.Framework.Graphics;
 using AsteroidOutpost.Entities.Units;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Input;
+using MouseButton = C3.XNA.MouseButton;
 
 
 namespace AsteroidOutpost.Screens.HeadsUpDisplay
@@ -22,26 +24,28 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 	/// <summary>
 	/// The HUD is how the user interacts with the game
 	/// </summary>
-	public class AOHUD : HUD, IComponentList
+	public class AOHUD : DrawableGameComponent, IComponentList
 	{
 		
 		Vector2 focusWorldPoint;
 		Vector2? middleMouseGrabPoint;
 		ConstructableEntity creating;				// Are they creating an entity?
 
+		private EnhancedMouseState theMouse = new EnhancedMouseState();
+		private EnhancedKeyboardState theKeyboard = new EnhancedKeyboardState();
 
 		readonly List<Entity> selectedEntities = new List<Entity>();
 		public event Action<MultiEntityEventArgs> SelectionChanged;
 
 
-		private readonly AsteroidOutpostScreen theGame;
+		private readonly World world;
 		private float scaleFactor = 1.0f;			// 1.0 = no scaling, 0.5 = zoomed in, 2.0 = zoomed out
 		private float desiredScaleFactor = 1.0f;
 
 		// These are entities that are drawn in the HUD layer
 		private readonly List<Component> components = new List<Component>(10);
 
-		private Form inGameMenu;
+		//private Form inGameMenu;
 		private Controller localActor;
 		private bool isDraggingScreen;
 
@@ -60,34 +64,42 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// <summary>
 		/// Construct a HUD
 		/// </summary>
-		/// <param name="theScreenManager">The screenManager that </param>
 		/// <param name="gameScreen">A reference to the game object</param>
-		public AOHUD(ScreenManager theScreenManager, AsteroidOutpostScreen gameScreen)
-			: base(theScreenManager)
+		public AOHUD(AOGame game, World gameScreen)
+			: base(game)
 		{
-			theGame = gameScreen;
+			world = gameScreen;
+
+			// Set up some hotkeys
+			hotkeys.Add(Keys.P, btnPower_Clicked);
+			hotkeys.Add(Keys.N, btnPowerNode_Clicked);
+			hotkeys.Add(Keys.M, btnMiner_Clicked);
+			hotkeys.Add(Keys.L, btnLaserTower_Clicked);
+
+
+			// Create callbacks for Awesomium content to communicate with the hud
+			game.Awesomium.WebView.CreateObject("hud");
+			game.Awesomium.WebView.SetObjectCallback("hud", "OnMouseUp", OnMouseUp);
+			game.Awesomium.WebView.SetObjectCallback("hud", "OnMouseDown", OnMouseDown);
 		}
 
 
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load all of your content.
 		/// </summary>
-		/// <param name="spriteBatch">The related sprite batch</param>
-		/// <param name="content">The content manager to load your content with</param>
-		public override void LoadContent(SpriteBatch spriteBatch, ContentManager content)
+		public new void LoadContent()
 		{
-			TextureDictionary.Add("Cursor");
-			TextureDictionary.Add("HUD");
-			TextureDictionary.Add("Buttons");
+			//TextureDictionary.Add("HUD");
+			//TextureDictionary.Add("Buttons");
 
-			constructionSound = content.Load<SoundEffect>(@"Sound Effects\BuildStructure");
+			constructionSound = Game.Content.Load<SoundEffect>(@"Sound Effects\BuildStructure");
 
-			Form radarPanel = CreateRadarPanel(0, ScreenMan.Viewport.Height - 220);
-			//createConstuctionPanel(0, (int)radarPanel.LocationAbs.Y - 220);				// Only make this when I have an actor
-			CreateSelectionInfoPanel(radarPanel.Width, ScreenMan.Viewport.Height - 150);
-			inGameMenu = CreateInGameMenu((ScreenMan.Viewport.Width / 2) - 65, (ScreenMan.Viewport.Height / 2) - 50);
+			//Form radarPanel = CreateRadarPanel(0, ScreenMan.Viewport.Height - 220);
+			////createConstuctionPanel(0, (int)radarPanel.LocationAbs.Y - 220);				// Only make this when I have an actor
+			//CreateSelectionInfoPanel(radarPanel.Width, ScreenMan.Viewport.Height - 150);
+			//inGameMenu = CreateInGameMenu((ScreenMan.Viewport.Width / 2) - 65, (ScreenMan.Viewport.Height / 2) - 50);
 
-			base.LoadContent(spriteBatch, content);
+			base.LoadContent();
 		}
 
 
@@ -110,128 +122,124 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			return null;
 		}
 
-		#region Create Panels
+		
+		//#region Create Panels
 
-		/// <summary>
-		/// Create the Radar in its own panel
-		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		private Form CreateRadarPanel(int x, int y)
-		{
-			Form radarPanel = new Form("Radar", x, y, 200, 220);
-			Radar radar = new Radar(theGame, this, 0, 0, 200, 200);
-			radarPanel.AddControl(radar);
+		///// <summary>
+		///// Create the Radar in its own panel
+		///// </summary>
+		///// <param name="x"></param>
+		///// <param name="y"></param>
+		//private Form CreateRadarPanel(int x, int y)
+		//{
+		//    Form radarPanel = new Form("Radar", x, y, 200, 220);
+		//    Radar radar = new Radar(world, this, 0, 0, 200, 200);
+		//    radarPanel.AddControl(radar);
 
-			AddControl(radarPanel);
-			return radarPanel;
-		}
-
-
-
-		/// <summary>
-		/// Create the construction panel and related buttons
-		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		private Form CreateConstuctionPanel(int x, int y)
-		{
-			Form constructionPanel = new Form("Construction Menu", x, y, 150, 150);
-			Button btnPower = new Button("Power", 5, 5, 140, 20);
-			Button btnPowerNode = new Button("Power Node", 5, 35, 140, 20);
-			Button btnMiner = new Button("Miner", 5, 65, 140, 20);
-			Button btnLaserTower = new Button("Laser Tower", 5, 95, 140, 20);
-
-			// Attach the button handlers
-			btnPower.Click += btnPower_Clicked;
-			btnPowerNode.Click += btnPowerNode_Clicked;
-			btnMiner.Click += btnMiner_Clicked;
-			btnLaserTower.Click += btnLaserTower_Clicked;
-
-			// Set up some hotkeys
-			hotkeys.Add(Keys.P, btnPower_Clicked);
-			hotkeys.Add(Keys.N, btnPowerNode_Clicked);
-			hotkeys.Add(Keys.M, btnMiner_Clicked);
-			hotkeys.Add(Keys.L, btnLaserTower_Clicked);
-
-			// Add the buttons to the construction panel
-			constructionPanel.AddControl(btnPower);
-			constructionPanel.AddControl(btnPowerNode);
-			constructionPanel.AddControl(btnMiner);
-			constructionPanel.AddControl(btnLaserTower);
-
-			AddControl(constructionPanel);
-			return constructionPanel;
-		}
+		//    AddControl(radarPanel);
+		//    return radarPanel;
+		//}
 
 
-		/// <summary>
-		/// Create the selection info in its own panel
-		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		/// <returns></returns>
-		private Form CreateSelectionInfoPanel(int x, int y)
-		{
-			Form selectionPanel = new Form("Selection Info", x, y, 700, 150);
-			SelectionInfo selectionInfo = new SelectionInfo(theGame, 5, 5, 690, 120, this, selectedEntities);
-			selectionPanel.AddControl(selectionInfo);
 
-			AddControl(selectionPanel);
-			return selectionPanel;
-		}
+		///// <summary>
+		///// Create the construction panel and related buttons
+		///// </summary>
+		///// <param name="x"></param>
+		///// <param name="y"></param>
+		//private Form CreateConstuctionPanel(int x, int y)
+		//{
+		//    Form constructionPanel = new Form("Construction Menu", x, y, 150, 150);
+		//    Button btnPower = new Button("Power", 5, 5, 140, 20);
+		//    Button btnPowerNode = new Button("Power Node", 5, 35, 140, 20);
+		//    Button btnMiner = new Button("Miner", 5, 65, 140, 20);
+		//    Button btnLaserTower = new Button("Laser Tower", 5, 95, 140, 20);
+
+		//    // Attach the button handlers
+		//    btnPower.Click += btnPower_Clicked;
+		//    btnPowerNode.Click += btnPowerNode_Clicked;
+		//    btnMiner.Click += btnMiner_Clicked;
+		//    btnLaserTower.Click += btnLaserTower_Clicked;
+
+		//    // Set up some hotkeys
+		//    hotkeys.Add(Keys.P, btnPower_Clicked);
+		//    hotkeys.Add(Keys.N, btnPowerNode_Clicked);
+		//    hotkeys.Add(Keys.M, btnMiner_Clicked);
+		//    hotkeys.Add(Keys.L, btnLaserTower_Clicked);
+
+		//    // Add the buttons to the construction panel
+		//    constructionPanel.AddControl(btnPower);
+		//    constructionPanel.AddControl(btnPowerNode);
+		//    constructionPanel.AddControl(btnMiner);
+		//    constructionPanel.AddControl(btnLaserTower);
+
+		//    AddControl(constructionPanel);
+		//    return constructionPanel;
+		//}
 
 
-		/// <summary>
-		/// Create the in-game menu and related buttons
-		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
-		/// <returns></returns>
-		private Form CreateInGameMenu(int x, int y)
-		{
-			Form gameMenu = new Form("In-Game Menu", x, y, 130, 80);
-			Button btnExitGame = new Button("Exit Game", 5, 5, 120, 20);
-			Button btnCloseInGameMenu = new Button("Cancel", 5, 35, 120, 20);
+		///// <summary>
+		///// Create the selection info in its own panel
+		///// </summary>
+		///// <param name="x"></param>
+		///// <param name="y"></param>
+		///// <returns></returns>
+		//private Form CreateSelectionInfoPanel(int x, int y)
+		//{
+		//    Form selectionPanel = new Form("Selection Info", x, y, 700, 150);
+		//    SelectionInfo selectionInfo = new SelectionInfo(world, 5, 5, 690, 120, this, selectedEntities);
+		//    selectionPanel.AddControl(selectionInfo);
 
-			btnExitGame.Click += btnExitGame_Clicked;
-			btnCloseInGameMenu.Click += btnCloseInGameMenu_Clicked;
+		//    AddControl(selectionPanel);
+		//    return selectionPanel;
+		//}
 
-			gameMenu.Visible = false;
-			gameMenu.AddControl(btnExitGame);
-			gameMenu.AddControl(btnCloseInGameMenu);
 
-			AddControl(gameMenu);
-			return gameMenu;
-		}
+		///// <summary>
+		///// Create the in-game menu and related buttons
+		///// </summary>
+		///// <param name="x"></param>
+		///// <param name="y"></param>
+		///// <returns></returns>
+		//private Form CreateInGameMenu(int x, int y)
+		//{
+		//    Form gameMenu = new Form("In-Game Menu", x, y, 130, 80);
+		//    Button btnExitGame = new Button("Exit Game", 5, 5, 120, 20);
+		//    Button btnCloseInGameMenu = new Button("Cancel", 5, 35, 120, 20);
 
-		#endregion
+		//    btnExitGame.Click += btnExitGame_Clicked;
+		//    btnCloseInGameMenu.Click += btnCloseInGameMenu_Clicked;
+
+		//    gameMenu.Visible = false;
+		//    gameMenu.AddControl(btnExitGame);
+		//    gameMenu.AddControl(btnCloseInGameMenu);
+
+		//    AddControl(gameMenu);
+		//    return gameMenu;
+		//}
+
+		//#endregion
 
 
 		void btnCloseInGameMenu_Clicked(object sender, EventArgs e)
 		{
-			inGameMenu.Visible = false;
-			theGame.Paused = false;
+			//inGameMenu.Visible = false;
+			world.Paused = false;
 		}
 
 
 		void btnExitGame_Clicked(object sender, EventArgs e)
 		{
 			//exitRequested = true;
-			ScreenMan.Exit();
+			//ScreenMan.Exit();
 		}
 
-
-		/// <summary>
-		/// Update the Screen status.
-		/// </summary>
-		/// <param name="deltaTime">The game time</param>
-		/// <param name="theMouse"></param>
-		/// <param name="theKeyboard"></param>
-		public override void Update(TimeSpan deltaTime, EnhancedMouseState theMouse, EnhancedKeyboardState theKeyboard)
+		public override void Update(GameTime gameTime)
 		{
-			base.Update(deltaTime, theMouse, theKeyboard);
+			TimeSpan deltaTime = gameTime.ElapsedGameTime;
 
+			theMouse.UpdateState();
+			theKeyboard.UpdateState();
 
 			if (theMouse.ScrollWheelDelta != 0)
 			{
@@ -268,10 +276,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 
 			// Take a screenshot
-			if (theKeyboard[Keys.F12] == EnhancedKeyState.JUST_RELEASED)
-			{
-				ScreenMan.TakeScreenshot();
-			}
+			//if (theKeyboard[Keys.F12] == EnhancedKeyState.JUST_RELEASED)
+			//{
+			//    ScreenMan.TakeScreenshot();
+			//}
 
 
 			if (theKeyboard[Keys.Escape] == EnhancedKeyState.JUST_PRESSED)
@@ -283,9 +291,9 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				else
 				{
 					// Pause/Unpause the game
-					theGame.Paused = !theGame.Paused;
-					inGameMenu.Visible = !inGameMenu.Visible;
-					GiveFocus(inGameMenu);
+					world.Paused = !world.Paused;
+					//inGameMenu.Visible = !inGameMenu.Visible;
+					//GiveFocus(inGameMenu);
 				}
 			}
 
@@ -305,7 +313,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				 theKeyboard[Keys.LeftAlt] == EnhancedKeyState.RELEASED && theKeyboard[Keys.RightAlt] == EnhancedKeyState.RELEASED)
 				&& theKeyboard[Keys.Q] == EnhancedKeyState.JUST_PRESSED)
 			{
-				theGame.DrawQuadTree = !theGame.DrawQuadTree;
+				world.DrawQuadTree = !world.DrawQuadTree;
 			}
 
 
@@ -313,7 +321,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			if (theKeyboard[Keys.F8] == EnhancedKeyState.JUST_RELEASED)
 			{
 				Controller aiActor = null;
-				foreach (Controller actor in theGame.Controllers)
+				foreach (Controller actor in world.Controllers)
 				{
 					if (actor.Role == ControllerRole.AI)
 					{
@@ -328,8 +336,8 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				if (aiActor != null)
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
 				{
-					//theGame.AddComponent(new Ship1(aiActor.PrimaryForce, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f) + new Vector2(1600, -10600)));
-					theGame.Add(new Ship1(theGame, theGame, aiActor.PrimaryForce, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f) + new Vector2(600, -600)));
+					//world.AddComponent(new Ship1(aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(1600, -10600)));
+					world.Add(new Ship1(world, world, aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(600, -600)));
 				}
 			}
 
@@ -369,7 +377,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					focusWorldPoint.X -= (float)(screenMovementRate * deltaTime.TotalMilliseconds);
 				}
-				else if ((theMouse.X > size.Width - 15 && theMouse.X <= size.Width) || theKeyboard.IsKeyDown(Keys.Right))
+				else if ((theMouse.X > Game.GraphicsDevice.Viewport.Width - 15 && theMouse.X <= Game.GraphicsDevice.Viewport.Width) || theKeyboard.IsKeyDown(Keys.Right))
 				{
 					focusWorldPoint.X += (float)(screenMovementRate * deltaTime.TotalMilliseconds);
 				}
@@ -377,14 +385,14 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					focusWorldPoint.Y -= (float)(screenMovementRate * deltaTime.TotalMilliseconds);
 				}
-				else if ((theMouse.Y > size.Height - 15 && theMouse.Y <= size.Height) || theKeyboard.IsKeyDown(Keys.Down))
+				else if ((theMouse.Y > Game.GraphicsDevice.Viewport.Height - 15 && theMouse.Y <= Game.GraphicsDevice.Viewport.Height) || theKeyboard.IsKeyDown(Keys.Down))
 				{
 					focusWorldPoint.Y += (float)(screenMovementRate * deltaTime.TotalMilliseconds);
 				}
 			}
 
 
-			if (!theGame.Paused)
+			if (!world.Paused)
 			{
 				// Update the entities
 				List<Component> deleteList = new List<Component>();
@@ -436,12 +444,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					float sizeRatio = ((selectedEntity.Radius.Value) / 45f);
 					spriteBatch.Draw(TextureDictionary.Get("ellipse50back"),
-					                 theGame.WorldToScreen(selectedEntity.Position.Center - (new Vector2(60, 60) * sizeRatio)),
+					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(60, 60) * sizeRatio)),
 					                 null,
 					                 ColorPalette.ApplyTint(Color.Green, tint),
 					                 0,
 					                 Vector2.Zero,
-					                 sizeRatio / theGame.ScaleFactor,
+					                 sizeRatio / world.ScaleFactor,
 					                 SpriteEffects.None,
 					                 0);
 				}
@@ -449,12 +457,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					float sizeRatio = ((selectedEntity.Radius.Value) / 45f) * 2;
 					spriteBatch.Draw(TextureDictionary.Get("ellipse25back"),
-					                 theGame.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
+					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
 					                 null,
 					                 ColorPalette.ApplyTint(Color.Green, tint),
 					                 0,
 					                 Vector2.Zero,
-					                 sizeRatio / theGame.ScaleFactor,
+					                 sizeRatio / world.ScaleFactor,
 					                 SpriteEffects.None,
 					                 0);
 				}
@@ -478,12 +486,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					float sizeRatio = ((selectedEntity.Radius.Value) / 45f);
 					spriteBatch.Draw(TextureDictionary.Get("ellipse50front"),
-					                 theGame.WorldToScreen(selectedEntity.Position.Center - (new Vector2(60, 60) * sizeRatio)),
+					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(60, 60) * sizeRatio)),
 					                 null,
 					                 ColorPalette.ApplyTint(Color.Green, tint),
 					                 0,
 					                 Vector2.Zero,
-					                 sizeRatio / theGame.ScaleFactor,
+					                 sizeRatio / world.ScaleFactor,
 					                 SpriteEffects.None,
 					                 0);
 				}
@@ -491,12 +499,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					float sizeRatio = ((selectedEntity.Radius.Value) / 45f) * 2;
 					spriteBatch.Draw(TextureDictionary.Get("ellipse25front"),
-					                 theGame.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
+					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
 					                 null,
 					                 ColorPalette.ApplyTint(Color.Green, tint),
 					                 0,
 					                 Vector2.Zero,
-					                 sizeRatio / theGame.ScaleFactor,
+					                 sizeRatio / world.ScaleFactor,
 					                 SpriteEffects.None,
 					                 0);
 				}
@@ -504,12 +512,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					float sizeRatio = ((selectedEntity.Radius.Value) / 45f) * 2;
 					spriteBatch.Draw(TextureDictionary.Get("ellipse25bold"),
-					                 theGame.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
+					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
 					                 null,
 					                 ColorPalette.ApplyTint(Color.Green, tint),
 					                 0,
 					                 Vector2.Zero,
-					                 sizeRatio / theGame.ScaleFactor,
+					                 sizeRatio / world.ScaleFactor,
 					                 SpriteEffects.None,
 					                 0);
 				}
@@ -566,23 +574,23 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 
 			// If we are paused, draw a big "PAUSED" on the screen
-			if (theGame.Paused)
+			if (world.Paused)
 			{
-				spriteBatch.DrawString(Fonts.ControlFont, "** PAUSED **", new Vector2((size.Width / 2.0f) - 75, size.Height / 5.0f), Color.White);
+				spriteBatch.DrawString(Fonts.ControlFont, "** PAUSED **", new Vector2((Game.GraphicsDevice.Viewport.Width / 2.0f) - 75, Game.GraphicsDevice.Viewport.Height / 5.0f), Color.White);
 			}
 
 
-			base.Draw(spriteBatch, tint);
+			//base.Draw(spriteBatch, tint);
 			
 			
-#if DEBUG
-			// Draw the current frame rate
-			string str = String.Format("{0} FPS", CurrentFrameRate);
-			spriteBatch.DrawString(Fonts.ControlFont, str, new Vector2(200, 10), ColorPalette.ApplyTint(Color.White, tint), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-#endif
+//#if DEBUG
+//            // Draw the current frame rate
+//            string str = String.Format("{0} FPS", CurrentFrameRate);
+//            spriteBatch.DrawString(Fonts.ControlFont, str, new Vector2(200, 10), ColorPalette.ApplyTint(Color.White, tint), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+//#endif
 			
 			// Draw the mouse last (so that it shows up on top)
-			spriteBatch.Draw(TextureDictionary.Get("Cursor"), new Vector2(ScreenMan.Mouse.X - 20, ScreenMan.Mouse.Y - 20), Color.White);
+			spriteBatch.Draw(TextureDictionary.Get("Cursor"), new Vector2(theMouse.X - 20, theMouse.Y - 20), Color.White);
 		}
 		
 		
@@ -592,8 +600,8 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		}
 		public Vector2 ScreenToWorld(float x, float y)
 		{
-			float deltaX = x - (size.Width / 2f);
-			float deltaY = y - (size.Height / 2f);
+			float deltaX = x - (Game.GraphicsDevice.Viewport.Width / 2f);
+			float deltaY = y - (Game.GraphicsDevice.Viewport.Height / 2f);
 
 			deltaX = deltaX * scaleFactor / (float)Math.Sqrt(3);
 			deltaY = deltaY * scaleFactor;
@@ -614,7 +622,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			deltaX = deltaX / scaleFactor * (float)Math.Sqrt(3);
 			deltaY = deltaY / scaleFactor;
 
-			return new Vector2(size.Width / 2f + deltaX, size.Height / 2f + deltaY);
+			return new Vector2(Game.GraphicsDevice.Viewport.Width / 2f + deltaX, Game.GraphicsDevice.Viewport.Height / 2f + deltaY);
 		}
 		
 		
@@ -624,7 +632,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			get
 			{
 				Vector2 topLeft = ScreenToWorld(0, 0);
-				Vector2 bottomRight = ScreenToWorld(size.Width, size.Height);
+				Vector2 bottomRight = ScreenToWorld(Game.GraphicsDevice.Viewport.Width, Game.GraphicsDevice.Viewport.Height);
 				
 				return new Rectangle((int)(topLeft.X + 0.5),
 				                     (int)(topLeft.Y + 0.5),
@@ -655,7 +663,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					if(localActor == null)
 					{
-						CreateConstuctionPanel(0, size.Height - 370);
+						//CreateConstuctionPanel(0, size.Height - 370);
 					}
 					localActor = value;
 				}
@@ -706,7 +714,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 		private void btnPower_Clicked(object sender, EventArgs e)
 		{
-			if (!theGame.Paused)
+			if (!world.Paused)
 			{
 				if(creating != null)
 				{
@@ -714,7 +722,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new power station
-				creating = new SolarStation(theGame, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(ScreenMan.Mouse.X, ScreenMan.Mouse.Y)));
+				creating = new SolarStation(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
 
 				CreateRangeRingsForConstruction(creating);
 				CreatePowerLinker(creating);
@@ -724,7 +732,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 		private void btnPowerNode_Clicked(object sender, EventArgs e)
 		{
-			if (!theGame.Paused)
+			if (!world.Paused)
 			{
 				if (creating != null)
 				{
@@ -732,7 +740,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new power node
-				creating = new PowerNode(theGame, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(ScreenMan.Mouse.X, ScreenMan.Mouse.Y)));
+				creating = new PowerNode(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
 
 				CreateRangeRingsForConstruction(creating);
 				CreatePowerLinker(creating);
@@ -741,7 +749,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		
 		private void btnMiner_Clicked(object sender, EventArgs e)
 		{
-			if (!theGame.Paused)
+			if (!world.Paused)
 			{
 				if (creating != null)
 				{
@@ -749,24 +757,24 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new power station
-				creating = new LaserMiner(theGame, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(ScreenMan.Mouse.X, ScreenMan.Mouse.Y)));
+				creating = new LaserMiner(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
 
 				CreateRangeRingsForConstruction(creating);
 				CreatePowerLinker(creating);
 
 				LaserMiner laserMiner = creating as LaserMiner;
-				Linker linker = new Linker(theGame, this, creating.Position);
+				Linker linker = new Linker(world, this, creating.Position);
 				linker.Links.Add(new Tuple<Predicate<Entity>, Color, float>(entity => entity is Asteroid, Color.Green, laserMiner.MiningRange));
 
 				CancelledCreationEvent += linker.KillSelf;
-				//theGame.StructureStartedEventPreAuth += linker.KillSelf;
+				//world.StructureStartedEventPreAuth += linker.KillSelf;
 				components.Add(linker);
 			}
 		}
 
 		void btnLaserTower_Clicked(object sender, EventArgs e)
 		{
-			if (!theGame.Paused)
+			if (!world.Paused)
 			{
 				if (creating != null)
 				{
@@ -774,7 +782,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new power station
-				creating = new LaserTower(theGame, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(ScreenMan.Mouse.X, ScreenMan.Mouse.Y)));
+				creating = new LaserTower(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
 
 				CreateRangeRingsForConstruction(creating);
 				CreatePowerLinker(creating);
@@ -790,7 +798,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 			foreach (var rangeRingDefinition in rangeRingDefinitions)
 			{
-				Ring ring = new Ring(theGame,
+				Ring ring = new Ring(world,
 				                     this,
 				                     entity.Position,
 				                     rangeRingDefinition.Item1,
@@ -798,8 +806,8 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				components.Add(ring);
 				createdSuicidals.Add(ring);
 
-				PositionOffset positionOffset = new PositionOffset(theGame, this, entity.Position, new Vector2(-25, -rangeRingDefinition.Item1 - 17));
-				FreeText text = new FreeText(theGame,
+				PositionOffset positionOffset = new PositionOffset(world, this, entity.Position, new Vector2(-25, -rangeRingDefinition.Item1 - 17));
+				FreeText text = new FreeText(world,
 				                             this,
 				                             positionOffset,
 				                             rangeRingDefinition.Item3,
@@ -819,7 +827,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			{
 				// TODO: I think these events will continue to hold on to the dying entity long after its dead and it will prevent garbage collection
 				CancelledCreationEvent += suicidal.KillSelf;
-				//theGame.StructureStartedEventPreAuth += suicidal.KillSelf;
+				//world.StructureStartedEventPreAuth += suicidal.KillSelf;
 			}
 		}
 
@@ -836,9 +844,9 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 		private void CreatePowerLinker(ConstructableEntity entity)
 		{
-			PowerLinker powerLinker = new PowerLinker(theGame, this, localActor.PrimaryForce, entity);
+			PowerLinker powerLinker = new PowerLinker(world, this, localActor.PrimaryForce, entity);
 			CancelledCreationEvent += powerLinker.KillSelf;
-			//theGame.StructureStartedEventPreAuth += powerLinker.KillSelf;
+			//world.StructureStartedEventPreAuth += powerLinker.KillSelf;
 			components.Add(powerLinker);
 		}
 		
@@ -848,8 +856,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// <summary>
 		/// Handle mouse up everywhere except the controls
 		/// </summary>
-		protected override void OnMouseUp(EnhancedMouseState mouse, MouseButton mouseButton, ref bool handled)
+		protected void OnMouseUp(object sender, JSCallbackEventArgs e)
 		{
+			bool mouseUpOverHUD = e.Arguments[0].ToBoolean();
+			MouseButton mouseButton = (MouseButton)e.Arguments[1].ToInteger();
 			bool clickHandled = false;
 
 			if (mouseButton == MouseButton.MIDDLE)
@@ -864,7 +874,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				if (creating != null)
 				{
 					// Have we just tried to build this guy?
-					if (mouse.LeftButton == EnhancedButtonState.JUST_RELEASED && creating.IsValidToBuildHere())
+					if (/*mouse.LeftButton == EnhancedButtonState.JUST_RELEASED &&*/ creating.IsValidToBuildHere())
 					{
 						// Yes, build this now!
 						BuildStructure();
@@ -875,10 +885,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				if (!clickHandled)
 				{
 					// Did we click on a unit?
-					Vector2 mouseMapCoords = ScreenToWorld(mouse.X, mouse.Y);
+					Vector2 mouseMapCoords = ScreenToWorld(theMouse.X, theMouse.Y);
 
 					// Grab a possible list of clicked entities by using a square-area search
-					List<Entity> possiblyClickedEntities = theGame.EntitiesInArea(new Rectangle((int)(mouseMapCoords.X + 0.5), (int)(mouseMapCoords.Y + 0.5), 1, 1));
+					List<Entity> possiblyClickedEntities = world.EntitiesInArea(new Rectangle((int)(mouseMapCoords.X + 0.5), (int)(mouseMapCoords.Y + 0.5), 1, 1));
 					foreach (Entity entity in possiblyClickedEntities)
 					{
 						// Make sure the unit was clicked
@@ -917,11 +927,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 		private void BuildStructure()
 		{
-			constructionSound.Play(Math.Min(1, theGame.Scale(1f)), 0, 0);
+			constructionSound.Play(Math.Min(1, world.Scale(1f)), 0, 0);
 
 			// Reflectively look up what they are making, and create an other one of the same thing in the game
 			Type creatingType = creating.GetType();
-			ConstructorInfo creatingTypeConstuctructor = creatingType.GetConstructor(new Type[] { typeof(AsteroidOutpostScreen), typeof(IComponentList), typeof(Force), typeof(Vector2) });
+			ConstructorInfo creatingTypeConstuctructor = creatingType.GetConstructor(new Type[] { typeof(World), typeof(IComponentList), typeof(Force), typeof(Vector2) });
 
 			if (creatingTypeConstuctructor == null)
 			{
@@ -930,10 +940,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				return;
 			}
 
-			ConstructableEntity toBuild = (ConstructableEntity)creatingTypeConstuctructor.Invoke(new object[]{theGame, theGame, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(ScreenMan.Mouse.X, ScreenMan.Mouse.Y))});
+			ConstructableEntity toBuild = (ConstructableEntity)creatingTypeConstuctructor.Invoke(new object[]{world, world, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y))});
 
 			toBuild.StartConstruction();
-			theGame.Add(toBuild);
+			world.Add(toBuild);
 
 
 			// TODO: Find a better place to put this, but I don't think the LaserMiner should know about this
@@ -941,11 +951,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			LaserMiner laserMiner = toBuild as LaserMiner;
 			if (laserMiner != null)
 			{
-				PositionOffset miningAccumPosition = new PositionOffset(theGame,
+				PositionOffset miningAccumPosition = new PositionOffset(world,
 				                                                        this,
 				                                                        laserMiner.Position,
 				                                                        new Vector2(-5, -20));
-				Accumulator miningAccumulator = new Accumulator(theGame,
+				Accumulator miningAccumulator = new Accumulator(world,
 				                                                this,
 				                                                miningAccumPosition,
 				                                                new Color(100, 255, 100, 255),
@@ -957,11 +967,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				AddComponent(miningAccumulator);
 			}
 
-			PositionOffset healthAccumPosisiton = new PositionOffset(theGame,
+			PositionOffset healthAccumPosisiton = new PositionOffset(world,
 				                                                        this,
 				                                                        toBuild.Position,
 				                                                        new Vector2(-5, -20));
-			Accumulator healthAccumulator = new Accumulator(theGame,
+			Accumulator healthAccumulator = new Accumulator(world,
 				                                            this,
 				                                            healthAccumPosisiton,
 				                                            new Color(200, 50, 50, 255),
@@ -972,14 +982,14 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			AddComponent(healthAccumPosisiton);
 			AddComponent(healthAccumulator);
 
-			ProgressBar progressBar = new ProgressBar(theGame, this, toBuild.Position, new Vector2(0, toBuild.Radius.Value - 6), toBuild.Radius.Value * 2, 6, Color.Gray, Color.RoyalBlue);
+			ProgressBar progressBar = new ProgressBar(world, this, toBuild.Position, new Vector2(0, toBuild.Radius.Value - 6), toBuild.Radius.Value * 2, 6, Color.Gray, Color.RoyalBlue);
 			progressBar.Max = toBuild.MineralsToConstruct;
 			toBuild.ConstructionProgressChangedEvent += progressBar.SetProgress;
 			toBuild.ConstructionCompletedEvent += progressBar.KillSelf;
 			toBuild.HitPoints.DyingEvent += progressBar.KillSelf;
 			AddComponent(progressBar);
 
-			ProgressBar healthBar = new ProgressBar(theGame, this, toBuild.Position, new Vector2(0, toBuild.Radius.Value), toBuild.Radius.Value * 2, 6, Color.Gray, Color.Green);
+			ProgressBar healthBar = new ProgressBar(world, this, toBuild.Position, new Vector2(0, toBuild.Radius.Value), toBuild.Radius.Value * 2, 6, Color.Gray, Color.Green);
 			healthBar.Max = toBuild.HitPoints.GetTotal();
 			healthBar.Progress = healthBar.Max;
 			toBuild.HitPoints.HitPointsChangedEvent += healthBar.SetProgress;
@@ -987,7 +997,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			AddComponent(healthBar);
 
 
-			if (!ScreenMan.Keyboard.IsKeyDown(Keys.LeftShift) && !ScreenMan.Keyboard.IsKeyDown(Keys.RightShift))
+			if (!theKeyboard.IsKeyDown(Keys.LeftShift) && !theKeyboard.IsKeyDown(Keys.RightShift))
 			{
 				OnCancelCreation();
 			}
@@ -1012,10 +1022,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		}
 
 
-		protected override void OnMouseDown(EnhancedMouseState theMouse, MouseButton theMouseButton, ref bool handled)
+		protected void OnMouseDown(object sender, JSCallbackEventArgs e)
 		{
+			MouseButton mouseButton = (MouseButton)e.Arguments[1].ToInteger();
 			// TODO: Start a multi-select, BUT only actually do something about it after they move... lets say 10px away from this location
-			if (theMouseButton == MouseButton.MIDDLE)
+			if (mouseButton == MouseButton.MIDDLE)
 			{
 				isDraggingScreen = true;
 				middleMouseGrabPoint = ScreenToWorld(theMouse.X, theMouse.Y);

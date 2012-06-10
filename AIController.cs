@@ -14,8 +14,8 @@ namespace AsteroidOutpost
 	{
 		private IControllerIDProvider actorIDProvider;
 
-		public AIController(AsteroidOutpostScreen theGame, IControllerIDProvider actorIDProvider, Force primaryForce)
-			: base(theGame, ControllerRole.AI, primaryForce)
+		public AIController(World world, IControllerIDProvider actorIDProvider, Force primaryForce)
+			: base(world, ControllerRole.AI, primaryForce)
 		{
 			this.actorIDProvider = actorIDProvider;
 		}
@@ -31,7 +31,7 @@ namespace AsteroidOutpost
 		{
 			// Do some AI logic here. This is very time consuming I'm sure
 			// TODO: Do some real AI logic here, or better yet, script it
-			var aiEntities = from ent in theGame.Entities where ent.OwningForce == PrimaryForce select ent;
+			var aiEntities = from ent in world.Entities where ent.OwningForce == PrimaryForce select ent;
 
 			foreach(Entity aiEntity in aiEntities)
 			{
@@ -39,7 +39,7 @@ namespace AsteroidOutpost
 				{
 					Ship aiShip = (Ship)aiEntity;
 
-					foreach (Entity entity in theGame.Entities)
+					foreach (Entity entity in world.Entities)
 					{
 
 						// Only look at entities that are alive

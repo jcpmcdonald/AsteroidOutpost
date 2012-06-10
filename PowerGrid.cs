@@ -17,7 +17,7 @@ namespace AsteroidOutpost
 {
 	public class PowerGrid
 	{
-		private AsteroidOutpostScreen theGame;
+		private World world;
 
 		public const int PowerConductingDistance = 220;
 		private readonly Dictionary<IPowerGridNode, List<IPowerGridNode>> powerNodes = new Dictionary<IPowerGridNode, List<IPowerGridNode>>(32);
@@ -25,9 +25,9 @@ namespace AsteroidOutpost
 		private List<Tuple<IPowerGridNode, IPowerGridNode>> recentlyActiveLinks = new List<Tuple<IPowerGridNode, IPowerGridNode>>();
 
 
-		public PowerGrid(AsteroidOutpostScreen theGame)
+		public PowerGrid(World world)
 		{
-			this.theGame = theGame;
+			this.world = world;
 		}
 
 
@@ -152,7 +152,7 @@ namespace AsteroidOutpost
 		internal bool IsPowerRoutableBetween(IPowerGridNode powerNodeA, IPowerGridNode powerNodeB)
 		{
 			// Check for obstacles in the way
-			List<Entity> nearbyEntities = theGame.EntitiesInArea((int)(Math.Min(powerNodeA.PowerLinkPointAbsolute.X, powerNodeB.PowerLinkPointAbsolute.X) - 0.5),
+			List<Entity> nearbyEntities = world.EntitiesInArea((int)(Math.Min(powerNodeA.PowerLinkPointAbsolute.X, powerNodeB.PowerLinkPointAbsolute.X) - 0.5),
 			                                                     (int)(Math.Min(powerNodeA.PowerLinkPointAbsolute.Y, powerNodeB.PowerLinkPointAbsolute.Y - 0.5)),
 			                                                     (int)(Math.Abs(powerNodeA.PowerLinkPointAbsolute.X - powerNodeB.PowerLinkPointAbsolute.X) + 0.5),
 			                                                     (int)(Math.Abs(powerNodeA.PowerLinkPointAbsolute.Y - powerNodeB.PowerLinkPointAbsolute.Y) + 0.5));
@@ -314,10 +314,10 @@ namespace AsteroidOutpost
 			{
 				if (!linksAlreadyDrawn.Contains(linkToDraw))
 				{
-					color = new Color((int)(150 + theGame.Scale(50)), (int)(150 + theGame.Scale(50)), 0, (int)(150 + theGame.Scale(50)));
+					color = new Color((int)(150 + world.Scale(50)), (int)(150 + world.Scale(50)), 0, (int)(150 + world.Scale(50)));
 
-					spriteBatch.DrawLine(theGame.WorldToScreen(linkToDraw.Item1.PowerLinkPointAbsolute),
-					                         theGame.WorldToScreen(linkToDraw.Item2.PowerLinkPointAbsolute),
+					spriteBatch.DrawLine(world.WorldToScreen(linkToDraw.Item1.PowerLinkPointAbsolute),
+					                         world.WorldToScreen(linkToDraw.Item2.PowerLinkPointAbsolute),
 					                         color);
 
 					linksAlreadyDrawn.Add(linkToDraw);
@@ -338,15 +338,15 @@ namespace AsteroidOutpost
 					{
 						if (nodeA.PowerStateActive && nodeB.PowerStateActive)
 						{
-							color = new Color((int)(70 + theGame.Scale(50)), (int)(70 + theGame.Scale(50)), 0, (int)(70 + theGame.Scale(50)));
+							color = new Color((int)(70 + world.Scale(50)), (int)(70 + world.Scale(50)), 0, (int)(70 + world.Scale(50)));
 						}
 						else
 						{
-							color = new Color((int)(80 + theGame.Scale(50)), (int)(0 + theGame.Scale(50)), 0, (int)(0 + theGame.Scale(50)));
+							color = new Color((int)(80 + world.Scale(50)), (int)(0 + world.Scale(50)), 0, (int)(0 + world.Scale(50)));
 						}
 
-						spriteBatch.DrawLine(theGame.WorldToScreen(nodeA.PowerLinkPointAbsolute),
-						                     theGame.WorldToScreen(nodeB.PowerLinkPointAbsolute),
+						spriteBatch.DrawLine(world.WorldToScreen(nodeA.PowerLinkPointAbsolute),
+						                     world.WorldToScreen(nodeB.PowerLinkPointAbsolute),
 						                     color);
 
 						linksAlreadyDrawn.Add(linkToDraw);

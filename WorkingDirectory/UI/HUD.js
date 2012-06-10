@@ -19,13 +19,19 @@ function selectionChanged(newSelection)
 }
 
 
-function timerTest()
+var mouseDownOverHUD = false;
+function docMouseDown(event)
 {
-	TEST_selectionData["health"] -= 1;
-	selectionChanged(TEST_selectionData);
-	//setTimeout("timerTest()", 100);
+	hud.OnMouseDown(mouseDownOverHUD, event.which - 1);
+	mouseDownOverHUD = false;
 }
 
+var mouseUpOverHUD = false;
+function docMouseUp(event)
+{
+	hud.OnMouseUp(mouseUpOverHUD, event.which - 1);
+	mouseUpOverHUD = false;
+}
 
 
 $(document).ready(function()
@@ -34,15 +40,28 @@ $(document).ready(function()
 	$(".button").mousedown( function(event) {
 		$(this).addClass("buttonPressed");
 	});
-	
 	$(".button").mouseup( function(event) {
 		$(this).removeClass("buttonPressed");
 	});
-	
 	$(".button").mouseleave( function(event) {
 		$(this).removeClass("buttonPressed");
 	});
 	
+	
+	$(document).mousedown( function(event) {
+		docMouseDown(event);
+	});
+	$("body").mousedown( function(event) {
+		mouseDownOverHUD = true;
+	});
+	
+	
+	$(document).mouseup( function(event) {
+		docMouseUp(event);
+	});
+	$("body").mouseup( function(event) {
+		mouseUpOverHUD = true;
+	});
+	
 	//selectionChanged(TEST_selectionData);
-	//setTimeout("timerTest()", 100);
 });

@@ -12,7 +12,7 @@ namespace AsteroidOutpost
 	{
 		// be with you
 
-		protected AsteroidOutpostScreen theGame;
+		protected World world;
 
 		private int id = -1;
 		private int minerals;
@@ -22,9 +22,9 @@ namespace AsteroidOutpost
 		public event Action<ForceMineralsChangedEventArgs> MineralsChangedEvent;
 
 
-		public Force(AsteroidOutpostScreen theGame, int theID, int initialMinerals, Team theTeam)
+		public Force(World world, int theID, int initialMinerals, Team theTeam)
 		{
-			this.theGame = theGame;
+			this.world = world;
 			id = theID;
 			minerals = Math.Max(initialMinerals, 0);
 			team = theTeam;
@@ -49,16 +49,16 @@ namespace AsteroidOutpost
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		public void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		/// <param name="world"></param>
+		public void PostDeserializeLink(World world)
 		{
-			this.theGame = theGame;
+			this.world = world;
 		}
 
 
 		public void SetMinerals(int value)
 		{
-			SetMinerals(value, theGame.IsServer);
+			SetMinerals(value, world.IsServer);
 		}
 
 		public void SetMinerals(int value, bool authoritative)

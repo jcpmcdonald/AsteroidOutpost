@@ -69,8 +69,8 @@ namespace AsteroidOutpost.Entities.Structures
 		public event Action<EntityUpgradeEventArgs> UpgradeCompletedEvent;
 
 
-		protected ConstructableEntity(AsteroidOutpostScreen theGame, IComponentList componentList, Force theowningForce, Vector2 theCenter, int theRadius, int totalHitPoints)
-			: base(theGame, componentList, theowningForce, theCenter, theRadius, totalHitPoints)
+		protected ConstructableEntity(World world, IComponentList componentList, Force theowningForce, Vector2 theCenter, int theRadius, int totalHitPoints)
+			: base(world, componentList, theowningForce, theCenter, theRadius, totalHitPoints)
 		{
 			// TODO: Lookup and fix "virtual member call in constructor"
 			mineralsLeftToConstruct = MineralsToConstruct;
@@ -139,12 +139,12 @@ namespace AsteroidOutpost.Entities.Structures
 		}
 
 
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		public override void PostDeserializeLink(World world)
 		{
-			base.PostDeserializeLink(theGame);
+			base.PostDeserializeLink(world);
 
 			// Hook me into the grid
-			theGame.PowerGrid(owningForce).ConnectToPowerGrid(this);
+			world.PowerGrid(owningForce).ConnectToPowerGrid(this);
 		}
 
 
@@ -338,7 +338,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 		public void StartUpgrade(String upgradeName)
 		{
-			StartUpgrade(GetUpgradeByName(upgradeName), theGame.IsServer);
+			StartUpgrade(GetUpgradeByName(upgradeName), world.IsServer);
 		}
 
 		public void StartUpgrade(String upgradeName, bool authoritative)
@@ -348,7 +348,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 		public void StartUpgrade(Upgrade u)
 		{
-			StartUpgrade(u, theGame.IsServer);
+			StartUpgrade(u, world.IsServer);
 		}
 
 		public void StartUpgrade(Upgrade u, bool authoritative)
@@ -385,7 +385,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 		public void CancelUpgrade()
 		{
-			CancelUpgrade(theGame.IsServer);
+			CancelUpgrade(world.IsServer);
 		}
 
 		public void CancelUpgrade(bool authoritative)
@@ -427,7 +427,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 		public void CancelConstruction()
 		{
-			CancelConstruction(theGame.IsServer);
+			CancelConstruction(world.IsServer);
 		}
 
 		public void CancelConstruction(bool authoritative)
@@ -474,7 +474,7 @@ namespace AsteroidOutpost.Entities.Structures
 				int delta;
 
 				// Check that we have enough power in the grid
-				if(theGame.PowerGrid(owningForce).HasPower(this, powerToUse))
+				if(world.PowerGrid(owningForce).HasPower(this, powerToUse))
 				{
 					// Check to see if the mineralsLeftToConstruct would pass an integer boundary
 					delta = (int)Math.Ceiling(mineralsLeftToConstruct) - (int)Math.Ceiling(mineralsLeftToConstruct - mineralsToUse);
@@ -484,7 +484,7 @@ namespace AsteroidOutpost.Entities.Structures
 						if (owningForce.GetMinerals() >= delta)
 						{
 							// Consume the resources
-							theGame.PowerGrid(owningForce).GetPower(this, powerToUse);
+							world.PowerGrid(owningForce).GetPower(this, powerToUse);
 							SetMineralsLeftToConstruct(mineralsLeftToConstruct - mineralsToUse);
 
 							// Set the force's minerals
@@ -502,7 +502,7 @@ namespace AsteroidOutpost.Entities.Structures
 						mineralsLeftToConstruct -= mineralsToUse;
 
 						// We should consume our little tidbit of power though:
-						theGame.PowerGrid(owningForce).GetPower(this, powerToUse);
+						world.PowerGrid(owningForce).GetPower(this, powerToUse);
 					}
 				}
 			}
@@ -524,7 +524,7 @@ namespace AsteroidOutpost.Entities.Structures
 				float mineralsToUse = mineralUsageRate * (float)deltaTime.TotalSeconds;
 
 				// BUG: There is a disconnect between the check for minerals (below) and the actual consumption of minerals. Could cause weird behaviour
-				if (owningForce.GetMinerals() > mineralsToUse && theGame.PowerGrid(owningForce).GetPower(this, powerToUse))
+				if (owningForce.GetMinerals() > mineralsToUse && world.PowerGrid(owningForce).GetPower(this, powerToUse))
 				{
 					// Use some minerals toward my upgrade
 					int temp = (int)mineralsLeftToConstruct;
@@ -581,8 +581,8 @@ namespace AsteroidOutpost.Entities.Structures
 			base.Draw(spriteBatch, scaleModifier, tint);
 			
 			// Draw a progress bar
-			//spriteBatch.FillRectangle(theGame.Scale(new Vector2(-Radius.Value, Radius.Value - 6)) + theGame.WorldToScreen(Position.Center), theGame.Scale(new Vector2(Radius.Width, 6)), Color.Gray);
-			//spriteBatch.FillRectangle(theGame.Scale(new Vector2(-Radius.Value, Radius.Value - 6)) + theGame.WorldToScreen(Position.Center), theGame.Scale(new Vector2(Radius.Width * percentComplete, 6)), Color.RoyalBlue);
+			//spriteBatch.FillRectangle(world.Scale(new Vector2(-Radius.Value, Radius.Value - 6)) + world.WorldToScreen(Position.Center), world.Scale(new Vector2(Radius.Width, 6)), Color.Gray);
+			//spriteBatch.FillRectangle(world.Scale(new Vector2(-Radius.Value, Radius.Value - 6)) + world.WorldToScreen(Position.Center), world.Scale(new Vector2(Radius.Width * percentComplete, 6)), Color.RoyalBlue);
 		}
 
 
@@ -599,9 +599,9 @@ namespace AsteroidOutpost.Entities.Structures
 			base.Draw(spriteBatch, scaleModifier, tint);
 			
 			// Draw a progress bar
-			//Vector2 selfCenterOnScreen = new Vector2(Center.X - theGame.Hud.FocusScreen.X, Center.Y - theGame.Hud.FocusScreen.Y);
-			spriteBatch.FillRectangle(theGame.Scale(new Vector2(-Radius.Value, Radius.Value - 6)) + theGame.WorldToScreen(Position.Center), theGame.Scale(new Vector2(Radius.Width, 6)), Color.Gray);
-			spriteBatch.FillRectangle(theGame.Scale(new Vector2(-Radius.Value, Radius.Value - 6)) + theGame.WorldToScreen(Position.Center), theGame.Scale(new Vector2(Radius.Width * percentComplete, 6)), Color.RoyalBlue);
+			//Vector2 selfCenterOnScreen = new Vector2(Center.X - world.Hud.FocusScreen.X, Center.Y - world.Hud.FocusScreen.Y);
+			spriteBatch.FillRectangle(world.Scale(new Vector2(-Radius.Value, Radius.Value - 6)) + world.WorldToScreen(Position.Center), world.Scale(new Vector2(Radius.Width, 6)), Color.Gray);
+			spriteBatch.FillRectangle(world.Scale(new Vector2(-Radius.Value, Radius.Value - 6)) + world.WorldToScreen(Position.Center), world.Scale(new Vector2(Radius.Width * percentComplete, 6)), Color.RoyalBlue);
 			
 			//DrawPowerConnections(spriteBatch);
 		}
@@ -616,7 +616,7 @@ namespace AsteroidOutpost.Entities.Structures
 			bool valid = true;
 
 			// This will grab all objects who's bounding square intersects with us
-			List<Entity> nearbyEntities = theGame.EntitiesInArea(Rect);
+			List<Entity> nearbyEntities = world.EntitiesInArea(Rect);
 			foreach (Entity entity in nearbyEntities)
 			{
 				// Now determine if they are really intersecting
@@ -686,7 +686,7 @@ namespace AsteroidOutpost.Entities.Structures
 			IsUpgrading = false;
 
 			// Hook me into the grid
-			theGame.PowerGrid(owningForce).ConnectToPowerGrid(this);
+			world.PowerGrid(owningForce).ConnectToPowerGrid(this);
 		}
 	}
 }

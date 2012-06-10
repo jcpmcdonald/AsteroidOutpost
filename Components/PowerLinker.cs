@@ -17,8 +17,8 @@ namespace AsteroidOutpost.Components
 		private int postDeserializeOwningForceID;		// For serialization linking, don't use this
 
 
-		public PowerLinker(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, IPowerGridNode powerGridNode)
-			: base(theGame, componentList)
+		public PowerLinker(World world, IComponentList componentList, Force owningForce, IPowerGridNode powerGridNode)
+			: base(world, componentList)
 		{
 			relatedPowerNode = powerGridNode;
 
@@ -49,10 +49,10 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		/// <param name="world"></param>
+		public override void PostDeserializeLink(World world)
 		{
-			owningForce = theGame.GetForce(postDeserializeOwningForceID);
+			owningForce = world.GetForce(postDeserializeOwningForceID);
 			if (owningForce == null)
 			{
 				// I think something is wrong, there should always be an owning force
@@ -63,10 +63,10 @@ namespace AsteroidOutpost.Components
 
 		public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
 		{
-			foreach (var powerLink in theGame.PowerGrid(owningForce).GetAllPowerLinks(relatedPowerNode))
+			foreach (var powerLink in world.PowerGrid(owningForce).GetAllPowerLinks(relatedPowerNode))
 			{
 				Color linkColor;
-				if (theGame.PowerGrid(owningForce).IsPowerRoutableBetween(relatedPowerNode, powerLink.Value))
+				if (world.PowerGrid(owningForce).IsPowerRoutableBetween(relatedPowerNode, powerLink.Value))
 				{
 					linkColor = Color.Yellow;
 				}
@@ -75,8 +75,8 @@ namespace AsteroidOutpost.Components
 					linkColor = Color.Red;
 				}
 
-				spriteBatch.DrawLine(theGame.WorldToScreen(relatedPowerNode.PowerLinkPointAbsolute),
-									 theGame.WorldToScreen(powerLink.Value.PowerLinkPointAbsolute),
+				spriteBatch.DrawLine(world.WorldToScreen(relatedPowerNode.PowerLinkPointAbsolute),
+									 world.WorldToScreen(powerLink.Value.PowerLinkPointAbsolute),
 									 linkColor);
 			}
 

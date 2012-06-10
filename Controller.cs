@@ -10,7 +10,7 @@ namespace AsteroidOutpost
 	public class Controller : ISerializable
 	{
 
-		protected AsteroidOutpostScreen theGame;
+		protected World world;
 
 		//private int id;
 		private readonly ControllerRole role;
@@ -20,9 +20,9 @@ namespace AsteroidOutpost
 		private List<int> forceIDs = new List<int>(1);
 
 
-		public Controller(AsteroidOutpostScreen theGame, ControllerRole role, Force primaryForce)
+		public Controller(World world, ControllerRole role, Force primaryForce)
 		{
-			this.theGame = theGame;
+			this.world = world;
 			//this.id = id;
 			this.role = role;
 			forces.Add(primaryForce);
@@ -60,14 +60,14 @@ namespace AsteroidOutpost
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		public void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		/// <param name="world"></param>
+		public void PostDeserializeLink(World world)
 		{
-			this.theGame = theGame;
+			this.world = world;
 
 			foreach (int forceID in forceIDs)
 			{
-				forces.Add(theGame.GetForce(forceID));
+				forces.Add(world.GetForce(forceID));
 			}
 			forceIDs.Clear();
 		}

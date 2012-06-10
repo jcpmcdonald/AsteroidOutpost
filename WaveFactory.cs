@@ -12,10 +12,10 @@ namespace AsteroidOutpost
 {
 	public class WaveFactory
 	{
-		public static void CreateWave(AsteroidOutpostScreen theGame, int pointValue, Vector2 roughPosition)
+		public static void CreateWave(World world, int pointValue, Vector2 roughPosition)
 		{
 			Controller aiActor = null;
-			foreach (Controller actor in theGame.Controllers)
+			foreach (Controller actor in world.Controllers)
 			{
 				if (actor.Role == ControllerRole.AI)
 				{
@@ -36,7 +36,7 @@ namespace AsteroidOutpost
 			while (aiCreated < pointValue)
 			{
 				// Make something
-				theGame.Add(new Ship1(theGame, theGame, aiActor.PrimaryForce, roughPosition));
+				world.Add(new Ship1(world, world, aiActor.PrimaryForce, roughPosition));
 				aiCreated += 100;
 			}
 

@@ -127,7 +127,7 @@ namespace AsteroidOutpost.Networking
 		/// <summary>
 		/// Execute this message. This should only be done from the Game Thread to avoid threading issues
 		/// </summary>
-		public override void Execute(AsteroidOutpostScreen theGame, AONetwork network, TimeSpan deltaTime)
+		public override void Execute(World world, AONetwork network, TimeSpan deltaTime)
 		{
 			//List<Type> reflectionTagets = Assembly.GetCallingAssembly().GetTypes().Where(type => type.IsSubclassOf(typeof(IReflectionTarget))).ToList();
 
@@ -141,12 +141,12 @@ namespace AsteroidOutpost.Networking
 			else if (targetObjectID == AONetwork.SpecialTargetTheGame)
 			{
 				// Reserved for the game
-				targetObject = theGame;
+				targetObject = world;
 			}
 			else
 			{
 				// For all other IDs, look up the corresponding Entity
-				targetObject = theGame.GetTarget(targetObjectID);
+				targetObject = world.GetTarget(targetObjectID);
 
 				if (targetObject == null)
 				{
@@ -173,7 +173,7 @@ namespace AsteroidOutpost.Networking
 			{
 				if(param is ISerializable)
 				{
-					((ISerializable)param).PostDeserializeLink(theGame);
+					((ISerializable)param).PostDeserializeLink(world);
 				}
 			}
 

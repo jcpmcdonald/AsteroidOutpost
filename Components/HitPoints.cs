@@ -19,8 +19,8 @@ namespace AsteroidOutpost.Components
 		public event Action<EntityHitPointsChangedEventArgs> HitPointsChangedEvent;
 
 
-		public HitPoints(AsteroidOutpostScreen theGame, IComponentList componentList, int totalHitPoints)
-			: base(theGame, componentList)
+		public HitPoints(World world, IComponentList componentList, int totalHitPoints)
+			: base(world, componentList)
 		{
 			this.totalHitPoints = totalHitPoints;
 			hitPoints = totalHitPoints;
@@ -50,7 +50,7 @@ namespace AsteroidOutpost.Components
 		/// <param name="value">What to set the hit points to</param>
 		public void Set(float value)
 		{
-			Set(value, theGame.IsServer);
+			Set(value, world.IsServer);
 		}
 
 

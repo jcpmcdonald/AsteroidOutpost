@@ -13,7 +13,7 @@ namespace AsteroidOutpost.Screens
 {
 	partial class ServerBrowserScreen : AOMenuScreen, IDisposable
 	{
-		private AsteroidOutpostScreen theGame;
+		private World world;
 
 		private Thread refreshThread;
 		private Thread serverReplyListenerThread;
@@ -24,10 +24,10 @@ namespace AsteroidOutpost.Screens
 
 
 
-		public ServerBrowserScreen(AsteroidOutpostScreen theGame, ScreenManager theScreenManager, LayeredStarField starField)
+		public ServerBrowserScreen(World world, ScreenManager theScreenManager, LayeredStarField starField)
 			: base(theScreenManager, starField)
 		{
-			this.theGame = theGame;
+			this.world = world;
 		}
 
 
@@ -76,13 +76,13 @@ namespace AsteroidOutpost.Screens
 			IPEndPoint remoteEndpoint = selectedServer.Tag as IPEndPoint;
 			if(remoteEndpoint != null)
 			{
-				bool success = theGame.Network.Connect(remoteEndpoint.Address, remoteEndpoint.Port);
+				bool success = world.Network.Connect(remoteEndpoint.Address, remoteEndpoint.Port);
 				if(success)
 				{
 					SimpleListRow simpleListRow = selectedServer as SimpleListRow;
 					if(simpleListRow != null)
 					{
-						theGame.Network.ServerName = simpleListRow.Cells[0];
+						world.Network.ServerName = simpleListRow.Cells[0];
 					}
 					ScreenMan.SwitchScreens("Lobby");
 				}
@@ -128,7 +128,7 @@ namespace AsteroidOutpost.Screens
 		/// <param name="theKeyboard">The current state of the keyboard</param>
 		protected override void StartTransitionToward(TimeSpan deltaTime, EnhancedMouseState theMouse, EnhancedKeyboardState theKeyboard)
 		{
-			theGame.IsServer = false;
+			world.IsServer = false;
 			base.StartTransitionToward(deltaTime, theMouse, theKeyboard);
 		}
 
@@ -168,7 +168,7 @@ namespace AsteroidOutpost.Screens
 				serverReplyListenerThread.Start();
 			}
 
-			List<Tuple<string, int>> serverIPs = theGame.Network.GetServerIPs();
+			List<Tuple<string, int>> serverIPs = world.Network.GetServerIPs();
 
 			// Locked the shared variable that is used to communicate the new servers to the main thread
 			lock (serverUpdateRequestsSent)
@@ -180,8 +180,8 @@ namespace AsteroidOutpost.Screens
 
 					MemoryStream memStream = new MemoryStream();
 					BinaryWriter bw = new BinaryWriter(memStream);
-					bw.Write(AsteroidOutpostScreen.StreamIdent);
-					bw.Write(AsteroidOutpostScreen.Version);
+					bw.Write(World.StreamIdent);
+					bw.Write(World.Version);
 					bw.Write((byte)StreamType.RequestServerInfo);
 					bw.Flush();
 
@@ -241,7 +241,7 @@ namespace AsteroidOutpost.Screens
 								BinaryReader br = new BinaryReader(new MemoryStream(bytes));
 
 								UInt32 handshake = br.ReadUInt32();
-								if(handshake != AsteroidOutpostScreen.StreamIdent)
+								if(handshake != World.StreamIdent)
 								{
 									Debugger.Break();
 								}

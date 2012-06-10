@@ -14,12 +14,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 	{
 		private readonly List<Entity> selectedEntities;			// This is a reference to the HUD's selected entity list
 
-		private AsteroidOutpostScreen theGame;
+		private World world;
 		private readonly AOHUD hud;
 		
-		public SelectionInfo(AsteroidOutpostScreen theGame, int x, int y, int w, int h, AOHUD theHUD, List<Entity> theSelectedEntities) : base(x, y, w, h)
+		public SelectionInfo(World world, int x, int y, int w, int h, AOHUD theHUD, List<Entity> theSelectedEntities) : base(x, y, w, h)
 		{
-			this.theGame = theGame;
+			this.world = world;
 			hud = theHUD;
 
 			selectedEntities = theSelectedEntities;
@@ -95,7 +95,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// <param name="e"></param>
 		private void upgradeButton_Clicked(object sender, EventArgs e)
 		{
-			if(sender is Button && !theGame.Paused)
+			if(sender is Button && !world.Paused)
 			{
 				Button clickedButton = (Button)sender;
 				if(clickedButton.Tag is Upgrade && selectedEntities.Count == 1 && selectedEntities[0] is ConstructableEntity)

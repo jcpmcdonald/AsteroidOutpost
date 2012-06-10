@@ -23,10 +23,10 @@ namespace AsteroidOutpost.Components
 		private Color foregroundColor;
 
 
-		public ProgressBar(AsteroidOutpostScreen theGame, IComponentList componentList, Position position, Vector2 positionOffset, int length, int thickness, Color backgroundColor, Color foregroundColor)
-			: base(theGame, componentList)
+		public ProgressBar(World world, IComponentList componentList, Position position, Vector2 positionOffset, int length, int thickness, Color backgroundColor, Color foregroundColor)
+			: base(world, componentList)
 		{
-			this.position = new PositionOffset(theGame, componentList, position, positionOffset);
+			this.position = new PositionOffset(world, componentList, position, positionOffset);
 			componentList.AddComponent(this.position);
 
 			this.length = length;
@@ -36,10 +36,10 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public ProgressBar(AsteroidOutpostScreen theGame, IComponentList componentList, Vector2 position, int length, int thickness, Color backgroundColor, Color foregroundColor)
-			: base(theGame, componentList)
+		public ProgressBar(World world, IComponentList componentList, Vector2 position, int length, int thickness, Color backgroundColor, Color foregroundColor)
+			: base(world, componentList)
 		{
-			this.position = new Position(theGame, componentList, position);
+			this.position = new Position(world, componentList, position);
 			componentList.AddComponent(this.position);
 
 			this.length = length;
@@ -64,11 +64,11 @@ namespace AsteroidOutpost.Components
 			bw.Write(position.ID);
 		}
 
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		public override void PostDeserializeLink(World world)
 		{
-			base.PostDeserializeLink(theGame);
+			base.PostDeserializeLink(world);
 
-			position = theGame.GetComponent(postDeserializePositionID) as Position;
+			position = world.GetComponent(postDeserializePositionID) as Position;
 
 			if (position == null)
 			{
@@ -119,12 +119,12 @@ namespace AsteroidOutpost.Components
 			base.Draw(spriteBatch, scaleModifier, tint);
 
 			float percentFilled = (float)(Progress - min) / (max - min);
-			spriteBatch.FillRectangle(theGame.WorldToScreen(position.Center) + theGame.Scale(new Vector2(-length / 2.0f, thickness / 2.0f)),
-			                          theGame.Scale(new Vector2(length, thickness)),
+			spriteBatch.FillRectangle(world.WorldToScreen(position.Center) + world.Scale(new Vector2(-length / 2.0f, thickness / 2.0f)),
+			                          world.Scale(new Vector2(length, thickness)),
 									  backgroundColor);
 
-			spriteBatch.FillRectangle(theGame.WorldToScreen(position.Center) + theGame.Scale(new Vector2(-length / 2.0f, thickness / 2.0f)),
-									  theGame.Scale(new Vector2(length * percentFilled, thickness)),
+			spriteBatch.FillRectangle(world.WorldToScreen(position.Center) + world.Scale(new Vector2(-length / 2.0f, thickness / 2.0f)),
+									  world.Scale(new Vector2(length * percentFilled, thickness)),
 									  foregroundColor);
 		}
 	}

@@ -15,8 +15,8 @@ namespace AsteroidOutpost.Entities.Structures
 		private static float angleStep;
 
 
-		public PowerNode(AsteroidOutpostScreen theGame, IComponentList componentList, Force theowningForce, Vector2 theCenter)
-			: base(theGame, componentList, theowningForce, theCenter, 15, 50)
+		public PowerNode(World world, IComponentList componentList, Force theowningForce, Vector2 theCenter)
+			: base(world, componentList, theowningForce, theCenter, 15, 50)
 		{
 			Init();
 		}
@@ -41,11 +41,11 @@ namespace AsteroidOutpost.Entities.Structures
 		/// <summary>
 		/// This is where all entities should do any resource loading that will be required. This will be called once per game.
 		/// </summary>
-		/// <param name="spriteBatch">The sprite batch</param>
+		/// <param name="graphicsDevice">The graphics device</param>
 		/// <param name="content">The content manager</param>
-		public static void LoadContent(SpriteBatch spriteBatch, ContentManager content)
+		public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content)
 		{
-			sprite = new Sprite(File.OpenRead(@"..\Sprites\PowerNode.sprx"), spriteBatch.GraphicsDevice);
+			sprite = new Sprite(File.OpenRead(@"..\Sprites\PowerNode.sprx"), graphicsDevice);
 			angleStep = 360.0f / sprite.OrientationLookup.Count;
 		}
 

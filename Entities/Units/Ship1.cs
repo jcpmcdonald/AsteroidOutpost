@@ -26,13 +26,13 @@ namespace AsteroidOutpost.Entities.Units
 		private Vector2 accelerationVector;
 
 
-		public Ship1(AsteroidOutpostScreen theGame, IComponentList componentList, Force theowningForce, Vector2 theCenter)
-			: base(theGame, componentList, theowningForce, theCenter, 45)
+		public Ship1(World world, IComponentList componentList, Force theowningForce, Vector2 theCenter)
+			: base(world, componentList, theowningForce, theCenter, 45)
 		{
 			accelerationMagnitude = 10;
 			animator = new SpriteAnimator(sprite);
 
-			weapon = new Laser(theGame, this);
+			weapon = new Laser(world, this);
 		}
 
 
@@ -43,22 +43,22 @@ namespace AsteroidOutpost.Entities.Units
 			animator = new SpriteAnimator(sprite);
 		}
 
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		public override void PostDeserializeLink(World world)
 		{
-			base.PostDeserializeLink(theGame);
+			base.PostDeserializeLink(world);
 
-			weapon = new Laser(theGame, this);
+			weapon = new Laser(world, this);
 		}
 
 
 		/// <summary>
 		/// This is where all entities should do any resource loading that will be required. This will be called once per game.
 		/// </summary>
-		/// <param name="spriteBatch">The sprite batch</param>
+		/// <param name="graphicsDevice">The graphics device</param>
 		/// <param name="content">The content manager</param>
-		public static void LoadContent(SpriteBatch spriteBatch, ContentManager content)
+		public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content)
 		{
-			sprite = new Sprite(File.OpenRead(@"..\Sprites\Spaceship128.sprx"), spriteBatch.GraphicsDevice);
+			sprite = new Sprite(File.OpenRead(@"..\Sprites\Spaceship128.sprx"), graphicsDevice);
 			angleStep = 360.0f / sprite.OrientationLookup.Count;
 		}
 
@@ -78,7 +78,7 @@ namespace AsteroidOutpost.Entities.Units
 			// Find my flock-mates
 			List<Entity> flockMates = new List<Entity>(10);
 			int searchRadius = 800;
-			foreach (Entity nearEntity in theGame.EntitiesInArea((int)Position.Center.X - searchRadius, (int)Position.Center.Y - searchRadius, searchRadius * 2, searchRadius * 2))
+			foreach (Entity nearEntity in world.EntitiesInArea((int)Position.Center.X - searchRadius, (int)Position.Center.Y - searchRadius, searchRadius * 2, searchRadius * 2))
 			{
 				if (nearEntity is Ship && !nearEntity.IsDead() && nearEntity != this)
 				{
@@ -231,15 +231,15 @@ namespace AsteroidOutpost.Entities.Units
 		{
 			weapon.Draw(spriteBatch, tint);
 
-			animator.Draw(spriteBatch, theGame.WorldToScreen(Position.Center), angleDiff, scaleModifier * 0.6f / theGame.ScaleFactor, tint);
+			animator.Draw(spriteBatch, world.WorldToScreen(Position.Center), angleDiff, scaleModifier * 0.6f / world.ScaleFactor, tint);
 
 			// Draw the velocity
-			//spriteBatch.DrawLine(theGame.WorldToScreen(center), theGame.WorldToScreen(center + velocity), Color.Green);
+			//spriteBatch.DrawLine(world.WorldToScreen(center), world.WorldToScreen(center + velocity), Color.Green);
 
 			// Draw the acceleration
-			//spriteBatch.DrawLine(theGame.WorldToScreen(center), theGame.WorldToScreen(center + (accelerationVector * 10.0f)), Color.Red);
+			//spriteBatch.DrawLine(world.WorldToScreen(center), world.WorldToScreen(center + (accelerationVector * 10.0f)), Color.Red);
 
-			//base.Draw(spriteBatch, theGame, scaleModifier * 0.6f, tint);
+			//base.Draw(spriteBatch, world, scaleModifier * 0.6f, tint);
 		}
 	}
 }

@@ -56,8 +56,8 @@ namespace AsteroidOutpost.Entities.Structures
 		public event Action<AccumulationEventArgs> AccumulationEvent;
 
 
-		public LaserMiner(AsteroidOutpostScreen theGame, IComponentList componentList, Force theowningForce, Vector2 theCenter)
-			: base(theGame, componentList, theowningForce, theCenter, 30, 100)
+		public LaserMiner(World world, IComponentList componentList, Force theowningForce, Vector2 theCenter)
+			: base(world, componentList, theowningForce, theCenter, 30, 100)
 		{
 			Init();
 			MiningRange = 90;
@@ -114,13 +114,13 @@ namespace AsteroidOutpost.Entities.Structures
 		/// <summary>
 		/// This is where all entities should do any resource loading that will be required. This will be called once per game.
 		/// </summary>
-		/// <param name="spriteBatch">The sprite batch</param>
+		/// <param name="graphicsDevice">The graphics device</param>
 		/// <param name="content">The content manager</param>
-		public static void LoadContent(SpriteBatch spriteBatch, ContentManager content)
+		public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content)
 		{
 			miningSound = content.Load<SoundEffect>(@"Sound Effects\BeamLaser");
 
-			sprite = new Sprite(File.OpenRead(@"..\Sprites\LaserMiner.sprx"), spriteBatch.GraphicsDevice);
+			sprite = new Sprite(File.OpenRead(@"..\Sprites\LaserMiner.sprx"), graphicsDevice);
 			angleStep = 360.0f / sprite.OrientationLookup.Count;
 		}
 
@@ -128,10 +128,10 @@ namespace AsteroidOutpost.Entities.Structures
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		/// <param name="world"></param>
+		public override void PostDeserializeLink(World world)
 		{
-			base.PostDeserializeLink(theGame);
+			base.PostDeserializeLink(world);
 
 			ScanForAsteroids();
 			firstUpdate = false;
@@ -195,7 +195,7 @@ namespace AsteroidOutpost.Entities.Structures
 			nearbyAsteroids.Clear();
 
 			// Search for nearby asteroids (in a square)
-			List<Entity> fairlyNearEntities = theGame.EntitiesInArea(new Rectangle((int)(Position.Center.X - MiningRange),
+			List<Entity> fairlyNearEntities = world.EntitiesInArea(new Rectangle((int)(Position.Center.X - MiningRange),
 																				 (int)(Position.Center.Y - MiningRange),
 																				 MiningRange * 2,
 																				 MiningRange * 2));
@@ -292,7 +292,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 				if (currentAsteroid != null)
 				{
-					if (theGame.PowerGrid(owningForce).GetPower(this, powerToUse))
+					if (world.PowerGrid(owningForce).GetPower(this, powerToUse))
 					{
 						if (currentAsteroid.GetMinerals() < mineralsToExtract)
 						{
@@ -364,7 +364,7 @@ namespace AsteroidOutpost.Entities.Structures
 			timeSinceLastStageChange = TimeSpan.FromMilliseconds(0);
 
 			// Start mining
-			miningSound.Play(Math.Max(1, theGame.Scale(0.5f)), 0, 0);
+			miningSound.Play(Math.Max(1, world.Scale(0.5f)), 0, 0);
 			state = MiningState.Mining;
 
 			// Move to the next asteroid
@@ -415,7 +415,7 @@ namespace AsteroidOutpost.Entities.Structures
 		{
 			if(state == MiningState.Mining)
 			{
-				//Rectangle focusScreen = theGame.Hud.FocusScreen;
+				//Rectangle focusScreen = world.Hud.FocusScreen;
 				Asteroid asteroid = nearbyAsteroids[miningAsteroid];
 
 				float amplitude;
@@ -428,14 +428,14 @@ namespace AsteroidOutpost.Entities.Structures
 					amplitude = (float)(timeSinceLastStageChange.TotalMilliseconds / 300f);
 				}
 
-				Color color = new Color((int)((20f + theGame.Scale(150)) * amplitude),
+				Color color = new Color((int)((20f + world.Scale(150)) * amplitude),
 										0,
 										0,
-										(int)((20f + theGame.Scale(150)) * amplitude));
+										(int)((20f + world.Scale(150)) * amplitude));
 
 				// Connect!
-				spriteBatch.DrawLine(theGame.WorldToScreen(Position.Center + PowerLinkPointRelative),
-									 theGame.WorldToScreen(asteroid.Position.Center + miningOffset),
+				spriteBatch.DrawLine(world.WorldToScreen(Position.Center + PowerLinkPointRelative),
+									 world.WorldToScreen(asteroid.Position.Center + miningOffset),
 									 color);
 			}
 

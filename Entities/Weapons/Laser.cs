@@ -18,8 +18,8 @@ namespace AsteroidOutpost.Entities.Weapons
 
 		private LaserState state = LaserState.IDLE;
 
-		public Laser(AsteroidOutpostScreen theGame, Entity theOwner)
-			: base(theGame, theOwner)
+		public Laser(World world, Entity theOwner)
+			: base(world, theOwner)
 		{
 			OptimumRange = 130;
 			MaxRange = 150;
@@ -66,9 +66,9 @@ namespace AsteroidOutpost.Entities.Weapons
 		{
 			if (state == LaserState.SHOOTING)
 			{
-				//Vector2 ownerCenterOnScreen = new Vector2(owner.Center.X - theGame.Hud.FocusScreen.X, owner.Center.Y - theGame.Hud.FocusScreen.Y);
-				//Vector2 targetCenterOnScreen = new Vector2(target.Center.X - theGame.Hud.FocusScreen.X, target.Center.Y - theGame.Hud.FocusScreen.Y);
-				spriteBatch.DrawLine(theGame.WorldToScreen(owner.Position.Center), theGame.WorldToScreen(target.Position.Center), Color.Red);
+				//Vector2 ownerCenterOnScreen = new Vector2(owner.Center.X - world.Hud.FocusScreen.X, owner.Center.Y - world.Hud.FocusScreen.Y);
+				//Vector2 targetCenterOnScreen = new Vector2(target.Center.X - world.Hud.FocusScreen.X, target.Center.Y - world.Hud.FocusScreen.Y);
+				spriteBatch.DrawLine(world.WorldToScreen(owner.Position.Center), world.WorldToScreen(target.Position.Center), Color.Red);
 			}
 		}
 	}

@@ -34,8 +34,8 @@ namespace AsteroidOutpost.Entities.Structures
 		public event Action<EntityMineralValueChangedEventArgs> MineralsChangedEvent;
 
 
-		public Asteroid(AsteroidOutpostScreen theGame, IComponentList componentList, Force theForce, Vector2 theCenter, int value)
-			: base(theGame, componentList, theForce, theCenter, 1000)
+		public Asteroid(World world, IComponentList componentList, Force theForce, Vector2 theCenter, int value)
+			: base(world, componentList, theForce, theCenter, 1000)
 		{
 			startingMinerals = value;
 			currentMinerals = startingMinerals;
@@ -51,7 +51,7 @@ namespace AsteroidOutpost.Entities.Structures
 			}
 			radius = radius * 10;
 			sizePercent = radius / 100.0f;
-			Radius = new Radius(theGame, componentList, Position, (int)(sizePercent * 25));
+			Radius = new Radius(world, componentList, Position, (int)(sizePercent * 25));
 			componentList.AddComponent(Radius);
 			
 			// And select a random asteroid type
@@ -89,11 +89,11 @@ namespace AsteroidOutpost.Entities.Structures
 		/// <summary>
 		/// This is where all entities should do any resource loading that will be required. This will be called once per game.
 		/// </summary>
-		/// <param name="spriteBatch">The sprite batch</param>
+		/// <param name="graphicsDevice">The graphics device</param>
 		/// <param name="content">The content manager</param>
-		public static void LoadContent(SpriteBatch spriteBatch, ContentManager content)
+		public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content)
 		{
-			sprite = new Sprite(File.OpenRead(@"..\Sprites\Asteroids.sprx"), spriteBatch.GraphicsDevice);
+			sprite = new Sprite(File.OpenRead(@"..\Sprites\Asteroids.sprx"), graphicsDevice);
 			angleStep = 360.0f / sprite.OrientationLookup.Count;
 		}
 
@@ -122,7 +122,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 		public void SetMinerals(int value)
 		{
-			SetMinerals(value, theGame.IsServer);
+			SetMinerals(value, world.IsServer);
 		}
 
 		public void SetMinerals(int value, bool authoritative)
@@ -180,7 +180,7 @@ namespace AsteroidOutpost.Entities.Structures
 			// Test a fake 3D effect with my asteroids
 			if (animator != null)
 			{
-				animator.Draw(spriteBatch, WorldToScreen(Position.Center), 0, (sizePercent * scaleModifier * 0.5f) / theGame.ScaleFactor, tint);
+				animator.Draw(spriteBatch, WorldToScreen(Position.Center), 0, (sizePercent * scaleModifier * 0.5f) / world.ScaleFactor, tint);
 			}
 			//*/
 
@@ -194,21 +194,21 @@ namespace AsteroidOutpost.Entities.Structures
 		}
 		public Vector2 WorldToScreen(float x, float y)
 		{
-			float deltaX = x - theGame.HUD.FocusWorldPoint.X;
-			float deltaY = y - theGame.HUD.FocusWorldPoint.Y;
+			float deltaX = x - world.HUD.FocusWorldPoint.X;
+			float deltaY = y - world.HUD.FocusWorldPoint.Y;
 
-			deltaX = deltaX / theGame.ScaleFactor * (float)Math.Sqrt(3);
-			deltaY = deltaY / theGame.ScaleFactor;
+			deltaX = deltaX / world.ScaleFactor * (float)Math.Sqrt(3);
+			deltaY = deltaY / world.ScaleFactor;
 
 			// Z CHANGES
-			float percentOffHorizontal = (deltaX / (theGame.Width / 2f));
-			deltaX += percentOffHorizontal * theGame.Scale(z * 15f);
+			float percentOffHorizontal = (deltaX / (world.Width / 2f));
+			deltaX += percentOffHorizontal * world.Scale(z * 15f);
 
-			float percentOffVertical = (deltaY / (theGame.Height / 2f));
-			deltaY += percentOffVertical * theGame.Scale(z * 15f);
+			float percentOffVertical = (deltaY / (world.Height / 2f));
+			deltaY += percentOffVertical * world.Scale(z * 15f);
 			// END Z CHANGES
 
-			return new Vector2(theGame.Width / 2f + deltaX, theGame.Height / 2f + deltaY);
+			return new Vector2(world.Width / 2f + deltaX, world.Height / 2f + deltaY);
 		}
 	}
 }

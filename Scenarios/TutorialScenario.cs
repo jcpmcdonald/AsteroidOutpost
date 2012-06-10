@@ -32,8 +32,8 @@ namespace AsteroidOutpost.Scenarios
 		private Label lblBuildLaserTowers;
 
 
-		public TutorialScenario(AsteroidOutpostScreen theGame, int playerCount)
-			: base(theGame, playerCount)
+		public TutorialScenario(World world, int playerCount)
+			: base(world, playerCount)
 		{
 		}
 
@@ -48,32 +48,32 @@ namespace AsteroidOutpost.Scenarios
 
 			elapsedTime = new TimeSpan(0);
 
-			frmInstructions = new Form("", theGame.Width - 300, 0, 300, 215);
+			//frmInstructions = new Form("", world.Width - 300, 0, 300, 215);
 			lblBuild2Miners = new Label("- (0 / 2) Build 2 miners near asteroids", 5, 100, eAlignment.Left);
 			lblUpgradeSolar = new Label("- Upgrade your solar station", 5, 120, eAlignment.Left);
 			lblBuildLaserTowers = new Label("- (0 / 3) Build some laser towers", 5, 140, eAlignment.Left);
 
 
 			// Set up some forces and actors
-			Force localForce = new Force(theGame, theGame.GetNextForceID(), 1000, Team.Team1);
-			Controller localController = new Controller(theGame, ControllerRole.Local, localForce);
-			theGame.AddForce(localForce);
-			theGame.AddController(localController);
+			Force localForce = new Force(world, world.GetNextForceID(), 1000, Team.Team1);
+			Controller localController = new Controller(world, ControllerRole.Local, localForce);
+			world.AddForce(localForce);
+			world.AddController(localController);
 
-			Force aiForce = new Force(theGame, theGame.GetNextForceID(), 1000, Team.AI);
-			Controller aiController = new AIController(theGame, theGame, aiForce);
-			theGame.AddForce(aiForce);
-			theGame.AddController(aiController);
+			Force aiForce = new Force(world, world.GetNextForceID(), 1000, Team.AI);
+			Controller aiController = new AIController(world, world, aiForce);
+			world.AddForce(aiForce);
+			world.AddController(aiController);
 			
 
-			theGame.CreatePowerGrid(localForce);
+			world.CreatePowerGrid(localForce);
 
 
-			theGame.HUD.FocusWorldPoint = new Vector2(theGame.MapWidth / 2f, theGame.MapHeight / 2f);
+			world.HUD.FocusWorldPoint = new Vector2(world.MapWidth / 2f, world.MapHeight / 2f);
 
 			// Create your starting solar station
-			SolarStation startingStation = new SolarStation(theGame, theGame, localController.PrimaryForce, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f));
-			theGame.Add(startingStation);
+			SolarStation startingStation = new SolarStation(world, world, localController.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f));
+			world.Add(startingStation);
 			startingStation.StartConstruction();
 			startingStation.IsConstructing = false;
 
@@ -87,19 +87,19 @@ namespace AsteroidOutpost.Scenarios
 			StartSection(progress);
 			
 			
-			btnNext = new Button("Next", (frmInstructions.Width / 2) - 50, frmInstructions.Height - 30, 100, 20);
-			btnNext.Click += btnNext_Click;
-			frmInstructions.AddControl(btnNext);
+			//btnNext = new Button("Next", (frmInstructions.Width / 2) - 50, frmInstructions.Height - 30, 100, 20);
+			//btnNext.Click += btnNext_Click;
+			//frmInstructions.AddControl(btnNext);
 
 			ConstructableEntity.AnyConstructionCompletedEvent += ConstructableEntity_StructureFinishedEvent;
 			ConstructableEntity.AnyUpgradeCompletedEvent += ConstructableEntity_UpgradeFinishedEvent;
 
 
-			Beacon minerBeacon = new Beacon(theGame, theGame, localForce, new Vector2((theGame.MapWidth / 2.0f) + 200, theGame.MapHeight / 2.0f), 40);
+			Beacon minerBeacon = new Beacon(world, world, localForce, new Vector2((world.MapWidth / 2.0f) + 200, world.MapHeight / 2.0f), 40);
 			beacons.Add(minerBeacon);
-			theGame.Add(minerBeacon);
+			world.Add(minerBeacon);
 
-			theGame.HUD.AddControl(frmInstructions);
+			//world.HUD.AddControl(frmInstructions);
 
 
 			GenerateAsteroidField(1000);
@@ -199,7 +199,7 @@ namespace AsteroidOutpost.Scenarios
 				lblBuild2Miners.Visible = true;
 				lblBuild2Miners.Text = "- (" + minersBuilt + " / 2) Build 2 miners near asteroids";
 				lblBuild2Miners.Color = Color.Tomato;
-				theGame.HUD.AddControl(lblBuild2Miners);
+				//world.HUD.AddControl(lblBuild2Miners);
 				break;
 			}
 
@@ -209,7 +209,7 @@ namespace AsteroidOutpost.Scenarios
 
 				lblUpgradeSolar.Visible = true;
 				lblUpgradeSolar.Color = Color.Tomato;
-				theGame.HUD.AddControl(lblUpgradeSolar);
+				//world.HUD.AddControl(lblUpgradeSolar);
 				break;
 			}
 
@@ -219,7 +219,7 @@ namespace AsteroidOutpost.Scenarios
 
 				lblBuildLaserTowers.Visible = true;
 				lblBuildLaserTowers.Color = Color.Tomato;
-				theGame.HUD.AddControl(lblBuildLaserTowers);
+				//world.HUD.AddControl(lblBuildLaserTowers);
 				break;
 			}
 

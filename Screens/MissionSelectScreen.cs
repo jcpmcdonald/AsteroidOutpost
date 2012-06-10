@@ -10,12 +10,12 @@ namespace AsteroidOutpost.Screens
 {
 	partial class MissionSelectScreen : AOMenuScreen
 	{
-		private AsteroidOutpostScreen theGame;
+		private World world;
 
-		public MissionSelectScreen(AsteroidOutpostScreen theGame, ScreenManager theScreenManager, LayeredStarField starField)
+		public MissionSelectScreen(World world, ScreenManager theScreenManager, LayeredStarField starField)
 			: base(theScreenManager, starField)
 		{
-			this.theGame = theGame;
+			this.world = world;
 		}
 
 
@@ -23,13 +23,13 @@ namespace AsteroidOutpost.Screens
 		void btnEndless_Click(object sender, MouseButtonEventArgs e)
 		{
 			ScreenMan.SwitchScreens("Game");
-			theGame.StartServer(new RandomScenario(theGame, 1));
+			world.StartServer(new RandomScenario(world, 1));
 		}
 
 		void btnTutorial_Click(object sender, MouseButtonEventArgs e)
 		{
 			ScreenMan.SwitchScreens("Game");
-			theGame.StartServer(new TutorialScenario(theGame, 1));
+			world.StartServer(new TutorialScenario(world, 1));
 		}
 
 		void btnBack_Click(object sender, MouseButtonEventArgs e)

@@ -23,8 +23,8 @@ namespace AsteroidOutpost.Components
 
 
 
-		public Accumulator(AsteroidOutpostScreen theGame, IComponentList componentList, Position position, Color color, int postTimeMilis, Vector2 velocity, float fade)
-			: base(theGame, componentList)
+		public Accumulator(World world, IComponentList componentList, Position position, Color color, int postTimeMilis, Vector2 velocity, float fade)
+			: base(world, componentList)
 		{
 			this.componentList = componentList;
 			this.position = position;
@@ -46,12 +46,12 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		/// <param name="world"></param>
+		public override void PostDeserializeLink(World world)
 		{
-			base.PostDeserializeLink(theGame);
+			base.PostDeserializeLink(world);
 
-			position = theGame.GetComponent(postDeserializePositionID) as Position;
+			position = world.GetComponent(postDeserializePositionID) as Position;
 
 			if (position == null)
 			{
@@ -80,15 +80,15 @@ namespace AsteroidOutpost.Components
 				{
 					/*
 					// Be your own position
-					Position textPos = new Position(theGame, componentList, owningForce, position.Center, velocity);
+					Position textPos = new Position(world, componentList, owningForce, position.Center, velocity);
 					/*/
 					// Follow the parent's position
-					Position textPos = new PositionOffset(theGame, componentList, position, Vector2.Zero, velocity);
+					Position textPos = new PositionOffset(world, componentList, position, Vector2.Zero, velocity);
 					//*/
 
-					FloatingText floatingText = new FloatingText(theGame, componentList, textPos, accumulator.ToString("+0;-0;+0"), color, fade);
-					theGame.HUD.AddComponent(textPos);
-					theGame.HUD.AddComponent(floatingText);
+					FloatingText floatingText = new FloatingText(world, componentList, textPos, accumulator.ToString("+0;-0;+0"), color, fade);
+					world.HUD.AddComponent(textPos);
+					world.HUD.AddComponent(floatingText);
 
 					accumulator = 0;
 				}

@@ -15,8 +15,8 @@ namespace AsteroidOutpost.Components
 		private int postDeserializePositionID;		// For serialization linking, don't use this
 
 
-		public Radius(AsteroidOutpostScreen theGame, IComponentList componentList, Position position, int radius)
-			: base(theGame, componentList)
+		public Radius(World world, IComponentList componentList, Position position, int radius)
+			: base(world, componentList)
 		{
 			Value = radius;
 			this.position = position;
@@ -39,11 +39,11 @@ namespace AsteroidOutpost.Components
 			bw.Write(Value);
 		}
 
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		public override void PostDeserializeLink(World world)
 		{
-			base.PostDeserializeLink(theGame);
+			base.PostDeserializeLink(world);
 			
-			position = theGame.GetComponent(postDeserializePositionID) as Position;
+			position = world.GetComponent(postDeserializePositionID) as Position;
 
 			if (position == null)
 			{

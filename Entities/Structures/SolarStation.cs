@@ -31,12 +31,12 @@ namespace AsteroidOutpost.Entities.Structures
 		/// <summary>
 		/// Create a new Solar Station
 		/// </summary>
-		/// <param name="theGame">A reference to the game</param>
+		/// <param name="world">A reference to the game</param>
 		/// <param name="componentList"></param>
 		/// <param name="theowningForce"></param>
 		/// <param name="theCenter"></param>
-		public SolarStation(AsteroidOutpostScreen theGame, IComponentList componentList, Force theowningForce, Vector2 theCenter)
-			: base(theGame, componentList, theowningForce, theCenter, 45, 250)
+		public SolarStation(World world, IComponentList componentList, Force theowningForce, Vector2 theCenter)
+			: base(world, componentList, theowningForce, theCenter, 45, 250)
 		{
 			Init();
 		}
@@ -64,11 +64,11 @@ namespace AsteroidOutpost.Entities.Structures
 		/// <summary>
 		/// This is where all entities should do any resource loading that will be required. This will be called once per game.
 		/// </summary>
-		/// <param name="spriteBatch">The sprite batch</param>
+		/// <param name="graphicsDevice">The graphics device</param>
 		/// <param name="content">The content manager</param>
-		public static void LoadContent(SpriteBatch spriteBatch, ContentManager content)
+		public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content)
 		{
-			sprite = new Sprite(File.OpenRead(@"..\Sprites\SolarStation.sprx"), spriteBatch.GraphicsDevice);
+			sprite = new Sprite(File.OpenRead(@"..\Sprites\SolarStation.sprx"), graphicsDevice);
 			//angleStep = 360.0f / sprite.OrientationLookup.Count;
 			angleStep = 11.25f;
 		}
@@ -195,8 +195,8 @@ namespace AsteroidOutpost.Entities.Structures
 					//spriteBatch.GraphicsDevice. .FillRectangle(brush, X - focusScreen.X, Y + Height - (6 * (i+1)) - focusScreen.Y, 5, 5);
 					SimpleShapes.FillRectangle(spriteBatch,
 										new Vector2(0, 0),
-										new Rectangle(Left - 6 - theGame.Hud.FocusScreen.X,
-												Top + Height - (6 * (i+1)) - theGame.Hud.FocusScreen.Y,
+										new Rectangle(Left - 6 - world.Hud.FocusScreen.X,
+												Top + Height - (6 * (i+1)) - world.Hud.FocusScreen.Y,
 												5,
 												5),
 										0,
@@ -212,31 +212,31 @@ namespace AsteroidOutpost.Entities.Structures
 
 				if(percentFull > 0.1)
 				{
-					spriteBatch.DrawArc(theGame.WorldToScreen(Position.Center),
-					                    theGame.Scale(Radius.Value + 5),
+					spriteBatch.DrawArc(world.WorldToScreen(Position.Center),
+					                    world.Scale(Radius.Value + 5),
 					                    40,
 										startingAngle,
 										degrees,
 					                    ColorPalette.ApplyTint(Color.Gray, tint),
-					                    theGame.Scale(5.0f));
+					                    world.Scale(5.0f));
 
-					spriteBatch.DrawArc(theGame.WorldToScreen(Position.Center),
-					                    theGame.Scale(Radius.Value + 5),
+					spriteBatch.DrawArc(world.WorldToScreen(Position.Center),
+					                    world.Scale(Radius.Value + 5),
 					                    40,
 										startingAngle,
 										(float)(degrees * percentFull),
 					                    ColorPalette.ApplyTint(color, tint),
-					                    theGame.Scale(5.0f));
+					                    world.Scale(5.0f));
 				}
 				else
 				{
-					spriteBatch.DrawArc(theGame.WorldToScreen(Position.Center),
-					                    theGame.Scale(Radius.Value + 5),
+					spriteBatch.DrawArc(world.WorldToScreen(Position.Center),
+					                    world.Scale(Radius.Value + 5),
 					                    40,
 										startingAngle,
 					                    degrees,
 					                    ColorPalette.ApplyTint(Color.Red, tint),
-					                    theGame.Scale(5.0f));
+					                    world.Scale(5.0f));
 				}
 				//*/
 			}

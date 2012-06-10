@@ -139,7 +139,7 @@ namespace AsteroidOutpost.Screens
 			{
 				Control myControl = localField.GetValue(instance) as Control;
 				// TODO: Hack Hack! Fix this using attributes maybe?
-				if (myControl != null && localField.Name != "theGame")
+				if (myControl != null && localField.Name != "world")
 				{
 					menuPanel.AddControl(myControl);
 				}

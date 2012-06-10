@@ -21,8 +21,8 @@ namespace AsteroidOutpost.Components
 		private int textureSize;
 		private float sizeRatio;
 
-		public Ring(AsteroidOutpostScreen theGame, IComponentList componentList, Position position, int radius, Color color)
-			: base(theGame, componentList)
+		public Ring(World world, IComponentList componentList, Position position, int radius, Color color)
+			: base(world, componentList)
 		{
 			this.position = position;
 			this.radius = radius;
@@ -58,12 +58,12 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		/// <param name="world"></param>
+		public override void PostDeserializeLink(World world)
 		{
-			base.PostDeserializeLink(theGame);
+			base.PostDeserializeLink(world);
 
-			position = theGame.GetComponent(postDeserializePositionID) as Position;
+			position = world.GetComponent(postDeserializePositionID) as Position;
 
 			if (position == null)
 			{
@@ -92,12 +92,12 @@ namespace AsteroidOutpost.Components
 		public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
 		{
 			spriteBatch.Draw(texture,
-							 theGame.WorldToScreen(position.Center - (new Vector2(textureSize + 10, textureSize + 10) * sizeRatio)),  // 10 padding in the textures
+							 world.WorldToScreen(position.Center - (new Vector2(textureSize + 10, textureSize + 10) * sizeRatio)),  // 10 padding in the textures
 							 null,
 							 ColorPalette.ApplyTint(color, tint),
 							 0,
 							 Vector2.Zero,
-							 (sizeRatio * scaleModifier) / theGame.ScaleFactor,
+							 (sizeRatio * scaleModifier) / world.ScaleFactor,
 							 SpriteEffects.None,
 							 0);
 

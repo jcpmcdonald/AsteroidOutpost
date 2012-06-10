@@ -10,14 +10,14 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 {
 	class Radar : Control
 	{
-		private readonly AsteroidOutpostScreen theGame;
+		private readonly World world;
 		private readonly AOHUD hud;
 		private bool isDragging;
 		
 		
-		public Radar(AsteroidOutpostScreen theGame, AOHUD theHUD, int x, int y, int w, int h) : base(x, y, w, h)
+		public Radar(World world, AOHUD theHUD, int x, int y, int w, int h) : base(x, y, w, h)
 		{
-			this.theGame = theGame;
+			this.world = world;
 			hud = theHUD;
 		}
 
@@ -37,21 +37,21 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			
 			// Draw the entities
 			// Draw the asteroids first
-			foreach(Entity entity in theGame.Entities)
+			foreach(Entity entity in world.Entities)
 			{
 				if(entity is Asteroid)
 				{
-					Vector2 mapLocation = new Vector2(entity.Position.Center.X / theGame.MapWidth * size.Width,
-					                                  entity.Position.Center.Y / theGame.MapHeight * size.Height);
+					Vector2 mapLocation = new Vector2(entity.Position.Center.X / world.MapWidth * size.Width,
+					                                  entity.Position.Center.Y / world.MapHeight * size.Height);
 					spriteBatch.PutPixel(mapLocation + LocationAbs, ColorPalette.ApplyTint(Color.Gray, tint));
 				}
 			}
-			foreach(Entity entity in theGame.Entities)
+			foreach(Entity entity in world.Entities)
 			{
 				if(!(entity is Asteroid))
 				{
-					Vector2 mapLocation = new Vector2(entity.Position.Center.X / theGame.MapWidth * size.Width,
-					                                  entity.Position.Center.Y / theGame.MapHeight * size.Height);
+					Vector2 mapLocation = new Vector2(entity.Position.Center.X / world.MapWidth * size.Width,
+					                                  entity.Position.Center.Y / world.MapHeight * size.Height);
 
 					Color color;
 					if(entity.OwningForce == null)
@@ -77,10 +77,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 
 			// Draw the focus screen
-			int miniFocusX = (int)(((double)focusScreen.X / theGame.MapWidth) * size.Width);// + (int)origin.X;
-			int miniFocusY = (int)(((double)focusScreen.Y / theGame.MapHeight) * size.Height);// + (int)origin.Y;
-			int miniFocusW = (int)(((double)focusScreen.Width / theGame.MapWidth) * size.Width);
-			int miniFocusH = (int)(((double)focusScreen.Height / theGame.MapHeight) * size.Height);
+			int miniFocusX = (int)(((double)focusScreen.X / world.MapWidth) * size.Width);// + (int)origin.X;
+			int miniFocusY = (int)(((double)focusScreen.Y / world.MapHeight) * size.Height);// + (int)origin.Y;
+			int miniFocusW = (int)(((double)focusScreen.Width / world.MapWidth) * size.Width);
+			int miniFocusH = (int)(((double)focusScreen.Height / world.MapHeight) * size.Height);
 
 
 			spriteBatch.DrawRectangle(new Vector2(miniFocusX, miniFocusY) + LocationAbs, new Vector2(miniFocusW, miniFocusH), ColorPalette.ApplyTint(Color.White, tint), 1);
@@ -108,8 +108,8 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		protected override void OnMouseDown(EnhancedMouseState theMouse, MouseButton theMouseButton, ref bool handled)
 		{
 			isDragging = true;
-			hud.FocusWorldPoint = new Vector2((theMouse.X - LocationAbs.X) / size.Width * theGame.MapWidth,
-			                                  (theMouse.Y - LocationAbs.Y) / size.Height * theGame.MapHeight);
+			hud.FocusWorldPoint = new Vector2((theMouse.X - LocationAbs.X) / size.Width * world.MapWidth,
+			                                  (theMouse.Y - LocationAbs.Y) / size.Height * world.MapHeight);
 
 			base.OnMouseDown(theMouse, theMouseButton, ref handled);
 		}
@@ -123,8 +123,8 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		{
 			if (isDragging)
 			{
-				hud.FocusWorldPoint = new Vector2((theMouse.X - LocationAbs.X) / size.Width * theGame.MapWidth,
-				                                  (theMouse.Y - LocationAbs.Y) / size.Height * theGame.MapHeight);
+				hud.FocusWorldPoint = new Vector2((theMouse.X - LocationAbs.X) / size.Width * world.MapWidth,
+				                                  (theMouse.Y - LocationAbs.Y) / size.Height * world.MapHeight);
 			}
 			base.OnMouseMove(theMouse, ref handled);
 		}

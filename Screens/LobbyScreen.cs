@@ -8,14 +8,14 @@ namespace AsteroidOutpost.Screens
 {
 	public partial class LobbyScreen : AOMenuScreen
 	{
-		private AsteroidOutpostScreen theGame;
+		private World world;
 
 		private int playerCount = 1;
 
-		public LobbyScreen(AsteroidOutpostScreen theGame, ScreenManager theScreenManager, LayeredStarField starField)
+		public LobbyScreen(World world, ScreenManager theScreenManager, LayeredStarField starField)
 			: base(theScreenManager, starField)
 		{
-			this.theGame = theGame;
+			this.world = world;
 		}
 
 
@@ -28,7 +28,7 @@ namespace AsteroidOutpost.Screens
 
 		void btnStartGame_Click(object sender, C3.XNA.Events.MouseButtonEventArgs e)
 		{
-			theGame.StartServer(new RandomScenario(theGame, playerCount));
+			world.StartServer(new RandomScenario(world, playerCount));
 			ScreenMan.SwitchScreens("Game");
 		}
 
@@ -41,8 +41,8 @@ namespace AsteroidOutpost.Screens
 		/// <param name="theKeyboard">The current state of the keyboard</param>
 		public override void Update(TimeSpan deltaTime, EnhancedMouseState theMouse, EnhancedKeyboardState theKeyboard)
 		{
-			theGame.Network.ProcessIncomingQueue(deltaTime);
-			theGame.Network.ProcessOutgoingQueue();
+			world.Network.ProcessIncomingQueue(deltaTime);
+			world.Network.ProcessOutgoingQueue();
 
 			base.Update(deltaTime, theMouse, theKeyboard);
 		}
@@ -57,8 +57,8 @@ namespace AsteroidOutpost.Screens
 		/// <param name="percentComplete">The transition's percentage complete (0-1)</param>
 		protected override void UpdateTransitionToward(TimeSpan deltaTime, EnhancedMouseState theMouse, EnhancedKeyboardState theKeyboard, float percentComplete)
 		{
-			theGame.Network.ProcessIncomingQueue(deltaTime);
-			theGame.Network.ProcessOutgoingQueue();
+			world.Network.ProcessIncomingQueue(deltaTime);
+			world.Network.ProcessOutgoingQueue();
 
 			base.UpdateTransitionToward(deltaTime, theMouse, theKeyboard, percentComplete);
 		}
@@ -75,15 +75,15 @@ namespace AsteroidOutpost.Screens
 			lstPlayers.ClearListItems();
 			playerCount = 0;
 
-			theGame.Network.ClientJoinedGame += AONetwork_ClientJoinedGame;
+			world.Network.ClientJoinedGame += AONetwork_ClientJoinedGame;
 
-			txtServerName.Text = theGame.Network.ServerName;
+			txtServerName.Text = world.Network.ServerName;
 
-			if (theGame.IsServer)
+			if (world.IsServer)
 			{
-				theGame.Network.StartServerBeacon();
-				theGame.Network.StartServerInfoServer();
-				theGame.Network.StartListening(18189);
+				world.Network.StartServerBeacon();
+				world.Network.StartServerInfoServer();
+				world.Network.StartListening(18189);
 
 				btnStartGame.Enabled = true;
 				btnStartGame.Visible = true;
@@ -114,7 +114,7 @@ namespace AsteroidOutpost.Screens
 		/// <param name="theKeyboard">The current state of the keyboard</param>
 		protected override void StartTransitionAway(TimeSpan deltaTime, EnhancedMouseState theMouse, EnhancedKeyboardState theKeyboard)
 		{
-			theGame.Network.ClientJoinedGame -= AONetwork_ClientJoinedGame;
+			world.Network.ClientJoinedGame -= AONetwork_ClientJoinedGame;
 			cleanup();
 
 			base.StartTransitionAway(deltaTime, theMouse, theKeyboard);
@@ -135,8 +135,8 @@ namespace AsteroidOutpost.Screens
 		private void cleanup()
 		{
 			// TODO: Make sure this doesn't screw anything up on the client since they didn't actually start these
-			theGame.Network.StopServerBeacon();
-			theGame.Network.StopServerInfoServer();
+			world.Network.StopServerBeacon();
+			world.Network.StopServerInfoServer();
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace AsteroidOutpost.Entities.Weapons
 {
 	abstract class Weapon
 	{
-		protected AsteroidOutpostScreen theGame;
+		protected World world;
 
 		private int optimumRange;
 		private int maxRange;
@@ -16,13 +16,13 @@ namespace AsteroidOutpost.Entities.Weapons
 		protected Entity target;
 
 
-		protected Weapon(AsteroidOutpostScreen theGame, Entity theOwner)
+		protected Weapon(World world, Entity theOwner)
 		{
-			if(theGame == null)
+			if(world == null)
 			{
 				Debugger.Break();
 			}
-			this.theGame = theGame;
+			this.world = world;
 			owner = theOwner;
 		}
 

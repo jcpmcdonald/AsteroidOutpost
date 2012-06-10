@@ -25,7 +25,7 @@ namespace AsteroidOutpost.Networking
 
 	internal class AONetwork : Network, IReflectionTarget
 	{
-		private AsteroidOutpostScreen theGame;
+		private World world;
 
 		public const int SpecialTargetNetworkingClass = -1;
 		public const int SpecialTargetTheGame = -2;
@@ -59,9 +59,9 @@ namespace AsteroidOutpost.Networking
 		public event ClientJoinedGameHandler ClientJoinedGame;
 
 
-		public AONetwork(AsteroidOutpostScreen theGame)
+		public AONetwork(World world)
 		{
-			this.theGame = theGame;
+			this.world = world;
 		}
 
 
@@ -215,12 +215,12 @@ namespace AsteroidOutpost.Networking
 				Object obj = entityConstructor.Invoke(new object[] { br });
 				if(obj is ISerializable)
 				{
-					((ISerializable)obj).PostDeserializeLink(theGame);
+					((ISerializable)obj).PostDeserializeLink(world);
 				}
 
 				if(obj is Entity)
 				{
-					theGame.Add((Entity)obj, true);
+					world.Add((Entity)obj, true);
 				}
 				else
 				{
@@ -245,7 +245,7 @@ namespace AsteroidOutpost.Networking
 
 		private void SendGameStateTo(BinaryWriter clientWriter)
 		{
-			if (!theGame.IsServer)
+			if (!world.IsServer)
 			{
 				Console.WriteLine("Client is trying to SEND the game state");
 				Debugger.Break();
@@ -258,18 +258,18 @@ namespace AsteroidOutpost.Networking
 				MemoryStream memStream = new MemoryStream(4096);
 				BinaryWriter bw = new BinaryWriter(memStream);
 
-				theGame.Serialize(bw, false);
+				world.Serialize(bw, false);
 
 				// TODO: Don't hard-code the team here, and make sure there's exactly 1 result. Better yet, associate the force with the client
-				Force clientForce = theGame.GetForcesOnTeam(Team.Team2)[0];
-				Controller clientController = new Controller(theGame, ControllerRole.Remote, clientForce);
-				Controller aiController = theGame.Controllers.First(a => a.Role == ControllerRole.AI);
+				Force clientForce = world.GetForcesOnTeam(Team.Team2)[0];
+				Controller clientController = new Controller(world, ControllerRole.Remote, clientForce);
+				Controller aiController = world.Controllers.First(a => a.Role == ControllerRole.AI);
 				bw.Write(2);
 				clientController.Serialize(bw);
 				aiController.Serialize(bw);
 
 				// Add a footer so that we can verify the integrity of this block
-				bw.Write(AsteroidOutpostScreen.StreamIdent);
+				bw.Write(World.StreamIdent);
 				bw.Flush();
 
 
@@ -392,7 +392,7 @@ namespace AsteroidOutpost.Networking
 				while (incomingMessageQueue.Count > 0)
 				{
 					message = incomingMessageQueue.Dequeue();
-					message.Execute(theGame, this, deltaTime);
+					message.Execute(world, this, deltaTime);
 				}
 			}
 		}
@@ -431,7 +431,7 @@ namespace AsteroidOutpost.Networking
 		/// <param name="forceID">The controller's primary force's ID</param>
 		public void CreateController(int role, int forceID)
 		{
-			theGame.AddController(new Controller(theGame, (ControllerRole)role, theGame.GetForce(forceID)));
+			world.AddController(new Controller(world, (ControllerRole)role, world.GetForce(forceID)));
 		}
 
 
@@ -454,11 +454,11 @@ namespace AsteroidOutpost.Networking
 				{
 					EventReplicationAttribute eventReplicationAttribute = (EventReplicationAttribute)eventAttributes[0];
 
-					if (eventReplicationAttribute.ReplicationTarget == EventReplication.ServerToClients && theGame.IsServer)
+					if (eventReplicationAttribute.ReplicationTarget == EventReplication.ServerToClients && world.IsServer)
 					{
 						registerThisEvent = true;
 					}
-					else if (eventReplicationAttribute.ReplicationTarget == EventReplication.ClientToServer && !theGame.IsServer)
+					else if (eventReplicationAttribute.ReplicationTarget == EventReplication.ClientToServer && !world.IsServer)
 					{
 						registerThisEvent = true;
 					}
@@ -751,7 +751,7 @@ namespace AsteroidOutpost.Networking
 
 						BinaryReader br = new BinaryReader(new MemoryStream(bytes));
 						UInt32 handshake = br.ReadUInt32();
-						if (handshake != AsteroidOutpostScreen.StreamIdent)
+						if (handshake != World.StreamIdent)
 						{
 							// TODO: See if this actually kills the whole datagram and allows the server to continue normally
 							br.Close();
@@ -768,8 +768,8 @@ namespace AsteroidOutpost.Networking
 						MemoryStream memStream = new MemoryStream();
 						BinaryWriter bw = new BinaryWriter(memStream);
 
-						bw.Write(AsteroidOutpostScreen.StreamIdent);
-						bw.Write(AsteroidOutpostScreen.Version);
+						bw.Write(World.StreamIdent);
+						bw.Write(World.Version);
 						bw.Write((byte)StreamType.ServerInfo);
 
 						bw.Write(serverName);
@@ -807,15 +807,15 @@ namespace AsteroidOutpost.Networking
 				int clientStartingID = (Int32.MaxValue / 4) * count;
 				new AOReflectiveOutgoingMessage(SpecialTargetTheGame, "StartClient", new object[] { clientStartingID }).Serialize(clientWriter);
 
-				//Force clientForce = new Force(theGame, theGame.GetNextForceID(), 1000, Team.Team2);
-				//theGame.AddForce(clientForce);
-				//Controller clientController = new Controller(theGame, theGame.GetNextControllerID(), ControllerRole.Remote, clientForce);
-				//theGame.AddController(clientController);
+				//Force clientForce = new Force(world, world.GetNextForceID(), 1000, Team.Team2);
+				//world.AddForce(clientForce);
+				//Controller clientController = new Controller(world, world.GetNextControllerID(), ControllerRole.Remote, clientForce);
+				//world.AddController(clientController);
 
 				// Flush the outgoing queue
 				ProcessOutgoingQueue();
 
-				//theGame.CreatePowerGrid(clientForce);
+				//world.CreatePowerGrid(clientForce);
 				
 
 				/*
@@ -827,7 +827,7 @@ namespace AsteroidOutpost.Networking
 				*/
 
 				// Set this guy's focus to his start location
-				//new AOReflectiveOutgoingMessage(theGame.ID, "SetFocus", new object[] { startingStation.Position.Center }).Serialize(clientWriter);
+				//new AOReflectiveOutgoingMessage(world.ID, "SetFocus", new object[] { startingStation.Position.Center }).Serialize(clientWriter);
 			}
 			endSend();
 		}

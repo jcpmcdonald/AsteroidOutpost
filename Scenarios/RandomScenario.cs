@@ -18,8 +18,8 @@ namespace AsteroidOutpost.Scenarios
 		private int sequence = 0;
 
 
-		public RandomScenario(AsteroidOutpostScreen theGame, int playerCount)
-			: base(theGame, playerCount)
+		public RandomScenario(World world, int playerCount)
+			: base(world, playerCount)
 		{
 		}
 
@@ -34,26 +34,26 @@ namespace AsteroidOutpost.Scenarios
 			int initialMinerals = 1000;
 			for (int iPlayer = 0; iPlayer < playerCount; iPlayer++)
 			{
-				Force force = new Force(theGame, theGame.GetNextForceID(), initialMinerals, (Team)iPlayer);
-				theGame.AddForce(force);
-				theGame.CreatePowerGrid(force);
+				Force force = new Force(world, world.GetNextForceID(), initialMinerals, (Team)iPlayer);
+				world.AddForce(force);
+				world.CreatePowerGrid(force);
 				Vector2 focusPoint = CreateStartingBase(force);
 
 
 				if (iPlayer == 0)
 				{
-					theGame.HUD.FocusWorldPoint = focusPoint;
+					world.HUD.FocusWorldPoint = focusPoint;
 
-					Controller controller = new Controller(theGame, ControllerRole.Local, force);
-					theGame.AddController(controller);
+					Controller controller = new Controller(world, ControllerRole.Local, force);
+					world.AddController(controller);
 				}
 			}
 
 
-			Force aiForce = new Force(theGame, theGame.GetNextForceID(), 0, Team.AI);
-			Controller aiController = new AIController(theGame, theGame, aiForce);
-			theGame.AddForce(aiForce);
-			theGame.AddController(aiController);
+			Force aiForce = new Force(world, world.GetNextForceID(), 0, Team.AI);
+			Controller aiController = new AIController(world, world, aiForce);
+			world.AddForce(aiForce);
+			world.AddController(aiController);
 			
 		}
 
@@ -68,7 +68,7 @@ namespace AsteroidOutpost.Scenarios
 			{
 				sequence++;
 
-				WaveFactory.CreateWave(theGame, 100 * sequence, new Vector2(theGame.MapWidth / 2.0f, theGame.MapHeight / 2.0f) + new Vector2(3000, -3000));
+				WaveFactory.CreateWave(world, 100 * sequence, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(3000, -3000));
 			}
 		}
 	}

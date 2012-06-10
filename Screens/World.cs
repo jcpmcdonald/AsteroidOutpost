@@ -30,11 +30,12 @@ namespace AsteroidOutpost.Screens
 		GameData
 	}
 
-	public class AsteroidOutpostScreen : Screen, IReflectionTarget, IControllerIDProvider, IComponentList
+	public class World : DrawableGameComponent, IReflectionTarget, IControllerIDProvider, IComponentList
 	{
 		public const UInt32 Version = 2;
 		public const UInt32 StreamIdent = 0x607A0BAD;  // Get it?
 
+		private SpriteBatch spriteBatch;
 
 		private LayeredStarField layeredStarField;
 		private QuadTree<Entity> quadTree;
@@ -62,10 +63,13 @@ namespace AsteroidOutpost.Screens
 		public event Action<EntityEventArgs> StructureStartedEventPostAuth;
 		
 		
-		// Private because this is a singleton. Make an instance and use this class though the following two functions
-		public AsteroidOutpostScreen(ScreenManager theScreenManager) : base(theScreenManager)
+		public World(AOGame game) : base(game)
 		{
 			network = new AONetwork(this);
+			hud = new AOHUD(game, this);
+
+			// TODO: Create this on the server, then send the size to the clients
+			quadTree = new QuadTree<Entity>(0, 0, 20000, 20000);
 		}
 
 
@@ -579,7 +583,7 @@ namespace AsteroidOutpost.Screens
 		{
 			nextComponentID = startingComponentID;
 			isServer = false;
-			ScreenMan.SwitchScreens("Game");
+			//ScreenMan.SwitchScreens("Game");
 			hud.FocusWorldPoint = new Vector2(MapWidth / 2f, MapHeight / 2f);
 
 			AddController(new Controller(this, ControllerRole.Local, GetForcesOnTeam(Team.Team2)[0]));
@@ -587,44 +591,23 @@ namespace AsteroidOutpost.Screens
 
 
 
+		public override void Initialize()
+		{
+			base.Initialize();
+		}
+
+
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
 		/// all of your content.
 		/// </summary>
-		public override void LoadContent(SpriteBatch spriteBatch, ContentManager content)
+		protected override void LoadContent()
 		{
-			Ship1.LoadContent(spriteBatch, content);
-			SolarStation.LoadContent(spriteBatch, content);
-			Asteroid.LoadContent(spriteBatch, content);
-			LaserMiner.LoadContent(spriteBatch, content);
-			LaserTower.LoadContent(spriteBatch, content);
-			PowerNode.LoadContent(spriteBatch, content);
-			Beacon.LoadContent(spriteBatch, content);
+			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-			TextureDictionary.Add("Sprites\\Power", "power");
-			TextureDictionary.Add("Sprites\\Asteroids", "asteroids");
-			TextureDictionary.Add("Sprites\\Miners", "miners");
-			TextureDictionary.Add("Sprites\\SolarStation", "solarStation");
-			TextureDictionary.Add("Sprites\\Spaceship", "spaceship");
+			hud.LoadContent();
 
-			TextureDictionary.Add("Ellipse25", "ellipse25");
-			TextureDictionary.Add("Ellipse25Bold", "ellipse25bold");
-			TextureDictionary.Add("Ellipse25Back", "ellipse25back");
-			TextureDictionary.Add("Ellipse25Front", "ellipse25front");
-			TextureDictionary.Add("Ellipse50", "ellipse50");
-			TextureDictionary.Add("Ellipse50Back", "ellipse50back");
-			TextureDictionary.Add("Ellipse50Front", "ellipse50front");
-			TextureDictionary.Add("Ellipse100", "ellipse100");
-			TextureDictionary.Add("Ellipse220", "ellipse220");
-
-			TextureDictionary.Add("powerline", "powerline");
-
-			// TODO: Create this on the server, then send the size to the clients
-			quadTree = new QuadTree<Entity>(0, 0, 20000, 20000);
-
-			hud = new AOHUD(ScreenMan, this);
-			hud.LoadContent(spriteBatch, content);
-
+			base.LoadContent();
 		}
 
 
@@ -633,7 +616,7 @@ namespace AsteroidOutpost.Screens
 		/// UnloadContent will be called once per game and is the place to unload
 		/// all content.
 		/// </summary>
-		public override void UnloadContent()
+		protected override void UnloadContent()
 		{
 			// Unload any non ContentManager content here
 			if (network != null)
@@ -647,12 +630,12 @@ namespace AsteroidOutpost.Screens
 		/// Update the world
 		/// </summary>
 		/// <param name="deltaTime">The elapsed time</param>
-		/// <param name="theMouse"></param>
-		/// <param name="theKeyboard"></param>
-		public override void Update(TimeSpan deltaTime, EnhancedMouseState theMouse, EnhancedKeyboardState theKeyboard)
+		public override void Update(GameTime gameTime)
 		{
-
+			TimeSpan deltaTime = gameTime.ElapsedGameTime;
 			network.ProcessIncomingQueue(deltaTime);
+
+			hud.Update(gameTime);
 			
 			if (!paused)
 			{
@@ -722,40 +705,37 @@ namespace AsteroidOutpost.Screens
 
 			}
 
-			// Update the HUD
-			hud.Update(deltaTime, theMouse, theKeyboard);
-
 
 			// Update the stars
-			layeredStarField.Update(deltaTime);
+			//layeredStarField.Update(deltaTime);
 
 			network.ProcessOutgoingQueue();
 
-			base.Update(deltaTime, theMouse, theKeyboard);
+			base.Update(gameTime);
 		}
 
 
 		/// <summary>
 		/// Draw the world
 		/// </summary>
-		/// <param name="spriteBatch"></param>
-		/// <param name="tint"></param>
-		public override void Draw(SpriteBatch spriteBatch, Color tint)
+		public override void Draw(GameTime gameTime)
 		{
+			spriteBatch.Begin();
+
 			if(drawQuadTree)
 			{
 				DrawQuad(spriteBatch, quadTree, 0);
 			}
 
 			// Draw the back of the HUD
-			hud.DrawBack(spriteBatch, tint);
+			hud.DrawBack(spriteBatch, Color.White);
 			
 
 			// Draw all the visible entities
 			List<Entity> visible = quadTree.GetObjects(hud.FocusScreen);
 			foreach (Entity entity in visible)
 			{
-				entity.Draw(spriteBatch, 1, tint);
+				entity.Draw(spriteBatch, 1, Color.White);
 			}
 
 			foreach (var grid in powerGrid.Values)
@@ -764,9 +744,11 @@ namespace AsteroidOutpost.Screens
 			}
 
 			// Draw the front of the HUD
-			hud.DrawFront(spriteBatch, tint);
+			hud.DrawFront(spriteBatch, Color.White);
 
-			base.Draw(spriteBatch, tint);
+			spriteBatch.End();
+
+			base.Draw(gameTime);
 		}
 
 
@@ -941,6 +923,22 @@ namespace AsteroidOutpost.Screens
 		}
 
 
+		public int Width
+		{
+			get
+			{
+				return Game.GraphicsDevice.Viewport.Width;
+			}
+		}
+
+		public int Height
+		{
+			get
+			{
+				return Game.GraphicsDevice.Viewport.Height;
+			}
+		}
+
 		public void Serialize(BinaryWriter bw, bool serializeActors)
 		{
 			// Write the header
@@ -1002,7 +1000,7 @@ namespace AsteroidOutpost.Screens
 		public void Deserialize(BinaryReader br)
 		{
 			UInt32 handshake = br.ReadUInt32();
-			if (handshake != AsteroidOutpostScreen.StreamIdent)
+			if (handshake != World.StreamIdent)
 			{
 				String msg = "Failed handshake during game deserialization";
 				Console.WriteLine(msg);
@@ -1080,7 +1078,7 @@ namespace AsteroidOutpost.Screens
 
 			// Read the footer
 			UInt32 footer = br.ReadUInt32();
-			if (footer != AsteroidOutpostScreen.StreamIdent)
+			if (footer != World.StreamIdent)
 			{
 				String msg = "Failed handshake during game deserialization";
 				Console.WriteLine(msg);

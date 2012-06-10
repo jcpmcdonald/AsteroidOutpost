@@ -5,20 +5,20 @@ namespace AsteroidOutpost.Screens
 {
 	public partial class ServerHostScreen : AOMenuScreen
 	{
-		private AsteroidOutpostScreen theGame;
+		private World world;
 
-		public ServerHostScreen(AsteroidOutpostScreen theGame, ScreenManager theScreenManager, LayeredStarField starField)
+		public ServerHostScreen(World world, ScreenManager theScreenManager, LayeredStarField starField)
 			: base(theScreenManager, starField)
 		{
-			this.theGame = theGame;
+			this.world = world;
 		}
 
 
 		void btnStartHost_Click(object sender, C3.XNA.Events.MouseButtonEventArgs e)
 		{
 			// Start the server information server   (In base 4, I'm FINE!)
-			theGame.Network.ServerName = txtServerName.Text;
-			theGame.IsServer = true;
+			world.Network.ServerName = txtServerName.Text;
+			world.IsServer = true;
 
 			ScreenMan.SwitchScreens("Lobby");
 		}

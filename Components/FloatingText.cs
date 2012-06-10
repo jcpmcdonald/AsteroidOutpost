@@ -14,8 +14,8 @@ namespace AsteroidOutpost.Components
 		private readonly float fade;
 		private Color fadeTint = Color.White;
 
-		public FloatingText(AsteroidOutpostScreen theGame, IComponentList componentList, Position position, string text, Color color, float fade)
-			: base(theGame, componentList, position, text, color)
+		public FloatingText(World world, IComponentList componentList, Position position, string text, Color color, float fade)
+			: base(world, componentList, position, text, color)
 		{
 			this.fade = fade;
 		}

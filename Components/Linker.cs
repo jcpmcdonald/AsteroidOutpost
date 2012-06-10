@@ -22,8 +22,8 @@ namespace AsteroidOutpost.Components
 		private List<Tuple<Predicate<Entity>, Color, float>> links = new List<Tuple<Predicate<Entity>, Color, float>>();
 
 
-		public Linker(AsteroidOutpostScreen theGame, IComponentList componentList, Position position)
-			: base(theGame, componentList)
+		public Linker(World world, IComponentList componentList, Position position)
+			: base(world, componentList)
 		{
 			this.position = position;
 		}
@@ -39,12 +39,12 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		/// <param name="world"></param>
+		public override void PostDeserializeLink(World world)
 		{
-			base.PostDeserializeLink(theGame);
+			base.PostDeserializeLink(world);
 
-			position = theGame.GetComponent(postDeserializePositionID) as Position;
+			position = world.GetComponent(postDeserializePositionID) as Position;
 
 			if (position == null)
 			{
@@ -73,7 +73,7 @@ namespace AsteroidOutpost.Components
 			if (maxDistance > 0)
 			{
 
-				List<Entity> nearbyEntities = theGame.EntitiesInArea((int)(position.Center.X - maxDistance),
+				List<Entity> nearbyEntities = world.EntitiesInArea((int)(position.Center.X - maxDistance),
 																	 (int)(position.Center.Y - maxDistance),
 				                                                     (int)(maxDistance * 2),
 				                                                     (int)(maxDistance * 2));
@@ -84,8 +84,8 @@ namespace AsteroidOutpost.Components
 					{
 						if (position.Distance(nearbyEntity.Position) <= tuple.Item3 && tuple.Item1(nearbyEntity))
 						{
-							spriteBatch.DrawLine(theGame.WorldToScreen(position.Center),
-												 theGame.WorldToScreen(nearbyEntity.Position.Center),
+							spriteBatch.DrawLine(world.WorldToScreen(position.Center),
+												 world.WorldToScreen(nearbyEntity.Position.Center),
 							                     tuple.Item2,
 							                     1);
 						}

@@ -20,8 +20,8 @@ namespace AsteroidOutpost.Components
 		private float angleDiff = 0;
 
 
-		public Beacon(AsteroidOutpostScreen theGame, IComponentList componentList, Force theOwningForce, Vector2 theCentre, int theRadius)
-			: base(theGame, componentList, theOwningForce, theCentre, theRadius, 9999)
+		public Beacon(World world, IComponentList componentList, Force theOwningForce, Vector2 theCentre, int theRadius)
+			: base(world, componentList, theOwningForce, theCentre, theRadius, 9999)
 		{
 			Init();
 		}
@@ -46,11 +46,11 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// This is where all entities should do any resource loading that will be required. This will be called once per game.
 		/// </summary>
-		/// <param name="spriteBatch">The sprite batch</param>
+		/// <param name="graphicsDevice">The graphics device</param>
 		/// <param name="content">The content manager</param>
-		public static void LoadContent(SpriteBatch spriteBatch, ContentManager content)
+		public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content)
 		{
-			sprite = new Sprite(File.OpenRead(@"..\Sprites\Beacon.sprx"), spriteBatch.GraphicsDevice);
+			sprite = new Sprite(File.OpenRead(@"..\Sprites\Beacon.sprx"), graphicsDevice);
 			angleStep = 360.0f / sprite.OrientationLookup.Count;
 		}
 
@@ -80,7 +80,7 @@ namespace AsteroidOutpost.Components
 		{
 			//base.Draw(spriteBatch, scaleModifier, tint);
 
-			animator.Draw(spriteBatch, theGame.WorldToScreen(Position.Center), angleDiff, scaleModifier * 0.7f / theGame.ScaleFactor, tint);
+			animator.Draw(spriteBatch, world.WorldToScreen(Position.Center), angleDiff, scaleModifier * 0.7f / world.ScaleFactor, tint);
 		}
 
 

@@ -21,7 +21,7 @@ namespace AsteroidOutpost.Networking
 		/// <summary>
 		/// Execute this message. This should only be done from the Game Thread to avoid threading issues
 		/// </summary>
-		public abstract void Execute(AsteroidOutpostScreen theGame, AONetwork network, TimeSpan deltaTime);
+		public abstract void Execute(World world, AONetwork network, TimeSpan deltaTime);
 
 	}
 }

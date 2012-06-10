@@ -14,14 +14,14 @@ namespace AsteroidOutpost.Components
 		private int postDeserializeParentID;		// For serialization linking, don't use this
 
 
-		public PositionOffset(AsteroidOutpostScreen theGame, IComponentList componentList, Position parentPosition, Vector2 offset)
-			: base(theGame, componentList, offset)
+		public PositionOffset(World world, IComponentList componentList, Position parentPosition, Vector2 offset)
+			: base(world, componentList, offset)
 		{
 			parent = parentPosition;
 		}
 
-		public PositionOffset(AsteroidOutpostScreen theGame, IComponentList componentList, Position parentPosition, Vector2 offset, Vector2 velocity)
-			: base(theGame, componentList, offset, velocity)
+		public PositionOffset(World world, IComponentList componentList, Position parentPosition, Vector2 offset, Vector2 velocity)
+			: base(world, componentList, offset, velocity)
 		{
 			parent = parentPosition;
 		}
@@ -54,12 +54,12 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		/// <param name="world"></param>
+		public override void PostDeserializeLink(World world)
 		{
-			base.PostDeserializeLink(theGame);
+			base.PostDeserializeLink(world);
 
-			parent = theGame.GetComponent(postDeserializeParentID) as Position;
+			parent = world.GetComponent(postDeserializeParentID) as Position;
 
 			if (parent == null)
 			{

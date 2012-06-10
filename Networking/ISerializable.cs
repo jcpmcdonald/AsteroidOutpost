@@ -19,7 +19,7 @@ namespace AsteroidOutpost.Networking
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		void PostDeserializeLink(AsteroidOutpostScreen theGame);
+		/// <param name="world"></param>
+		void PostDeserializeLink(World world);
 	}
 }

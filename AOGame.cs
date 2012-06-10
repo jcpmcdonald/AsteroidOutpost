@@ -1,27 +1,36 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Structures;
+using AsteroidOutpost.Entities.Units;
 using AsteroidOutpost.Networking;
+using AsteroidOutpost.Scenarios;
 using AsteroidOutpost.Screens;
 using AsteroidOutpost.Screens.Credits;
 using AsteroidOutpost.Screens.HeadsUpDisplay;
+using Awesomium.Core;
+using AwesomiumXNA;
 using C3.XNA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Threading;
 using Microsoft.Xna.Framework.Media;
+using Console = AsteroidOutpost.Screens.HeadsUpDisplay.Console;
 
 namespace AsteroidOutpost
 {
 	/// <summary>
-	/// This is the main type for your game
+	/// This is the entry point for the game and is responsible for creating the menu and the world
 	/// </summary>
 	public class AOGame : Game
 	{
+
+		#region user32 SetWindowPos
 
 		[DllImport("user32.dll", EntryPoint = "SetWindowPos")]
         public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
@@ -30,6 +39,11 @@ namespace AsteroidOutpost
 		private const short SWP_NOSIZE = 1;
 		private const short SWP_NOZORDER = 0X4;
 		private const int SWP_SHOWWINDOW = 0x0040;
+
+		#endregion
+
+
+		#region Fields
 
 		private bool moveWindow = false;
 		private int moveWindowX;
@@ -40,15 +54,31 @@ namespace AsteroidOutpost
 		private SpriteBatch spriteBatch;
 		private Settings settings;
 
-		// TODO: Think of a better place to put these
+		private AwesomiumComponent awesomium;
+
 		private Song menuMusic;
 		private bool musicStarted = false;
 
+		private LayeredStarField starField;
+		private World world;
 
-		// TODO: Allow all screens to dispose
-		private ServerBrowserScreen serverBrowser;		// This needs to be disposed
-		private ScreenManager screenManager;
+		#endregion
 
+
+		#region Properties
+
+		public AwesomiumComponent Awesomium
+		{
+			get
+			{
+				return awesomium;
+			}
+		}
+
+		#endregion
+
+
+		#region Construct
 
 		public AOGame(int width, int height, bool fullScreen)
 		{
@@ -69,8 +99,12 @@ namespace AsteroidOutpost
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
+			TextureDictionary.SetContent(Content);
 
 			settings = new Settings();
+			//world = new World(this);
+			starField = new LayeredStarField(this);
+			Components.Add(starField);
 
 			initGraphicsMode(width, height, fullScreen);
 
@@ -79,7 +113,19 @@ namespace AsteroidOutpost
 			graphics.SynchronizeWithVerticalRetrace = false;
 #endif
 
-			//IsFixedTimeStep = false;
+			// Create our web front end
+			awesomium = new AwesomiumComponent(this);
+			WebCore.BaseDirectory = @"..\UI\";
+			awesomium.WebView.LoadFile("MainMenu.html");
+			awesomium.WebView.Focus();
+			Components.Add(awesomium);
+
+			// Create callbacks for Awesomium content to communicate with the game
+			awesomium.WebView.CreateObject("xna");
+			awesomium.WebView.SetObjectCallback("xna", "StartWorld", StartWorld);
+			awesomium.WebView.SetObjectCallback("xna", "Exit", Exit);
+
+			IsFixedTimeStep = false;
 		}
 		
 		
@@ -130,79 +176,55 @@ namespace AsteroidOutpost
 			}
 			return false;
 		}
-		
-		
-		
+
+		#endregion
+
+
+
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
 		/// all of your content.
 		/// </summary>
 		protected override void LoadContent()
 		{
-
 			if (moveWindow)
 			{
 				SetWindowPos(Window.Handle, 0, moveWindowX, moveWindowY, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_SHOWWINDOW);
 			}
 
-			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			TextureDictionary.SetContent(Content);
-
 			Fonts.Initialize(Content);
 
-			// Set up some colours to use
-			ColorPalette.ActiveBorder        = new Color(73, 73, 73, 180);
-			ColorPalette.ActiveCaption       = new Color(46, 46, 46, 180);
-			ColorPalette.ActiveCaptionText   = new Color(255, 255, 255, 255);
-			ColorPalette.ButtonFace          = new Color(73, 73, 73, 180);
-			ColorPalette.ButtonHighlight     = new Color(100, 100, 100, 180);
-			ColorPalette.ButtonShadow        = new Color(46, 46, 46, 180);
-			ColorPalette.Control             = new Color(73, 73, 73, 180);
-			ColorPalette.ControlDark         = new Color(46, 46, 46, 180);
-			ColorPalette.ControlDarkDark     = new Color(30, 30, 30, 180);
-			ColorPalette.ControlLight        = new Color(100, 100, 100, 180);
-			ColorPalette.ControlLightLight   = new Color(120, 120, 120, 180);
-			ColorPalette.ControlText         = new Color(255, 255, 255, 255);
-			ColorPalette.GrayText            = new Color(190, 190, 190, 255);
-			ColorPalette.Highlight           = new Color(100, 100, 150, 180);
-			ColorPalette.HighlightText       = new Color(255, 255, 255, 255);
-			ColorPalette.InactiveBorder      = new Color(100, 100, 100, 180);
-			ColorPalette.InactiveCaption     = new Color(30, 30, 30, 180);
-			ColorPalette.InactiveCaptionText = new Color(230, 230, 230, 255);
-			ColorPalette.ScrollBar           = new Color(46, 46, 46, 180);
-			ColorPalette.Window              = new Color(73, 73, 73, 180);
-			ColorPalette.WindowFrame         = new Color(73, 73, 73, 180);
-			ColorPalette.WindowText          = new Color(255, 255, 255, 255);
+			Ship1.LoadContent(GraphicsDevice, Content);
+			SolarStation.LoadContent(GraphicsDevice, Content);
+			Asteroid.LoadContent(GraphicsDevice, Content);
+			LaserMiner.LoadContent(GraphicsDevice, Content);
+			LaserTower.LoadContent(GraphicsDevice, Content);
+			PowerNode.LoadContent(GraphicsDevice, Content);
+			Beacon.LoadContent(GraphicsDevice, Content);
 
+			TextureDictionary.Add("Sprites\\Power", "power");
+			TextureDictionary.Add("Sprites\\Asteroids", "asteroids");
+			TextureDictionary.Add("Sprites\\Miners", "miners");
+			TextureDictionary.Add("Sprites\\SolarStation", "solarStation");
+			TextureDictionary.Add("Sprites\\Spaceship", "spaceship");
 
-			screenManager = new ScreenManager(this, graphics);
-			AsteroidOutpostScreen gameScreen = new AsteroidOutpostScreen(screenManager);
-			LayeredStarField starField = new LayeredStarField(screenManager, gameScreen);
-			gameScreen.SetScene(starField);
-			MainMenuScreen mainMenuScreen = new MainMenuScreen(screenManager, starField);
-			CreditsScreen creditsScreen = new CreditsScreen(screenManager, starField);
-			serverBrowser = new ServerBrowserScreen(gameScreen, screenManager, starField);
-			ServerHostScreen serverHost = new ServerHostScreen(gameScreen, screenManager, starField);
-			LobbyScreen gameLobby = new LobbyScreen(gameScreen, screenManager, starField);
-			MissionSelectScreen missionSelect = new MissionSelectScreen(gameScreen, screenManager, starField);
+			TextureDictionary.Add("Ellipse25", "ellipse25");
+			TextureDictionary.Add("Ellipse25Bold", "ellipse25bold");
+			TextureDictionary.Add("Ellipse25Back", "ellipse25back");
+			TextureDictionary.Add("Ellipse25Front", "ellipse25front");
+			TextureDictionary.Add("Ellipse50", "ellipse50");
+			TextureDictionary.Add("Ellipse50Back", "ellipse50back");
+			TextureDictionary.Add("Ellipse50Front", "ellipse50front");
+			TextureDictionary.Add("Ellipse100", "ellipse100");
+			TextureDictionary.Add("Ellipse220", "ellipse220");
 
+			TextureDictionary.Add("powerline", "powerline");
 
-			screenManager.AddScreen("Main Menu", mainMenuScreen);
-			screenManager.AddScreen("Game", gameScreen);
-			screenManager.AddScreen("Credits", creditsScreen);
-			screenManager.AddScreen("Starfield", starField);
-			screenManager.AddScreen("Server Browser", serverBrowser);
-			screenManager.AddScreen("Server Host", serverHost);
-			screenManager.AddScreen("Lobby", gameLobby);
-			screenManager.AddScreen("Mission Select", missionSelect);
-
-			screenManager.SetBackground("Starfield");
+			TextureDictionary.Add("Cursor");
 
 			menuMusic = Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 04 Inner Battles (Bignic Remix)");
 			MediaPlayer.IsRepeating = true;
-
-			screenManager.LoadContent(spriteBatch, Content);
 		}
 
 		/// <summary>
@@ -211,21 +233,20 @@ namespace AsteroidOutpost
 		/// </summary>
 		protected override void UnloadContent()
 		{
-			// Unload any non ContentManager content here
-			screenManager.UnloadContent();
-			serverBrowser.Dispose();
-
+			// Note: Is this abuse?
 			MediaPlayer.Stop();
 			menuMusic.Dispose();
 		}
 
 
 		/// <summary>
-		/// Update the world
+		/// Update the game
 		/// </summary>
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
+			base.Update(gameTime);
+
 			if (!musicStarted)
 			{
 				if (settings.MusicVolume > 0)
@@ -241,23 +262,55 @@ namespace AsteroidOutpost
 			{
 				Exit();
 			}
-
-			// Update the screen manager
-			screenManager.Update(gameTime.ElapsedGameTime);
 		}
 		
 		
 		/// <summary>
-		/// Draw the world
+		/// Draw the game
 		/// </summary>
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
-			// Draw the screen manager
-			screenManager.Draw(spriteBatch, gameTime.ElapsedGameTime);
+			spriteBatch.Begin();
+			starField.Draw(spriteBatch, Color.White);
+			spriteBatch.End();
+
+			// Note: This needs to be called before we can draw Awesomium
+			base.Draw(gameTime);
+
+			// Draw Awesomium and the cursor last
+			spriteBatch.Begin();
+			spriteBatch.Draw(awesomium.WebViewTexture, GraphicsDevice.Viewport.Bounds, Color.White);
+			spriteBatch.Draw(TextureDictionary.Get("Cursor"), new Vector2(Mouse.GetState().X - 20, Mouse.GetState().Y - 20), Color.White);
+			spriteBatch.End();
 		}
 
 
+		protected void StartWorld(object sender, JSCallbackEventArgs e)
+		{
+			String mapName = e.Arguments[0].ToString();
+			System.Console.WriteLine("");
+			if(world != null)
+			{
+				// The world should always be null before starting to make a new one
+				Debugger.Break();
+			}
+
+			world = new World(this);
+			RandomScenario randomScenario = new RandomScenario(world, 1);
+			randomScenario.Start();
+
+			Components.Add(world);
+		}
+		
+		
+		/// <summary>
+		/// Exit callback so that JavaScript can exit the game
+		/// </summary>
+		public void Exit(object sender, JSCallbackEventArgs e)
+		{
+			Exit();
+		}
 
 	}
 }

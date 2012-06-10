@@ -12,9 +12,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AsteroidOutpost.Screens
 {
-	public class LayeredStarField : Screen
+	public class LayeredStarField : DrawableGameComponent
 	{
-		private readonly AsteroidOutpostScreen theGame;
 		List<Layer> starLayers = new List<Layer>();
 		List<Layer> anomalies = new List<Layer>();
 		List<Layer> distantAnomalies = new List<Layer>();
@@ -22,74 +21,66 @@ namespace AsteroidOutpost.Screens
 		private Vector2? lastFocusPoint;
 
 
-		public LayeredStarField(ScreenManager theScreenManager, AsteroidOutpostScreen theGame) : base(theScreenManager)
+		public LayeredStarField(Game game) : base(game)
 		{
-			this.theGame = theGame;
 		}
 
 
-		public override void LoadContent(SpriteBatch spriteBatch, ContentManager content)
+		protected override void LoadContent()
 		{
-			base.LoadContent(spriteBatch, content);
-
 			/*
 			starLayers.Add(new Tuple<Texture2D, float, Rectangle>(content.Load<Texture2D>("Scenes\\stars1"),
 			                                                      0.06f,
 			                                                      new Rectangle(GlobalRandom.Next(64), GlobalRandom.Next(64), GlobalRandom.Next(128, 512 - 64), GlobalRandom.Next(128, 512 - 64))));
 			*/
-			starLayers.Add(new Layer(theGame,
-			                         content.Load<Texture2D>("Scenes\\stars1"),
+			starLayers.Add(new Layer(Game.Content.Load<Texture2D>("Scenes\\stars1"),
 			                         0.04f,
 			                         new Rectangle(GlobalRandom.Next(64), GlobalRandom.Next(64), GlobalRandom.Next(128, 512 - 64), GlobalRandom.Next(128, 512 - 64))));
 
-			starLayers.Add(new Layer(theGame,
-			                         content.Load<Texture2D>("Scenes\\stars1"),
+			starLayers.Add(new Layer(Game.Content.Load<Texture2D>("Scenes\\stars1"),
 			                         0.025f,
 			                         new Rectangle(GlobalRandom.Next(64), GlobalRandom.Next(64), GlobalRandom.Next(128, 512 - 64), GlobalRandom.Next(128, 512 - 64))));
 			
-			starLayers.Add(new Layer(theGame,
-			                         content.Load<Texture2D>("Scenes\\stars1"),
+			starLayers.Add(new Layer(Game.Content.Load<Texture2D>("Scenes\\stars1"),
 			                         0.0125f,
 			                         new Rectangle(GlobalRandom.Next(64), GlobalRandom.Next(64), GlobalRandom.Next(128, 512 - 64), GlobalRandom.Next(128, 512 - 64))));
 
 
-			Layer nebula = new Layer(theGame,
-			                         content.Load<Texture2D>("Scenes\\SpaceNebula"),
+			Layer nebula = new Layer(Game.Content.Load<Texture2D>("Scenes\\SpaceNebula"),
 			                         0.03f,
 			                         new Vector2(-1500, -1500));
 			nebula.Tint = new Color(200, 200, 200, 100);
 			nebula.Scale = 2f;
 			distantAnomalies.Add(nebula);
 
-			anomalies.Add(new Layer(theGame,
-			                        content.Load<Texture2D>("Scenes\\IcePlanet"),
+			anomalies.Add(new Layer(Game.Content.Load<Texture2D>("Scenes\\IcePlanet"),
 			                        0.04f,
-			                        new Vector2(spriteBatch.GraphicsDevice.Viewport.Width * 0.3f, 300f)));
+			                        new Vector2(Game.GraphicsDevice.Viewport.Width * 0.3f, 300f)));
 		}
 
 
-		public void Update(TimeSpan deltaTime)
+		public override void Update(GameTime gameTime)
 		{
-			if (lastFocusPoint == null)
-			{
-				// can't really do anything
-			}
-			else
-			{
-				Vector2 delta = lastFocusPoint.Value - theGame.HUD.FocusWorldPoint;
-				Move(delta);
-			}
+			//if (lastFocusPoint == null)
+			//{
+			//    // can't really do anything
+			//}
+			//else
+			//{
+			//    Vector2 delta = lastFocusPoint.Value - world.HUD.FocusWorldPoint;
+			//    Move(delta);
+			//}
 
-			lastFocusPoint = theGame.HUD.FocusWorldPoint;
+			//lastFocusPoint = world.HUD.FocusWorldPoint;
 		}
 
 
 		
 
 
-		public override void Draw(SpriteBatch spriteBatch, Color tint)
+		public void Draw(SpriteBatch spriteBatch, Color tint)
 		{
-			ScreenMan.GraphicsDevice.Clear(ColorPalette.ApplyTint(Color.Black, tint));
+			spriteBatch.GraphicsDevice.Clear(ColorPalette.ApplyTint(Color.Black, tint));
 
 			
 
@@ -109,8 +100,6 @@ namespace AsteroidOutpost.Screens
 				anomaly.Draw(spriteBatch, tint, offset);
 				//spriteBatch.Draw(anomaly.Item1, anomaly.Item3 + (offset * anomaly.Item2), null, tint, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
 			}
-			
-			base.Draw(spriteBatch, tint);
 		}
 
 		public void Move(float x, float y)
@@ -129,7 +118,6 @@ namespace AsteroidOutpost.Screens
 
 	class Layer
 	{
-		private readonly AsteroidOutpostScreen theGame;
 		private Texture2D texture;
 		private float speed;
 		private Rectangle imgSize;
@@ -139,16 +127,14 @@ namespace AsteroidOutpost.Screens
 		private float scale = 1.0f;
 
 
-		public Layer(AsteroidOutpostScreen theGame, Texture2D texture, float speed, Rectangle imgSize)
+		public Layer(Texture2D texture, float speed, Rectangle imgSize)
 		{
-			this.theGame = theGame;
 			init(texture, speed, imgSize, Vector2.Zero, true);
 		}
 
 
-		public Layer(AsteroidOutpostScreen theGame, Texture2D texture, float speed, Vector2 position)
+		public Layer(Texture2D texture, float speed, Vector2 position)
 		{
-			this.theGame = theGame;
 			init(texture, speed, texture.Bounds, position, false);
 		}
 
@@ -238,8 +224,8 @@ namespace AsteroidOutpost.Screens
 				int gridsVertical = (int)((viewportRect.Height / (imgSize.Height * scale)) + 1) + 1;
 
 
-				Vector2 start = theGame.WorldToScreen(theGame.HUD.FocusWorldPoint)
-				                + new Vector2(viewportRect.Center.X, viewportRect.Center.Y)
+				Vector2 start = //world.WorldToScreen(world.HUD.FocusWorldPoint)
+				                new Vector2(viewportRect.Center.X, viewportRect.Center.Y)
 				                + new Vector2((offset.X * speed), (offset.Y * speed));
 
 				start = new Vector2(start.X % (imgSize.Width * scale), start.Y % (imgSize.Height * scale))

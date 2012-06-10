@@ -22,6 +22,10 @@ function changeSelectionTo(menuItem)
 
 function selectionMade(menuItem)
 {
+	if(typeof menuItem.attr("call") !== 'undefined')
+	{
+		eval(menuItem.attr("call"));
+	}
 	if(typeof menuItem.attr("href") !== 'undefined')
 	{
 		window.location = menuItem.attr("href");
@@ -42,13 +46,6 @@ $(document).ready(function()
 		function()
 		{
 			selectionMade($(this));
-		}
-	);
-	
-	$("#exit").click(
-		function()
-		{
-			xna.exit();
 		}
 	);
 	

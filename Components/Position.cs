@@ -19,14 +19,14 @@ namespace AsteroidOutpost.Components
 		public event Action<EntityMovedEventArgs> MovedEvent;
 
 
-		public Position(AsteroidOutpostScreen theGame, IComponentList componentList, Vector2 center)
-			: base(theGame, componentList)
+		public Position(World world, IComponentList componentList, Vector2 center)
+			: base(world, componentList)
 		{
 			offset = center;
 		}
  
-		public Position(AsteroidOutpostScreen theGame, IComponentList componentList, Vector2 center, Vector2 velocity)
-			: base(theGame, componentList)
+		public Position(World world, IComponentList componentList, Vector2 center, Vector2 velocity)
+			: base(world, componentList)
 		{
 			offset = center;
 			this.velocity = velocity;

@@ -11,7 +11,7 @@ namespace AsteroidOutpost.Components
 {
 	public class Component : ISerializable, ICanKillSelf, IIdentifiable
 	{
-		protected AsteroidOutpostScreen theGame;
+		protected World world;
 
 		// This ID will uniquely identify this object in the game
 		protected int id = -1;
@@ -23,9 +23,9 @@ namespace AsteroidOutpost.Components
 		public event Action<ComponentDyingEventArgs> DyingEvent;
 
 
-		public Component(AsteroidOutpostScreen theGame, IComponentList componentList)
+		public Component(World world, IComponentList componentList)
 		{
-			this.theGame = theGame;
+			this.world = world;
 		}
 
 		protected Component(BinaryReader br)
@@ -47,10 +47,10 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		public virtual void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		/// <param name="world"></param>
+		public virtual void PostDeserializeLink(World world)
 		{
-			this.theGame = theGame;
+			this.world = world;
 		}
 
 
@@ -87,7 +87,7 @@ namespace AsteroidOutpost.Components
 		/// </summary>
 		public void SetDead(bool delMe)
 		{
-			SetDead(delMe, theGame.IsServer);
+			SetDead(delMe, world.IsServer);
 		}
 
 

@@ -24,8 +24,8 @@ namespace AsteroidOutpost.Entities.Units
 		[EventReplication(EventReplication.ServerToClients)]
 		public event Action<EntityTargetChangedEventArgs> TargetChangedEvent;
 
-		protected Ship(AsteroidOutpostScreen theGame, IComponentList componentList, Force theowningForce, Vector2 theCenter, int theRadius)
-			: base(theGame, componentList, theowningForce, theCenter, theRadius, 30)
+		protected Ship(World world, IComponentList componentList, Force theowningForce, Vector2 theCenter, int theRadius)
+			: base(world, componentList, theowningForce, theCenter, theRadius, 30)
 		{
 		}
 
@@ -66,14 +66,14 @@ namespace AsteroidOutpost.Entities.Units
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		/// <param name="world"></param>
+		public override void PostDeserializeLink(World world)
 		{
-			base.PostDeserializeLink(theGame);
+			base.PostDeserializeLink(world);
 
 			if (targetID >= 0)
 			{
-				target = theGame.GetEntity(targetID);
+				target = world.GetEntity(targetID);
 			}
 			else
 			{
@@ -89,7 +89,7 @@ namespace AsteroidOutpost.Entities.Units
 
 		public void SetTarget(int entityID)
 		{
-			SetTarget(entityID, theGame.IsServer);
+			SetTarget(entityID, world.IsServer);
 		}
 
 		public void SetTarget(int entityID, bool authoritative)
@@ -97,7 +97,7 @@ namespace AsteroidOutpost.Entities.Units
 			Entity newTarget = null;
 			if(entityID >= 0)
 			{
-				newTarget = theGame.GetEntity(entityID);
+				newTarget = world.GetEntity(entityID);
 			}
 			if (newTarget != null)
 			{
@@ -107,7 +107,7 @@ namespace AsteroidOutpost.Entities.Units
 
 		public void SetTarget(Entity entity)
 		{
-			SetTarget(entity, theGame.IsServer);
+			SetTarget(entity, world.IsServer);
 		}
 
 		public void SetTarget(Entity entity, bool authoritative)

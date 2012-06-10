@@ -16,7 +16,7 @@ namespace AsteroidOutpost.Entities
 {
 	public abstract class Entity : IQuadStorable, ISerializable, IIdentifiable, IUpdatable, ICanKillSelf
 	{
-		protected AsteroidOutpostScreen theGame;
+		protected World world;
 
 		// This ID will uniquely identify this object in the game
 		protected int id = -1;
@@ -45,14 +45,14 @@ namespace AsteroidOutpost.Entities
 		public event Action<EntityDyingEventArgs> DyingEvent;
 
 		
-		protected Entity(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, Vector2 center, int radius, int totalHitPoints)
+		protected Entity(World world, IComponentList componentList, Force owningForce, Vector2 center, int radius, int totalHitPoints)
 		{
-			this.theGame = theGame;
+			this.world = world;
 			this.owningForce = owningForce;
 
-			Position = new Position(theGame, componentList, center);
-			Radius = new Radius(theGame, componentList, Position, radius);
-			HitPoints = new HitPoints(theGame, componentList, totalHitPoints);
+			Position = new Position(world, componentList, center);
+			Radius = new Radius(world, componentList, Position, radius);
+			HitPoints = new HitPoints(world, componentList, totalHitPoints);
 			HitPoints.DyingEvent += KillSelf;
 
 			componentList.AddComponent(Position);
@@ -60,13 +60,13 @@ namespace AsteroidOutpost.Entities
 			componentList.AddComponent(HitPoints);
 		}
 
-		protected Entity(AsteroidOutpostScreen theGame, IComponentList componentList, Force owningForce, Vector2 center, int totalHitPoints)
+		protected Entity(World world, IComponentList componentList, Force owningForce, Vector2 center, int totalHitPoints)
 		{
-			this.theGame = theGame;
+			this.world = world;
 			this.owningForce = owningForce;
 
-			Position = new Position(theGame, componentList, center);
-			HitPoints = new HitPoints(theGame, componentList, totalHitPoints);
+			Position = new Position(world, componentList, center);
+			HitPoints = new HitPoints(world, componentList, totalHitPoints);
 			HitPoints.DyingEvent += KillSelf;
 
 			componentList.AddComponent(Position);
@@ -116,12 +116,12 @@ namespace AsteroidOutpost.Entities
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		public virtual void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		/// <param name="world"></param>
+		public virtual void PostDeserializeLink(World world)
 		{
-			this.theGame = theGame;
+			this.world = world;
 
-			owningForce = theGame.GetForce(postDeserializeOwningForceID);
+			owningForce = world.GetForce(postDeserializeOwningForceID);
 			if(owningForce == null)
 			{
 				// I think something is wrong, there should always be an owning force
@@ -129,9 +129,9 @@ namespace AsteroidOutpost.Entities
 			}
 
 			
-			position = theGame.GetComponent(postDeserializePositionID) as Position;
-			radius = theGame.GetComponent(postDeserializeSizeID) as Radius;
-			hitPoints = theGame.GetComponent(postDeserializeHitPointsID) as HitPoints;
+			position = world.GetComponent(postDeserializePositionID) as Position;
+			radius = world.GetComponent(postDeserializeSizeID) as Radius;
+			hitPoints = world.GetComponent(postDeserializeHitPointsID) as HitPoints;
 
 			if (position == null || radius == null || hitPoints == null)
 			{
@@ -169,7 +169,7 @@ namespace AsteroidOutpost.Entities
 			// draw the unit
 			if (animator != null)
 			{
-				animator.Draw(spriteBatch, theGame.WorldToScreen(Position.Center), 0, scaleModifier / theGame.ScaleFactor, tint);
+				animator.Draw(spriteBatch, world.WorldToScreen(Position.Center), 0, scaleModifier / world.ScaleFactor, tint);
 			}
 		}
 
@@ -194,7 +194,7 @@ namespace AsteroidOutpost.Entities
 			ignoreList.Add(this);
 			ignoreList.Add(otherEntity);
 
-			return IsLineObstructed(Position.Center, otherEntity.Position.Center, theGame, ignoreList);
+			return IsLineObstructed(Position.Center, otherEntity.Position.Center, world, ignoreList);
 		}
 		
 		
@@ -203,13 +203,13 @@ namespace AsteroidOutpost.Entities
 		/// </summary>
 		/// <param name="point1">The first point on the line</param>
 		/// <param name="point2">The second point on the line</param>
-		/// <param name="theGame">A reference to the game</param>
+		/// <param name="world">A reference to the game</param>
 		/// <param name="ignoreList">A list of non-obstructable entities, these entities will be ignored. Use null if you don't want to ignore anything</param>
 		/// <returns>True if an entity is blocking the line, false otherwise</returns>
-		protected static bool IsLineObstructed(Vector2 point1, Vector2 point2, AsteroidOutpostScreen theGame, List<Entity> ignoreList)
+		protected static bool IsLineObstructed(Vector2 point1, Vector2 point2, World world, List<Entity> ignoreList)
 		{
 			// Check for obstacles in the way
-			List<Entity> nearbyEntities = theGame.EntitiesInArea((int)(Math.Min(point1.X, point2.X) - 0.5),
+			List<Entity> nearbyEntities = world.EntitiesInArea((int)(Math.Min(point1.X, point2.X) - 0.5),
 			                                                   (int)(Math.Min(point1.Y, point2.Y - 0.5)),
 			                                                   (int)(Math.Abs(point1.X - point2.X) + 0.5),
 			                                                   (int)(Math.Abs(point1.Y - point2.Y) + 0.5));
@@ -351,7 +351,7 @@ namespace AsteroidOutpost.Entities
 		/// </summary>
 		public void SetDead(bool delMe)
 		{
-			SetDead(delMe, theGame.IsServer);
+			SetDead(delMe, world.IsServer);
 		}
 
 

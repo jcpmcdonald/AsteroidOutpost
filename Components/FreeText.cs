@@ -17,8 +17,8 @@ namespace AsteroidOutpost.Components
 		private String text;
 		protected Color color;
 
-		public FreeText(AsteroidOutpostScreen theGame, IComponentList componentList, Position position, string text, Color color)
-			: base(theGame, componentList)
+		public FreeText(World world, IComponentList componentList, Position position, string text, Color color)
+			: base(world, componentList)
 		{
 			this.text = text;
 			this.position = position;
@@ -53,11 +53,11 @@ namespace AsteroidOutpost.Components
 		{
 			spriteBatch.DrawString(Fonts.ControlFont,
 								   text,
-								   theGame.WorldToScreen(position.Center),
+								   world.WorldToScreen(position.Center),
 								   ColorPalette.ApplyTint(color, tint),
 								   0,
 								   Vector2.Zero,
-								   1 / theGame.ScaleFactor,
+								   1 / world.ScaleFactor,
 								   SpriteEffects.None,
 								   0);
 		}

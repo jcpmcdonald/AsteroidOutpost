@@ -24,8 +24,8 @@ namespace AsteroidOutpost.Entities.Structures
 		// For serialized linking
 		private int targetID;
 
-		public LaserTower(AsteroidOutpostScreen theGame, IComponentList componentList, Force theowningForce, Vector2 theCenter)
-			: base(theGame, componentList, theowningForce, theCenter, 15, 100)
+		public LaserTower(World world, IComponentList componentList, Force theowningForce, Vector2 theCenter)
+			: base(world, componentList, theowningForce, theCenter, 15, 100)
 		{
 			Init();
 		}
@@ -39,7 +39,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 		private void Init()
 		{
-			weapon = new Laser(theGame, this);
+			weapon = new Laser(world, this);
 			animator = new SpriteAnimator(sprite);
 			PowerLinkPointRelative = new Vector2(0, -13);
 		}
@@ -48,11 +48,11 @@ namespace AsteroidOutpost.Entities.Structures
 		/// <summary>
 		/// This is where all entities should do any resource loading that will be required. This will be called once per game.
 		/// </summary>
-		/// <param name="spriteBatch">The sprite batch</param>
+		/// <param name="graphicsDevice">The graphics device</param>
 		/// <param name="content">The content manager</param>
-		public static void LoadContent(SpriteBatch spriteBatch, ContentManager content)
+		public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content)
 		{
-			sprite = new Sprite(File.OpenRead(@"..\Sprites\LaserTower.sprx"), spriteBatch.GraphicsDevice);
+			sprite = new Sprite(File.OpenRead(@"..\Sprites\LaserTower.sprx"), graphicsDevice);
 			angleStep = 360.0f / sprite.OrientationLookup.Count;
 		}
 
@@ -80,14 +80,14 @@ namespace AsteroidOutpost.Entities.Structures
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
-		/// <param name="theGame"></param>
-		public override void PostDeserializeLink(AsteroidOutpostScreen theGame)
+		/// <param name="world"></param>
+		public override void PostDeserializeLink(World world)
 		{
-			base.PostDeserializeLink(theGame);
+			base.PostDeserializeLink(world);
 
 			if (targetID >= 0)
 			{
-				target = theGame.GetEntity(targetID);
+				target = world.GetEntity(targetID);
 			}
 			else
 			{
@@ -149,7 +149,7 @@ namespace AsteroidOutpost.Entities.Structures
 			{
 				// TODO:  Change this to server-side code
 				float powerToUse = (float)(5.0 * deltaTime.TotalSeconds);
-				if (theGame.PowerGrid(owningForce).GetPower(this, powerToUse))
+				if (world.PowerGrid(owningForce).GetPower(this, powerToUse))
 				{
 					ScanForTarget();
 					if (target != null)
@@ -180,7 +180,7 @@ namespace AsteroidOutpost.Entities.Structures
 		private void ScanForTarget()
 		{
 			// Search for nearby enemies
-			List<Entity> fairlyNearEntities = theGame.EntitiesInArea(new Rectangle((int)(Position.Center.X - weapon.MaxRange),
+			List<Entity> fairlyNearEntities = world.EntitiesInArea(new Rectangle((int)(Position.Center.X - weapon.MaxRange),
 																				 (int)(Position.Center.Y - weapon.MaxRange),
 																				 weapon.MaxRange * 2,
 																				 weapon.MaxRange * 2));
