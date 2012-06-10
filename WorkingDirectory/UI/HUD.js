@@ -22,14 +22,20 @@ function selectionChanged(newSelection)
 var mouseDownOverHUD = false;
 function docMouseDown(event)
 {
-	hud.OnMouseDown(mouseDownOverHUD, event.which - 1);
+	if(typeof hud !== 'undefined')
+	{
+		hud.OnMouseDown(mouseDownOverHUD, event.which - 1);
+	}
 	mouseDownOverHUD = false;
 }
 
 var mouseUpOverHUD = false;
 function docMouseUp(event)
 {
-	hud.OnMouseUp(mouseUpOverHUD, event.which - 1);
+	if(typeof hud !== 'undefined')
+	{
+		hud.OnMouseUp(mouseUpOverHUD, event.which - 1);
+	}
 	mouseUpOverHUD = false;
 }
 

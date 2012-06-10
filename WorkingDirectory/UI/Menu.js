@@ -22,7 +22,8 @@ function changeSelectionTo(menuItem)
 
 function selectionMade(menuItem)
 {
-	if(typeof menuItem.attr("call") !== 'undefined')
+	if (typeof xna !== 'undefined' &&
+		typeof menuItem.attr("call") !== 'undefined')
 	{
 		eval(menuItem.attr("call"));
 	}

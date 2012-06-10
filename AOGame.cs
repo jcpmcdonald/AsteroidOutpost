@@ -125,6 +125,12 @@ namespace AsteroidOutpost
 			awesomium.WebView.SetObjectCallback("xna", "StartWorld", StartWorld);
 			awesomium.WebView.SetObjectCallback("xna", "Exit", Exit);
 
+			// Create somewhere to log messages to
+			awesomium.WebView.CreateObject("console");
+			awesomium.WebView.SetObjectCallback("console", "log", JSConsoleLog);
+
+			awesomium.WebView.JSConsoleMessageAdded += WebView_JSConsoleMessageAdded;
+
 			IsFixedTimeStep = false;
 		}
 		
@@ -286,11 +292,13 @@ namespace AsteroidOutpost
 		}
 
 
-		protected void StartWorld(object sender, JSCallbackEventArgs e)
+		#region JavaScript Callbacks
+
+		private void StartWorld(object sender, JSCallbackEventArgs e)
 		{
 			String mapName = e.Arguments[0].ToString();
 			System.Console.WriteLine("");
-			if(world != null)
+			if (world != null)
 			{
 				// The world should always be null before starting to make a new one
 				Debugger.Break();
@@ -302,15 +310,36 @@ namespace AsteroidOutpost
 
 			Components.Add(world);
 		}
-		
-		
+
+
 		/// <summary>
 		/// Exit callback so that JavaScript can exit the game
 		/// </summary>
-		public void Exit(object sender, JSCallbackEventArgs e)
+		private void Exit(object sender, JSCallbackEventArgs e)
 		{
 			Exit();
 		}
+
+
+		/// <summary>
+		/// Allows JavaScript to log
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void JSConsoleLog(object sender, JSCallbackEventArgs e)
+		{
+			System.Console.WriteLine(e.Arguments[0].ToString());
+		}
+
+
+		private void WebView_JSConsoleMessageAdded(object sender, JSConsoleMessageEventArgs e)
+		{
+			// JavaScript Error!
+			System.Console.WriteLine("{0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);
+			Debugger.Break();
+		}
+
+		#endregion
 
 	}
 }
