@@ -1,9 +1,19 @@
+"use strict";
 
 
 function InXNA()
 {
 	return typeof xna !== 'undefined';
 }
+
+
+$(document).ready(function ()
+{
+	if (!InXNA())
+	{
+		$("body").addClass("nebula");
+	}
+});
 
 
 function XNACall(param)
@@ -16,11 +26,11 @@ function XNACall(param)
 	
 	
 	var callString;
-	if(typeof param === 'string')
+	if (typeof param === 'string')
 	{
 		callString = param;
 	}
-	else if(typeof param !== 'undefined' && typeof param.attr("call") !== 'undefined')
+	else if (typeof param !== 'undefined' && typeof param.attr("call") !== 'undefined')
 	{
 		callString = param.attr("call");
 	}
@@ -36,12 +46,12 @@ function XNACall(param)
 function FormatNumber(nStr)
 {
 	nStr += '';
-	x = nStr.split('.');
-	x1 = x[0];
-	x2 = x.length > 1 ? '.' + x[1] : '';
+	//x = nStr.split('.');
+	//x1 = x[0];
+	//x2 = x.length > 1 ? '.' + x[1] : '';
 	var rgx = /(\d+)(\d{3})/;
-	while (rgx.test(x1)) {
-		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	while (rgx.test(nStr)) {
+		nStr = nStr.replace(rgx, '$1' + ',' + '$2');
 	}
-	return x1 + x2;
+	return nStr;
 }

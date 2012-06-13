@@ -1,13 +1,15 @@
+"use strict";
+
 var currentRow = -1;
 
 function SelectRow(newRowID)
 {
 
-    if (currentRow == newRowID) {
+    if (currentRow === newRowID) {
         return;
     }
 
-    if (currentRow != -1) {
+    if (currentRow !== -1) {
         var oldrow = document.getElementById("row_" + currentRow);
         oldrow.style.background = "transparent";
     }
@@ -19,7 +21,7 @@ function SelectRow(newRowID)
 }
 
 function IsSelected() {
-    return currentRow == -1 ? false : true;
+    return currentRow === -1 ? false : true;
 }
 
 function GetSelectedRow() {

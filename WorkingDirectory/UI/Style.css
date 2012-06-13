@@ -1,8 +1,4 @@
 
-div
-{
-	/*padding: 0px;*/
-}
 
 body
 {
@@ -11,6 +7,23 @@ body
 	
 	-moz-user-select: none;
 	-webkit-user-select: none;
+}
+
+body.nebula
+{
+	/* This will be visible when viewing in a web-browser */
+	background-image: url("images/TestNebula.png");
+}
+
+
+div
+{
+	-moz-user-select: none;
+}
+
+span
+{
+	-moz-user-select: none;
 }
 
 

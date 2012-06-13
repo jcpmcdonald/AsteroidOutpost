@@ -1,3 +1,4 @@
+"use strict";
 
 var selectionMarkerWidth = 12;
 var selectionMarkerHeight = 12;
@@ -6,7 +7,7 @@ var selectedItem = null;
 
 function changeSelectionTo(menuItem)
 {
-	if(selectedItem != null)
+	if(selectedItem !== null)
 	{
 		selectedItem.removeClass("selected");
 	}
@@ -62,23 +63,23 @@ $(document).ready(function()
 	$(document).keydown(
 		function(event)
 		{
-			if(event.keyCode == KEY_UP)
+			if(event.keyCode === KEY_UP)
 			{
-				prevItem = selectedItem.prevAll("h2:first");
+				var prevItem = selectedItem.prevAll("h2:first");
 				if(prevItem.length > 0)
 				{
 					changeSelectionTo(prevItem);
 				}
 			}
-			else if(event.keyCode == KEY_DOWN)
+			else if(event.keyCode === KEY_DOWN)
 			{
-				nextItem = selectedItem.nextAll("h2:first");
+				var nextItem = selectedItem.nextAll("h2:first");
 				if(nextItem.length > 0)
 				{
 					changeSelectionTo(nextItem);
 				}
 			}
-			else if(event.keyCode == KEY_ENTER)
+			else if(event.keyCode === KEY_ENTER)
 			{
 				selectionMade(selectedItem);
 			}

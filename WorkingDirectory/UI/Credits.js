@@ -1,15 +1,15 @@
+"use strict";
 
-
-$(document).ready(function()
+$(document).ready(function ()
 {
 	$("#creditsWrapper").css("top", $(window).height() + "px").css("top");
 	$("#creditsWrapper").addClass("scroll");
 	$("#creditsWrapper").css("top", -100 - $("#coreCredits").height());
 	
 	$(document).keydown(
-		function(event)
+		function (event)
 		{
-			switch(event.keyCode)
+			switch (event.keyCode)
 			{
 			case KEY_ENTER:
 			case KEY_ESC:
@@ -17,10 +17,10 @@ $(document).ready(function()
 				history.back();
 			}
 		}
-	)
+	);
 	
 	$(document).click(
-		function()
+		function ()
 		{
 			history.back();
 		}
