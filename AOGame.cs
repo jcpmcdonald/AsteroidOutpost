@@ -55,6 +55,7 @@ namespace AsteroidOutpost
 		private Settings settings;
 
 		private AwesomiumComponent awesomium;
+		private FrameRateCounter frameRateCounter;
 
 		private Song menuMusic;
 		private bool musicStarted = false;
@@ -106,11 +107,15 @@ namespace AsteroidOutpost
 			starField = new LayeredStarField(this);
 			Components.Add(starField);
 
+			frameRateCounter = new FrameRateCounter(this);
+			Components.Add(frameRateCounter);
+
 			initGraphicsMode(width, height, fullScreen);
 
 
 #if UNLIMITED_FPS && DEBUG
 			graphics.SynchronizeWithVerticalRetrace = false;
+			IsFixedTimeStep = false;
 #endif
 
 			// Create our web front end
@@ -130,8 +135,6 @@ namespace AsteroidOutpost
 			awesomium.WebView.SetObjectCallback("console", "log", JSConsoleLog);
 
 			awesomium.WebView.JSConsoleMessageAdded += WebView_JSConsoleMessageAdded;
-
-			IsFixedTimeStep = false;
 		}
 		
 		
@@ -252,6 +255,7 @@ namespace AsteroidOutpost
 		protected override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
+			Window.Title = "FPS = " + frameRateCounter.FPS;
 
 			if (!musicStarted)
 			{

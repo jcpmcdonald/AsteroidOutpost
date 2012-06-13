@@ -135,6 +135,7 @@
     <Compile Include="Components\PositionOffset.cs" />
     <Compile Include="Components\ProgressBar.cs" />
     <Compile Include="Entities\Beacon.cs" />
+    <Compile Include="FrameRateCounter.cs" />
     <Compile Include="Interfaces\IIdentifiable.cs" />
     <Compile Include="Interfaces\IKillable.cs" />
     <Compile Include="Interfaces\IQuantifiable.cs" />
