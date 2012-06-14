@@ -1,0 +1,4 @@
+Retreived from http://developer.android.com/design/style/typography.html on June 13th, 2012
+
+In the footnote: "Except as noted, this content is licensed under Creative Commons Attribution 2.5."
+with a link to: http://creativecommons.org/licenses/by/2.5/

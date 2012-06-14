@@ -92,4 +92,12 @@ span.nick
 {
 	font-style: italic;
 }
+span.nick:before
+{
+	content: "(";
+}
+span.nick:after
+{
+	content: ")";
+}
 
