@@ -1,40 +1,18 @@
 
 
+@import "HUDConstructionPanel.css";
+@import "HUDInGameMenu.css";
+@import "HUDSelectionInfo.css";
+@import "HUDConsole.css";
 
 .panel
 {
 	position: absolute;
-	background-color: rgba(100, 100, 100, 0.5);
+	background-color: rgba(100, 100, 100, 0.7);
 	border-color: #bbbbbb;
 	border-width: 1px;
 }
 
-#constructionMenu
-{
-	left: 0px;
-	bottom: 0px;
-	
-	width: 230px;
-	
-	/*display: inline-block;*/
-	padding: 0px;
-	border-radius: 0px 15px 0px 0px;
-	border-style: solid solid none none;
-}
-
-
-#selectonInfo
-{
-	left: 230px;
-	bottom: 0px;
-	
-	height: 150px;
-	width: 650px;
-	
-	padding: 0px;
-	border-radius: 0px 15px 0px 0px;
-	border-style: solid solid none none;
-}
 
 #resources
 {
@@ -48,48 +26,6 @@
 	padding-right: 8px;
 	border-radius: 0px 0px 15px 15px;
 	border-style: none solid solid solid;
-}
-
-#gameMenu
-{
-	display: none;
-	
-	left: 50%;
-	top: 50%;
-	/*height: 250px;*/
-	width: 250px;
-	
-	/* margin values are half the height and width respectively */
-	margin: -125px 0 0 -125px;
-	
-	padding: 0px;
-	border-radius: 15px;
-	border-style: solid solid solid solid;
-}
-
-#pauseDisplay
-{
-	font-size: x-large;
-	text-align: center;
-	
-	left: 50%;
-	top: -40px;
-	width: 250px;
-	
-	-moz-transition: top 0.3s ease-in;
-	-webkit-transition: top 0.3s ease-in;
-	
-	/* margin is half the width */
-	margin-left: -125px;
-	
-	padding: 0px;
-	border-radius: 0px 0px 15px 15px;
-	border-style: none solid solid solid;
-}
-
-#pauseDisplay.paused
-{
-	top: 0px;
 }
 
 .button
@@ -109,43 +45,17 @@
 	background-color: rgba(70, 70, 70, 0.5);
 }
 
-.button.constructionButton
-{
-	float: left;
-	width: 100px;
-	height: 80px;
-}
-
-
-.button.menuButton
-{
-	float: left;
-	font-size: x-large;
-	text-align: center;
-	
-	float: left;
-	width: 235px;
-	height: 35px;
-}
-
-
-
 .buttonPressed
 {
 	border-style: inset;
 	background-position: 2px 2px;
 }
 
-.label
-{
-	padding-left: 15px;
-	padding-right: 5px;
-	color: #AAAAAA;
-}
 
-.data
+
+#minerals
 {
-	padding: 5px;
+	padding: 10px;
 }
 
 #lblMinerals
@@ -157,30 +67,5 @@
 	height: 20px;
 }
 
-#selectionTitle
-{
-	padding: 5px;
-	font-size: x-large;
-}
 
-#SolarStation
-{
-	background-image: url("images/SolarStation.png");
-	background-repeat: no-repeat;
-}
-#LaserMiner
-{
-	background-image: url("images/LaserMiner.png");
-	background-repeat: no-repeat;
-}
-#PowerNode
-{
-	background-image: url("images/PowerNode.png");
-	background-repeat: no-repeat;
-}
-#LaserTower
-{
-	background-image: url("images/LaserTower.png");
-	background-repeat: no-repeat;
-}
 

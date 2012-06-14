@@ -1,0 +1,42 @@
+
+
+.button.constructionButton
+{
+	float: left;
+	width: 100px;
+	height: 80px;
+}
+
+#constructionMenu
+{
+	left: 0px;
+	bottom: 0px;
+	
+	width: 230px;
+	
+	/*display: inline-block;*/
+	padding: 0px;
+	border-radius: 0px 15px 0px 0px;
+	border-style: solid solid none none;
+}
+
+#SolarStation
+{
+	background-image: url("images/SolarStation.png");
+	background-repeat: no-repeat;
+}
+#LaserMiner
+{
+	background-image: url("images/LaserMiner.png");
+	background-repeat: no-repeat;
+}
+#PowerNode
+{
+	background-image: url("images/PowerNode.png");
+	background-repeat: no-repeat;
+}
+#LaserTower
+{
+	background-image: url("images/LaserTower.png");
+	background-repeat: no-repeat;
+}

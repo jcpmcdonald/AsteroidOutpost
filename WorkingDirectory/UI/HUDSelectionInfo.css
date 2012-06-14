@@ -1,0 +1,32 @@
+
+#selectonInfo
+{
+	left: 230px;
+	bottom: 0px;
+	
+	height: 150px;
+	width: 250px;
+	
+	padding: 0px;
+	border-radius: 0px 15px 0px 0px;
+	border-style: solid solid none none;
+}
+
+#selectionTitle
+{
+	padding: 5px;
+	font-size: x-large;
+}
+
+.selectionLabel
+{
+	padding-left: 15px;
+	padding-right: 5px;
+	color: #AAAAAA;
+}
+
+.selectionData
+{
+	padding: 5px;
+}
+

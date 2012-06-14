@@ -26,12 +26,14 @@ body.nebula
 
 div
 {
-	-moz-user-select: none;
+	-moz-user-select: inherit;
+	-webkit-user-select: inherit;
 }
 
 span
 {
-	-moz-user-select: none;
+	-moz-user-select: inherit;
+	-webkit-user-select: inherit;
 }
 
 
