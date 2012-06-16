@@ -139,10 +139,27 @@ $(document).ready(function()
 
 
 
-//$("#history").scrollTop($("#history").prop("scrollHeight"));
+
+
+/// #########################################################
+/// #### Console
+/// #########################################################
+
+function addConsoleMessage(name, message)
+{
+	$("#history").append('<div class="consoleLine"><span class="consoleID">' +
+							name +
+							'</span><span class="consoleText">' +
+							message +
+							'</span><span class="consoleTime">' +
+							(new Date()).toLocaleTimeString() +
+							'</span></div>');
+	$("#history").scrollTop($("#history").prop("scrollHeight"));
+}
+
 $(document).ready(function()
 {
-	var username = "cell18189";
+	var username = "me";
 	
 	$("#consoleInput").keyup(function(event){
 		if(event.which == 13)
@@ -154,14 +171,7 @@ $(document).ready(function()
 				return;
 			}
 			
-			$("#history").append('<div class="consoleLine"><span class="consoleID">' +
-									username +
-									'</span><span class="consoleText">' +
-									text +
-									'</span><span class="consoleTime">' +
-									(new Date()).toLocaleTimeString() +
-									'</span></div>');
-			$("#history").scrollTop($("#history").prop("scrollHeight"));
+			addConsoleMessage(username, text);
 		}
 	});
 });

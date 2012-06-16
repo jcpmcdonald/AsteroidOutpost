@@ -21,19 +21,16 @@
     
 	display: table-cell;
 	vertical-align: bottom;
-	
-	background-color: rgba(70, 70, 70, 0.5);
 }
 
 #history
 {
-	/* border-style: ridge; */
-	/* border-width: 1px; */
-	/* border-color: #aaaaaa; */
+    overflow: auto;
 	
 	height: 150px;
 	max-height: 150px;
-    overflow: auto;
+	
+	background-color: rgba(70, 70, 70, 0.5);
 }
 
 .consoleID
