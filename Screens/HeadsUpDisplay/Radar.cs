@@ -1,15 +1,14 @@
 ﻿using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Structures;
 using AsteroidOutpost.Screens;
-using C3.XNA;
-using C3.XNA.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AsteroidOutpost.Screens.HeadsUpDisplay
 {
-	class Radar : Control
+	class Radar
 	{
+		/*
 		private readonly World world;
 		private readonly AOHUD hud;
 		private bool isDragging;
@@ -27,7 +26,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// </summary>
 		/// <param name="spriteBatch">The spriteBatch to draw to</param>
 		/// <param name="tint">The color used to tint this control. Use Color.White to draw this control normally</param>
-		public override void Draw(SpriteBatch spriteBatch, Color tint)
+		public void Draw(SpriteBatch spriteBatch, Color tint)
 		{
 			Rectangle focusScreen = hud.FocusScreen;
 			
@@ -93,10 +92,9 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// </summary>
 		/// <param name="mouse">A reference to the mouse</param>
 		/// <param name="mouseButton">The mouse button that was released</param>
-		protected override void OnMouseUp(EnhancedMouseState mouse, MouseButton mouseButton, ref bool handled)
+		protected void OnMouseUp(EnhancedMouseState mouse, MouseButton mouseButton, ref bool handled)
 		{
 			isDragging = false;
-			base.OnMouseUp(mouse, mouseButton, ref handled);
 		}
 
 
@@ -105,13 +103,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// </summary>
 		/// <param name="theMouse">A reference to the mouse</param>
 		/// <param name="theMouseButton">The mouse button that was pressed</param>
-		protected override void OnMouseDown(EnhancedMouseState theMouse, MouseButton theMouseButton, ref bool handled)
+		protected void OnMouseDown(EnhancedMouseState theMouse, MouseButton theMouseButton, ref bool handled)
 		{
 			isDragging = true;
 			hud.FocusWorldPoint = new Vector2((theMouse.X - LocationAbs.X) / size.Width * world.MapWidth,
 			                                  (theMouse.Y - LocationAbs.Y) / size.Height * world.MapHeight);
 
-			base.OnMouseDown(theMouse, theMouseButton, ref handled);
 		}
 
 
@@ -119,14 +116,13 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// Called when the mouse moves over the control
 		/// </summary>
 		/// <param name="theMouse">A reference to the mouse</param>
-		protected override void OnMouseMove(EnhancedMouseState theMouse, ref bool handled)
+		protected void OnMouseMove(EnhancedMouseState theMouse, ref bool handled)
 		{
 			if (isDragging)
 			{
 				hud.FocusWorldPoint = new Vector2((theMouse.X - LocationAbs.X) / size.Width * world.MapWidth,
 				                                  (theMouse.Y - LocationAbs.Y) / size.Height * world.MapHeight);
 			}
-			base.OnMouseMove(theMouse, ref handled);
 		}
 
 
@@ -134,10 +130,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// Called when the mouse has left the control's bounds
 		/// </summary>
 		/// <param name="theMouse">A reference to the mouse</param>
-		protected override void OnMouseLeave(EnhancedMouseState theMouse, ref bool handled)
+		protected void OnMouseLeave(EnhancedMouseState theMouse, ref bool handled)
 		{
 			isDragging = false;
-			base.OnMouseLeave(theMouse, ref handled);
 		}
+
+		*/
 	}
 }
