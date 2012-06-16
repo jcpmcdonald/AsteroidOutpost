@@ -127,6 +127,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorExtension.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="AIController.cs" />
     <Compile Include="Components\Accumulator.cs" />
@@ -134,6 +135,8 @@
     <Compile Include="Components\HitPoints.cs" />
     <Compile Include="Components\PositionOffset.cs" />
     <Compile Include="Components\ProgressBar.cs" />
+    <Compile Include="EnhancedKeyboardState.cs" />
+    <Compile Include="EnhancedMouseState.cs" />
     <Compile Include="Entities\Beacon.cs" />
     <Compile Include="FrameRateCounter.cs" />
     <Compile Include="Interfaces\IIdentifiable.cs" />
@@ -265,10 +268,6 @@
     <ProjectReference Include="..\QuadTree\QuadTree.csproj">
       <Project>{FE3B63BD-7671-43EA-B2CA-04BAC399FEB9}</Project>
       <Name>QuadTree</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XNA Screen Manager\XNAHUD.csproj">
-      <Project>{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}</Project>
-      <Name>XNAHUD</Name>
     </ProjectReference>
     <ProjectReference Include="..\XNASpriteLib\XNASpriteLib.csproj">
       <Project>{1C2746A5-941A-45A4-88ED-149ACED08984}</Project>

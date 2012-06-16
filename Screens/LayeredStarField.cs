@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Screens.HeadsUpDisplay;
-using C3.XNA;
-using C3.XNA.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -80,7 +78,7 @@ namespace AsteroidOutpost.Screens
 
 		public void Draw(SpriteBatch spriteBatch, Color tint)
 		{
-			spriteBatch.GraphicsDevice.Clear(ColorPalette.ApplyTint(Color.Black, tint));
+			spriteBatch.GraphicsDevice.Clear(Color.Black.Blend(tint));
 
 			
 
@@ -243,7 +241,7 @@ namespace AsteroidOutpost.Screens
 						spriteBatch.Draw(texture,
 						                 destinationLocation,
 						                 new Rectangle(imgSize.X, imgSize.Y, (int)(imgSize.Width * scale), (int)(imgSize.Height * scale)),
-						                 ColorPalette.ApplyTint(tint, this.tint),
+										 tint.Blend(this.tint),
 						                 0,
 						                 Vector2.Zero,
 						                 scale,
@@ -259,7 +257,7 @@ namespace AsteroidOutpost.Screens
 				spriteBatch.Draw(texture,
 				                 position + (offset * speed),
 				                 null,
-				                 ColorPalette.ApplyTint(tint, this.tint),
+								 tint.Blend(this.tint),
 				                 0,
 				                 Vector2.Zero,
 				                 scale,

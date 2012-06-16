@@ -175,7 +175,7 @@ namespace AsteroidOutpost.Entities.Structures
 			}
 
 			//*
-			base.Draw(spriteBatch, sizePercent * scaleModifier * 0.5f, ColorPalette.ApplyTint(tint, mineralTint));
+			base.Draw(spriteBatch, sizePercent * scaleModifier * 0.5f, tint.Blend(mineralTint));
 			/*/
 			// Test a fake 3D effect with my asteroids
 			if (animator != null)

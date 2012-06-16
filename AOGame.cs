@@ -201,7 +201,6 @@ namespace AsteroidOutpost
 			}
 
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			Fonts.Initialize(Content);
 
 			Ship1.LoadContent(GraphicsDevice, Content);
 			SolarStation.LoadContent(GraphicsDevice, Content);
@@ -210,6 +209,7 @@ namespace AsteroidOutpost
 			LaserTower.LoadContent(GraphicsDevice, Content);
 			PowerNode.LoadContent(GraphicsDevice, Content);
 			Beacon.LoadContent(GraphicsDevice, Content);
+			FreeText.LoadContent(GraphicsDevice, Content);
 
 			TextureDictionary.Add("Sprites\\Power", "power");
 			TextureDictionary.Add("Sprites\\Asteroids", "asteroids");

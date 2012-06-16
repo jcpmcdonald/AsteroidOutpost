@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadTree", "..\QuadTree\Qua
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Primitives2D", "..\Primitives2D\Primitives2D.csproj", "{39AD1482-1881-4852-A05D-DC61B0D3446A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAHUD", "..\XNA Screen Manager\XNAHUD.csproj", "{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asteroid OutpostContent", "Content\Asteroid OutpostContent.contentproj", "{D5E6C1BE-DDF9-4FE0-9ADF-7957DB9BC883}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadTreeNormalUsageExample", "..\QuadTree\QuadTreeNormalUsageExample\QuadTreeNormalUsageExample.csproj", "{042E291D-90C1-4817-B48E-33B128814DB8}"
@@ -19,10 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadTreeUnitTests", "..\Qua
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadTreeVisualTest", "..\QuadTree\QuadTreeVisualTest\QuadTreeVisualTest.csproj", "{776E09CC-C322-4102-8A43-58F4B1B0E525}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAHUDTester", "..\XNA Screen Manager\XNAHUDTester\XNAHUDTester.csproj", "{99B19DDA-8463-47FE-9B6A-77793D10B527}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAHUDTesterContent", "..\XNA Screen Manager\XNAHUDTester\Content\XNAHUDTesterContent.contentproj", "{987BF8D0-7FB0-4A58-9B49-B06444C8BD92}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadTreeNormalUsageExampleContent", "..\QuadTree\QuadTreeNormalUsageExample\Content\QuadTreeNormalUsageExampleContent.contentproj", "{76C468BF-88E9-4566-A430-71D0C77462DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuadTreeVisualTestContent", "..\QuadTree\QuadTreeVisualTest\Content\QuadTreeVisualTestContent.contentproj", "{E3D34B63-D34E-492D-AE3A-87C53E719A5C}"
@@ -32,8 +26,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNASpriteLibVisualTest", "..\XNASpriteLib\SpriteLibVisualTest\XNASpriteLibVisualTest.csproj", "{1AA1F8D6-1F77-44BF-8E6D-DCE4261F62D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNASpriteLibVisualTestContent", "..\XNASpriteLib\SpriteLibVisualTest\Content\XNASpriteLibVisualTestContent.contentproj", "{D30B070A-90AB-4613-9DBF-E099E5A9F367}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asteroid Outpost Screen Design", "Asteroid Outpost Screen Design\Asteroid Outpost Screen Design.csproj", "{97300651-995A-47EF-B689-70F0C1A2819D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomiumXNA", "..\AwesomiumXNA\AwesomiumXNA\AwesomiumXNA.csproj", "{251BCEDB-CC58-4266-B087-6D404A4A1785}"
 EndProject
@@ -105,21 +97,6 @@ Global
 		{39AD1482-1881-4852-A05D-DC61B0D3446A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{39AD1482-1881-4852-A05D-DC61B0D3446A}.Release|x86.ActiveCfg = Release|Any CPU
 		{39AD1482-1881-4852-A05D-DC61B0D3446A}.Release|x86.Build.0 = Release|Any CPU
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Debug Monitor 2|Any CPU.ActiveCfg = Debug|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Debug Monitor 2|Mixed Platforms.ActiveCfg = Debug|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Debug Monitor 2|Mixed Platforms.Build.0 = Debug|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Debug Monitor 2|x86.ActiveCfg = Debug|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Debug Monitor 2|x86.Build.0 = Debug|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Debug|x86.ActiveCfg = Debug|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Debug|x86.Build.0 = Debug|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Release|Any CPU.ActiveCfg = Release|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Release|Mixed Platforms.Build.0 = Release|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Release|x86.ActiveCfg = Release|x86
-		{D62A47C3-5DAA-419B-A6B3-8F7EA5B25E31}.Release|x86.Build.0 = Release|x86
 		{D5E6C1BE-DDF9-4FE0-9ADF-7957DB9BC883}.Debug Monitor 2|Any CPU.ActiveCfg = Debug|x86
 		{D5E6C1BE-DDF9-4FE0-9ADF-7957DB9BC883}.Debug Monitor 2|Mixed Platforms.ActiveCfg = Debug|x86
 		{D5E6C1BE-DDF9-4FE0-9ADF-7957DB9BC883}.Debug Monitor 2|x86.ActiveCfg = Debug|x86
@@ -189,30 +166,6 @@ Global
 		{776E09CC-C322-4102-8A43-58F4B1B0E525}.Release|Mixed Platforms.Build.0 = Release|x86
 		{776E09CC-C322-4102-8A43-58F4B1B0E525}.Release|x86.ActiveCfg = Release|x86
 		{776E09CC-C322-4102-8A43-58F4B1B0E525}.Release|x86.Build.0 = Release|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Debug Monitor 2|Any CPU.ActiveCfg = Debug|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Debug Monitor 2|Mixed Platforms.ActiveCfg = Debug|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Debug Monitor 2|Mixed Platforms.Build.0 = Debug|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Debug Monitor 2|x86.ActiveCfg = Debug|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Debug Monitor 2|x86.Build.0 = Debug|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Debug|x86.ActiveCfg = Debug|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Debug|x86.Build.0 = Debug|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Release|Any CPU.ActiveCfg = Release|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Release|Mixed Platforms.Build.0 = Release|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Release|x86.ActiveCfg = Release|x86
-		{99B19DDA-8463-47FE-9B6A-77793D10B527}.Release|x86.Build.0 = Release|x86
-		{987BF8D0-7FB0-4A58-9B49-B06444C8BD92}.Debug Monitor 2|Any CPU.ActiveCfg = Debug|x86
-		{987BF8D0-7FB0-4A58-9B49-B06444C8BD92}.Debug Monitor 2|Mixed Platforms.ActiveCfg = Debug|x86
-		{987BF8D0-7FB0-4A58-9B49-B06444C8BD92}.Debug Monitor 2|x86.ActiveCfg = Debug|x86
-		{987BF8D0-7FB0-4A58-9B49-B06444C8BD92}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{987BF8D0-7FB0-4A58-9B49-B06444C8BD92}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{987BF8D0-7FB0-4A58-9B49-B06444C8BD92}.Debug|x86.ActiveCfg = Debug|x86
-		{987BF8D0-7FB0-4A58-9B49-B06444C8BD92}.Release|Any CPU.ActiveCfg = Release|x86
-		{987BF8D0-7FB0-4A58-9B49-B06444C8BD92}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{987BF8D0-7FB0-4A58-9B49-B06444C8BD92}.Release|x86.ActiveCfg = Release|x86
 		{76C468BF-88E9-4566-A430-71D0C77462DA}.Debug Monitor 2|Any CPU.ActiveCfg = Debug|x86
 		{76C468BF-88E9-4566-A430-71D0C77462DA}.Debug Monitor 2|Mixed Platforms.ActiveCfg = Debug|x86
 		{76C468BF-88E9-4566-A430-71D0C77462DA}.Debug Monitor 2|x86.ActiveCfg = Debug|x86
@@ -270,21 +223,6 @@ Global
 		{D30B070A-90AB-4613-9DBF-E099E5A9F367}.Release|Any CPU.ActiveCfg = Release|x86
 		{D30B070A-90AB-4613-9DBF-E099E5A9F367}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{D30B070A-90AB-4613-9DBF-E099E5A9F367}.Release|x86.ActiveCfg = Release|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Debug Monitor 2|Any CPU.ActiveCfg = Debug|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Debug Monitor 2|Mixed Platforms.ActiveCfg = Debug|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Debug Monitor 2|Mixed Platforms.Build.0 = Debug|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Debug Monitor 2|x86.ActiveCfg = Debug|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Debug Monitor 2|x86.Build.0 = Debug|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Debug|x86.ActiveCfg = Debug|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Debug|x86.Build.0 = Debug|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Release|Any CPU.ActiveCfg = Release|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Release|Mixed Platforms.Build.0 = Release|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Release|x86.ActiveCfg = Release|x86
-		{97300651-995A-47EF-B689-70F0C1A2819D}.Release|x86.Build.0 = Release|x86
 		{251BCEDB-CC58-4266-B087-6D404A4A1785}.Debug Monitor 2|Any CPU.ActiveCfg = Debug|x86
 		{251BCEDB-CC58-4266-B087-6D404A4A1785}.Debug Monitor 2|Mixed Platforms.ActiveCfg = Debug|x86
 		{251BCEDB-CC58-4266-B087-6D404A4A1785}.Debug Monitor 2|Mixed Platforms.Build.0 = Debug|x86

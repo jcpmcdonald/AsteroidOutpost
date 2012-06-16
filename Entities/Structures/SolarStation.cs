@@ -217,7 +217,7 @@ namespace AsteroidOutpost.Entities.Structures
 					                    40,
 										startingAngle,
 										degrees,
-					                    ColorPalette.ApplyTint(Color.Gray, tint),
+					                    Color.Gray.Blend(tint),
 					                    world.Scale(5.0f));
 
 					spriteBatch.DrawArc(world.WorldToScreen(Position.Center),
@@ -225,7 +225,7 @@ namespace AsteroidOutpost.Entities.Structures
 					                    40,
 										startingAngle,
 										(float)(degrees * percentFull),
-					                    ColorPalette.ApplyTint(color, tint),
+					                    color.Blend(tint),
 					                    world.Scale(5.0f));
 				}
 				else
@@ -235,7 +235,7 @@ namespace AsteroidOutpost.Entities.Structures
 					                    40,
 										startingAngle,
 					                    degrees,
-					                    ColorPalette.ApplyTint(Color.Red, tint),
+					                    Color.Red.Blend(tint),
 					                    world.Scale(5.0f));
 				}
 				//*/

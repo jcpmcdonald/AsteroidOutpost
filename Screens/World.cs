@@ -16,7 +16,6 @@ using AsteroidOutpost.Screens.HeadsUpDisplay;
 using Awesomium.Core;
 using AwesomiumXNA;
 using C3.XNA;
-using C3.XNA.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;

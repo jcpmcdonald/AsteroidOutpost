@@ -94,7 +94,7 @@ namespace AsteroidOutpost.Components
 			spriteBatch.Draw(texture,
 							 world.WorldToScreen(position.Center - (new Vector2(textureSize + 10, textureSize + 10) * sizeRatio)),  // 10 padding in the textures
 							 null,
-							 ColorPalette.ApplyTint(color, tint),
+							 color.Blend(tint),
 							 0,
 							 Vector2.Zero,
 							 (sizeRatio * scaleModifier) / world.ScaleFactor,

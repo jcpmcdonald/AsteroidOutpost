@@ -9,7 +9,6 @@ using AsteroidOutpost.Interfaces;
 using Awesomium.Core;
 using AwesomiumXNA;
 using C3.XNA;
-using C3.XNA.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -17,7 +16,6 @@ using Microsoft.Xna.Framework.Graphics;
 using AsteroidOutpost.Entities.Units;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Input;
-using MouseButton = C3.XNA.MouseButton;
 
 
 namespace AsteroidOutpost.Screens.HeadsUpDisplay
@@ -357,7 +355,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					spriteBatch.Draw(TextureDictionary.Get("ellipse50back"),
 					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(60, 60) * sizeRatio)),
 					                 null,
-					                 ColorPalette.ApplyTint(Color.Green, tint),
+					                 Color.Green.Blend(tint),
 					                 0,
 					                 Vector2.Zero,
 					                 sizeRatio / world.ScaleFactor,
@@ -370,7 +368,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					spriteBatch.Draw(TextureDictionary.Get("ellipse25back"),
 					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
 					                 null,
-					                 ColorPalette.ApplyTint(Color.Green, tint),
+									 Color.Green.Blend(tint),
 					                 0,
 					                 Vector2.Zero,
 					                 sizeRatio / world.ScaleFactor,
@@ -399,7 +397,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					spriteBatch.Draw(TextureDictionary.Get("ellipse50front"),
 					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(60, 60) * sizeRatio)),
 					                 null,
-					                 ColorPalette.ApplyTint(Color.Green, tint),
+									 Color.Green.Blend(tint),
 					                 0,
 					                 Vector2.Zero,
 					                 sizeRatio / world.ScaleFactor,
@@ -412,7 +410,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					spriteBatch.Draw(TextureDictionary.Get("ellipse25front"),
 					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
 					                 null,
-					                 ColorPalette.ApplyTint(Color.Green, tint),
+									 Color.Green.Blend(tint),
 					                 0,
 					                 Vector2.Zero,
 					                 sizeRatio / world.ScaleFactor,
@@ -425,7 +423,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					spriteBatch.Draw(TextureDictionary.Get("ellipse25bold"),
 					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
 					                 null,
-					                 ColorPalette.ApplyTint(Color.Green, tint),
+									 Color.Green.Blend(tint),
 					                 0,
 					                 Vector2.Zero,
 					                 sizeRatio / world.ScaleFactor,
@@ -472,7 +470,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 				else
 				{
-					creating.Draw(spriteBatch, 1, ColorPalette.ApplyTint(new Color(255, 50, 50, 255), tint));
+					creating.Draw(spriteBatch, 1, new Color(255, 50, 50, 255).Blend(tint));
 				}
 			}
 

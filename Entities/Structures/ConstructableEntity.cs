@@ -576,7 +576,7 @@ namespace AsteroidOutpost.Entities.Structures
 		{
 			float percentComplete = (float)(MineralsToConstruct - mineralsLeftToConstruct) / MineralsToConstruct;
 			byte rgb = (byte)((percentComplete * 100.0) + 150.0);
-			tint = ColorPalette.ApplyTint(new Color(rgb, rgb, rgb), tint);
+			tint = new Color(rgb, rgb, rgb).Blend(tint);
 
 			base.Draw(spriteBatch, scaleModifier, tint);
 			

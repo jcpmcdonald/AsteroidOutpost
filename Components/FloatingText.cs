@@ -51,7 +51,7 @@ namespace AsteroidOutpost.Components
 
 		public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
 		{
-			base.Draw(spriteBatch, scaleModifier, ColorPalette.ApplyTint(fadeTint, tint));
+			base.Draw(spriteBatch, scaleModifier, fadeTint.Blend(tint));
 		}
 	}
 }
