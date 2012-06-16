@@ -113,12 +113,13 @@ namespace AsteroidOutpost
 			initGraphicsMode(width, height, fullScreen);
 
 
-#if UNLIMITED_FPS && DEBUG
+#if UNLIMITED_FPS
 			graphics.SynchronizeWithVerticalRetrace = false;
 			IsFixedTimeStep = false;
 #endif
 
 			// Create our web front end
+			//WebCoreConfig.Default.ForceSingleProcess = true;
 			awesomium = new AwesomiumComponent(this);
 			WebCore.BaseDirectory = @"..\UI\";
 			awesomium.WebView.LoadFile("MainMenu.html");
@@ -255,7 +256,7 @@ namespace AsteroidOutpost
 		protected override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
-			Window.Title = "FPS = " + frameRateCounter.FPS;
+			Window.Title = String.Format("{0, 0} FPS {1, 30} ms / frame", frameRateCounter.FPS, Math.Round(frameRateCounter.MillisecondsPerFrame, 3));
 
 			if (!musicStarted)
 			{
