@@ -18,17 +18,22 @@
 {
 	position: relative;
 	width: 350px;
-	height: 150px;
     
 	display: table-cell;
 	vertical-align: bottom;
+	
+	background-color: rgba(70, 70, 70, 0.5);
 }
 
 #history
 {
-	max-height: 250px;
+	/* border-style: ridge; */
+	/* border-width: 1px; */
+	/* border-color: #aaaaaa; */
+	
+	height: 150px;
+	max-height: 150px;
     overflow: auto;
-	background-color: rgba(70, 70, 70, 0.5);
 }
 
 .consoleID
@@ -60,6 +65,7 @@
 
 #consoleInputWrap
 {
+	height: 20px;
 	padding-top: 5px;
 }
 

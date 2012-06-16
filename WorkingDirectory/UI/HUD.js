@@ -136,3 +136,34 @@ $(document).ready(function()
 	});
 	
 });
+
+
+
+//$("#history").scrollTop($("#history").prop("scrollHeight"));
+$(document).ready(function()
+{
+	var username = "cell18189";
+	
+	$("#consoleInput").keyup(function(event){
+		if(event.which == 13)
+		{
+			var text = $("#consoleInput").val().trim();
+			$("#consoleInput").val("");
+			if(text == "")
+			{
+				return;
+			}
+			
+			$("#history").append('<div class="consoleLine"><span class="consoleID">' +
+									username +
+									'</span><span class="consoleText">' +
+									text +
+									'</span><span class="consoleTime">' +
+									(new Date()).toLocaleTimeString() +
+									'</span></div>');
+			$("#history").scrollTop($("#history").prop("scrollHeight"));
+		}
+	});
+});
+
+
