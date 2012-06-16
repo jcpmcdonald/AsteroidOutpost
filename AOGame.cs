@@ -10,7 +10,6 @@ using AsteroidOutpost.Entities.Units;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Scenarios;
 using AsteroidOutpost.Screens;
-using AsteroidOutpost.Screens.Credits;
 using AsteroidOutpost.Screens.HeadsUpDisplay;
 using Awesomium.Core;
 using AwesomiumXNA;
@@ -20,7 +19,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Threading;
 using Microsoft.Xna.Framework.Media;
-using Console = AsteroidOutpost.Screens.HeadsUpDisplay.Console;
 
 namespace AsteroidOutpost
 {

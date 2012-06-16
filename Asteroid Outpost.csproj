@@ -168,12 +168,7 @@
     <Compile Include="Scenarios\Scenario.cs" />
     <Compile Include="Scenarios\TutorialScenario.cs" />
     <Compile Include="Screens\World.cs" />
-    <Compile Include="Screens\Credits\CreditsScreen.cs" />
-    <Compile Include="Screens\Credits\ExplodingWord.cs" />
-    <Compile Include="Screens\Credits\MovableCharacter.cs" />
-    <Compile Include="Screens\HeadsUpDisplay\Console.cs" />
     <Compile Include="Screens\HeadsUpDisplay\AOHUD.cs" />
-    <Compile Include="Screens\HeadsUpDisplay\SelectionInfo.cs" />
     <Compile Include="Entities\Structures\ConstructableEntity.cs" />
     <Compile Include="Entities\Structures\LaserTower.cs" />
     <Compile Include="Entities\Units\Ship.cs" />
@@ -188,27 +183,6 @@
     <Compile Include="Networking\AOOutgoingMessage.cs" />
     <Compile Include="Networking\Network.cs" />
     <Compile Include="Screens\LayeredStarField.cs" />
-    <Compile Include="Screens\LobbyScreen.cs" />
-    <Compile Include="Screens\LobbyScreen.Designer.cs">
-      <DependentUpon>LobbyScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Screens\MainMenuScreen.cs" />
-    <Compile Include="Screens\AOMenuScreen.cs" />
-    <Compile Include="Screens\MainMenuScreen.Designer.cs">
-      <DependentUpon>MainMenuScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Screens\MissionSelectScreen.cs" />
-    <Compile Include="Screens\MissionSelectScreen.Designer.cs">
-      <DependentUpon>MissionSelectScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Screens\ServerBrowserScreen.cs" />
-    <Compile Include="Screens\ServerBrowserScreen.Designer.cs">
-      <DependentUpon>ServerBrowserScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Screens\ServerHostScreen.cs" />
-    <Compile Include="Screens\ServerHostScreen.Designer.cs">
-      <DependentUpon>ServerHostScreen.cs</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="TextureDictionary.cs" />
     <Compile Include="Screens\HeadsUpDisplay\Radar.cs" />
