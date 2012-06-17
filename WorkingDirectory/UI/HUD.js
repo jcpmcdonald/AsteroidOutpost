@@ -1,4 +1,4 @@
-"use strict";
+//"use strict";
 
 function SelectionChanged(newSelection)
 {
@@ -138,6 +138,17 @@ $(document).ready(function()
 });
 
 
+function MakeTimerPanel()
+{
+	$("body").append('<div id="timer" class="panel">1:00</div>');
+}
+
+function UpdateTimerPanel(value)
+{
+	$("#timer").text(value);
+}
+
+
 
 
 
@@ -155,6 +166,11 @@ function addConsoleMessage(name, message)
 							(new Date()).toLocaleTimeString() +
 							'</span></div>');
 	$("#history").scrollTop($("#history").prop("scrollHeight"));
+	
+	if(message.toLowerCase().indexOf("/js ") == 0)
+	{
+		eval(message.substr(4));
+	}
 }
 
 $(document).ready(function()

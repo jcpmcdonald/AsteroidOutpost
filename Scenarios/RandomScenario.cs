@@ -8,26 +8,28 @@ using AsteroidOutpost.Entities.Structures;
 using AsteroidOutpost.Entities.Units;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
+using Awesomium.Core;
 using Microsoft.Xna.Framework;
 
 namespace AsteroidOutpost.Scenarios
 {
 	public class RandomScenario : Scenario
 	{
-		private TimeSpan elapsedTime;
+		private static readonly TimeSpan timeBetweenWaves = TimeSpan.FromMinutes(1);
+		private TimeSpan waveTimer = timeBetweenWaves;
 		private int sequence = 0;
 
+		//private 
 
-		public RandomScenario(World world, int playerCount)
-			: base(world, playerCount)
+
+		public RandomScenario(AOGame theGame, int playerCount)
+			: base(theGame, playerCount)
 		{
 		}
 
 
 		public override void Start()
 		{
-			elapsedTime = new TimeSpan(0);
-
 			GenerateAsteroidField(1000);
 
 			// Set up the player forces and local controller
@@ -54,7 +56,9 @@ namespace AsteroidOutpost.Scenarios
 			Controller aiController = new AIController(world, world, aiForce);
 			world.AddForce(aiForce);
 			world.AddController(aiController);
-			
+
+
+			theGame.Awesomium.WebView.CallJavascriptFunction("", "MakeTimerPanel", new JSValue());
 		}
 
 		
@@ -62,14 +66,17 @@ namespace AsteroidOutpost.Scenarios
 
 		public override void Update(TimeSpan deltaTime)
 		{
-			elapsedTime = elapsedTime.Add(deltaTime);
+			waveTimer = waveTimer.Subtract(deltaTime);
 
-			if ((int)(elapsedTime.TotalMinutes) > sequence)
+			if (waveTimer <= TimeSpan.Zero)
 			{
 				sequence++;
+				waveTimer = waveTimer.Add(timeBetweenWaves);
 
 				WaveFactory.CreateWave(world, 100 * sequence, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(3000, -3000));
 			}
+
+			theGame.Awesomium.WebView.CallJavascriptFunction("", "UpdateTimerPanel", new JSValue(waveTimer.ToString(@"m\:ss")));
 		}
 	}
 }

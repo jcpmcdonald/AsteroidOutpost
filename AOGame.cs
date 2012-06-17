@@ -74,6 +74,14 @@ namespace AsteroidOutpost
 			}
 		}
 
+		public World World
+		{
+			get
+			{
+				return world;
+			}
+		}
+
 		#endregion
 
 
@@ -299,19 +307,26 @@ namespace AsteroidOutpost
 
 		private void StartWorld(object sender, JSCallbackEventArgs e)
 		{
+			awesomium.WebView.LoadCompleted += HUD_LoadCompleted;
+
 			String mapName = e.Arguments[0].ToString();
-			System.Console.WriteLine("");
-			if (world != null)
+			if (World != null)
 			{
 				// The world should always be null before starting to make a new one
 				Debugger.Break();
 			}
 
 			world = new World(this);
-			RandomScenario randomScenario = new RandomScenario(world, 1);
-			randomScenario.Start();
 
-			Components.Add(world);
+			Components.Add(World);
+		}
+
+		void HUD_LoadCompleted(object sender, EventArgs e)
+		{
+			awesomium.WebView.LoadCompleted -= HUD_LoadCompleted;
+
+			RandomScenario randomScenario = new RandomScenario(this, 1);
+			world.StartServer(randomScenario);
 		}
 
 

@@ -30,8 +30,8 @@ namespace AsteroidOutpost.Scenarios
 		//private Label lblBuildLaserTowers;
 
 
-		public TutorialScenario(World world, int playerCount)
-			: base(world, playerCount)
+		public TutorialScenario(AOGame theGame, int playerCount)
+			: base(theGame, playerCount)
 		{
 		}
 
@@ -45,6 +45,7 @@ namespace AsteroidOutpost.Scenarios
 			}
 
 			elapsedTime = new TimeSpan(0);
+
 
 			//lblBuild2Miners = new Label("- (0 / 2) Build 2 miners near asteroids", 5, 100, eAlignment.Left);
 			//lblUpgradeSolar = new Label("- Upgrade your solar station", 5, 120, eAlignment.Left);

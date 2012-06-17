@@ -14,13 +14,15 @@ namespace AsteroidOutpost.Scenarios
 		private String name;
 		private String author;
 
+		protected AOGame theGame;
 		protected World world;
 		protected int playerCount;
 
 
-		protected Scenario(World world, int playerCount)
+		protected Scenario(AOGame theGame, int playerCount)
 		{
-			this.world = world;
+			this.theGame = theGame;
+			this.world = theGame.World;
 			this.playerCount = playerCount;
 		}
 
