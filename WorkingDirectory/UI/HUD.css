@@ -19,11 +19,12 @@
 	left: 150px;
 	top: 0px;
 	
-	height: 25px;
-	/*width: 200px;*/
+	/*height: 25px;
+	width: 200px;*/
 	
 	padding: 0px;
 	padding-right: 8px;
+	padding-bottom: 3px;
 	border-radius: 0px 0px 15px 15px;
 	border-style: none solid solid solid;
 }
@@ -68,4 +69,50 @@
 }
 
 
+
+#radar
+{
+	width: 200px;
+	height: 200px;
+}
+
+#radarContainer
+{
+	width: 100px;
+	height: 100px;
+	background-color: rgba(255, 255, 255, 0);
+}
+
+
+#timer
+{
+	right: 120px;
+	top: 0px;
+	
+	font-size: x-large;
+	
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-bottom: 3px;
+	border-radius: 0px 0px 15px 15px;
+	border-style: none solid solid solid;
+}
+
+
+#missions
+{
+	top: 80px;
+	right: 0px;
+	
+	padding: 5px;
+	
+	border-radius: 15px 0px 0px 15px;
+	border-style: solid none solid solid;
+}
+
+
+.mission:before
+{
+	content: "- ";
+}
 

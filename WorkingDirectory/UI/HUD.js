@@ -41,6 +41,34 @@ function SetPaused(paused)
 }
 
 
+function MakeTimerPanel()
+{
+	$("body").append('<div id="timer" class="panel">0:00</div>');
+}
+
+function UpdateTimerPanel(value)
+{
+	$("#timer").text(value);
+}
+
+
+var missions;
+function AddMission(key, description)
+{
+	//if (typeof missions === 'undefined')
+	if (missions == undefined)
+	{
+		missions = new Array();
+		$("body").append('<div id="missions" class="panel"></div>');
+	}
+	missions[key] = description;
+	$("#missions").append('<div id="mission' + key + '" class="mission">' + description + '</div>');
+}
+
+
+
+
+
 var mouseDownOverHUD = false;
 function docMouseDown(event)
 {
@@ -98,6 +126,10 @@ $(document).ready(function()
 		
 		// Make the Main Menu button work (fakely)
 		$("#btnMainMenu").click( function (event){ window.location = "MainMenu.html"; });
+		
+		// Add some missions
+		AddMission("buildMiners", "Build 3 miners near asteroids");
+		AddMission("buildLaserTowers", "Build 2 laser towers");
 	}
 	
 	
@@ -134,19 +166,7 @@ $(document).ready(function()
 	$("body").mouseup( function(event) {
 		mouseUpOverHUD = true;
 	});
-	
 });
-
-
-function MakeTimerPanel()
-{
-	$("body").append('<div id="timer" class="panel">1:00</div>');
-}
-
-function UpdateTimerPanel(value)
-{
-	$("#timer").text(value);
-}
 
 
 
@@ -167,6 +187,7 @@ function addConsoleMessage(name, message)
 							'</span></div>');
 	$("#history").scrollTop($("#history").prop("scrollHeight"));
 	
+	// Execute javascript on request
 	if(message.toLowerCase().indexOf("/js ") == 0)
 	{
 		eval(message.substr(4));
