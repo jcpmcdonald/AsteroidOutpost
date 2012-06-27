@@ -3,6 +3,7 @@ If this looks too complicated for you, I intend to release the occational source
 Prerequisites:
 Visual C# 2010 or greater (express works): http://www.microsoft.com/visualstudio/en-us/products/2010-editions/express
 XNA Game Studio 4.0: http://www.microsoft.com/download/en/details.aspx?id=23714
+Awesomium SDK 1.6.6 or greater: http://awesomium.com/download/
 
 
 This project relies on four other projects, three Mercurial repositories on Bitbucket and one SVN project on Google Code. You will need to checkout all projects into the same root directory as Asteroid Outpost.
