@@ -51,8 +51,7 @@ namespace AsteroidOutpost.Entities.Structures
 			}
 			radius = radius * 10;
 			sizePercent = radius / 100.0f;
-			Radius = new Radius(world, componentList, Position, (int)(sizePercent * 25));
-			componentList.AddComponent(Radius);
+			Position.Radius = (int)(sizePercent * 25);
 			
 			// And select a random asteroid type
 			style = GlobalRandom.Next(1, 4);

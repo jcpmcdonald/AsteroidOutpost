@@ -21,8 +21,8 @@ namespace AsteroidOutpost.Components
 		private int textureSize;
 		private float sizeRatio;
 
-		public Ring(World world, IComponentList componentList, Position position, int radius, Color color)
-			: base(world, componentList)
+		public Ring(World world, Position position, int radius, Color color)
+			: base(world)
 		{
 			this.position = position;
 			this.radius = radius;

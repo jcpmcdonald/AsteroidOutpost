@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using AsteroidOutpost.Components;
@@ -6,6 +7,7 @@ using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Entities.Structures;
 using AsteroidOutpost.Interfaces;
+using AsteroidOutpost.Systems;
 using Awesomium.Core;
 using AwesomiumXNA;
 using C3.XNA;
@@ -25,7 +27,9 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 	/// </summary>
 	public class AOHUD : DrawableGameComponent, IComponentList
 	{
-		
+
+		private SpriteBatch spriteBatch;
+
 		Vector2 focusWorldPoint;
 		Vector2? middleMouseGrabPoint;
 		ConstructableEntity creating;				// Are they creating an entity?
@@ -43,7 +47,9 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		private float desiredScaleFactor = 1.0f;
 
 		// These are entities that are drawn in the HUD layer
-		private readonly List<Component> components = new List<Component>(10);
+		private readonly List<GameComponent> localSystems = new List<GameComponent>(8);
+		private readonly AccumulationSystem accumulationSystem;
+		private readonly List<Component> components = new List<Component>(100);
 
 		//private Form inGameMenu;
 		private Controller localActor;
@@ -65,10 +71,13 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// Construct a HUD
 		/// </summary>
 		/// <param name="gameScreen">A reference to the game object</param>
-		public AOHUD(AOGame game, World gameScreen)
+		public AOHUD(AOGame game, World world)
 			: base(game)
 		{
-			world = gameScreen;
+			this.world = world;
+
+			accumulationSystem = new AccumulationSystem(game, world, 500);
+			localSystems.Add(accumulationSystem);
 
 			// Set up some hotkeys
 			hotkeys.Add(Keys.P, btnPower_Clicked);
@@ -95,8 +104,9 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load all of your content.
 		/// </summary>
-		public new void LoadContent()
+		protected override void LoadContent()
 		{
+			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			constructionSound = Game.Content.Load<SoundEffect>(@"Sound Effects\BuildStructure");
 
 			base.LoadContent();
@@ -139,6 +149,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		public override void Update(GameTime gameTime)
 		{
 			TimeSpan deltaTime = gameTime.ElapsedGameTime;
+
+			foreach(GameComponent system in localSystems)
+			{
+				system.Update(gameTime);
+			}
 
 			theMouse.UpdateState();
 			theKeyboard.UpdateState();
@@ -351,7 +366,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			{
 				if (scaleFactor < 2)
 				{
-					float sizeRatio = ((selectedEntity.Radius.Value) / 45f);
+					float sizeRatio = ((selectedEntity.Position.Radius) / 45f);
 					spriteBatch.Draw(TextureDictionary.Get("ellipse50back"),
 					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(60, 60) * sizeRatio)),
 					                 null,
@@ -364,11 +379,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 				else if(scaleFactor < 4)
 				{
-					float sizeRatio = ((selectedEntity.Radius.Value) / 45f) * 2;
+					float sizeRatio = ((selectedEntity.Position.Radius) / 45f) * 2;
 					spriteBatch.Draw(TextureDictionary.Get("ellipse25back"),
 					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
 					                 null,
-									 Color.Green.Blend(tint),
+					                 Color.Green.Blend(tint),
 					                 0,
 					                 Vector2.Zero,
 					                 sizeRatio / world.ScaleFactor,
@@ -393,11 +408,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			{
 				if (scaleFactor < 2)
 				{
-					float sizeRatio = ((selectedEntity.Radius.Value) / 45f);
+					float sizeRatio = ((selectedEntity.Position.Radius) / 45f);
 					spriteBatch.Draw(TextureDictionary.Get("ellipse50front"),
 					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(60, 60) * sizeRatio)),
 					                 null,
-									 Color.Green.Blend(tint),
+					                 Color.Green.Blend(tint),
 					                 0,
 					                 Vector2.Zero,
 					                 sizeRatio / world.ScaleFactor,
@@ -406,11 +421,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 				else if(scaleFactor < 4)
 				{
-					float sizeRatio = ((selectedEntity.Radius.Value) / 45f) * 2;
+					float sizeRatio = ((selectedEntity.Position.Radius) / 45f) * 2;
 					spriteBatch.Draw(TextureDictionary.Get("ellipse25front"),
 					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
 					                 null,
-									 Color.Green.Blend(tint),
+					                 Color.Green.Blend(tint),
 					                 0,
 					                 Vector2.Zero,
 					                 sizeRatio / world.ScaleFactor,
@@ -419,11 +434,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 				else
 				{
-					float sizeRatio = ((selectedEntity.Radius.Value) / 45f) * 2;
+					float sizeRatio = ((selectedEntity.Position.Radius) / 45f) * 2;
 					spriteBatch.Draw(TextureDictionary.Get("ellipse25bold"),
 					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
 					                 null,
-									 Color.Green.Blend(tint),
+					                 Color.Green.Blend(tint),
 					                 0,
 					                 Vector2.Zero,
 					                 sizeRatio / world.ScaleFactor,
@@ -451,42 +466,36 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// </summary>
 		/// <param name="spriteBatch">The sprite batch to use</param>
 		/// <param name="tint">The color to tint this</param>
-		public void DrawFront(SpriteBatch spriteBatch, Color tint)
+		public override void Draw(GameTime gameTime)
 		{
+			foreach(DrawableGameComponent system in localSystems.Where(x => x is DrawableGameComponent))
+			{
+				system.Draw(gameTime);
+			}
+
+			spriteBatch.Begin();
 
 			foreach (var entity in components)
 			{
-				entity.Draw(spriteBatch, 1, tint);
+				entity.Draw(spriteBatch, 1, Color.White);
 			}
 
-			DrawSelectionCirclesFront(spriteBatch, tint);
+			DrawSelectionCirclesFront(spriteBatch, Color.White);
 
 			if(creating != null)
 			{
 				// Draw with a red tint if it's an invalid spot to build
 				if (creating.IsValidToBuildHere())
 				{
-					creating.Draw(spriteBatch, 1, tint);
+					creating.Draw(spriteBatch, 1, Color.White);
 				}
 				else
 				{
-					creating.Draw(spriteBatch, 1, new Color(255, 50, 50, 255).Blend(tint));
+					creating.Draw(spriteBatch, 1, new Color(255, 50, 50, 255));
 				}
 			}
 
-
-			//// If we are paused, draw a big "PAUSED" on the screen
-			//if (world.Paused)
-			//{
-			//    spriteBatch.DrawString(Fonts.ControlFont, "** PAUSED **", new Vector2((Game.GraphicsDevice.Viewport.Width / 2.0f) - 75, Game.GraphicsDevice.Viewport.Height / 5.0f), Color.White);
-			//}
-			
-			
-//#if DEBUG
-//            // Draw the current frame rate
-//            string str = String.Format("{0} FPS", CurrentFrameRate);
-//            spriteBatch.DrawString(Fonts.ControlFont, str, new Vector2(200, 10), ColorPalette.ApplyTint(Color.White, tint), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-//#endif
+			spriteBatch.End();
 		}
 		
 		
@@ -659,7 +668,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				CreatePowerLinker(creating);
 
 				LaserMiner laserMiner = creating as LaserMiner;
-				Linker linker = new Linker(world, this, creating.Position);
+				Linker linker = new Linker(world, creating.Position);
 				linker.Links.Add(new Tuple<Predicate<Entity>, Color, float>(entity => entity is Asteroid, Color.Green, laserMiner.MiningRange));
 
 				CancelledCreationEvent += linker.KillSelf;
@@ -695,17 +704,15 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			foreach (var rangeRingDefinition in rangeRingDefinitions)
 			{
 				Ring ring = new Ring(world,
-				                     this,
 				                     entity.Position,
 				                     rangeRingDefinition.Item1,
 				                     rangeRingDefinition.Item2);
 				components.Add(ring);
 				createdSuicidals.Add(ring);
 
-				PositionOffset positionOffset = new PositionOffset(world, this, entity.Position, new Vector2(-25, -rangeRingDefinition.Item1 - 17));
+				PositionOffset positionOffset = new PositionOffset(world, entity.Position, new Vector2(-25, -rangeRingDefinition.Item1 - 17));
 				FreeText text = new FreeText(world,
-				                             this,
-				                             positionOffset,
+				                             entity.Position.Center + new Vector2(-25, -rangeRingDefinition.Item1 - 17),
 				                             rangeRingDefinition.Item3,
 				                             rangeRingDefinition.Item2);
 				components.Add(positionOffset);
@@ -740,7 +747,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 		private void CreatePowerLinker(ConstructableEntity entity)
 		{
-			PowerLinker powerLinker = new PowerLinker(world, this, localActor.PrimaryForce, entity);
+			PowerLinker powerLinker = new PowerLinker(world, localActor.PrimaryForce, entity);
 			CancelledCreationEvent += powerLinker.KillSelf;
 			//world.StructureStartedEventPreAuth += powerLinker.KillSelf;
 			components.Add(powerLinker);
@@ -801,7 +808,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					foreach (Entity entity in possiblyClickedEntities)
 					{
 						// Make sure the unit was clicked
-						if (entity.Radius.IsIntersecting(mouseMapCoords, 1))
+						if (entity.Position.IsIntersecting(mouseMapCoords, 1))
 						{
 							selectedEntities.Clear();
 							selectedEntities.Add(entity);
@@ -860,45 +867,31 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			LaserMiner laserMiner = toBuild as LaserMiner;
 			if (laserMiner != null)
 			{
-				PositionOffset miningAccumPosition = new PositionOffset(world,
-				                                                        this,
-				                                                        laserMiner.Position,
-				                                                        new Vector2(-5, -20));
 				Accumulator miningAccumulator = new Accumulator(world,
-				                                                this,
-				                                                miningAccumPosition,
-				                                                new Color(100, 255, 100, 255),
-				                                                450,
+				                                                laserMiner.Position.Center + new Vector2(-5, -20),
 				                                                new Vector2(0, -15),
+				                                                new Color(100, 255, 100, 255),
 				                                                120);
-				laserMiner.AccumulationEvent += miningAccumulator.Accumulate;
-				AddComponent(miningAccumPosition);
+				//laserMiner.AccumulationEvent += miningAccumulator.Accumulate;
 				AddComponent(miningAccumulator);
 			}
 
-			PositionOffset healthAccumPosisiton = new PositionOffset(world,
-				                                                        this,
-				                                                        toBuild.Position,
-				                                                        new Vector2(-5, -20));
 			Accumulator healthAccumulator = new Accumulator(world,
-				                                            this,
-				                                            healthAccumPosisiton,
-				                                            new Color(200, 50, 50, 255),
-				                                            450,
-				                                            new Vector2(0, -15),
-				                                            120);
+			                                                toBuild.Position.Center + new Vector2(-5, -20),
+			                                                new Vector2(0, -15),
+			                                                new Color(200, 50, 50, 255),
+			                                                120);
 			toBuild.HitPoints.HitPointsChangedEvent += healthAccumulator.Accumulate;
-			AddComponent(healthAccumPosisiton);
 			AddComponent(healthAccumulator);
 
-			ProgressBar progressBar = new ProgressBar(world, this, toBuild.Position, new Vector2(0, toBuild.Radius.Value - 6), toBuild.Radius.Value * 2, 6, Color.Gray, Color.RoyalBlue);
+			ProgressBar progressBar = new ProgressBar(world, toBuild.Position, new Vector2(0, toBuild.Position.Radius - 6), toBuild.Position.Radius * 2, 6, Color.Gray, Color.RoyalBlue);
 			progressBar.Max = toBuild.MineralsToConstruct;
 			toBuild.ConstructionProgressChangedEvent += progressBar.SetProgress;
 			toBuild.ConstructionCompletedEvent += progressBar.KillSelf;
 			toBuild.HitPoints.DyingEvent += progressBar.KillSelf;
 			AddComponent(progressBar);
 
-			ProgressBar healthBar = new ProgressBar(world, this, toBuild.Position, new Vector2(0, toBuild.Radius.Value), toBuild.Radius.Value * 2, 6, Color.Gray, Color.Green);
+			ProgressBar healthBar = new ProgressBar(world, toBuild.Position, new Vector2(0, toBuild.Position.Radius), toBuild.Position.Radius * 2, 6, Color.Gray, Color.Green);
 			healthBar.Max = toBuild.HitPoints.GetTotal();
 			healthBar.Progress = healthBar.Max;
 			toBuild.HitPoints.HitPointsChangedEvent += healthBar.SetProgress;

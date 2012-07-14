@@ -19,8 +19,8 @@ namespace AsteroidOutpost.Components
 		public event Action<EntityHitPointsChangedEventArgs> HitPointsChangedEvent;
 
 
-		public HitPoints(World world, IComponentList componentList, int totalHitPoints)
-			: base(world, componentList)
+		public HitPoints(World world, int totalHitPoints)
+			: base(world)
 		{
 			this.totalHitPoints = totalHitPoints;
 			hitPoints = totalHitPoints;

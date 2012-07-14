@@ -23,11 +23,11 @@ namespace AsteroidOutpost.Components
 		private Color foregroundColor;
 
 
-		public ProgressBar(World world, IComponentList componentList, Position position, Vector2 positionOffset, int length, int thickness, Color backgroundColor, Color foregroundColor)
-			: base(world, componentList)
+		public ProgressBar(World world, Position position, Vector2 positionOffset, int length, int thickness, Color backgroundColor, Color foregroundColor)
+			: base(world)
 		{
-			this.position = new PositionOffset(world, componentList, position, positionOffset);
-			componentList.AddComponent(this.position);
+			this.position = new PositionOffset(world, position, positionOffset);
+			world.HUD.AddComponent(this.position);
 
 			this.length = length;
 			this.thickness = thickness;
@@ -37,9 +37,9 @@ namespace AsteroidOutpost.Components
 
 
 		public ProgressBar(World world, IComponentList componentList, Vector2 position, int length, int thickness, Color backgroundColor, Color foregroundColor)
-			: base(world, componentList)
+			: base(world)
 		{
-			this.position = new Position(world, componentList, position);
+			this.position = new Position(world, position);
 			componentList.AddComponent(this.position);
 
 			this.length = length;
@@ -98,6 +98,18 @@ namespace AsteroidOutpost.Components
 			set
 			{
 				progress = value;
+			}
+		}
+
+		public int Min
+		{
+			get
+			{
+				return min;
+			}
+			set
+			{
+				min = value;
 			}
 		}
 

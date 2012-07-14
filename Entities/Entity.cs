@@ -32,10 +32,8 @@ namespace AsteroidOutpost.Entities
 
 
 		private Position position;
-		private Radius radius;
 		private HitPoints hitPoints;
 		private int postDeserializePositionID;		// For serialization linking, don't use this
-		private int postDeserializeSizeID;			// For serialization linking, don't use this
 		private int postDeserializeHitPointsID;		// For serialization linking, don't use this
 
 
@@ -50,13 +48,11 @@ namespace AsteroidOutpost.Entities
 			this.world = world;
 			this.owningForce = owningForce;
 
-			Position = new Position(world, componentList, center);
-			Radius = new Radius(world, componentList, Position, radius);
-			HitPoints = new HitPoints(world, componentList, totalHitPoints);
+			Position = new Position(world, center, radius);
+			HitPoints = new HitPoints(world, totalHitPoints);
 			HitPoints.DyingEvent += KillSelf;
 
 			componentList.AddComponent(Position);
-			componentList.AddComponent(Radius);
 			componentList.AddComponent(HitPoints);
 		}
 
@@ -65,8 +61,8 @@ namespace AsteroidOutpost.Entities
 			this.world = world;
 			this.owningForce = owningForce;
 
-			Position = new Position(world, componentList, center);
-			HitPoints = new HitPoints(world, componentList, totalHitPoints);
+			Position = new Position(world, center);
+			HitPoints = new HitPoints(world, totalHitPoints);
 			HitPoints.DyingEvent += KillSelf;
 
 			componentList.AddComponent(Position);
@@ -86,7 +82,6 @@ namespace AsteroidOutpost.Entities
 			postDeserializeOwningForceID = br.ReadInt32();
 
 			postDeserializePositionID = br.ReadInt32();
-			postDeserializeSizeID = br.ReadInt32();
 			postDeserializeHitPointsID = br.ReadInt32();
 		}
 
@@ -108,7 +103,6 @@ namespace AsteroidOutpost.Entities
 			bw.Write(owningForce.ID);
 
 			bw.Write(position.ID);
-			bw.Write(radius.ID);
 			bw.Write(hitPoints.ID);
 		}
 
@@ -130,10 +124,9 @@ namespace AsteroidOutpost.Entities
 
 			
 			position = world.GetComponent(postDeserializePositionID) as Position;
-			radius = world.GetComponent(postDeserializeSizeID) as Radius;
 			hitPoints = world.GetComponent(postDeserializeHitPointsID) as HitPoints;
 
-			if (position == null || radius == null || hitPoints == null)
+			if (position == null || hitPoints == null)
 			{
 				Debugger.Break();
 			}
@@ -218,7 +211,7 @@ namespace AsteroidOutpost.Entities
 			{
 				if (obstructingEntity.solid && (ignoreList == null || !ignoreList.Contains(obstructingEntity)))
 				{
-					if (obstructingEntity.Position.ShortestDistanceToLine(point1, point2) < obstructingEntity.Radius.Value)
+					if (obstructingEntity.Position.ShortestDistanceToLine(point1, point2) < obstructingEntity.Position.Radius)
 					{
 						// It's obstructed
 						return true;
@@ -288,7 +281,7 @@ namespace AsteroidOutpost.Entities
 		{
 			get
 			{
-				return Radius.Rect;
+				return Position.Rect;
 			}
 		}
 
@@ -303,18 +296,6 @@ namespace AsteroidOutpost.Entities
 			protected set
 			{
 				position = value;
-			}
-		}
-
-		public Radius Radius
-		{
-			get
-			{
-				return radius;
-			}
-			set
-			{
-				radius = value;
 			}
 		}
 

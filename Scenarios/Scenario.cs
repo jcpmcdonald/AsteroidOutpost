@@ -88,7 +88,7 @@ namespace AsteroidOutpost.Scenarios
 						List<Entity> nearbyEntities = world.EntitiesInArea(asteroid.Rect);
 						foreach (Entity nearbyEntity in nearbyEntities)
 						{
-							if (asteroid.Radius.IsIntersecting(nearbyEntity.Radius))
+							if (asteroid.Position.IsIntersecting(nearbyEntity.Position))
 							{
 								findNewHome = true;
 							}
@@ -127,7 +127,7 @@ namespace AsteroidOutpost.Scenarios
 				List<Entity> nearbyEntities = world.EntitiesInArea(startingStation.Rect);
 				foreach (Entity nearbyEntity in nearbyEntities)
 				{
-					if (startingStation.Radius.IsIntersecting(nearbyEntity.Radius))
+					if (startingStation.Position.IsIntersecting(nearbyEntity.Position))
 					{
 						findNewHome = true;
 						attempts++;

@@ -200,7 +200,7 @@ namespace AsteroidOutpost.Entities.Structures
 												5,
 												5),
 										0,
-										color); 
+										color);
 				}
 				
 				/*/ // OR
@@ -213,27 +213,27 @@ namespace AsteroidOutpost.Entities.Structures
 				if(percentFull > 0.1)
 				{
 					spriteBatch.DrawArc(world.WorldToScreen(Position.Center),
-					                    world.Scale(Radius.Value + 5),
+					                    world.Scale(Position.Radius + 5),
 					                    40,
-										startingAngle,
-										degrees,
+					                    startingAngle,
+					                    degrees,
 					                    Color.Gray.Blend(tint),
 					                    world.Scale(5.0f));
 
 					spriteBatch.DrawArc(world.WorldToScreen(Position.Center),
-					                    world.Scale(Radius.Value + 5),
+					                    world.Scale(Position.Radius + 5),
 					                    40,
-										startingAngle,
-										(float)(degrees * percentFull),
+					                    startingAngle,
+					                    (float)(degrees * percentFull),
 					                    color.Blend(tint),
 					                    world.Scale(5.0f));
 				}
 				else
 				{
 					spriteBatch.DrawArc(world.WorldToScreen(Position.Center),
-					                    world.Scale(Radius.Value + 5),
+					                    world.Scale(Position.Radius + 5),
 					                    40,
-										startingAngle,
+					                    startingAngle,
 					                    degrees,
 					                    Color.Red.Blend(tint),
 					                    world.Scale(5.0f));

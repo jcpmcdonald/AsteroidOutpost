@@ -186,7 +186,7 @@ namespace AsteroidOutpost.Entities.Structures
 																				 weapon.MaxRange * 2));
 			foreach (Entity entity in fairlyNearEntities)
 			{
-				if (entity.OwningForce.Team == Team.AI && Position.Distance(entity.Position) - entity.Radius.Value < weapon.MaxRange)
+				if (entity.OwningForce.Team == Team.AI && Position.Distance(entity.Position) - entity.Position.Radius < weapon.MaxRange)
 				{
 					target = entity;
 				}

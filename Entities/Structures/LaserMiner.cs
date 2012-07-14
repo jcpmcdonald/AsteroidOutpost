@@ -201,7 +201,7 @@ namespace AsteroidOutpost.Entities.Structures
 																				 MiningRange * 2));
 			foreach (Entity entity in fairlyNearEntities)
 			{
-				if (entity is Asteroid && Position.Distance(entity.Position) - entity.Radius.Value < MiningRange)
+				if (entity is Asteroid && Position.Distance(entity.Position) - entity.Position.Radius < MiningRange)
 				{
 					Asteroid asteroid = (Asteroid)entity;
 
@@ -376,7 +376,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 			if (nearbyAsteroids.Count >= 1)
 			{
-				int randFactor = nearbyAsteroids[0].Radius.Value / 2;
+				int randFactor = nearbyAsteroids[0].Position.Radius / 2;
 				miningOffset.X = GlobalRandom.Next(-randFactor, randFactor);
 				miningOffset.Y = GlobalRandom.Next(-randFactor, randFactor);
 			}

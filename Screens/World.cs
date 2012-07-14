@@ -20,6 +20,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Console = System.Console;
+using AsteroidOutpost.Systems;
 
 namespace AsteroidOutpost.Screens
 {
@@ -46,6 +47,7 @@ namespace AsteroidOutpost.Screens
 		private Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
 		private AOHUD hud;
 		private Scenario scenario;
+		private PhysicsSystem physicsSystem;
 
 		private bool paused;
 		private bool drawQuadTree = false;
@@ -69,10 +71,14 @@ namespace AsteroidOutpost.Screens
 		{
 			network = new AONetwork(this);
 			hud = new AOHUD(game, this);
+			physicsSystem = new PhysicsSystem(game, this);
 			awesomium = game.Awesomium;
 
 			// TODO: Create this on the server, then send the size to the clients
 			quadTree = new QuadTree<Entity>(0, 0, 20000, 20000);
+
+			game.Components.Add(physicsSystem);
+			game.Components.Add(hud);
 		}
 
 
@@ -379,6 +385,20 @@ namespace AsteroidOutpost.Screens
 
 
 		/// <summary>
+		/// Retreives a list of components with the type specified
+		/// This method is thread safe
+		/// </summary>
+		/// <returns>Returns a list of components of the type specified</returns>
+		public List<T> GetComponents<T>() where T: Component
+		{
+			lock (componentDictionary)
+			{
+				return new List<T>(componentDictionary.Where(comp => comp.Value.GetType() == typeof(T)).Select(x => x.Value as T));
+			}
+		}
+
+
+		/// <summary>
 		/// Looks up a component by ID
 		/// This method is thread safe
 		/// </summary>
@@ -609,7 +629,7 @@ namespace AsteroidOutpost.Screens
 		{
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-			hud.LoadContent();
+			//hud.LoadContent();
 
 			base.LoadContent();
 		}
@@ -638,8 +658,6 @@ namespace AsteroidOutpost.Screens
 		{
 			TimeSpan deltaTime = gameTime.ElapsedGameTime;
 			network.ProcessIncomingQueue(deltaTime);
-
-			hud.Update(gameTime);
 			
 			if (!paused)
 			{
@@ -725,7 +743,6 @@ namespace AsteroidOutpost.Screens
 		public override void Draw(GameTime gameTime)
 		{
 			spriteBatch.Begin();
-
 			if(drawQuadTree)
 			{
 				DrawQuad(spriteBatch, quadTree, 0);
@@ -733,7 +750,6 @@ namespace AsteroidOutpost.Screens
 
 			// Draw the back of the HUD
 			hud.DrawBack(spriteBatch, Color.White);
-			
 
 			// Draw all the visible entities
 			List<Entity> visible = quadTree.GetObjects(hud.FocusScreen);
@@ -746,12 +762,11 @@ namespace AsteroidOutpost.Screens
 			{
 				grid.Draw(spriteBatch);
 			}
-
-			// Draw the front of the HUD
-			hud.DrawFront(spriteBatch, Color.White);
-
+			
 			spriteBatch.End();
 
+			// Draw the front of the HUD
+			//hud.DrawFront(spriteBatch, Color.White);
 			base.Draw(gameTime);
 		}
 

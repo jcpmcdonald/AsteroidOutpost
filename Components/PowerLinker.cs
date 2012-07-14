@@ -17,8 +17,8 @@ namespace AsteroidOutpost.Components
 		private int postDeserializeOwningForceID;		// For serialization linking, don't use this
 
 
-		public PowerLinker(World world, IComponentList componentList, Force owningForce, IPowerGridNode powerGridNode)
-			: base(world, componentList)
+		public PowerLinker(World world, Force owningForce, IPowerGridNode powerGridNode)
+			: base(world)
 		{
 			relatedPowerNode = powerGridNode;
 

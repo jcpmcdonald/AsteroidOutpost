@@ -22,8 +22,8 @@ namespace AsteroidOutpost.Components
 		private List<Tuple<Predicate<Entity>, Color, float>> links = new List<Tuple<Predicate<Entity>, Color, float>>();
 
 
-		public Linker(World world, IComponentList componentList, Position position)
-			: base(world, componentList)
+		public Linker(World world, Position position)
+			: base(world)
 		{
 			this.position = position;
 		}

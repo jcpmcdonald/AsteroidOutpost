@@ -12,28 +12,29 @@ namespace AsteroidOutpost.Components
 {
 	public class FreeText : Component
 	{
-		private readonly Position position;
-		private int postDeserializePositionID;		// For serialization linking, don't use this
-
+		private readonly Vector2 offset;
+		private readonly Vector2 velocity;
 		private String text;
 		protected Color color;
 
+		private TimeSpan cumulativeTime = new TimeSpan(0);
+		private readonly float fadeRate;
+
 		private static SpriteFont font;
 
-		public FreeText(World world, IComponentList componentList, Position position, string text, Color color)
-			: base(world, componentList)
+		public FreeText(World world, Vector2 offset, string text, Color color, float fadeRate = 150)
+			: base(world)
 		{
 			this.text = text;
-			this.position = position;
+			this.offset = offset;
 			this.color = color;
+			this.fadeRate = fadeRate;
 		}
 
 
 		public FreeText(BinaryReader br)
 			: base(br)
 		{
-			postDeserializePositionID = br.ReadInt32();
-
 			text = br.ReadString();
 			//offset = br.ReadVector2();
 			color = new Color(br.ReadByte(), br.ReadByte(), br.ReadByte(), br.ReadByte());
@@ -59,21 +60,32 @@ namespace AsteroidOutpost.Components
 		{
 			base.Update(deltaTime);
 
-			position.Update(deltaTime);
+			cumulativeTime += deltaTime;
+
+			int fadeAmount = (int)((fadeRate * cumulativeTime.TotalSeconds) + 0.5);
+			color.R = (byte)Math.Max(0, 255 - fadeAmount);
+			color.G = (byte)Math.Max(0, 255 - fadeAmount);
+			color.B = (byte)Math.Max(0, 255 - fadeAmount);
+			color.A = (byte)Math.Max(0, 255 - fadeAmount);
+
+			if (color.A == 0 || (color.R == 0 && color.G == 0 && color.B == 0))
+			{
+				SetDead(true, true);
+			}
 		}
 
 
 		public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
 		{
 			spriteBatch.DrawString(font,
-								   text,
-								   world.WorldToScreen(position.Center),
-								   color.Blend(tint),
-								   0,
-								   Vector2.Zero,
-								   1 / world.ScaleFactor,
-								   SpriteEffects.None,
-								   0);
+			                       text,
+			                       world.WorldToScreen(offset),
+			                       color.Blend(tint),
+			                       0,
+			                       Vector2.Zero,
+			                       1 / world.ScaleFactor,
+			                       SpriteEffects.None,
+			                       0);
 		}
 	}
 }

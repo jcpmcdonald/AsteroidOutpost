@@ -161,7 +161,7 @@ namespace AsteroidOutpost
 			{
 				if (obstructingEntity.Solid && obstructingEntity != powerNodeA && obstructingEntity != powerNodeB)
 				{
-					if (obstructingEntity.Position.ShortestDistanceToLine(powerNodeA.PowerLinkPointAbsolute, powerNodeB.PowerLinkPointAbsolute) < obstructingEntity.Radius.Value)
+					if (obstructingEntity.Position.ShortestDistanceToLine(powerNodeA.PowerLinkPointAbsolute, powerNodeB.PowerLinkPointAbsolute) < obstructingEntity.Position.Radius)
 					{
 						// It's obstructed
 						return false;
@@ -288,7 +288,6 @@ namespace AsteroidOutpost
 			var path = new List<IPowerGridNode>{ visited[visited.Count - 1].Item1 };
 			IPowerGridNode search = visited[visited.Count - 1].Item2;
 
-			bool done = false;
 			while (search != null)
 			{
 				var node = visited.FirstOrDefault(visit => search == visit.Item1);

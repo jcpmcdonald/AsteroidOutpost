@@ -600,8 +600,8 @@ namespace AsteroidOutpost.Entities.Structures
 			
 			// Draw a progress bar
 			//Vector2 selfCenterOnScreen = new Vector2(Center.X - world.Hud.FocusScreen.X, Center.Y - world.Hud.FocusScreen.Y);
-			spriteBatch.FillRectangle(world.Scale(new Vector2(-Radius.Value, Radius.Value - 6)) + world.WorldToScreen(Position.Center), world.Scale(new Vector2(Radius.Width, 6)), Color.Gray);
-			spriteBatch.FillRectangle(world.Scale(new Vector2(-Radius.Value, Radius.Value - 6)) + world.WorldToScreen(Position.Center), world.Scale(new Vector2(Radius.Width * percentComplete, 6)), Color.RoyalBlue);
+			spriteBatch.FillRectangle(world.Scale(new Vector2(-Position.Radius, Position.Radius - 6)) + world.WorldToScreen(Position.Center), world.Scale(new Vector2(Position.Width, 6)), Color.Gray);
+			spriteBatch.FillRectangle(world.Scale(new Vector2(-Position.Radius, Position.Radius - 6)) + world.WorldToScreen(Position.Center), world.Scale(new Vector2(Position.Width * percentComplete, 6)), Color.RoyalBlue);
 			
 			//DrawPowerConnections(spriteBatch);
 		}
@@ -620,7 +620,7 @@ namespace AsteroidOutpost.Entities.Structures
 			foreach (Entity entity in nearbyEntities)
 			{
 				// Now determine if they are really intersecting
-				if(entity.Solid && Radius.IsIntersecting(entity.Radius))
+				if(entity.Solid && Position.IsIntersecting(entity.Position))
 				{
 					valid = false;
 					break;

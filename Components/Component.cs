@@ -23,7 +23,7 @@ namespace AsteroidOutpost.Components
 		public event Action<ComponentDyingEventArgs> DyingEvent;
 
 
-		public Component(World world, IComponentList componentList)
+		public Component(World world)
 		{
 			this.world = world;
 		}

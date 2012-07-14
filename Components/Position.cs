@@ -13,23 +13,26 @@ namespace AsteroidOutpost.Components
 	{
 		private Vector2 offset;		// from the origin (0,0)
 		private Vector2 velocity;
+		private int radius;
 
 
 		//[EventReplication(EventReplication.ServerToClients)]
 		public event Action<EntityMovedEventArgs> MovedEvent;
 
 
-		public Position(World world, IComponentList componentList, Vector2 center)
-			: base(world, componentList)
+		public Position(World world, Vector2 center, int radius = 0)
+			: base(world)
 		{
 			offset = center;
+			this.radius = radius;
 		}
  
-		public Position(World world, IComponentList componentList, Vector2 center, Vector2 velocity)
-			: base(world, componentList)
+		public Position(World world, Vector2 center, Vector2 velocity, int radius = 0)
+			: base(world)
 		{
 			offset = center;
 			this.velocity = velocity;
+			this.radius = radius;
 		}
 
 
@@ -38,6 +41,7 @@ namespace AsteroidOutpost.Components
 		{
 			offset = br.ReadVector2();
 			velocity = br.ReadVector2();
+			radius = br.ReadInt32();
 		}
 		
 		
@@ -52,6 +56,7 @@ namespace AsteroidOutpost.Components
 
 			bw.Write(offset);
 			bw.Write(velocity);
+			bw.Write(radius);
 		}
 
 
@@ -106,18 +111,99 @@ namespace AsteroidOutpost.Components
 
 
 		/// <summary>
-		/// Updates this component
+		/// Gets or set the radius
 		/// </summary>
-		/// <param name="deltaTime">The elapsed time since the last update</param>
-		public override void Update(TimeSpan deltaTime)
+		public int Radius
 		{
-			if (velocity.X != 0.0 || velocity.Y != 0.0)
+			get
 			{
-				// Move!
-				Center += velocity * (float)deltaTime.TotalSeconds;
+				return radius;
+			}
+			set
+			{
+				radius = value;
 			}
 		}
 
+
+		/// <summary>
+		/// Gets the width
+		/// </summary>
+		public int Width
+		{
+			get { return radius * 2; }
+		}
+
+
+		/// <summary>
+		/// Gets the height
+		/// </summary>
+		public int Height
+		{
+			get { return radius * 2; }
+		}
+
+
+		/// <summary>
+		/// Gets the Top
+		/// </summary>
+		public int Top
+		{
+			get { return (int)(Center.Y + 0.5) - radius; }
+		}
+
+
+		/// <summary>
+		/// Gets the Left
+		/// </summary>
+		public int Left
+		{
+			get { return (int)(Center.X + 0.5) - radius; }
+		}
+
+
+		/// <summary>
+		/// Gets the Right
+		/// </summary>
+		public int Right
+		{
+			get { return (int)(Center.X + 0.5) + radius; }
+		}
+
+
+		/// <summary>
+		/// Gets the bottom
+		/// </summary>
+		public int Bottom
+		{
+			get { return (int)(Center.Y + 0.5) + radius; }
+		}
+
+
+		/// <summary>
+		/// The rectangle that defines the object's boundaries.
+		/// </summary>
+		public Rectangle Rect
+		{
+			get
+			{
+				return new Rectangle(Left,
+									 Top,
+									 radius * 2,
+									 radius * 2);
+			}
+		}
+
+
+
+		public bool IsIntersecting(Position other)
+		{
+			return IsIntersecting(other.Center, other.radius);
+		}
+		public bool IsIntersecting(Vector2 point, int otherRadius)
+		{
+			return Distance(point) < (radius + otherRadius);
+		}
 
 
 		public virtual float Distance(Position other)
@@ -131,11 +217,11 @@ namespace AsteroidOutpost.Components
 
 
 		/// <summary>
-		/// Returns the shortest distance from this object to the given line
+		/// Returns the shortest distance from this object to the given line segment
 		/// </summary>
 		/// <param name="p1">One of the line endpoints</param>
 		/// <param name="p2">One of the line endpoints</param>
-		/// <returns>Returns the shortest distance from this entity to the given line</returns>
+		/// <returns>Returns the shortest distance from this entity to the given line segment</returns>
 		public virtual float ShortestDistanceToLine(Vector2 p1, Vector2 p2)
 		{
 			float m1 = (p1.Y - p2.Y) / (p1.X - p2.X);
