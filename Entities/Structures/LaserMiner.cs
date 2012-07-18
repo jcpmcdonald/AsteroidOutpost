@@ -30,10 +30,10 @@ namespace AsteroidOutpost.Entities.Structures
 		MiningState state = MiningState.Idle;
 		TimeSpan timeSinceLastStageChange;
 		
-		private float miningRate = 25;			// minerals per second while mining
-		private float energyUsageRate = 5;		// power per second while mining
-		private int chargeTime = 3000;			// charging time in milliseconds
-		private int mineTime = 900;				// mining time in milliseconds
+		private float miningRate = 25;          // minerals per second while mining
+		private float energyUsageRate = 5;      // power per second while mining
+		private int chargeTime = 3000;          // charging time in milliseconds
+		private int mineTime = 900;             // mining time in milliseconds
 		
 		
 		// Remember which asteroid we mined last so that we can mine the next asteroid

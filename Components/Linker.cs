@@ -74,9 +74,9 @@ namespace AsteroidOutpost.Components
 			{
 
 				List<Entity> nearbyEntities = world.EntitiesInArea((int)(position.Center.X - maxDistance),
-																	 (int)(position.Center.Y - maxDistance),
-				                                                     (int)(maxDistance * 2),
-				                                                     (int)(maxDistance * 2));
+				                                                   (int)(position.Center.Y - maxDistance),
+				                                                   (int)(maxDistance * 2),
+				                                                   (int)(maxDistance * 2));
 
 				foreach (var nearbyEntity in nearbyEntities)
 				{
@@ -85,7 +85,7 @@ namespace AsteroidOutpost.Components
 						if (position.Distance(nearbyEntity.Position) <= tuple.Item3 && tuple.Item1(nearbyEntity))
 						{
 							spriteBatch.DrawLine(world.WorldToScreen(position.Center),
-												 world.WorldToScreen(nearbyEntity.Position.Center),
+							                     world.WorldToScreen(nearbyEntity.Position.Center),
 							                     tuple.Item2,
 							                     1);
 						}
