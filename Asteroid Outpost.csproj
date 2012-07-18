@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorExtension.cs" />
+    <Compile Include="Components\Animator.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="AIController.cs" />
     <Compile Include="Components\Accumulator.cs" />
@@ -189,7 +190,9 @@
     <Compile Include="Screens\LayeredStarField.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Systems\AccumulationSystem.cs" />
+    <Compile Include="Systems\AnimationSystem.cs" />
     <Compile Include="Systems\PhysicsSystem.cs" />
+    <Compile Include="Systems\RenderSystem.cs" />
     <Compile Include="TextureDictionary.cs" />
     <Compile Include="Screens\HeadsUpDisplay\Radar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

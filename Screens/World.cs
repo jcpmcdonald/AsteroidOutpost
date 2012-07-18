@@ -48,6 +48,7 @@ namespace AsteroidOutpost.Screens
 		private AOHUD hud;
 		private Scenario scenario;
 		private PhysicsSystem physicsSystem;
+		private RenderSystem renderSystem;
 
 		private bool paused;
 		private bool drawQuadTree = false;
@@ -72,6 +73,7 @@ namespace AsteroidOutpost.Screens
 			network = new AONetwork(this);
 			hud = new AOHUD(game, this);
 			physicsSystem = new PhysicsSystem(game, this);
+			renderSystem = new RenderSystem(game, this);
 			awesomium = game.Awesomium;
 
 			// TODO: Create this on the server, then send the size to the clients
@@ -79,6 +81,7 @@ namespace AsteroidOutpost.Screens
 
 			game.Components.Add(physicsSystem);
 			game.Components.Add(hud);
+			game.Components.Add(renderSystem);
 		}
 
 
@@ -751,12 +754,12 @@ namespace AsteroidOutpost.Screens
 			// Draw the back of the HUD
 			hud.DrawBack(spriteBatch, Color.White);
 
-			// Draw all the visible entities
-			List<Entity> visible = quadTree.GetObjects(hud.FocusScreen);
-			foreach (Entity entity in visible)
-			{
-				entity.Draw(spriteBatch, 1, Color.White);
-			}
+			//// Draw all the visible entities
+			//List<Entity> visible = quadTree.GetObjects(hud.FocusScreen);
+			//foreach (Entity entity in visible)
+			//{
+			//    entity.Draw(spriteBatch, 1, Color.White);
+			//}
 
 			foreach (var grid in powerGrid.Values)
 			{
@@ -849,17 +852,6 @@ namespace AsteroidOutpost.Screens
 				hud.LocalActor = controller;
 			}
 
-		}
-
-
-		// TODO: Pass these events straight to the force instead of using (aka cheating) the game as a middle-man
-		public void SetForceMinerals(int forceID, int minerals)
-		{
-			GetForce(forceID).SetMinerals(minerals);
-		}
-		public void SetForceMinerals(int forceID, int minerals, bool authoritative)
-		{
-			GetForce(forceID).SetMinerals(minerals, authoritative);
 		}
 
 
@@ -957,6 +949,15 @@ namespace AsteroidOutpost.Screens
 				return Game.GraphicsDevice.Viewport.Height;
 			}
 		}
+
+		public QuadTree<Entity> QuadTree
+		{
+			get
+			{
+				return quadTree;
+			}
+		}
+
 
 		public void Serialize(BinaryWriter bw, bool serializeActors)
 		{
