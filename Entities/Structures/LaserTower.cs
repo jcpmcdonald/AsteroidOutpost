@@ -149,7 +149,7 @@ namespace AsteroidOutpost.Entities.Structures
 			{
 				// TODO:  Change this to server-side code
 				float powerToUse = (float)(5.0 * deltaTime.TotalSeconds);
-				if (world.PowerGrid(owningForce).GetPower(this, powerToUse))
+				if (world.PowerGrid[owningForce.ID].GetPower(this, powerToUse))
 				{
 					ScanForTarget();
 					if (target != null)

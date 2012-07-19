@@ -144,7 +144,7 @@ namespace AsteroidOutpost.Entities.Structures
 			base.PostDeserializeLink(world);
 
 			// Hook me into the grid
-			world.PowerGrid(owningForce).ConnectToPowerGrid(this);
+			world.PowerGrid[owningForce.ID].ConnectToPowerGrid(this);
 		}
 
 
@@ -474,7 +474,7 @@ namespace AsteroidOutpost.Entities.Structures
 				int delta;
 
 				// Check that we have enough power in the grid
-				if(world.PowerGrid(owningForce).HasPower(this, powerToUse))
+				if(world.PowerGrid[owningForce.ID].HasPower(this, powerToUse))
 				{
 					// Check to see if the mineralsLeftToConstruct would pass an integer boundary
 					delta = (int)Math.Ceiling(mineralsLeftToConstruct) - (int)Math.Ceiling(mineralsLeftToConstruct - mineralsToUse);
@@ -484,7 +484,7 @@ namespace AsteroidOutpost.Entities.Structures
 						if (owningForce.GetMinerals() >= delta)
 						{
 							// Consume the resources
-							world.PowerGrid(owningForce).GetPower(this, powerToUse);
+							world.PowerGrid[owningForce.ID].GetPower(this, powerToUse);
 							SetMineralsLeftToConstruct(mineralsLeftToConstruct - mineralsToUse);
 
 							// Set the force's minerals
@@ -502,7 +502,7 @@ namespace AsteroidOutpost.Entities.Structures
 						mineralsLeftToConstruct -= mineralsToUse;
 
 						// We should consume our little tidbit of power though:
-						world.PowerGrid(owningForce).GetPower(this, powerToUse);
+						world.PowerGrid[owningForce.ID].GetPower(this, powerToUse);
 					}
 				}
 			}
@@ -524,7 +524,7 @@ namespace AsteroidOutpost.Entities.Structures
 				float mineralsToUse = mineralUsageRate * (float)deltaTime.TotalSeconds;
 
 				// BUG: There is a disconnect between the check for minerals (below) and the actual consumption of minerals. Could cause weird behaviour
-				if (owningForce.GetMinerals() > mineralsToUse && world.PowerGrid(owningForce).GetPower(this, powerToUse))
+				if (owningForce.GetMinerals() > mineralsToUse && world.PowerGrid[owningForce.ID].GetPower(this, powerToUse))
 				{
 					// Use some minerals toward my upgrade
 					int temp = (int)mineralsLeftToConstruct;
@@ -686,7 +686,7 @@ namespace AsteroidOutpost.Entities.Structures
 			IsUpgrading = false;
 
 			// Hook me into the grid
-			world.PowerGrid(owningForce).ConnectToPowerGrid(this);
+			world.PowerGrid[owningForce.ID].ConnectToPowerGrid(this);
 		}
 	}
 }

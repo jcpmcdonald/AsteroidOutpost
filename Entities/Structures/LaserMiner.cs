@@ -292,7 +292,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 				if (currentAsteroid != null)
 				{
-					if (world.PowerGrid(owningForce).GetPower(this, powerToUse))
+					if (world.PowerGrid[owningForce.ID].GetPower(this, powerToUse))
 					{
 						if (currentAsteroid.GetMinerals() < mineralsToExtract)
 						{

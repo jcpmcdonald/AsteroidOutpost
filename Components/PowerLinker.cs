@@ -63,10 +63,10 @@ namespace AsteroidOutpost.Components
 
 		public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
 		{
-			foreach (var powerLink in world.PowerGrid(owningForce).GetAllPowerLinks(relatedPowerNode))
+			foreach (var powerLink in world.PowerGrid[owningForce.ID].GetAllPowerLinks(relatedPowerNode))
 			{
 				Color linkColor;
-				if (world.PowerGrid(owningForce).IsPowerRoutableBetween(relatedPowerNode, powerLink.Value))
+				if (world.PowerGrid[owningForce.ID].IsPowerRoutableBetween(relatedPowerNode, powerLink.Value))
 				{
 					linkColor = Color.Yellow;
 				}

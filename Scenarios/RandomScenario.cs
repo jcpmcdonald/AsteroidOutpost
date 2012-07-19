@@ -38,7 +38,7 @@ namespace AsteroidOutpost.Scenarios
 			{
 				Force force = new Force(world, world.GetNextForceID(), initialMinerals, (Team)iPlayer);
 				world.AddForce(force);
-				world.CreatePowerGrid(force);
+				world.PowerGrid.Add(force.ID, new PowerGrid(world));
 				Vector2 focusPoint = CreateStartingBase(force);
 
 

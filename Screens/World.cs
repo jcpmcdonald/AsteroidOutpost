@@ -49,9 +49,10 @@ namespace AsteroidOutpost.Screens
 		private Scenario scenario;
 		private PhysicsSystem physicsSystem;
 		private RenderSystem renderSystem;
+		private RenderQuadTreeSystem renderQuadTreeSystem;
+		private RenderPowerGridSystem renderPowerGridSystem;
 
 		private bool paused;
-		private bool drawQuadTree = false;
 
 		private bool isServer = true;
 		private AONetwork network;
@@ -74,6 +75,8 @@ namespace AsteroidOutpost.Screens
 			hud = new AOHUD(game, this);
 			physicsSystem = new PhysicsSystem(game, this);
 			renderSystem = new RenderSystem(game, this);
+			renderQuadTreeSystem = new RenderQuadTreeSystem(game, this);
+			renderPowerGridSystem = new RenderPowerGridSystem(game, this);
 			awesomium = game.Awesomium;
 
 			// TODO: Create this on the server, then send the size to the clients
@@ -82,6 +85,8 @@ namespace AsteroidOutpost.Screens
 			game.Components.Add(physicsSystem);
 			game.Components.Add(hud);
 			game.Components.Add(renderSystem);
+			game.Components.Add(renderQuadTreeSystem);
+			game.Components.Add(renderPowerGridSystem);
 		}
 
 
@@ -547,42 +552,39 @@ namespace AsteroidOutpost.Screens
 			}
 		}
 
+
+		// TODO: Not sure I should have this helper methos here to pass a message to a system. Think about removing this
 		public bool DrawQuadTree
 		{
 			get
 			{
-				return drawQuadTree;
+				return renderQuadTreeSystem.DrawQuadTree;
 			}
 			set
 			{
-				drawQuadTree = value;
+				renderQuadTreeSystem.DrawQuadTree = value;
 			}
 		}
 
 
-		internal PowerGrid PowerGrid(Force force)
+		internal Dictionary<int, PowerGrid> PowerGrid
 		{
-			return powerGrid[force.ID];
-		}
-
-		internal PowerGrid PowerGrid(int forceID)
-		{
-			return powerGrid[forceID];
-		}
-
-
-		public void CreatePowerGrid(Force force)
-		{
-			powerGrid.Add(force.ID, new PowerGrid(this));
-			/*
-			if(isServer)
+			get
 			{
-				network.EnqueueMessage(new AOReflectiveOutgoingMessage(ID,
-				                                                       "CreatePowerGrid",
-				                                                       new object[]{ force }));
+				return powerGrid;
 			}
-			*/
 		}
+
+		//internal PowerGrid PowerGrid(int forceID)
+		//{
+		//    return powerGrid[forceID];
+		//}
+
+
+		//public void CreatePowerGrid(Force force)
+		//{
+		//    powerGrid.Add(force.ID, new PowerGrid(this));
+		//}
 
 
 		/// <summary>
@@ -746,25 +748,14 @@ namespace AsteroidOutpost.Screens
 		public override void Draw(GameTime gameTime)
 		{
 			spriteBatch.Begin();
-			if(drawQuadTree)
-			{
-				DrawQuad(spriteBatch, quadTree, 0);
-			}
 
 			// Draw the back of the HUD
 			hud.DrawBack(spriteBatch, Color.White);
 
-			//// Draw all the visible entities
-			//List<Entity> visible = quadTree.GetObjects(hud.FocusScreen);
-			//foreach (Entity entity in visible)
+			//foreach (var grid in powerGrid.Values)
 			//{
-			//    entity.Draw(spriteBatch, 1, Color.White);
+			//    grid.Draw(spriteBatch);
 			//}
-
-			foreach (var grid in powerGrid.Values)
-			{
-				grid.Draw(spriteBatch);
-			}
 			
 			spriteBatch.End();
 
@@ -853,72 +844,6 @@ namespace AsteroidOutpost.Screens
 			}
 
 		}
-
-
-		#region Draw QuadTree
-
-		private void DrawQuad(SpriteBatch spriteBatch, QuadTree<Entity> quad, int depth)
-		{
-			if (quad != null)
-			{
-				DrawQuad(spriteBatch, quad.RootQuad, depth);
-			}
-		}
-
-		private void DrawQuad(SpriteBatch spriteBatch, QuadTreeNode<Entity> quad, int depth)
-		{
-			if (quad != null)
-			{
-
-				Rectangle rect = quad.QuadRect;
-
-				Color drawColor;
-				switch (depth)
-				{
-				default:
-					goto case 0;
-				case 0:
-					drawColor = Color.White;
-					break;
-				case 1:
-					drawColor = Color.Red;
-					break;
-				case 2:
-					drawColor = Color.Green;
-					break;
-				case 3:
-					drawColor = Color.Blue;
-					break;
-				case 4:
-					drawColor = Color.Gray;
-					break;
-				case 5:
-					drawColor = Color.DarkRed;
-					break;
-				case 6:
-					drawColor = Color.DarkGreen;
-					break;
-				case 7:
-					drawColor = Color.DarkBlue;
-					break;
-				}
-
-				Vector2 screenTopLeft = WorldToScreen(rect.X, rect.Y);
-				Vector2 screenBottomLeft = WorldToScreen(rect.Right, rect.Bottom);
-
-				rect = new Rectangle((int)screenTopLeft.X,
-				                     (int)screenTopLeft.Y,
-				                     (int)(screenBottomLeft.X - screenTopLeft.X),
-				                     (int)(screenBottomLeft.Y - screenTopLeft.Y));
-				spriteBatch.DrawRectangle(rect, drawColor, 1);
-
-				DrawQuad(spriteBatch, quad.TopLeftChild, depth + 1);
-				DrawQuad(spriteBatch, quad.TopRightChild, depth + 1);
-				DrawQuad(spriteBatch, quad.BottomLeftChild, depth + 1);
-				DrawQuad(spriteBatch, quad.BottomRightChild, depth + 1);
-			}
-		}
-		#endregion
 
 
 
@@ -1050,7 +975,7 @@ namespace AsteroidOutpost.Screens
 			for (int iGrid = 0; iGrid < powerGridCount; iGrid++)
 			{
 				int owningForceID = br.ReadInt32();
-				CreatePowerGrid(GetForce(owningForceID));
+				PowerGrid.Add(owningForceID, new PowerGrid(this));
 			}
 
 

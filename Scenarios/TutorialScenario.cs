@@ -62,9 +62,8 @@ namespace AsteroidOutpost.Scenarios
 			Controller aiController = new AIController(world, world, aiForce);
 			world.AddForce(aiForce);
 			world.AddController(aiController);
-			
 
-			world.CreatePowerGrid(localForce);
+			world.PowerGrid.Add(localForce.ID, new PowerGrid(world));
 
 
 			world.HUD.FocusWorldPoint = new Vector2(world.MapWidth / 2f, world.MapHeight / 2f);

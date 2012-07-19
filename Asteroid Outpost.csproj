@@ -192,6 +192,8 @@
     <Compile Include="Systems\AccumulationSystem.cs" />
     <Compile Include="Systems\AnimationSystem.cs" />
     <Compile Include="Systems\PhysicsSystem.cs" />
+    <Compile Include="Systems\RenderPowerGridSystem.cs" />
+    <Compile Include="Systems\RenderQuadTreeSystem.cs" />
     <Compile Include="Systems\RenderSystem.cs" />
     <Compile Include="TextureDictionary.cs" />
     <Compile Include="Screens\HeadsUpDisplay\Radar.cs" />

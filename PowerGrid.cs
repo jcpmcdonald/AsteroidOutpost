@@ -20,9 +20,9 @@ namespace AsteroidOutpost
 		private World world;
 
 		public const int PowerConductingDistance = 220;
-		private readonly Dictionary<IPowerGridNode, List<IPowerGridNode>> powerNodes = new Dictionary<IPowerGridNode, List<IPowerGridNode>>(32);
+		internal readonly Dictionary<IPowerGridNode, List<IPowerGridNode>> powerNodes = new Dictionary<IPowerGridNode, List<IPowerGridNode>>(32);
 
-		private List<Tuple<IPowerGridNode, IPowerGridNode>> recentlyActiveLinks = new List<Tuple<IPowerGridNode, IPowerGridNode>>();
+		internal List<Tuple<IPowerGridNode, IPowerGridNode>> recentlyActiveLinks = new List<Tuple<IPowerGridNode, IPowerGridNode>>();
 
 
 		public PowerGrid(World world)
@@ -296,63 +296,6 @@ namespace AsteroidOutpost
 			}
 
 			return path;
-		}
-
-
-		
-
-		public void Draw(SpriteBatch spriteBatch)
-		{
-			Color color;
-
-			// TODO: This allocates a bunch of memory each draw, fix this!
-			List<Tuple<IPowerGridNode, IPowerGridNode>> linksAlreadyDrawn = new List<Tuple<IPowerGridNode, IPowerGridNode>>(powerNodes.Count * 6);
-
-			// Draw all of the active links first
-			foreach (var linkToDraw in recentlyActiveLinks)
-			{
-				if (!linksAlreadyDrawn.Contains(linkToDraw))
-				{
-					color = new Color((int)(150 + world.Scale(50)), (int)(150 + world.Scale(50)), 0, (int)(150 + world.Scale(50)));
-
-					spriteBatch.DrawLine(world.WorldToScreen(linkToDraw.Item1.PowerLinkPointAbsolute),
-					                         world.WorldToScreen(linkToDraw.Item2.PowerLinkPointAbsolute),
-					                         color);
-
-					linksAlreadyDrawn.Add(linkToDraw);
-					linksAlreadyDrawn.Add(new Tuple<IPowerGridNode, IPowerGridNode>(linkToDraw.Item2, linkToDraw.Item1));
-				}
-			}
-
-			// Wipe the recent list
-			recentlyActiveLinks.Clear();
-
-
-			foreach (var nodeA in powerNodes.Keys)
-			{
-				foreach (var nodeB in powerNodes[nodeA])
-				{
-					var linkToDraw = new Tuple<IPowerGridNode, IPowerGridNode>(nodeA, nodeB);
-					if (!linksAlreadyDrawn.Contains(linkToDraw))
-					{
-						if (nodeA.PowerStateActive && nodeB.PowerStateActive)
-						{
-							color = new Color((int)(70 + world.Scale(50)), (int)(70 + world.Scale(50)), 0, (int)(70 + world.Scale(50)));
-						}
-						else
-						{
-							color = new Color((int)(80 + world.Scale(50)), (int)(0 + world.Scale(50)), 0, (int)(0 + world.Scale(50)));
-						}
-
-						spriteBatch.DrawLine(world.WorldToScreen(nodeA.PowerLinkPointAbsolute),
-						                     world.WorldToScreen(nodeB.PowerLinkPointAbsolute),
-						                     color);
-
-						linksAlreadyDrawn.Add(linkToDraw);
-						linksAlreadyDrawn.Add(new Tuple<IPowerGridNode, IPowerGridNode>(nodeB, nodeA));
-					}
-				}
-			}
 		}
 	}
 
