@@ -44,12 +44,13 @@ namespace AsteroidOutpost.Components
 		{
 			base.PostDeserializeLink(world);
 
-			position = world.GetComponent(postDeserializePositionID) as Position;
+			// TODO: 2012-08-10 I probably need this down the line
+			//position = world.GetComponents(postDeserializePositionID) as Position;
 
-			if (position == null)
-			{
-				Debugger.Break();
-			}
+			//if (position == null)
+			//{
+			//    Debugger.Break();
+			//}
 		}
 
 

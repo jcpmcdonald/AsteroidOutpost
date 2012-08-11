@@ -132,6 +132,10 @@
   <ItemGroup>
     <Compile Include="ColorExtension.cs" />
     <Compile Include="Components\Animator.cs" />
+    <Compile Include="Components\Constructable.cs" />
+    <Compile Include="Components\PowerGridNode.cs" />
+    <Compile Include="Components\PowerProducer.cs" />
+    <Compile Include="Components\Upgradable.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="AIController.cs" />
     <Compile Include="Components\Accumulator.cs" />
@@ -156,8 +160,6 @@
     <Compile Include="Interfaces\IControllerIDProvider.cs" />
     <Compile Include="Interfaces\ICanKillSelf.cs" />
     <Compile Include="Interfaces\IComponentList.cs" />
-    <Compile Include="Interfaces\IPowerGridNode.cs" />
-    <Compile Include="Interfaces\IPowerProducer.cs" />
     <Compile Include="Components\Linker.cs" />
     <Compile Include="Networking\AOReflectiveIncomingMessage.cs" />
     <Compile Include="Networking\AOReflectiveOutgoingMessage.cs" />
@@ -195,6 +197,7 @@
     <Compile Include="Systems\RenderPowerGridSystem.cs" />
     <Compile Include="Systems\RenderQuadTreeSystem.cs" />
     <Compile Include="Systems\RenderSystem.cs" />
+    <Compile Include="Systems\UpgradeSystem.cs" />
     <Compile Include="TextureDictionary.cs" />
     <Compile Include="Screens\HeadsUpDisplay\Radar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

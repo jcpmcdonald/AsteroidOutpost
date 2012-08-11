@@ -4,6 +4,6 @@ namespace AsteroidOutpost.Interfaces
 {
 	public interface IIdentifiable : IReflectionTarget 
 	{
-		new int ID { get; set; }
+		new int EntityID { get; set; }
 	}
 }

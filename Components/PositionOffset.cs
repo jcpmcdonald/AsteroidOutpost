@@ -47,7 +47,7 @@ namespace AsteroidOutpost.Components
 			// Always serialize the base first because we can't pick the deserialization order
 			base.Serialize(bw);
 
-			bw.Write(parent.ID);
+			bw.Write(parent.EntityID);
 		}
 
 
@@ -55,17 +55,17 @@ namespace AsteroidOutpost.Components
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
 		/// <param name="world"></param>
-		public override void PostDeserializeLink(World world)
-		{
-			base.PostDeserializeLink(world);
+		//public override void PostDeserializeLink(World world)
+		//{
+		//    base.PostDeserializeLink(world);
 
-			parent = world.GetComponent(postDeserializeParentID) as Position;
+		//    parent = world.GetComponents(postDeserializeParentID) as Position;
 
-			if (parent == null)
-			{
-				Debugger.Break();
-			}
-		}
+		//    if (parent == null)
+		//    {
+		//        Debugger.Break();
+		//    }
+		//}
 
 
 		/// <summary>

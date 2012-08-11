@@ -67,7 +67,7 @@ namespace AsteroidOutpost
 
 			foreach (int forceID in forceIDs)
 			{
-				forces.Add(world.GetForce(forceID));
+				forces.Add(world.GetForceByID(forceID));
 			}
 			forceIDs.Clear();
 		}

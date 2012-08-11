@@ -397,12 +397,12 @@ namespace AsteroidOutpost.Entities.Structures
 		/// </summary>
 		/// <param name="deltaTime"></param>
 		/// <returns></returns>
-		protected override bool UpdateUpgrading(TimeSpan deltaTime)
-		{
-			timeSinceLastStageChange = TimeSpan.FromMilliseconds(0);
-			state = MiningState.Idle;
-			return base.UpdateUpgrading(deltaTime);
-		}
+		//protected override bool UpdateUpgrading(TimeSpan deltaTime)
+		//{
+		//    timeSinceLastStageChange = TimeSpan.FromMilliseconds(0);
+		//    state = MiningState.Idle;
+		//    return base.UpdateUpgrading(deltaTime);
+		//}
 
 
 		/// <summary>

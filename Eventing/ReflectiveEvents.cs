@@ -92,7 +92,7 @@ namespace AsteroidOutpost.Entities.Eventing
 	public class EntityTargetChangedEventArgs : EntityReflectiveEventArgs
 	{
 		public EntityTargetChangedEventArgs(Entity entity, Entity newTarget)
-			: base(entity, "SetTarget", new object[] { newTarget == null ? -1 : newTarget.ID, true })
+			: base(entity, "SetTarget", new object[] { newTarget == null ? -1 : newTarget.EntityID, true })
 		{
 			NewTarget = newTarget;
 		}

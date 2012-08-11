@@ -26,7 +26,8 @@ namespace AsteroidOutpost.Components
 			offset = center;
 			this.radius = radius;
 		}
- 
+
+
 		public Position(World world, Vector2 center, Vector2 velocity, int radius = 0)
 			: base(world)
 		{
@@ -95,7 +96,7 @@ namespace AsteroidOutpost.Components
 
 
 		/// <summary>
-		/// Gets or sets the X velocity
+		/// Gets or sets the velocity
 		/// </summary>
 		public Vector2 Velocity
 		{
@@ -188,9 +189,9 @@ namespace AsteroidOutpost.Components
 			get
 			{
 				return new Rectangle(Left,
-									 Top,
-									 radius * 2,
-									 radius * 2);
+				                     Top,
+				                     radius * 2,
+				                     radius * 2);
 			}
 		}
 

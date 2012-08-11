@@ -20,9 +20,9 @@ namespace AsteroidOutpost
 		private World world;
 
 		public const int PowerConductingDistance = 220;
-		internal readonly Dictionary<IPowerGridNode, List<IPowerGridNode>> powerNodes = new Dictionary<IPowerGridNode, List<IPowerGridNode>>(32);
+		internal readonly Dictionary<PowerGridNode, List<PowerGridNode>> powerNodes = new Dictionary<PowerGridNode, List<PowerGridNode>>(32);
 
-		internal List<Tuple<IPowerGridNode, IPowerGridNode>> recentlyActiveLinks = new List<Tuple<IPowerGridNode, IPowerGridNode>>();
+		internal List<Tuple<PowerGridNode, PowerGridNode>> recentlyActiveLinks = new List<Tuple<PowerGridNode, PowerGridNode>>();
 
 
 		public PowerGrid(World world)
@@ -31,9 +31,9 @@ namespace AsteroidOutpost
 		}
 
 
-		internal List<KeyValuePair<float, IPowerGridNode>> GetAllPowerLinks(IPowerGridNode node)
+		internal List<KeyValuePair<float, PowerGridNode>> GetAllPowerLinks(PowerGridNode node)
 		{
-			var allPowerLinks = new List<KeyValuePair<float, IPowerGridNode>>(10);
+			var allPowerLinks = new List<KeyValuePair<float, PowerGridNode>>(10);
 
 			foreach (var powerNode in powerNodes.Keys)
 			{
@@ -43,7 +43,7 @@ namespace AsteroidOutpost
 					float distance = Vector2.Distance(powerNode.PowerLinkPointAbsolute, node.PowerLinkPointAbsolute);
 					if (distance <= PowerConductingDistance)
 					{
-						allPowerLinks.Add(new KeyValuePair<float, IPowerGridNode>(distance, powerNode));
+						allPowerLinks.Add(new KeyValuePair<float, PowerGridNode>(distance, powerNode));
 					}
 				}
 			}
@@ -51,32 +51,32 @@ namespace AsteroidOutpost
 
 			if(node.ConductsPower)
 			{
-				return new List<KeyValuePair<float, IPowerGridNode>>(allPowerLinks.Where(n => n.Value.ConductsPower || powerNodes[n.Value].Count == 0));
+				return new List<KeyValuePair<float, PowerGridNode>>(allPowerLinks.Where(n => n.Value.ConductsPower || powerNodes[n.Value].Count == 0));
 			}
 			else
 			{
 				// Return the closest power conductor IF there's a valid connection
 				// Else return all bad connections
 				allPowerLinks.Sort((lhs, rhs) => lhs.Key.CompareTo(rhs.Key));
-				KeyValuePair<float, IPowerGridNode> theOne = allPowerLinks.FirstOrDefault(n => n.Value.ConductsPower && IsPowerRoutableBetween(node, n.Value));
-				if(theOne.Equals(default(KeyValuePair<float, IPowerGridNode>)))
+				KeyValuePair<float, PowerGridNode> theOne = allPowerLinks.FirstOrDefault(n => n.Value.ConductsPower && IsPowerRoutableBetween(node, n.Value));
+				if(theOne.Equals(default(KeyValuePair<float, PowerGridNode>)))
 				{
 
-					return new List<KeyValuePair<float, IPowerGridNode>>(allPowerLinks.Where(n => n.Value.ConductsPower));
+					return new List<KeyValuePair<float, PowerGridNode>>(allPowerLinks.Where(n => n.Value.ConductsPower));
 				}
 
-				return new List<KeyValuePair<float, IPowerGridNode>>(1) { new KeyValuePair<float, IPowerGridNode>(theOne.Key, theOne.Value) };
+				return new List<KeyValuePair<float, PowerGridNode>>(1) { new KeyValuePair<float, PowerGridNode>(theOne.Key, theOne.Value) };
 			}
 		}
 
 
 		
-		internal void ConnectToPowerGrid(IPowerGridNode newNode)
+		internal void ConnectToPowerGrid(PowerGridNode newNode)
 		{
-			powerNodes.Add(newNode, new List<IPowerGridNode>(6));
+			powerNodes.Add(newNode, new List<PowerGridNode>(6));
 			newNode.DyingEvent += NodeDying;
 
-			List<KeyValuePair<float, IPowerGridNode>> allPowerLinks = GetAllPowerLinks(newNode);
+			List<KeyValuePair<float, PowerGridNode>> allPowerLinks = GetAllPowerLinks(newNode);
 
 			if(newNode.ConductsPower)
 			{
@@ -95,7 +95,7 @@ namespace AsteroidOutpost
 			else
 			{
 				// Only connect to the closest power source
-				IPowerGridNode node = allPowerLinks.FirstOrDefault(n => n.Value != null && n.Value.ConductsPower && IsPowerRoutableBetween(newNode, n.Value)).Value;
+				PowerGridNode node = allPowerLinks.FirstOrDefault(n => n.Value != null && n.Value.ConductsPower && IsPowerRoutableBetween(newNode, n.Value)).Value;
 				if(node != null)
 				{
 					Connect(newNode, node);
@@ -104,7 +104,7 @@ namespace AsteroidOutpost
 		}
 
 
-		private void Connect(IPowerGridNode nodeA, IPowerGridNode nodeB)
+		private void Connect(PowerGridNode nodeA, PowerGridNode nodeB)
 		{
 			if (!powerNodes[nodeA].Contains(nodeB))
 			{
@@ -119,14 +119,14 @@ namespace AsteroidOutpost
 
 		public void NodeDying(EntityReflectiveEventArgs e)
 		{
-			IPowerGridNode node = e.Entity as IPowerGridNode;
+			PowerGridNode node = e.Entity as PowerGridNode;
 			if (node != null)
 			{
 				Disconnect(node);
 			}
 		}
 
-		internal void Disconnect(IPowerGridNode node)
+		internal void Disconnect(PowerGridNode node)
 		{
 			if(node == null || !powerNodes.ContainsKey(node))
 			{
@@ -136,7 +136,7 @@ namespace AsteroidOutpost
 			// Time of death:   13:57
 			node.DyingEvent -= NodeDying;
 
-			List<IPowerGridNode> connectedNodes = powerNodes[node];
+			List<PowerGridNode> connectedNodes = powerNodes[node];
 			foreach (var connectedNode in connectedNodes)
 			{
 				powerNodes[connectedNode].Remove(node);
@@ -149,7 +149,7 @@ namespace AsteroidOutpost
 		/// <summary>
 		/// Is power routable between the two nodes?
 		/// </summary>
-		internal bool IsPowerRoutableBetween(IPowerGridNode powerNodeA, IPowerGridNode powerNodeB)
+		internal bool IsPowerRoutableBetween(PowerGridNode powerNodeA, PowerGridNode powerNodeB)
 		{
 			// Check for obstacles in the way
 			List<Entity> nearbyEntities = world.EntitiesInArea((int)(Math.Min(powerNodeA.PowerLinkPointAbsolute.X, powerNodeB.PowerLinkPointAbsolute.X) - 0.5),
@@ -180,16 +180,28 @@ namespace AsteroidOutpost
 		/// <param name="startingLocation">Where in the power grid should we begin our quest for power</param>
 		/// <param name="amount">The amount of power to retrieve</param>
 		/// <returns>Returns true if successful, false otherwise</returns>
-		internal bool GetPower(IPowerGridNode startingLocation, float amount)
+		internal bool GetPower(int startingEntityID, float amount)
 		{
-			List<IPowerGridNode> path;
-			IPowerProducer powerProducer = GetProducerWithPower(startingLocation, amount, out path);
+			return GetPower(world.GetComponents<PowerGridNode>(startingEntityID)[0], amount);
+		}
+
+
+		/// <summary>
+		/// Gets the requested amount of power from a single power-source that is able to provide it
+		/// </summary>
+		/// <param name="startingLocation">Where in the power grid should we begin our quest for power</param>
+		/// <param name="amount">The amount of power to retrieve</param>
+		/// <returns>Returns true if successful, false otherwise</returns>
+		internal bool GetPower(PowerGridNode startingLocation, float amount)
+		{
+			List<PowerGridNode> path;
+			PowerProducer powerProducer = GetProducerWithPower(startingLocation, amount, out path);
 			if(powerProducer != null)
 			{
 				for (int iNode = 1; iNode < path.Count; iNode++)
 				{
-					var linkToAdd = new Tuple<IPowerGridNode, IPowerGridNode>(path[iNode - 1], path[iNode]);
-					var linkToAddVariant = new Tuple<IPowerGridNode, IPowerGridNode>(path[iNode], path[iNode - 1]);
+					var linkToAdd = new Tuple<PowerGridNode, PowerGridNode>(path[iNode - 1], path[iNode]);
+					var linkToAddVariant = new Tuple<PowerGridNode, PowerGridNode>(path[iNode], path[iNode - 1]);
 					if (!recentlyActiveLinks.Contains(linkToAdd) && !recentlyActiveLinks.Contains(linkToAddVariant))
 					{
 						recentlyActiveLinks.Add(linkToAdd);
@@ -208,21 +220,21 @@ namespace AsteroidOutpost
 		/// <param name="startingLocation">Where in the power grid should we begin our quest for power</param>
 		/// <param name="amount">The amount of power to retrieve</param>
 		/// <returns>Returns true if successful, false otherwise</returns>
-		internal bool HasPower(IPowerGridNode startingLocation, float amount)
+		internal bool HasPower(PowerGridNode startingLocation, float amount)
 		{
-			List<IPowerGridNode> path;
+			List<PowerGridNode> path;
 			return GetProducerWithPower(startingLocation, amount, out path) != null;
 		}
 
 
-		private IPowerProducer GetProducerWithPower(IPowerGridNode startingLocation, float amount, out List<IPowerGridNode> path)
+		private PowerProducer GetProducerWithPower(PowerGridNode startingLocation, float amount, out List<PowerGridNode> path)
 		{
 			// NOTE: This sorted list should be a Min Heap for best performance
-			var toVisit = new SortedList<float, Tuple<IPowerGridNode, IPowerGridNode>>(powerNodes.Count);		// <Distance, <NodeToVisit, VisitedFrom>>
-			var visited = new List<Tuple<IPowerGridNode, IPowerGridNode>>(powerNodes.Count);					// <VisitedNode, VisitedFrom>
-			toVisit.Add(0, new Tuple<IPowerGridNode, IPowerGridNode>(startingLocation, null));
+			var toVisit = new SortedList<float, Tuple<PowerGridNode, PowerGridNode>>(powerNodes.Count);		// <Distance, <NodeToVisit, VisitedFrom>>
+			var visited = new List<Tuple<PowerGridNode, PowerGridNode>>(powerNodes.Count);					// <VisitedNode, VisitedFrom>
+			toVisit.Add(0, new Tuple<PowerGridNode, PowerGridNode>(startingLocation, null));
 
-			IPowerGridNode cursor = toVisit.Values[0].Item1;
+			PowerGridNode cursor = toVisit.Values[0].Item1;
 			while (cursor != null)
 			{
 				float cursorDistance = toVisit.Keys[0];
@@ -232,7 +244,7 @@ namespace AsteroidOutpost
 				if (cursor.ProducesPower)
 				{
 					// OOoo, a power source
-					IPowerProducer producer = cursor as IPowerProducer;
+					PowerProducer producer = cursor as PowerProducer;
 					if (producer != null)
 					{
 						if (producer.AvailablePower >= amount)
@@ -283,10 +295,10 @@ namespace AsteroidOutpost
 		}
 
 
-		private List<IPowerGridNode> DecodePath(List<Tuple<IPowerGridNode, IPowerGridNode>> visited)
+		private List<PowerGridNode> DecodePath(List<Tuple<PowerGridNode, PowerGridNode>> visited)
 		{
-			var path = new List<IPowerGridNode>{ visited[visited.Count - 1].Item1 };
-			IPowerGridNode search = visited[visited.Count - 1].Item2;
+			var path = new List<PowerGridNode>{ visited[visited.Count - 1].Item1 };
+			PowerGridNode search = visited[visited.Count - 1].Item2;
 
 			while (search != null)
 			{

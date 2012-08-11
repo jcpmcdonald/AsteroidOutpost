@@ -8,6 +8,6 @@ namespace AsteroidOutpost.Networking
 {
 	public interface IReflectionTarget
 	{
-		int ID { get; }
+		int EntityID { get; }
 	}
 }

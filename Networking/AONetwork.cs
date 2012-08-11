@@ -76,7 +76,7 @@ namespace AsteroidOutpost.Networking
 		/// <summary>
 		/// Gets the ID for this network target
 		/// </summary>
-		public int ID
+		public int EntityID
 		{
 			get
 			{
@@ -431,7 +431,7 @@ namespace AsteroidOutpost.Networking
 		/// <param name="forceID">The controller's primary force's ID</param>
 		public void CreateController(int role, int forceID)
 		{
-			world.AddController(new Controller(world, (ControllerRole)role, world.GetForce(forceID)));
+			world.AddController(new Controller(world, (ControllerRole)role, world.GetForceByID(forceID)));
 		}
 
 

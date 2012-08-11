@@ -54,7 +54,7 @@ namespace AsteroidOutpost.Entities.Units
 
 			if (target != null)
 			{
-				bw.Write(target.ID);
+				bw.Write(target.EntityID);
 			}
 			else
 			{
@@ -67,19 +67,19 @@ namespace AsteroidOutpost.Entities.Units
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
 		/// <param name="world"></param>
-		public override void PostDeserializeLink(World world)
-		{
-			base.PostDeserializeLink(world);
+		//public override void PostDeserializeLink(World world)
+		//{
+		//    base.PostDeserializeLink(world);
 
-			if (targetID >= 0)
-			{
-				target = world.GetEntity(targetID);
-			}
-			else
-			{
-				target = null;
-			}
-		}
+		//    if (targetID >= 0)
+		//    {
+		//        target = world.GetEntity(targetID);
+		//    }
+		//    else
+		//    {
+		//        target = null;
+		//    }
+		//}
 
 
 		public Entity Target

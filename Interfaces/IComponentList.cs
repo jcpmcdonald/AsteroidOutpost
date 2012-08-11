@@ -18,7 +18,7 @@ namespace AsteroidOutpost.Interfaces
 		/// </summary>
 		/// <param name="id">The ID to look up</param>
 		/// <returns>The component with the given ID, or null if the entity is not found</returns>
-		Component GetComponent(int id);
+		//Component GetComponent(int id);
 
 	}
 }

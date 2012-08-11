@@ -68,7 +68,7 @@ namespace AsteroidOutpost.Entities.Structures
 
 			if (target != null)
 			{
-				bw.Write(target.ID);
+				bw.Write(target.EntityID);
 			}
 			else
 			{

@@ -11,13 +11,13 @@ namespace AsteroidOutpost.Components
 {
 	internal class PowerLinker : Component
 	{
-		private readonly IPowerGridNode relatedPowerNode;
+		private readonly PowerGridNode relatedPowerNode;
 
 		protected Force owningForce;
 		private int postDeserializeOwningForceID;		// For serialization linking, don't use this
 
 
-		public PowerLinker(World world, Force owningForce, IPowerGridNode powerGridNode)
+		public PowerLinker(World world, Force owningForce, PowerGridNode powerGridNode)
 			: base(world)
 		{
 			relatedPowerNode = powerGridNode;
@@ -52,7 +52,7 @@ namespace AsteroidOutpost.Components
 		/// <param name="world"></param>
 		public override void PostDeserializeLink(World world)
 		{
-			owningForce = world.GetForce(postDeserializeOwningForceID);
+			owningForce = world.GetForceByID(postDeserializeOwningForceID);
 			if (owningForce == null)
 			{
 				// I think something is wrong, there should always be an owning force

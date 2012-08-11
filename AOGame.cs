@@ -216,7 +216,7 @@ namespace AsteroidOutpost
 			Asteroid.LoadContent(GraphicsDevice, Content);
 			LaserMiner.LoadContent(GraphicsDevice, Content);
 			LaserTower.LoadContent(GraphicsDevice, Content);
-			PowerNode.LoadContent(GraphicsDevice, Content);
+			PowerGridNode.LoadContent(GraphicsDevice, Content);
 			Beacon.LoadContent(GraphicsDevice, Content);
 			FreeText.LoadContent(GraphicsDevice, Content);
 

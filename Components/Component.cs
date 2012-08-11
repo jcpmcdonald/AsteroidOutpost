@@ -14,7 +14,7 @@ namespace AsteroidOutpost.Components
 		protected World world;
 
 		// This ID will uniquely identify this object in the game
-		protected int id = -1;
+		protected int entityID = -1;
 		private bool deleteMe;
 
 
@@ -30,7 +30,7 @@ namespace AsteroidOutpost.Components
 
 		protected Component(BinaryReader br)
 		{
-			id = br.ReadInt32();
+			entityID = br.ReadInt32();
 		}
 
 
@@ -40,7 +40,7 @@ namespace AsteroidOutpost.Components
 		/// <param name="bw">The binary writer to serialize to</param>
 		public virtual void Serialize(BinaryWriter bw)
 		{
-			bw.Write(id);
+			bw.Write(entityID);
 		}
 
 
@@ -57,12 +57,12 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// Gets the Entity's ID
 		/// </summary>
-		public int ID
+		public int EntityID
 		{
-			get { return id; }
+			get { return entityID; }
 			set
 			{
-				id = value;
+				entityID = value;
 			}
 		}
 

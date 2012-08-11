@@ -1,43 +1,58 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 
-namespace AsteroidOutpost.Interfaces
+namespace AsteroidOutpost.Components
 {
-	internal interface IPowerGridNode
+	public class PowerGridNode : Component
 	{
-		event Action<EntityDyingEventArgs> DyingEvent;
+
+		public PowerGridNode(World world)
+			: base(world)
+		{
+		}
+
+
+		protected PowerGridNode(BinaryReader br)
+			: base(br)
+		{
+		}
 
 
 		/// <summary>
 		/// True if this node is active and ready to either conduct or produce power (not used for consumers)
 		/// </summary>
-		bool PowerStateActive { get; }
+		public bool PowerStateActive { get; set; }
 
 
 		/// <summary>
 		/// True if this conducts power
 		/// </summary>
-		bool ConductsPower { get; }
+		public bool ConductsPower { get; set; }
 
 
 		/// <summary>
 		/// True if this produces power  (note that power producers should also conduct power)
 		/// </summary>
-		bool ProducesPower { get; }
+		public bool ProducesPower { get; set; }
 
 
 		/// <summary>
 		/// Returns an offset from the center showing where the power link should be displayed
 		/// </summary>
 		/// <returns>Returns an offset from the center, showing where the power link should be displayed</returns>
-		Vector2 PowerLinkPointRelative { get; }
+		public Vector2 PowerLinkPointRelative { get; set; }
 
 
 		/// <summary>
 		/// Returns the absolute location showing where the power link should be displayed
 		/// </summary>
 		/// <returns>Returns the absolute location showing where the power link should be displayed</returns>
-		Vector2 PowerLinkPointAbsolute { get; }
+		public Vector2 PowerLinkPointAbsolute { get; set; }
 	}
 }

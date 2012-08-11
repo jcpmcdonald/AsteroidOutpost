@@ -102,8 +102,8 @@ namespace AsteroidOutpost.Entities
 			}
 			bw.Write(owningForce.ID);
 
-			bw.Write(position.ID);
-			bw.Write(hitPoints.ID);
+			bw.Write(position.EntityID);
+			bw.Write(hitPoints.EntityID);
 		}
 
 
@@ -115,7 +115,7 @@ namespace AsteroidOutpost.Entities
 		{
 			this.world = world;
 
-			owningForce = world.GetForce(postDeserializeOwningForceID);
+			owningForce = world.GetForceByID(postDeserializeOwningForceID);
 			if(owningForce == null)
 			{
 				// I think something is wrong, there should always be an owning force
@@ -123,8 +123,8 @@ namespace AsteroidOutpost.Entities
 			}
 
 			
-			position = world.GetComponent(postDeserializePositionID) as Position;
-			hitPoints = world.GetComponent(postDeserializeHitPointsID) as HitPoints;
+			position = world.GetComponents(postDeserializePositionID) as Position;
+			hitPoints = world.GetComponents(postDeserializeHitPointsID) as HitPoints;
 
 			if (position == null || hitPoints == null)
 			{
@@ -230,7 +230,7 @@ namespace AsteroidOutpost.Entities
 		/// <summary>
 		/// Gets the Entity's ID
 		/// </summary>
-		public int ID
+		public int EntityID
 		{
 			get { return id; }
 			set

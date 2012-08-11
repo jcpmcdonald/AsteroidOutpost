@@ -13,7 +13,7 @@ namespace AsteroidOutpost.Networking
 	{
 		public ReflectiveEventArgs(IReflectionTarget target, String theRemoteMethodName, object[] theRemoteMethodParameters)
 		{
-			TargetID = target.ID;
+			TargetID = target.EntityID;
 			RemoteMethodName = theRemoteMethodName;
 			RemoteMethodParameters = theRemoteMethodParameters;
 

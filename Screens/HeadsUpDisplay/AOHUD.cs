@@ -645,7 +645,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new power node
-				creating = new PowerNode(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
+				creating = new PowerGridNode(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
 
 				CreateRangeRingsForConstruction(creating);
 				CreatePowerLinker(creating);

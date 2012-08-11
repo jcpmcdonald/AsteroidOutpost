@@ -42,9 +42,10 @@ namespace AsteroidOutpost.Screens
 		private LayeredStarField layeredStarField;
 		private QuadTree<Entity> quadTree;
 		private readonly AwesomiumComponent awesomium;
-		private Dictionary<int, Component> componentDictionary = new Dictionary<int, Component>(6000);		// Note: This variable must be kept thread-safe
-		private Dictionary<int, Entity> entityDictionary = new Dictionary<int, Entity>(2000);		// Note: This variable must be kept thread-safe
+		private Dictionary<int, List<Component>> componentDictionary = new Dictionary<int, List<Component>>(6000);		// Note: This variable must be kept thread-safe
+		//private Dictionary<int, Entity> entityDictionary = new Dictionary<int, Entity>(2000);		// Note: This variable must be kept thread-safe
 		private Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
+		private Dictionary<int, Force> owningForces = new Dictionary<int, Force>();
 		private AOHUD hud;
 		private Scenario scenario;
 		private PhysicsSystem physicsSystem;
@@ -90,7 +91,7 @@ namespace AsteroidOutpost.Screens
 		}
 
 
-		public int ID
+		public int EntityID
 		{
 			get
 			{
@@ -196,16 +197,16 @@ namespace AsteroidOutpost.Screens
 			if (component != null)
 			{
 				
-				if (component.ID == -1)
+				if (component.EntityID == -1)
 				{
 					// Assign an ID
-					component.ID = PopNextComponentID();
+					component.EntityID = PopNextComponentID();
 				}
 				else if(isAuthoritative)
 				{
 					lock(componentDictionary)
 					{
-						if(componentDictionary.ContainsKey(component.ID))
+						if(componentDictionary.ContainsKey(component.EntityID))
 						{
 							// This component already exists
 							return;
@@ -215,13 +216,13 @@ namespace AsteroidOutpost.Screens
 
 				if (isServer)
 				{
-					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
+					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.EntityID,
 					                                                       "Add",
 					                                                       new object[]{component, true}));
 				}
 				else if(!isAuthoritative)
 				{
-					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
+					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.EntityID,
 					                                                       "Add",
 					                                                       new object[]{component}));
 				}
@@ -232,7 +233,7 @@ namespace AsteroidOutpost.Screens
 				// Add this to a dictionary for quick ID-based lookups
 				lock (componentDictionary)
 				{
-					componentDictionary.Add(component.ID, component);
+					componentDictionary.Add(component.EntityID, component);
 				}
 				
 			}
@@ -248,16 +249,16 @@ namespace AsteroidOutpost.Screens
 		{
 			if (entity != null)
 			{
-				if (entity.ID == -1)
+				if (entity.EntityID == -1)
 				{
 					// Assign an ID and replicate this object to the clients
-					entity.ID = PopNextComponentID();
+					entity.EntityID = PopNextComponentID();
 				}
 				else if(isAuthoritative && !isServer)
 				{
 					lock(entityDictionary)
 					{
-						if (entityDictionary.ContainsKey(entity.ID))
+						if (entityDictionary.ContainsKey(entity.EntityID))
 						{
 							// This entity already exists locally. Post-auth and exit
 							if (StructureStartedEventPostAuth != null)
@@ -272,13 +273,13 @@ namespace AsteroidOutpost.Screens
 
 				if (isServer)
 				{
-					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
+					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.EntityID,
 					                                                       "Add",
 					                                                       new object[]{ entity, true }));
 				}
 				else if(!isAuthoritative)
 				{
-					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.ID,
+					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.EntityID,
 					                                                       "Add",
 					                                                       new object[]{ entity }));
 				}
@@ -293,7 +294,7 @@ namespace AsteroidOutpost.Screens
 				// Add this to a dictionary for quick ID-based lookups
 				lock (entityDictionary)
 				{
-					entityDictionary.Add(entity.ID, entity);
+					entityDictionary.Add(entity.EntityID, entity);
 				}
 
 				// Pre and Post-auth. Post only if we're the server, it happens later on the client
@@ -356,19 +357,19 @@ namespace AsteroidOutpost.Screens
 		/// </summary>
 		/// <param name="id">The ID to look up</param>
 		/// <returns>The entity with the given ID, or null if the entity is not found</returns>
-		public Entity GetEntity(int id)
-		{
-			lock (entityDictionary)
-			{
-				if (entityDictionary.ContainsKey(id))
-				{
-					return entityDictionary[id];
-				}
+		//public Entity GetEntity(int id)
+		//{
+		//    lock (entityDictionary)
+		//    {
+		//        if (entityDictionary.ContainsKey(id))
+		//        {
+		//            return entityDictionary[id];
+		//        }
 
-				//Debugger.Break();
-				return null;
-			}
-		}
+		//        //Debugger.Break();
+		//        return null;
+		//    }
+		//}
 
 
 		/// <summary>
@@ -377,13 +378,13 @@ namespace AsteroidOutpost.Screens
 		/// </summary>
 		/// <param name="id">The ID to look up</param>
 		/// <returns>The component with the given ID, or null if the component is not found</returns>
-		public Component GetComponent(int id)
+		public List<T> GetComponents<T>(int entityID) where T : Component
 		{
 			lock (componentDictionary)
 			{
-				if (componentDictionary.ContainsKey(id))
+				if (componentDictionary.ContainsKey(entityID))
 				{
-					return componentDictionary[id];
+					return (List<T>)componentDictionary[entityID].Where(x => x is T);
 				}
 
 				//Debugger.Break();
@@ -406,6 +407,12 @@ namespace AsteroidOutpost.Screens
 		}
 
 
+		public Force GetOwningForce(int entityID)
+		{
+			return owningForces[entityID];
+		}
+
+
 		/// <summary>
 		/// Looks up a component by ID
 		/// This method is thread safe
@@ -414,7 +421,7 @@ namespace AsteroidOutpost.Screens
 		/// <returns>The component with the given ID, or null if the component is not found</returns>
 		public IReflectionTarget GetTarget(int id)
 		{
-			Component component = GetComponent(id);
+			Component component = GetComponents(id);
 			if(component != null)
 			{
 				return component;
@@ -575,17 +582,6 @@ namespace AsteroidOutpost.Screens
 			}
 		}
 
-		//internal PowerGrid PowerGrid(int forceID)
-		//{
-		//    return powerGrid[forceID];
-		//}
-
-
-		//public void CreatePowerGrid(Force force)
-		//{
-		//    powerGrid.Add(force.ID, new PowerGrid(this));
-		//}
-
 
 		/// <summary>
 		/// Starts this instance of the game as a server
@@ -716,7 +712,7 @@ namespace AsteroidOutpost.Screens
 				{
 					lock (componentDictionary)
 					{
-						componentDictionary.Remove(deadComponent.ID);
+						componentDictionary.Remove(deadComponent.EntityID);
 					}
 				}
 
@@ -726,7 +722,7 @@ namespace AsteroidOutpost.Screens
 
 					lock (componentDictionary)
 					{
-						componentDictionary.Remove(deadEntity.ID);
+						componentDictionary.Remove(deadEntity.EntityID);
 					}
 				}
 
@@ -771,7 +767,7 @@ namespace AsteroidOutpost.Screens
 		/// </summary>
 		/// <param name="owningForceID"></param>
 		/// <returns></returns>
-		public Force GetForce(int owningForceID)
+		public Force GetForceByID(int owningForceID)
 		{
 			foreach(Force force in forces)
 			{
@@ -826,7 +822,7 @@ namespace AsteroidOutpost.Screens
 
 			if (isServer)
 			{
-				network.EnqueueMessage(new AOReflectiveOutgoingMessage(ID,
+				network.EnqueueMessage(new AOReflectiveOutgoingMessage(EntityID,
 				                                                       "AddForce",
 				                                                       new object[]{force}));
 			}
