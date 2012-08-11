@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AsteroidOutpost.Components;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
@@ -31,7 +32,7 @@ namespace AsteroidOutpost.Systems
 				Color color;
 
 				// TODO: This allocates a bunch of memory each draw, fix this!
-				List<Tuple<IPowerGridNode, IPowerGridNode>> linksAlreadyDrawn = new List<Tuple<IPowerGridNode, IPowerGridNode>>(grid.powerNodes.Count * 6);
+				List<Tuple<PowerGridNode, PowerGridNode>> linksAlreadyDrawn = new List<Tuple<PowerGridNode, PowerGridNode>>(grid.powerNodes.Count * 6);
 
 				// Draw all of the active links first
 				foreach (var linkToDraw in grid.recentlyActiveLinks)
@@ -45,7 +46,7 @@ namespace AsteroidOutpost.Systems
 						                     color);
 
 						linksAlreadyDrawn.Add(linkToDraw);
-						linksAlreadyDrawn.Add(new Tuple<IPowerGridNode, IPowerGridNode>(linkToDraw.Item2, linkToDraw.Item1));
+						linksAlreadyDrawn.Add(new Tuple<PowerGridNode, PowerGridNode>(linkToDraw.Item2, linkToDraw.Item1));
 					}
 				}
 
@@ -57,7 +58,7 @@ namespace AsteroidOutpost.Systems
 				{
 					foreach (var nodeB in grid.powerNodes[nodeA])
 					{
-						var linkToDraw = new Tuple<IPowerGridNode, IPowerGridNode>(nodeA, nodeB);
+						var linkToDraw = new Tuple<PowerGridNode, PowerGridNode>(nodeA, nodeB);
 						if (!linksAlreadyDrawn.Contains(linkToDraw))
 						{
 							if (nodeA.PowerStateActive && nodeB.PowerStateActive)
@@ -74,7 +75,7 @@ namespace AsteroidOutpost.Systems
 							                     color);
 
 							linksAlreadyDrawn.Add(linkToDraw);
-							linksAlreadyDrawn.Add(new Tuple<IPowerGridNode, IPowerGridNode>(nodeB, nodeA));
+							linksAlreadyDrawn.Add(new Tuple<PowerGridNode, PowerGridNode>(nodeB, nodeA));
 						}
 					}
 				}

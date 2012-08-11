@@ -60,27 +60,6 @@ namespace AsteroidOutpost.Entities.Structures
 			get { return "Power Node"; }
 		}
 
-		protected override void InitializeUpgrades()
-		{
-			// No upgrades
-		}
-
-		public override void Update(TimeSpan deltaTime)
-		{
-			if(IsConstructing)
-			{
-				UpdateConstructing(deltaTime);
-				//return;
-			}
-			else if(IsUpgrading)
-			{
-				UpdateUpgrading(deltaTime);
-				//return;
-			}
-
-			base.Update(deltaTime);
-		}
-
 		public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
 		{
 			base.Draw(spriteBatch, scaleModifier * 0.3f, tint);

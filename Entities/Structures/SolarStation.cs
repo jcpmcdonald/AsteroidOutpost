@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
@@ -12,7 +13,7 @@ using XNASpriteLib;
 
 namespace AsteroidOutpost.Entities.Structures
 {
-	class SolarStation : ConstructableEntity, IPowerProducer
+	class SolarStation : ConstructableEntity
 	{
 		private static Sprite sprite;
 		private static float angleStep;
