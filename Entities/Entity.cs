@@ -14,7 +14,7 @@ using XNASpriteLib;
 
 namespace AsteroidOutpost.Entities
 {
-	public abstract class Entity : IQuadStorable, ISerializable, IIdentifiable, IUpdatable, ICanKillSelf
+	public abstract class Entity //: IQuadStorable, ISerializable, IIdentifiable, IUpdatable, ICanKillSelf
 	{
 		protected World world;
 
@@ -28,7 +28,6 @@ namespace AsteroidOutpost.Entities
 
 		// Attributes
 		protected SpriteAnimator animator;
-		private bool solid = true;
 
 
 		private Position position;
@@ -39,34 +38,34 @@ namespace AsteroidOutpost.Entities
 
 
 		// Events
-		[EventReplication(EventReplication.ServerToClients)]
-		public event Action<EntityDyingEventArgs> DyingEvent;
+		//[EventReplication(EventReplication.ServerToClients)]
+		//public event Action<EntityDyingEventArgs> DyingEvent;
 
 		
 		protected Entity(World world, IComponentList componentList, Force owningForce, Vector2 center, int radius, int totalHitPoints)
 		{
-			this.world = world;
-			this.owningForce = owningForce;
+			//this.world = world;
+			//this.owningForce = owningForce;
 
-			Position = new Position(world, center, radius);
-			HitPoints = new HitPoints(world, totalHitPoints);
-			HitPoints.DyingEvent += KillSelf;
+			//Position = new Position(world, center, radius);
+			//HitPoints = new HitPoints(world, totalHitPoints);
+			//HitPoints.DyingEvent += KillSelf;
 
-			componentList.AddComponent(Position);
-			componentList.AddComponent(HitPoints);
+			//componentList.AddComponent(Position);
+			//componentList.AddComponent(HitPoints);
 		}
 
 		protected Entity(World world, IComponentList componentList, Force owningForce, Vector2 center, int totalHitPoints)
 		{
-			this.world = world;
-			this.owningForce = owningForce;
+			//this.world = world;
+			//this.owningForce = owningForce;
 
-			Position = new Position(world, center);
-			HitPoints = new HitPoints(world, totalHitPoints);
-			HitPoints.DyingEvent += KillSelf;
+			//Position = new Position(world, center);
+			//HitPoints = new HitPoints(world, totalHitPoints);
+			//HitPoints.DyingEvent += KillSelf;
 
-			componentList.AddComponent(Position);
-			componentList.AddComponent(HitPoints);
+			//componentList.AddComponent(Position);
+			//componentList.AddComponent(HitPoints);
 		}
 
 
@@ -111,26 +110,26 @@ namespace AsteroidOutpost.Entities
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
 		/// <param name="world"></param>
-		public virtual void PostDeserializeLink(World world)
-		{
-			this.world = world;
+		//public virtual void PostDeserializeLink(World world)
+		//{
+		//    this.world = world;
 
-			owningForce = world.GetForceByID(postDeserializeOwningForceID);
-			if(owningForce == null)
-			{
-				// I think something is wrong, there should always be an owning force
-				Debugger.Break();
-			}
+		//    owningForce = world.GetForceByID(postDeserializeOwningForceID);
+		//    if(owningForce == null)
+		//    {
+		//        // I think something is wrong, there should always be an owning force
+		//        Debugger.Break();
+		//    }
 
 			
-			position = world.GetComponents(postDeserializePositionID) as Position;
-			hitPoints = world.GetComponents(postDeserializeHitPointsID) as HitPoints;
+		//    position = world.GetComponents(postDeserializePositionID) as Position;
+		//    hitPoints = world.GetComponents(postDeserializeHitPointsID) as HitPoints;
 
-			if (position == null || hitPoints == null)
-			{
-				Debugger.Break();
-			}
-		}
+		//    if (position == null || hitPoints == null)
+		//    {
+		//        Debugger.Break();
+		//    }
+		//}
 
 		#endregion
 
@@ -175,53 +174,53 @@ namespace AsteroidOutpost.Entities
 
 
 
-		/// <summary>
-		/// Is the path between me and the other entity obstructed by any other entity?
-		/// </summary>
-		/// <param name="otherEntity"></param>
-		/// <returns></returns>
-		public bool IsObstructed(Entity otherEntity)
-		{
-			// We can't be obstructed by ourselves, so create an ignore list
-			List<Entity> ignoreList = new List<Entity>();
-			ignoreList.Add(this);
-			ignoreList.Add(otherEntity);
+		///// <summary>
+		///// Is the path between me and the other entity obstructed by any other entity?
+		///// </summary>
+		///// <param name="otherEntity"></param>
+		///// <returns></returns>
+		//public bool IsObstructed(int otherEntity)
+		//{
+		//    // We can't be obstructed by ourselves, so create an ignore list
+		//    List<int> ignoreList = new List<int>();
+		//    ignoreList.Add(id);
+		//    ignoreList.Add(otherEntity);
 
-			return IsLineObstructed(Position.Center, otherEntity.Position.Center, world, ignoreList);
-		}
+		//    return IsLineObstructed(Position.Center, otherEntity.Position.Center, world, ignoreList);
+		//}
 		
 		
-		/// <summary>
-		/// Is the line between two points obstructed by a entity?
-		/// </summary>
-		/// <param name="point1">The first point on the line</param>
-		/// <param name="point2">The second point on the line</param>
-		/// <param name="world">A reference to the game</param>
-		/// <param name="ignoreList">A list of non-obstructable entities, these entities will be ignored. Use null if you don't want to ignore anything</param>
-		/// <returns>True if an entity is blocking the line, false otherwise</returns>
-		protected static bool IsLineObstructed(Vector2 point1, Vector2 point2, World world, List<Entity> ignoreList)
-		{
-			// Check for obstacles in the way
-			List<Entity> nearbyEntities = world.EntitiesInArea((int)(Math.Min(point1.X, point2.X) - 0.5),
-			                                                   (int)(Math.Min(point1.Y, point2.Y - 0.5)),
-			                                                   (int)(Math.Abs(point1.X - point2.X) + 0.5),
-			                                                   (int)(Math.Abs(point1.Y - point2.Y) + 0.5));
+		///// <summary>
+		///// Is the line between two points obstructed by a entity?
+		///// </summary>
+		///// <param name="point1">The first point on the line</param>
+		///// <param name="point2">The second point on the line</param>
+		///// <param name="world">A reference to the game</param>
+		///// <param name="ignoreList">A list of non-obstructable entities, these entities will be ignored. Use null if you don't want to ignore anything</param>
+		///// <returns>True if an entity is blocking the line, false otherwise</returns>
+		//protected static bool IsLineObstructed(Vector2 point1, Vector2 point2, World world, List<int> ignoreList)
+		//{
+		//    // Check for obstacles in the way
+		//    List<int> nearbyEntities = world.EntitiesInArea((int)(Math.Min(point1.X, point2.X) - 0.5),
+		//                                                       (int)(Math.Min(point1.Y, point2.Y - 0.5)),
+		//                                                       (int)(Math.Abs(point1.X - point2.X) + 0.5),
+		//                                                       (int)(Math.Abs(point1.Y - point2.Y) + 0.5));
 
-			foreach (Entity obstructingEntity in nearbyEntities)
-			{
-				if (obstructingEntity.solid && (ignoreList == null || !ignoreList.Contains(obstructingEntity)))
-				{
-					if (obstructingEntity.Position.ShortestDistanceToLine(point1, point2) < obstructingEntity.Position.Radius)
-					{
-						// It's obstructed
-						return true;
-					}
-				}
-			}
+		//    foreach (Entity obstructingEntity in nearbyEntities)
+		//    {
+		//        if (obstructingEntity.solid && (ignoreList == null || !ignoreList.Contains(obstructingEntity)))
+		//        {
+		//            if (obstructingEntity.Position.ShortestDistanceToLine(point1, point2) < obstructingEntity.Position.Radius)
+		//            {
+		//                // It's obstructed
+		//                return true;
+		//            }
+		//        }
+		//    }
 			
-			// Good line
-			return false;
-		}
+		//    // Good line
+		//    return false;
+		//}
 
 		#endregion
 
@@ -255,22 +254,6 @@ namespace AsteroidOutpost.Entities
 		public Force OwningForce
 		{
 			get { return owningForce; }
-		}
-
-
-		/// <summary>
-		/// Gets whether this entity is solid or not
-		/// </summary>
-		public bool Solid
-		{
-			get
-			{
-				return solid;
-			}
-			protected set
-			{
-				solid = value;
-			}
 		}
 
 
@@ -346,10 +329,10 @@ namespace AsteroidOutpost.Entities
 			deleteMe = delMe;
 
 			// Tell everyone that's interested in my death
-			if (DyingEvent != null)
-			{
-				DyingEvent(new EntityDyingEventArgs(this));
-			}
+			//if (DyingEvent != null)
+			//{
+			//    DyingEvent(new EntityDyingEventArgs(this));
+			//}
 		}
 
 		public override string ToString()

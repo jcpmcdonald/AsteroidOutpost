@@ -145,8 +145,8 @@ namespace AsteroidOutpost.Networking
 			}
 			else
 			{
-				// For all other IDs, look up the corresponding Entity
-				targetObject = world.GetTarget(targetObjectID);
+				// For all other IDs, look up the corresponding Component
+				targetObject = null;//world.GetTarget(targetObjectID);
 
 				if (targetObject == null)
 				{

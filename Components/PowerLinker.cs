@@ -17,8 +17,8 @@ namespace AsteroidOutpost.Components
 		private int postDeserializeOwningForceID;		// For serialization linking, don't use this
 
 
-		public PowerLinker(World world, Force owningForce, PowerGridNode powerGridNode)
-			: base(world)
+		public PowerLinker(World world, int entityID, Force owningForce, PowerGridNode powerGridNode)
+			: base(world, entityID)
 		{
 			relatedPowerNode = powerGridNode;
 
@@ -61,27 +61,27 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
-		{
-			foreach (var powerLink in world.PowerGrid[owningForce.ID].GetAllPowerLinks(relatedPowerNode))
-			{
-				Color linkColor;
-				if (world.PowerGrid[owningForce.ID].IsPowerRoutableBetween(relatedPowerNode, powerLink.Value))
-				{
-					linkColor = Color.Yellow;
-				}
-				else
-				{
-					linkColor = Color.Red;
-				}
+		//public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
+		//{
+		//    foreach (var powerLink in world.PowerGrid[owningForce.ID].GetAllPowerLinks(relatedPowerNode))
+		//    {
+		//        Color linkColor;
+		//        if (world.PowerGrid[owningForce.ID].IsPowerRoutableBetween(relatedPowerNode, powerLink.Value))
+		//        {
+		//            linkColor = Color.Yellow;
+		//        }
+		//        else
+		//        {
+		//            linkColor = Color.Red;
+		//        }
 
-				spriteBatch.DrawLine(world.WorldToScreen(relatedPowerNode.PowerLinkPointAbsolute),
-									 world.WorldToScreen(powerLink.Value.PowerLinkPointAbsolute),
-									 linkColor);
-			}
+		//        spriteBatch.DrawLine(world.WorldToScreen(relatedPowerNode.PowerLinkPointAbsolute),
+		//                             world.WorldToScreen(powerLink.Value.PowerLinkPointAbsolute),
+		//                             linkColor);
+		//    }
 
 
-			base.Draw(spriteBatch, scaleModifier, tint);
-		}
+		//    base.Draw(spriteBatch, scaleModifier, tint);
+		//}
 	}
 }

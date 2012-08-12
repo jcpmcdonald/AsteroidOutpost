@@ -35,7 +35,7 @@ namespace AsteroidOutpost.Components
 
 		private void Init()
 		{
-			Solid = false;
+			//Solid = false;
 
 			animator = new SpriteAnimator(sprite);
 			animator.CurrentAnimation = "Rotate";

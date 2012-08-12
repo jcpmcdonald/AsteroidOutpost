@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Screens;
+using Microsoft.Xna.Framework;
 using XNASpriteLib;
 
 namespace AsteroidOutpost.Components
@@ -11,11 +12,11 @@ namespace AsteroidOutpost.Components
 	public class Animator : Component
 	{
 
-
-		public Animator(World world, Sprite sprite)
-			: base(world)
+		public Animator(World world, int entityID, Sprite sprite)
+			: base(world, entityID)
 		{
 			SpriteAnimator = new SpriteAnimator(sprite);
+			Tint = Color.White;
 		}
 
 
@@ -26,5 +27,6 @@ namespace AsteroidOutpost.Components
 
 
 		public SpriteAnimator SpriteAnimator { get; set; }
+		public Color Tint { get; set; }
 	}
 }

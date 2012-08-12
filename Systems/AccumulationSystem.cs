@@ -42,7 +42,7 @@ namespace AsteroidOutpost.Systems
 						// Follow the parent's position
 						//Position textPos = new PositionOffset(world, componentList, position, Vector2.Zero, velocity);
 
-						FreeText freeText = new FreeText(world, accumulator.Offset, accumulator.Value.ToString("+0;-0;+0"), accumulator.Color, accumulator.FadeRate);
+						FreeText freeText = new FreeText(world, accumulator.EntityID, accumulator.Offset, accumulator.Value.ToString("+0;-0;+0"), accumulator.Color, accumulator.FadeRate);
 						world.HUD.AddComponent(freeText);
 
 						accumulator.Value = 0;

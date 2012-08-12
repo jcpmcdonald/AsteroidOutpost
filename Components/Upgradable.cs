@@ -41,8 +41,8 @@ namespace AsteroidOutpost.Components
 		public event Action<EntityUpgradeEventArgs> UpgradeCompletedEvent;
 
 
-		public Upgradable(World world, params Upgrade[] upgrades)
-			: base(world)
+		public Upgradable(World world, int entityID, params Upgrade[] upgrades)
+			: base(world, entityID)
 		{
 			CurrentUpgrade = null;
 			allUpgrades.AddRange(upgrades);

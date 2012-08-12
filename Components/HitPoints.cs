@@ -2,6 +2,7 @@
 using System.IO;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
@@ -19,8 +20,8 @@ namespace AsteroidOutpost.Components
 		public event Action<EntityHitPointsChangedEventArgs> HitPointsChangedEvent;
 
 
-		public HitPoints(World world, int totalHitPoints)
-			: base(world)
+		public HitPoints(World world, int entityID, int totalHitPoints)
+			: base(world, entityID)
 		{
 			this.totalHitPoints = totalHitPoints;
 			hitPoints = totalHitPoints;

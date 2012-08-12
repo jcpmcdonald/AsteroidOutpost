@@ -14,14 +14,14 @@ namespace AsteroidOutpost.Components
 		private int postDeserializeParentID;		// For serialization linking, don't use this
 
 
-		public PositionOffset(World world, Position parentPosition, Vector2 offset)
-			: base(world, offset)
+		public PositionOffset(World world, int entityID, Position parentPosition, Vector2 offset)
+			: base(world, entityID, offset)
 		{
 			parent = parentPosition;
 		}
 
-		public PositionOffset(World world, Position parentPosition, Vector2 offset, Vector2 velocity)
-			: base(world, offset, velocity)
+		public PositionOffset(World world, int entityID, Position parentPosition, Vector2 offset, Vector2 velocity)
+			: base(world, entityID, offset, velocity)
 		{
 			parent = parentPosition;
 		}

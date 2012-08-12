@@ -23,10 +23,10 @@ namespace AsteroidOutpost.Components
 		private Color foregroundColor;
 
 
-		public ProgressBar(World world, Position position, Vector2 positionOffset, int length, int thickness, Color backgroundColor, Color foregroundColor)
-			: base(world)
+		public ProgressBar(World world, int entityID, Position position, Vector2 positionOffset, int length, int thickness, Color backgroundColor, Color foregroundColor)
+			: base(world, entityID)
 		{
-			this.position = new PositionOffset(world, position, positionOffset);
+			this.position = new PositionOffset(world, entityID, position, positionOffset);
 			world.HUD.AddComponent(this.position);
 
 			this.length = length;
@@ -36,10 +36,10 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public ProgressBar(World world, IComponentList componentList, Vector2 position, int length, int thickness, Color backgroundColor, Color foregroundColor)
-			: base(world)
+		public ProgressBar(World world, int entityID, IComponentList componentList, Vector2 position, int length, int thickness, Color backgroundColor, Color foregroundColor)
+			: base(world, entityID)
 		{
-			this.position = new Position(world, position);
+			this.position = new Position(world, entityID, position);
 			componentList.AddComponent(this.position);
 
 			this.length = length;
@@ -126,18 +126,18 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
-		{
-			base.Draw(spriteBatch, scaleModifier, tint);
+		//public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
+		//{
+		//    base.Draw(spriteBatch, scaleModifier, tint);
 
-			float percentFilled = (float)(Progress - min) / (max - min);
-			spriteBatch.FillRectangle(world.WorldToScreen(position.Center) + world.Scale(new Vector2(-length / 2.0f, thickness / 2.0f)),
-			                          world.Scale(new Vector2(length, thickness)),
-									  backgroundColor);
+		//    float percentFilled = (float)(Progress - min) / (max - min);
+		//    spriteBatch.FillRectangle(world.WorldToScreen(position.Center) + world.Scale(new Vector2(-length / 2.0f, thickness / 2.0f)),
+		//                              world.Scale(new Vector2(length, thickness)),
+		//                              backgroundColor);
 
-			spriteBatch.FillRectangle(world.WorldToScreen(position.Center) + world.Scale(new Vector2(-length / 2.0f, thickness / 2.0f)),
-									  world.Scale(new Vector2(length * percentFilled, thickness)),
-									  foregroundColor);
-		}
+		//    spriteBatch.FillRectangle(world.WorldToScreen(position.Center) + world.Scale(new Vector2(-length / 2.0f, thickness / 2.0f)),
+		//                              world.Scale(new Vector2(length * percentFilled, thickness)),
+		//                              foregroundColor);
+		//}
 	}
 }

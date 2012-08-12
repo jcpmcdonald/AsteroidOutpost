@@ -2,34 +2,38 @@
 using System.IO;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
+using C3.XNA;
 using Microsoft.Xna.Framework;
 
 namespace AsteroidOutpost.Components
 {
-	public class Position : Component, IUpdatable, ISerializable
+	public class Position : Component, IQuadStorable
 	{
 		private Vector2 offset;		// from the origin (0,0)
 		private Vector2 velocity;
 		private int radius;
+
+		private bool solid = true;
 
 
 		//[EventReplication(EventReplication.ServerToClients)]
 		public event Action<EntityMovedEventArgs> MovedEvent;
 
 
-		public Position(World world, Vector2 center, int radius = 0)
-			: base(world)
+		public Position(World world, int entityID, Vector2 center, int radius = 0)
+			: base(world, entityID)
 		{
 			offset = center;
 			this.radius = radius;
 		}
 
 
-		public Position(World world, Vector2 center, Vector2 velocity, int radius = 0)
-			: base(world)
+		public Position(World world, int entityID, Vector2 center, Vector2 velocity, int radius = 0)
+			: base(world, entityID)
 		{
 			offset = center;
 			this.velocity = velocity;
@@ -92,6 +96,22 @@ namespace AsteroidOutpost.Components
 		public void SetCenter(Vector2 newCenter)
 		{
 			Center = newCenter;
+		}
+
+
+		/// <summary>
+		/// Gets whether this entity is solid or not
+		/// </summary>
+		public bool Solid
+		{
+			get
+			{
+				return solid;
+			}
+			protected set
+			{
+				solid = value;
+			}
 		}
 
 

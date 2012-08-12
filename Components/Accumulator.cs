@@ -11,11 +11,12 @@ namespace AsteroidOutpost.Components
 	public class Accumulator : Component
 	{
 		public Accumulator(World world,
+		                   int entityID,
 		                   Vector2 offset,
 		                   Vector2 velocity,
 		                   Color color,
 		                   float fadeRate = 120)
-			: base(world)
+			: base(world, entityID)
 		{
 			this.Offset = offset;
 			this.Velocity = velocity;
@@ -37,7 +38,8 @@ namespace AsteroidOutpost.Components
 		{
 			Value += e.Delta;
 		}
-		
+
+
 		public int Value { get; set; }
 		public Vector2 Offset { get; set; }
 		public Vector2 Velocity { get; private set; }

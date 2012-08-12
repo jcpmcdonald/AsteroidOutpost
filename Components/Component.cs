@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
@@ -14,6 +15,7 @@ namespace AsteroidOutpost.Components
 		protected World world;
 
 		// This ID will uniquely identify this object in the game
+		private Guid guid;
 		protected int entityID = -1;
 		private bool deleteMe;
 
@@ -23,8 +25,10 @@ namespace AsteroidOutpost.Components
 		public event Action<ComponentDyingEventArgs> DyingEvent;
 
 
-		public Component(World world)
+		public Component(World world, int entityID)
 		{
+			guid = Guid.NewGuid();
+			this.entityID = entityID;
 			this.world = world;
 		}
 
@@ -63,6 +67,18 @@ namespace AsteroidOutpost.Components
 			set
 			{
 				entityID = value;
+			}
+		}
+
+		public Guid GUID
+		{
+			get
+			{
+				return guid;
+			}
+			set
+			{
+				guid = value;
 			}
 		}
 
@@ -105,25 +121,6 @@ namespace AsteroidOutpost.Components
 			{
 				DyingEvent(new ComponentDyingEventArgs(this));
 			}
-		}
-
-
-		/// <summary>
-		/// Draws this component
-		/// </summary>
-		/// <param name="spriteBatch">The sprite batch to draw to</param>
-		/// <param name="scaleModifier">The scale modifier to use</param>
-		/// <param name="tint">The tint to use</param>
-		public virtual void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
-		{
-		}
-
-		/// <summary>
-		/// Updates this component
-		/// </summary>
-		/// <param name="deltaTime">The amount of time that has passed since the last frame</param>
-		public virtual void Update(TimeSpan deltaTime)
-		{
 		}
 	}
 }

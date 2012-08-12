@@ -1,5 +1,4 @@
 ﻿using AsteroidOutpost.Entities;
-using AsteroidOutpost.Entities.Structures;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

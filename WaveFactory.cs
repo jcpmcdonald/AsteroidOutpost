@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Entities;
-using AsteroidOutpost.Entities.Units;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 
@@ -35,8 +34,9 @@ namespace AsteroidOutpost
 			int aiCreated = 0;
 			while (aiCreated < pointValue)
 			{
+				// TODO: 2012-08-10 Fix spawning bad guys
 				// Make something
-				world.Add(new Ship1(world, world, aiActor.PrimaryForce, roughPosition));
+				//world.Add(new Ship1(world, world, aiActor.PrimaryForce, roughPosition));
 				aiCreated += 100;
 			}
 

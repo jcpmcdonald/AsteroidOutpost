@@ -22,8 +22,8 @@ namespace AsteroidOutpost.Components
 
 		private static SpriteFont font;
 
-		public FreeText(World world, Vector2 offset, string text, Color color, float fadeRate = 150)
-			: base(world)
+		public FreeText(World world, int entityID, Vector2 offset, string text, Color color, float fadeRate = 150)
+			: base(world, entityID)
 		{
 			this.text = text;
 			this.offset = offset;
@@ -56,36 +56,36 @@ namespace AsteroidOutpost.Components
 		/// Updates this component
 		/// </summary>
 		/// <param name="deltaTime">The amount of time that has passed since the last frame</param>
-		public override void Update(TimeSpan deltaTime)
-		{
-			base.Update(deltaTime);
+		//public override void Update(TimeSpan deltaTime)
+		//{
+		//    base.Update(deltaTime);
 
-			cumulativeTime += deltaTime;
+		//    cumulativeTime += deltaTime;
 
-			int fadeAmount = (int)((fadeRate * cumulativeTime.TotalSeconds) + 0.5);
-			color.R = (byte)Math.Max(0, 255 - fadeAmount);
-			color.G = (byte)Math.Max(0, 255 - fadeAmount);
-			color.B = (byte)Math.Max(0, 255 - fadeAmount);
-			color.A = (byte)Math.Max(0, 255 - fadeAmount);
+		//    int fadeAmount = (int)((fadeRate * cumulativeTime.TotalSeconds) + 0.5);
+		//    color.R = (byte)Math.Max(0, 255 - fadeAmount);
+		//    color.G = (byte)Math.Max(0, 255 - fadeAmount);
+		//    color.B = (byte)Math.Max(0, 255 - fadeAmount);
+		//    color.A = (byte)Math.Max(0, 255 - fadeAmount);
 
-			if (color.A == 0 || (color.R == 0 && color.G == 0 && color.B == 0))
-			{
-				SetDead(true, true);
-			}
-		}
+		//    if (color.A == 0 || (color.R == 0 && color.G == 0 && color.B == 0))
+		//    {
+		//        SetDead(true, true);
+		//    }
+		//}
 
 
-		public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
-		{
-			spriteBatch.DrawString(font,
-			                       text,
-			                       world.WorldToScreen(offset),
-			                       color.Blend(tint),
-			                       0,
-			                       Vector2.Zero,
-			                       1 / world.ScaleFactor,
-			                       SpriteEffects.None,
-			                       0);
-		}
+		//public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
+		//{
+		//    spriteBatch.DrawString(font,
+		//                           text,
+		//                           world.WorldToScreen(offset),
+		//                           color.Blend(tint),
+		//                           0,
+		//                           Vector2.Zero,
+		//                           1 / world.ScaleFactor,
+		//                           SpriteEffects.None,
+		//                           0);
+		//}
 	}
 }

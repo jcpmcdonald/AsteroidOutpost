@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
-using AsteroidOutpost.Entities.Structures;
-using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
-using C3.XNA;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace AsteroidOutpost
+namespace AsteroidOutpost.Components
 {
 	public class PowerGrid
 	{
-		private World world;
+		protected World world;
 
 		public const int PowerConductingDistance = 220;
 		internal readonly Dictionary<PowerGridNode, List<PowerGridNode>> powerNodes = new Dictionary<PowerGridNode, List<PowerGridNode>>(32);
@@ -26,6 +19,7 @@ namespace AsteroidOutpost
 
 
 		public PowerGrid(World world)
+			//: base(world)
 		{
 			this.world = world;
 		}
@@ -74,7 +68,9 @@ namespace AsteroidOutpost
 		internal void ConnectToPowerGrid(PowerGridNode newNode)
 		{
 			powerNodes.Add(newNode, new List<PowerGridNode>(6));
-			newNode.DyingEvent += NodeDying;
+
+			// TODO: 2012-08-11 Power node dying event needs to be hooked up
+			//newNode.DyingEvent += NodeDying;
 
 			List<KeyValuePair<float, PowerGridNode>> allPowerLinks = GetAllPowerLinks(newNode);
 
@@ -117,13 +113,14 @@ namespace AsteroidOutpost
 		}
 
 
-		public void NodeDying(EntityReflectiveEventArgs e)
+		public void NodeDying(/*EntityReflectiveEventArgs e*/)
 		{
-			PowerGridNode node = e.Entity as PowerGridNode;
-			if (node != null)
-			{
-				Disconnect(node);
-			}
+			// TODO: 2012-08-11 Event broken
+			//PowerGridNode node = e.Entity as PowerGridNode;
+			//if (node != null)
+			//{
+			//    Disconnect(node);
+			//}
 		}
 
 		internal void Disconnect(PowerGridNode node)
@@ -133,8 +130,8 @@ namespace AsteroidOutpost
 				return;
 			}
 
-			// Time of death:   13:57
-			node.DyingEvent -= NodeDying;
+			// TODO: 2012-08-11 Power node dying event needs to be hooked up
+			//node.DyingEvent -= NodeDying;
 
 			List<PowerGridNode> connectedNodes = powerNodes[node];
 			foreach (var connectedNode in connectedNodes)
@@ -152,16 +149,18 @@ namespace AsteroidOutpost
 		internal bool IsPowerRoutableBetween(PowerGridNode powerNodeA, PowerGridNode powerNodeB)
 		{
 			// Check for obstacles in the way
-			List<Entity> nearbyEntities = world.EntitiesInArea((int)(Math.Min(powerNodeA.PowerLinkPointAbsolute.X, powerNodeB.PowerLinkPointAbsolute.X) - 0.5),
-			                                                     (int)(Math.Min(powerNodeA.PowerLinkPointAbsolute.Y, powerNodeB.PowerLinkPointAbsolute.Y - 0.5)),
-			                                                     (int)(Math.Abs(powerNodeA.PowerLinkPointAbsolute.X - powerNodeB.PowerLinkPointAbsolute.X) + 0.5),
-			                                                     (int)(Math.Abs(powerNodeA.PowerLinkPointAbsolute.Y - powerNodeB.PowerLinkPointAbsolute.Y) + 0.5));
+			List<int> nearbyEntities = world.EntitiesInArea((int)(Math.Min(powerNodeA.PowerLinkPointAbsolute.X, powerNodeB.PowerLinkPointAbsolute.X) - 0.5),
+			                                                (int)(Math.Min(powerNodeA.PowerLinkPointAbsolute.Y, powerNodeB.PowerLinkPointAbsolute.Y - 0.5)),
+			                                                (int)(Math.Abs(powerNodeA.PowerLinkPointAbsolute.X - powerNodeB.PowerLinkPointAbsolute.X) + 0.5),
+			                                                (int)(Math.Abs(powerNodeA.PowerLinkPointAbsolute.Y - powerNodeB.PowerLinkPointAbsolute.Y) + 0.5),
+			                                                true);
 
-			foreach (Entity obstructingEntity in nearbyEntities)
+			foreach (int obstructingEntityID in nearbyEntities)
 			{
-				if (obstructingEntity.Solid && obstructingEntity != powerNodeA && obstructingEntity != powerNodeB)
+				if (obstructingEntityID != powerNodeA.EntityID && obstructingEntityID != powerNodeB.EntityID)
 				{
-					if (obstructingEntity.Position.ShortestDistanceToLine(powerNodeA.PowerLinkPointAbsolute, powerNodeB.PowerLinkPointAbsolute) < obstructingEntity.Position.Radius)
+					Position obstructingPosition = world.GetComponent<Position>(obstructingEntityID);
+					if (obstructingPosition.ShortestDistanceToLine(powerNodeA.PowerLinkPointAbsolute, powerNodeB.PowerLinkPointAbsolute) < obstructingPosition.Radius)
 					{
 						// It's obstructed
 						return false;

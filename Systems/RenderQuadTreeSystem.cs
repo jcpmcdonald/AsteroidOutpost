@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Screens;
 using C3.XNA;
@@ -46,7 +47,7 @@ namespace AsteroidOutpost.Systems
 			base.Draw(gameTime);
 		}
 
-		private void DrawQuad(SpriteBatch spriteBatch, QuadTreeNode<Entity> quad, int depth)
+		private void DrawQuad(SpriteBatch spriteBatch, QuadTreeNode<Position> quad, int depth)
 		{
 			if (quad != null)
 			{

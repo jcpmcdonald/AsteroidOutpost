@@ -9,8 +9,8 @@ namespace AsteroidOutpost.Components
 {
 	public class PowerProducer : PowerGridNode
 	{
-		public PowerProducer(World world)
-			: base(world)
+		public PowerProducer(World world, int entityID)
+			: base(world, entityID)
 		{
 		}
 

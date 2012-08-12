@@ -21,8 +21,8 @@ namespace AsteroidOutpost.Components
 		private int textureSize;
 		private float sizeRatio;
 
-		public Ring(World world, Position position, int radius, Color color)
-			: base(world)
+		public Ring(World world, int entityID, Position position, int radius, Color color)
+			: base(world, entityID)
 		{
 			this.position = position;
 			this.radius = radius;
@@ -89,20 +89,20 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
-		{
-			spriteBatch.Draw(texture,
-							 world.WorldToScreen(position.Center - (new Vector2(textureSize + 10, textureSize + 10) * sizeRatio)),  // 10 padding in the textures
-							 null,
-							 color.Blend(tint),
-							 0,
-							 Vector2.Zero,
-							 (sizeRatio * scaleModifier) / world.ScaleFactor,
-							 SpriteEffects.None,
-							 0);
+		//public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
+		//{
+		//    spriteBatch.Draw(texture,
+		//                     world.WorldToScreen(position.Center - (new Vector2(textureSize + 10, textureSize + 10) * sizeRatio)),  // 10 padding in the textures
+		//                     null,
+		//                     color.Blend(tint),
+		//                     0,
+		//                     Vector2.Zero,
+		//                     (sizeRatio * scaleModifier) / world.ScaleFactor,
+		//                     SpriteEffects.None,
+		//                     0);
 
-			//base.Draw(spriteBatch, scaleModifier, tint);
-		}
+		//    //base.Draw(spriteBatch, scaleModifier, tint);
+		//}
 
 	}
 }

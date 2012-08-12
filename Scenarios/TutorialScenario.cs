@@ -6,7 +6,6 @@ using System.Text;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
-using AsteroidOutpost.Entities.Structures;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 
@@ -68,11 +67,11 @@ namespace AsteroidOutpost.Scenarios
 
 			world.HUD.FocusWorldPoint = new Vector2(world.MapWidth / 2f, world.MapHeight / 2f);
 
-			// Create your starting solar station
-			SolarStation startingStation = new SolarStation(world, world, localController.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f));
-			world.Add(startingStation);
-			startingStation.StartConstruction();
-			startingStation.IsConstructing = false;
+			//// Create your starting solar station
+			//SolarStation startingStation = new SolarStation(world, world, localController.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f));
+			//world.Add(startingStation);
+			//startingStation.StartConstruction();
+			//startingStation.IsConstructing = false;
 
 
 			//lblBuild2Miners.Visible = false;
@@ -88,13 +87,13 @@ namespace AsteroidOutpost.Scenarios
 			//btnNext.Click += btnNext_Click;
 			//frmInstructions.AddControl(btnNext);
 
-			ConstructableEntity.AnyConstructionCompletedEvent += ConstructableEntity_StructureFinishedEvent;
-			ConstructableEntity.AnyUpgradeCompletedEvent += ConstructableEntity_UpgradeFinishedEvent;
+			//ConstructableEntity.AnyConstructionCompletedEvent += ConstructableEntity_StructureFinishedEvent;
+			//ConstructableEntity.AnyUpgradeCompletedEvent += ConstructableEntity_UpgradeFinishedEvent;
 
 
-			Beacon minerBeacon = new Beacon(world, world, localForce, new Vector2((world.MapWidth / 2.0f) + 200, world.MapHeight / 2.0f), 40);
-			beacons.Add(minerBeacon);
-			world.Add(minerBeacon);
+			//Beacon minerBeacon = new Beacon(world, world, localForce, new Vector2((world.MapWidth / 2.0f) + 200, world.MapHeight / 2.0f), 40);
+			//beacons.Add(minerBeacon);
+			//world.Add(minerBeacon);
 
 			//world.HUD.AddControl(frmInstructions);
 
@@ -107,16 +106,16 @@ namespace AsteroidOutpost.Scenarios
 			switch (progress)
 			{
 			case 1:
-				if (e.Entity is SolarStation)
-				{
-					if (e.Upgrade.Name == "Level 2")
-					{
-						//lblUpgradeSolar.Text = "+" + lblUpgradeSolar.Text.Substring(1);
-						//lblUpgradeSolar.Color = Color.LightGreen;
-						progress++;
-						StartSection(progress);
-					}
-				}
+				//if (e.Entity is SolarStation)
+				//{
+				//    if (e.Upgrade.Name == "Level 2")
+				//    {
+				//        //lblUpgradeSolar.Text = "+" + lblUpgradeSolar.Text.Substring(1);
+				//        //lblUpgradeSolar.Color = Color.LightGreen;
+				//        progress++;
+				//        StartSection(progress);
+				//    }
+				//}
 				break;
 
 
@@ -128,56 +127,56 @@ namespace AsteroidOutpost.Scenarios
 
 		void ConstructableEntity_StructureFinishedEvent(EntityEventArgs e)
 		{
-			switch(progress)
-			{
-			case 0:
-				LaserMiner miner = e.Entity as LaserMiner;
-				if (miner != null)
-				{
-					// miner.ConnectedPowerSources().Count > 0 &&
-					if(miner.NearbyAsteroids().Count > 0)
-					{
-						minersBuilt++;
-						if(minersBuilt == 2)
-						{
-							//lblBuild2Miners.Text = "+ (" + minersBuilt + " / 2) Build 2 miners near asteroids";
-							//lblBuild2Miners.Color = Color.LightGreen;
-							progress++;
-							StartSection(progress);
-						}
-						else
-						{
-							//lblBuild2Miners.Text = "- (" + minersBuilt + " / 2) Build 2 miners near asteroids";
-						}
-					}
-				}
-				break;
+			//switch(progress)
+			//{
+			//case 0:
+			//    LaserMiner miner = e.Entity as LaserMiner;
+			//    if (miner != null)
+			//    {
+			//        // miner.ConnectedPowerSources().Count > 0 &&
+			//        if(miner.NearbyAsteroids().Count > 0)
+			//        {
+			//            minersBuilt++;
+			//            if(minersBuilt == 2)
+			//            {
+			//                //lblBuild2Miners.Text = "+ (" + minersBuilt + " / 2) Build 2 miners near asteroids";
+			//                //lblBuild2Miners.Color = Color.LightGreen;
+			//                progress++;
+			//                StartSection(progress);
+			//            }
+			//            else
+			//            {
+			//                //lblBuild2Miners.Text = "- (" + minersBuilt + " / 2) Build 2 miners near asteroids";
+			//            }
+			//        }
+			//    }
+			//    break;
 
 
 
-			case 2:
-				if (e.Entity is LaserTower)
-				{
-					lasersBuilt++;
-					if(lasersBuilt == 3)
-					{
-						//lblBuildLaserTowers.Text = "+ (" + lasersBuilt + " / 3) Build some laser towers";
-						//lblBuildLaserTowers.Color = Color.LightGreen;
-						progress++;
-						StartSection(progress);
-					}
-					else
-					{
-						//lblBuildLaserTowers.Text = "- (" + lasersBuilt + " / 3) Build some laser towers";
-					}
-				}
-				break;
+			//case 2:
+			//    if (e.Entity is LaserTower)
+			//    {
+			//        lasersBuilt++;
+			//        if(lasersBuilt == 3)
+			//        {
+			//            //lblBuildLaserTowers.Text = "+ (" + lasersBuilt + " / 3) Build some laser towers";
+			//            //lblBuildLaserTowers.Color = Color.LightGreen;
+			//            progress++;
+			//            StartSection(progress);
+			//        }
+			//        else
+			//        {
+			//            //lblBuildLaserTowers.Text = "- (" + lasersBuilt + " / 3) Build some laser towers";
+			//        }
+			//    }
+			//    break;
 
 
 
-			default:
-				break;
-			}
+			//default:
+			//    break;
+			//}
 		}
 
 

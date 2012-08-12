@@ -16,23 +16,23 @@ namespace AsteroidOutpost.Components
 	/// </summary>
 	public class Linker : Component, ICanKillSelf
 	{
-		private Position position;
-		private int postDeserializePositionID;		// For serialization linking, don't use this
+		//private Position position;
+		//private int postDeserializePositionID;		// For serialization linking, don't use this
 
-		private List<Tuple<Predicate<Entity>, Color, float>> links = new List<Tuple<Predicate<Entity>, Color, float>>();
+		private List<Tuple<Predicate<int>, Color, float>> links = new List<Tuple<Predicate<int>, Color, float>>();
 
 
-		public Linker(World world, Position position)
-			: base(world)
+		public Linker(World world, int entityID)
+			: base(world, entityID)
 		{
-			this.position = position;
+			//this.position = position;
 		}
 
 
 		public Linker(BinaryReader br)
 			: base(br)
 		{
-			postDeserializePositionID = br.ReadInt32();
+			//postDeserializePositionID = br.ReadInt32();
 		}
 
 
@@ -54,7 +54,7 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public List<Tuple<Predicate<Entity>, Color, float>> Links
+		public List<Tuple<Predicate<int>, Color, float>> Links
 		{
 			get
 			{
@@ -63,38 +63,40 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
-		{
-			float maxDistance = 0;
-			foreach (var tuple in Links)
-			{
-				maxDistance = Math.Max(maxDistance, tuple.Item3);
-			}
+		//public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)
+		//{
+		//    float maxDistance = 0;
+		//    foreach (var tuple in Links)
+		//    {
+		//        maxDistance = Math.Max(maxDistance, tuple.Item3);
+		//    }
 
-			if (maxDistance > 0)
-			{
+		//    if (maxDistance > 0)
+		//    {
 
-				List<Entity> nearbyEntities = world.EntitiesInArea((int)(position.Center.X - maxDistance),
-				                                                   (int)(position.Center.Y - maxDistance),
-				                                                   (int)(maxDistance * 2),
-				                                                   (int)(maxDistance * 2));
+		//        Position position = world.GetComponent<Position>(entityID);
+		//        List<int> nearbyEntities = world.EntitiesInArea((int)(position.Center.X - maxDistance),
+		//                                                        (int)(position.Center.Y - maxDistance),
+		//                                                        (int)(maxDistance * 2),
+		//                                                        (int)(maxDistance * 2));
 
-				foreach (var nearbyEntity in nearbyEntities)
-				{
-					foreach (var tuple in Links)
-					{
-						if (position.Distance(nearbyEntity.Position) <= tuple.Item3 && tuple.Item1(nearbyEntity))
-						{
-							spriteBatch.DrawLine(world.WorldToScreen(position.Center),
-							                     world.WorldToScreen(nearbyEntity.Position.Center),
-							                     tuple.Item2,
-							                     1);
-						}
-					}
-				}
-			}
+		//        foreach (var nearbyEntity in nearbyEntities)
+		//        {
+		//            foreach (var tuple in Links)
+		//            {
+		//                Position nearbyPosition = world.GetComponent<Position>(nearbyEntity);
+		//                if (position.Distance(nearbyPosition) <= tuple.Item3 && tuple.Item1(nearbyEntity))
+		//                {
+		//                    spriteBatch.DrawLine(world.WorldToScreen(position.Center),
+		//                                         world.WorldToScreen(nearbyPosition.Center),
+		//                                         tuple.Item2,
+		//                                         1);
+		//                }
+		//            }
+		//        }
+		//    }
 
-			//base.Draw(spriteBatch, scaleModifier, tint);
-		}
+		//    //base.Draw(spriteBatch, scaleModifier, tint);
+		//}
 	}
 }

@@ -146,6 +146,7 @@
     <Compile Include="EnhancedKeyboardState.cs" />
     <Compile Include="EnhancedMouseState.cs" />
     <Compile Include="Entities\Beacon.cs" />
+    <Compile Include="Entities\EntityFactory.cs" />
     <Compile Include="FrameRateCounter.cs" />
     <Compile Include="Interfaces\IIdentifiable.cs" />
     <Compile Include="Interfaces\IKillable.cs" />
@@ -169,17 +170,13 @@
     <Compile Include="Networking\EventReplicationAttribute.cs" />
     <Compile Include="Networking\ClientConnectedHandlerArgs.cs" />
     <Compile Include="Networking\ReflectiveEventArgs.cs" />
-    <Compile Include="PowerGrid.cs" />
+    <Compile Include="Components\PowerGrid.cs" />
     <Compile Include="Components\PowerLinker.cs" />
     <Compile Include="Scenarios\RandomScenario.cs" />
     <Compile Include="Scenarios\Scenario.cs" />
     <Compile Include="Scenarios\TutorialScenario.cs" />
     <Compile Include="Screens\World.cs" />
     <Compile Include="Screens\HeadsUpDisplay\AOHUD.cs" />
-    <Compile Include="Entities\Structures\ConstructableEntity.cs" />
-    <Compile Include="Entities\Structures\LaserTower.cs" />
-    <Compile Include="Entities\Units\Ship.cs" />
-    <Compile Include="Entities\Units\Ship1.cs" />
     <Compile Include="Entities\Upgrade.cs" />
     <Compile Include="Entities\Weapons\Laser.cs" />
     <Compile Include="Entities\Weapons\Weapon.cs" />
@@ -193,10 +190,10 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Systems\AccumulationSystem.cs" />
     <Compile Include="Systems\AnimationSystem.cs" />
+    <Compile Include="Systems\ConstructionSystem.cs" />
     <Compile Include="Systems\PhysicsSystem.cs" />
-    <Compile Include="Systems\RenderPowerGridSystem.cs" />
+    <Compile Include="Systems\PowerGridSystem.cs" />
     <Compile Include="Systems\RenderQuadTreeSystem.cs" />
-    <Compile Include="Systems\RenderSystem.cs" />
     <Compile Include="Systems\UpgradeSystem.cs" />
     <Compile Include="TextureDictionary.cs" />
     <Compile Include="Screens\HeadsUpDisplay\Radar.cs" />
@@ -205,10 +202,6 @@
     <Compile Include="AOGame.cs" />
     <Compile Include="Interfaces\IMappable.cs" />
     <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\Structures\Asteroid.cs" />
-    <Compile Include="Entities\Structures\LaserMiner.cs" />
-    <Compile Include="Entities\Structures\PowerNode.cs" />
-    <Compile Include="Entities\Structures\SolarStation.cs" />
     <Compile Include="WaveFactory.cs" />
   </ItemGroup>
   <ItemGroup>

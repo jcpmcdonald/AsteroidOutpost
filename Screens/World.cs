@@ -7,8 +7,6 @@ using System.Reflection;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
-using AsteroidOutpost.Entities.Structures;
-using AsteroidOutpost.Entities.Units;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Scenarios;
@@ -40,7 +38,7 @@ namespace AsteroidOutpost.Screens
 		private SpriteBatch spriteBatch;
 
 		private LayeredStarField layeredStarField;
-		private QuadTree<Entity> quadTree;
+		private QuadTree<Position> quadTree;
 		private readonly AwesomiumComponent awesomium;
 		private Dictionary<int, List<Component>> componentDictionary = new Dictionary<int, List<Component>>(6000);		// Note: This variable must be kept thread-safe
 		//private Dictionary<int, Entity> entityDictionary = new Dictionary<int, Entity>(2000);		// Note: This variable must be kept thread-safe
@@ -48,10 +46,11 @@ namespace AsteroidOutpost.Screens
 		private Dictionary<int, Force> owningForces = new Dictionary<int, Force>();
 		private AOHUD hud;
 		private Scenario scenario;
+
+		private AnimationSystem animationSystem;
 		private PhysicsSystem physicsSystem;
-		private RenderSystem renderSystem;
 		private RenderQuadTreeSystem renderQuadTreeSystem;
-		private RenderPowerGridSystem renderPowerGridSystem;
+		private PowerGridSystem powerGridSystem;
 
 		private bool paused;
 
@@ -74,20 +73,24 @@ namespace AsteroidOutpost.Screens
 		{
 			network = new AONetwork(this);
 			hud = new AOHUD(game, this);
+
+			animationSystem = new AnimationSystem(game, this);
 			physicsSystem = new PhysicsSystem(game, this);
-			renderSystem = new RenderSystem(game, this);
 			renderQuadTreeSystem = new RenderQuadTreeSystem(game, this);
-			renderPowerGridSystem = new RenderPowerGridSystem(game, this);
+			powerGridSystem = new PowerGridSystem(game, this);
+
 			awesomium = game.Awesomium;
 
 			// TODO: Create this on the server, then send the size to the clients
-			quadTree = new QuadTree<Entity>(0, 0, 20000, 20000);
+			quadTree = new QuadTree<Position>(0, 0, 20000, 20000);
 
+			animationSystem.DrawOrder = 1000;
+
+			game.Components.Add(animationSystem);
 			game.Components.Add(physicsSystem);
 			game.Components.Add(hud);
-			game.Components.Add(renderSystem);
 			game.Components.Add(renderQuadTreeSystem);
-			game.Components.Add(renderPowerGridSystem);
+			game.Components.Add(powerGridSystem);
 		}
 
 
@@ -153,10 +156,10 @@ namespace AsteroidOutpost.Screens
 		/// Adds the identifiable item to the game. If the game is a client, this will send a request to the server instead
 		/// </summary>
 		/// <param name="obj">The identifiable item to add to the game</param>
-		public void Add(IIdentifiable obj)
-		{
-			Add(obj, isServer);
-		}
+		//public void Add(IIdentifiable obj)
+		//{
+		//    Add(obj, isServer);
+		//}
 
 
 		/// <summary>
@@ -164,27 +167,27 @@ namespace AsteroidOutpost.Screens
 		/// </summary>
 		/// <param name="obj">The identifiable item to add to the game</param>
 		/// <param name="isAuthoritative">If true, indicates that this instance of the game is a server OR that we have been told to do this by the server</param>
-		public void Add(IIdentifiable obj, bool isAuthoritative)
-		{
-			Entity entity = obj as Entity;
-			if (entity != null)
-			{
-				Add(entity, isAuthoritative);
-			}
-			else
-			{
-				Component component = obj as Component;
-				if (component != null)
-				{
-					Add(component, isAuthoritative);
-				}
-				else
-				{
-					// We were unable to add the item to the game
-					Debugger.Break();
-				}
-			}
-		}
+		//public void Add(IIdentifiable obj, bool isAuthoritative)
+		//{
+		//    Entity entity = obj as Entity;
+		//    if (entity != null)
+		//    {
+		//        Add(entity, isAuthoritative);
+		//    }
+		//    else
+		//    {
+		//        Component component = obj as Component;
+		//        if (component != null)
+		//        {
+		//            Add(component, isAuthoritative);
+		//        }
+		//        else
+		//        {
+		//            // We were unable to add the item to the game
+		//            Debugger.Break();
+		//        }
+		//    }
+		//}
 
 
 		/// <summary>
@@ -204,14 +207,14 @@ namespace AsteroidOutpost.Screens
 				}
 				else if(isAuthoritative)
 				{
-					lock(componentDictionary)
-					{
-						if(componentDictionary.ContainsKey(component.EntityID))
-						{
-							// This component already exists
-							return;
-						}
-					}
+					//lock(componentDictionary)
+					//{
+					//    if(componentDictionary.ContainsKey(component.EntityID))
+					//    {
+					//        // This component already exists
+					//        return;
+					//    }
+					//}
 				}
 
 				if (isServer)
@@ -233,9 +236,22 @@ namespace AsteroidOutpost.Screens
 				// Add this to a dictionary for quick ID-based lookups
 				lock (componentDictionary)
 				{
-					componentDictionary.Add(component.EntityID, component);
+					if(componentDictionary.ContainsKey(component.EntityID))
+					{
+						componentDictionary[component.EntityID].Add(component);
+					}
+					else
+					{
+						componentDictionary.Add(component.EntityID, new List<Component>() {component});
+					}
 				}
-				
+
+				Position position = component as Position;
+				if(position != null)
+				{
+					quadTree.Add(position);
+				}
+
 			}
 		}
 
@@ -245,70 +261,70 @@ namespace AsteroidOutpost.Screens
 		/// </summary>
 		/// <param name="entity">The entity to add to the game</param>
 		/// <param name="isAuthoritative">If true, indicates that this instance of the game is a server OR that we have been told to do this by the server</param>
-		public void Add(Entity entity, bool isAuthoritative)
-		{
-			if (entity != null)
-			{
-				if (entity.EntityID == -1)
-				{
-					// Assign an ID and replicate this object to the clients
-					entity.EntityID = PopNextComponentID();
-				}
-				else if(isAuthoritative && !isServer)
-				{
-					lock(entityDictionary)
-					{
-						if (entityDictionary.ContainsKey(entity.EntityID))
-						{
-							// This entity already exists locally. Post-auth and exit
-							if (StructureStartedEventPostAuth != null)
-							{
-								StructureStartedEventPostAuth(new EntityEventArgs(entity));
-							}
+		//public void Add(Entity entity, bool isAuthoritative)
+		//{
+		//    if (entity != null)
+		//    {
+		//        if (entity.EntityID == -1)
+		//        {
+		//            // Assign an ID and replicate this object to the clients
+		//            entity.EntityID = PopNextComponentID();
+		//        }
+		//        else if(isAuthoritative && !isServer)
+		//        {
+		//            lock(entityDictionary)
+		//            {
+		//                if (entityDictionary.ContainsKey(entity.EntityID))
+		//                {
+		//                    // This entity already exists locally. Post-auth and exit
+		//                    if (StructureStartedEventPostAuth != null)
+		//                    {
+		//                        StructureStartedEventPostAuth(new EntityEventArgs(entity));
+		//                    }
 
-							return;
-						}
-					}
-				}
+		//                    return;
+		//                }
+		//            }
+		//        }
 
-				if (isServer)
-				{
-					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.EntityID,
-					                                                       "Add",
-					                                                       new object[]{ entity, true }));
-				}
-				else if(!isAuthoritative)
-				{
-					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.EntityID,
-					                                                       "Add",
-					                                                       new object[]{ entity }));
-				}
+		//        if (isServer)
+		//        {
+		//            network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.EntityID,
+		//                                                                   "Add",
+		//                                                                   new object[]{ entity, true }));
+		//        }
+		//        else if(!isAuthoritative)
+		//        {
+		//            network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.EntityID,
+		//                                                                   "Add",
+		//                                                                   new object[]{ entity }));
+		//        }
 
 
-				// Tell the network to listen to anything that may happen
-				network.ListenToEvents(entity);
+		//        // Tell the network to listen to anything that may happen
+		//        network.ListenToEvents(entity);
 
-				// Add this to the quad tree for rapid area-based lookups
-				quadTree.Add(entity);
+		//        // Add this to the quad tree for rapid area-based lookups
+		//        quadTree.Add(entity);
 
-				// Add this to a dictionary for quick ID-based lookups
-				lock (entityDictionary)
-				{
-					entityDictionary.Add(entity.EntityID, entity);
-				}
+		//        // Add this to a dictionary for quick ID-based lookups
+		//        lock (entityDictionary)
+		//        {
+		//            entityDictionary.Add(entity.EntityID, entity);
+		//        }
 
-				// Pre and Post-auth. Post only if we're the server, it happens later on the client
-				if (StructureStartedEventPreAuth != null)
-				{
-					StructureStartedEventPreAuth(new EntityEventArgs(entity));
-				}
-				if (isServer && StructureStartedEventPostAuth != null)
-				{
-					StructureStartedEventPostAuth(new EntityEventArgs(entity));
-				}
+		//        // Pre and Post-auth. Post only if we're the server, it happens later on the client
+		//        if (StructureStartedEventPreAuth != null)
+		//        {
+		//            StructureStartedEventPreAuth(new EntityEventArgs(entity));
+		//        }
+		//        if (isServer && StructureStartedEventPostAuth != null)
+		//        {
+		//            StructureStartedEventPostAuth(new EntityEventArgs(entity));
+		//        }
 
-			}
-		}
+		//    }
+		//}
 
 		private int PopNextComponentID()
 		{
@@ -319,22 +335,29 @@ namespace AsteroidOutpost.Screens
 		/// <summary>
 		/// Gets a complete list of the Entities that are in the game
 		/// </summary>
-		public ICollection<Entity> Entities
-		{
-			get
-			{
-				return quadTree;
-			}
-		}
+		//public ICollection<Position> Entities
+		//{
+		//    get
+		//    {
+		//        return quadTree;
+		//    }
+		//}
 
 		/// <summary>
 		/// Gets a list of entities that are intersecting with the search area
 		/// </summary>
 		/// <param name="rect">The search area</param>
 		/// <returns>A list of entities that are intersecting with the search area</returns>
-		public List<Entity> EntitiesInArea(Rectangle rect)
+		public List<int> EntitiesInArea(Rectangle rect, bool onlySolids = false)
 		{
-			return quadTree.GetObjects(rect);
+			if(onlySolids)
+			{
+				return quadTree.GetObjects(rect).Where(x => x.Solid).Select(x => x.EntityID).ToList();
+			}
+			else
+			{
+				return quadTree.GetObjects(rect).Select(x => x.EntityID).ToList();
+			}
 		}
 
 		/// <summary>
@@ -345,9 +368,9 @@ namespace AsteroidOutpost.Screens
 		/// <param name="w">The search area's Width</param>
 		/// <param name="h">The search area's Height</param>
 		/// <returns>A list of entities that are intersecting with the search area</returns>
-		public List<Entity> EntitiesInArea(int x, int y, int w, int h)
+		public List<int> EntitiesInArea(int x, int y, int w, int h, bool onlySolids = false)
 		{
-			return EntitiesInArea(new Rectangle(x, y, w, h));
+			return EntitiesInArea(new Rectangle(x, y, w, h), onlySolids);
 		}
 
 
@@ -373,23 +396,40 @@ namespace AsteroidOutpost.Screens
 
 
 		/// <summary>
-		/// Looks up a component by ID
+		/// Looks up a component by entityID
 		/// This method is thread safe
 		/// </summary>
-		/// <param name="id">The ID to look up</param>
-		/// <returns>The component with the given ID, or null if the component is not found</returns>
+		/// <param name="entityID">The entityID to look up</param>
+		/// <returns>A list of components for the given entityID and type, or null if the entity is not found</returns>
 		public List<T> GetComponents<T>(int entityID) where T : Component
 		{
 			lock (componentDictionary)
 			{
 				if (componentDictionary.ContainsKey(entityID))
 				{
-					return (List<T>)componentDictionary[entityID].Where(x => x is T);
+					return componentDictionary[entityID].OfType<T>().ToList();
 				}
 
 				//Debugger.Break();
 				return null;
 			}
+		}
+
+
+		/// <summary>
+		/// Looks up a component by entityID
+		/// This method is thread safe
+		/// </summary>
+		/// <param name="entityID">The entityID to look up</param>
+		/// <returns>A list of components for the given entityID and type, or null if the entity is not found</returns>
+		public T GetComponent<T>(int entityID) where T : Component
+		{
+			List<T> matchingComponents = GetComponents<T>(entityID);
+			if(matchingComponents.Count != 1)
+			{
+				Debugger.Break();
+			}
+			return matchingComponents[0];
 		}
 
 
@@ -419,27 +459,27 @@ namespace AsteroidOutpost.Screens
 		/// </summary>
 		/// <param name="id">The ID to look up</param>
 		/// <returns>The component with the given ID, or null if the component is not found</returns>
-		public IReflectionTarget GetTarget(int id)
-		{
-			Component component = GetComponents(id);
-			if(component != null)
-			{
-				return component;
-			}
-			else
-			{
-				Entity entity = GetEntity(id);
-				if(entity != null)
-				{
-					return entity;
-				}
-				else
-				{
-					Debugger.Break();
-					return null;
-				}
-			}
-		}
+		//public IReflectionTarget GetTarget(int id)
+		//{
+		//    Component component = GetComponents(id);
+		//    if(component != null)
+		//    {
+		//        return component;
+		//    }
+		//    else
+		//    {
+		//        Entity entity = GetEntity(id);
+		//        if(entity != null)
+		//        {
+		//            return entity;
+		//        }
+		//        else
+		//        {
+		//            Debugger.Break();
+		//            return null;
+		//        }
+		//    }
+		//}
 
 
 		/// <summary>
@@ -619,6 +659,7 @@ namespace AsteroidOutpost.Screens
 		public override void Initialize()
 		{
 			base.Initialize();
+			EntityFactory.Init(this);
 		}
 
 
@@ -676,55 +717,55 @@ namespace AsteroidOutpost.Screens
 				}
 
 
-				// Update the components and entities
-				List<Component> deadComponents = new List<Component>();
-				foreach (Component component in componentDictionary.Values)
-				{
-					if (!component.IsDead())
-					{
-						component.Update(deltaTime);
-					}
-					if (component.IsDead())
-					{
-						deadComponents.Add(component);
-					}
-				}
+				//// Update the components and entities
+				//List<Component> deadComponents = new List<Component>();
+				//foreach (Component component in componentDictionary.Values)
+				//{
+				//    if (!component.IsDead())
+				//    {
+				//        component.Update(deltaTime);
+				//    }
+				//    if (component.IsDead())
+				//    {
+				//        deadComponents.Add(component);
+				//    }
+				//}
 
-				List<Entity> deadEntities = new List<Entity>();
-				foreach (Entity entity in entityDictionary.Values)
-				{
-					if (!entity.IsDead())
-					{
-						entity.Update(deltaTime);
-					}
-					if (entity.IsDead())
-					{
-						deadEntities.Add(entity);
-					}
+				//List<Entity> deadEntities = new List<Entity>();
+				//foreach (Entity entity in entityDictionary.Values)
+				//{
+				//    if (!entity.IsDead())
+				//    {
+				//        entity.Update(deltaTime);
+				//    }
+				//    if (entity.IsDead())
+				//    {
+				//        deadEntities.Add(entity);
+				//    }
 
 
-					// TODO: Find a way to listen for move events instead of always updating the position
-					quadTree.Move(entity);
-				}
+				//    // TODO: Find a way to listen for move events instead of always updating the position
+				//    quadTree.Move(entity);
+				//}
 
 				// Delete any components or entities that need to be deleted
-				foreach (Component deadComponent in deadComponents)
-				{
-					lock (componentDictionary)
-					{
-						componentDictionary.Remove(deadComponent.EntityID);
-					}
-				}
+				//foreach (Component deadComponent in deadComponents)
+				//{
+				//    lock (componentDictionary)
+				//    {
+				//        componentDictionary.Remove(deadComponent.EntityID);
+				//    }
+				//}
 
-				foreach (Entity deadEntity in deadEntities)
-				{
-					quadTree.Remove(deadEntity);
+				//foreach (Entity deadEntity in deadEntities)
+				//{
+				//    quadTree.Remove(deadEntity);
 
-					lock (componentDictionary)
-					{
-						componentDictionary.Remove(deadEntity.EntityID);
-					}
-				}
+				//    lock (componentDictionary)
+				//    {
+				//        componentDictionary.Remove(deadEntity.EntityID);
+				//    }
+				//}
 
 			}
 
@@ -871,7 +912,7 @@ namespace AsteroidOutpost.Screens
 			}
 		}
 
-		public QuadTree<Entity> QuadTree
+		public QuadTree<Position> QuadTree
 		{
 			get
 			{
@@ -904,17 +945,17 @@ namespace AsteroidOutpost.Screens
 			}
 
 
-			bw.Write(entityDictionary.Count + componentDictionary.Count);
-			foreach (ISerializable serializableObj in componentDictionary.Values.Concat<ISerializable>(entityDictionary.Values))
-			{
-				if (serializableObj == null || serializableObj.GetType().AssemblyQualifiedName == null)
-				{
-					Debugger.Break(); // Something is wrong here
-					continue;
-				}
-				bw.Write(serializableObj.GetType().AssemblyQualifiedName);
-				serializableObj.Serialize(bw);
-			}
+			//bw.Write(entityDictionary.Count + componentDictionary.Count);
+			//foreach (ISerializable serializableObj in componentDictionary.Values.Concat<ISerializable>(entityDictionary.Values))
+			//{
+			//    if (serializableObj == null || serializableObj.GetType().AssemblyQualifiedName == null)
+			//    {
+			//        Debugger.Break(); // Something is wrong here
+			//        continue;
+			//    }
+			//    bw.Write(serializableObj.GetType().AssemblyQualifiedName);
+			//    serializableObj.Serialize(bw);
+			//}
 
 
 			if (serializeActors)
@@ -995,10 +1036,10 @@ namespace AsteroidOutpost.Screens
 					serializableObj.PostDeserializeLink(this);
 				}
 
-				if(identifiableObj != null)
-				{
-					Add(identifiableObj, true);
-				}
+				//if(identifiableObj != null)
+				//{
+				//    Add(identifiableObj, true);
+				//}
 			}
 
 

@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
-using AsteroidOutpost.Entities.Structures;
-using AsteroidOutpost.Entities.Units;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Scenarios;
 using AsteroidOutpost.Screens;
@@ -211,14 +209,14 @@ namespace AsteroidOutpost
 
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			Ship1.LoadContent(GraphicsDevice, Content);
-			SolarStation.LoadContent(GraphicsDevice, Content);
-			Asteroid.LoadContent(GraphicsDevice, Content);
-			LaserMiner.LoadContent(GraphicsDevice, Content);
-			LaserTower.LoadContent(GraphicsDevice, Content);
-			PowerGridNode.LoadContent(GraphicsDevice, Content);
-			Beacon.LoadContent(GraphicsDevice, Content);
-			FreeText.LoadContent(GraphicsDevice, Content);
+			//Ship1.LoadContent(GraphicsDevice, Content);
+			//SolarStation.LoadContent(GraphicsDevice, Content);
+			//Asteroid.LoadContent(GraphicsDevice, Content);
+			//LaserMiner.LoadContent(GraphicsDevice, Content);
+			//LaserTower.LoadContent(GraphicsDevice, Content);
+			//PowerGridNode.LoadContent(GraphicsDevice, Content);
+			//Beacon.LoadContent(GraphicsDevice, Content);
+			//FreeText.LoadContent(GraphicsDevice, Content);
 
 			TextureDictionary.Add("Sprites\\Power", "power");
 			TextureDictionary.Add("Sprites\\Asteroids", "asteroids");

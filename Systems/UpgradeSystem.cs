@@ -17,16 +17,19 @@ namespace AsteroidOutpost.Systems
 		private const float powerUsageRate = 12.0f;
 		private const float mineralUsageRate = 30.0f;
 
+		private SpriteBatch spriteBatch;
+
 		public UpgradeSystem(AOGame game, World world)
 			: base(game)
 		{
-			
+			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 			this.world = world;
 		}
 
+
 		public override void Update(GameTime gameTime)
 		{
-			List<Upgradable> upgradables = world.GetComponents<Upgradable>();
+			List<Upgradable> upgradables = (List<Upgradable>)world.GetComponents<Upgradable>().Where(x => x.IsUpgrading && x.CurrentUpgrade != null);
 
 			foreach (var upgradable in upgradables)
 			{
@@ -55,24 +58,32 @@ namespace AsteroidOutpost.Systems
 			base.Update(gameTime);
 		}
 
+
 		/// <summary>
 		/// Draw this upgrading entity to the screen
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="scaleModifier"></param>
-		/// <param name="tint"></param>
-		protected void DrawUpgrading(SpriteBatch spriteBatch, float scaleModifier, Color tint)
+		public override void Draw(GameTime gameTime)
 		{
-			float percentComplete = (float)((currentUpgrade.MineralCost - mineralsLeftToUpgrade) / currentUpgrade.MineralCost);
+			List<Upgradable> upgradables = world.GetComponents<Upgradable>();
 
-			base.Draw(spriteBatch, scaleModifier, tint);
-			
-			// Draw a progress bar
-			//Vector2 selfCenterOnScreen = new Vector2(Center.X - world.Hud.FocusScreen.X, Center.Y - world.Hud.FocusScreen.Y);
-			spriteBatch.FillRectangle(world.Scale(new Vector2(-Position.Radius, Position.Radius - 6)) + world.WorldToScreen(Position.Center), world.Scale(new Vector2(Position.Width, 6)), Color.Gray);
-			spriteBatch.FillRectangle(world.Scale(new Vector2(-Position.Radius, Position.Radius - 6)) + world.WorldToScreen(Position.Center), world.Scale(new Vector2(Position.Width * percentComplete, 6)), Color.RoyalBlue);
-			
-			//DrawPowerConnections(spriteBatch);
+			spriteBatch.Begin();
+
+			foreach (var upgradable in upgradables)
+			{
+				if (upgradable.IsUpgrading)
+				{
+					float percentComplete = (float)((upgradable.CurrentUpgrade.MineralCost - upgradable.MineralsLeftToUpgrade) / upgradable.CurrentUpgrade.MineralCost);
+					Position position = world.GetComponents<Position>(upgradable.EntityID)[0];
+
+					// Draw a progress bar
+					spriteBatch.FillRectangle(world.Scale(new Vector2(-position.Radius, position.Radius - 6)) + world.WorldToScreen(position.Center), world.Scale(new Vector2(position.Width, 6)), Color.Gray);
+					spriteBatch.FillRectangle(world.Scale(new Vector2(-position.Radius, position.Radius - 6)) + world.WorldToScreen(position.Center), world.Scale(new Vector2(position.Width * percentComplete, 6)), Color.RoyalBlue);
+				}
+			}
+
+			spriteBatch.End();
+
+			base.Draw(gameTime);
 		}
 	}
 }

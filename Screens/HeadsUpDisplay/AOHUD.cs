@@ -5,7 +5,6 @@ using System.Reflection;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
-using AsteroidOutpost.Entities.Structures;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Systems;
 using Awesomium.Core;
@@ -15,7 +14,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using AsteroidOutpost.Entities.Units;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Input;
 
@@ -32,12 +30,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 		Vector2 focusWorldPoint;
 		Vector2? middleMouseGrabPoint;
-		ConstructableEntity creating;				// Are they creating an entity?
+		int? creatingEntityID;				// Are they creating an entity?
 
 		private EnhancedMouseState theMouse = new EnhancedMouseState();
 		private EnhancedKeyboardState theKeyboard = new EnhancedKeyboardState();
 
-		readonly List<Entity> selectedEntities = new List<Entity>();
+		readonly List<int> selectedEntities = new List<int>();
 		public event Action<MultiEntityEventArgs> SelectionChanged;
 
 
@@ -80,10 +78,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			localSystems.Add(accumulationSystem);
 
 			// Set up some hotkeys
-			hotkeys.Add(Keys.P, btnPower_Clicked);
-			hotkeys.Add(Keys.N, btnPowerNode_Clicked);
-			hotkeys.Add(Keys.M, btnMiner_Clicked);
-			hotkeys.Add(Keys.L, btnLaserTower_Clicked);
+			//hotkeys.Add(Keys.P, btnPower_Clicked);
+			//hotkeys.Add(Keys.N, btnPowerNode_Clicked);
+			//hotkeys.Add(Keys.M, btnMiner_Clicked);
+			//hotkeys.Add(Keys.L, btnLaserTower_Clicked);
 
 
 			// Create callbacks for Awesomium content to communicate with the hud
@@ -94,10 +92,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 			awesomium.WebView.SetObjectCallback("hud", "ResumeGame", ResumeGame);
 
-			awesomium.WebView.SetObjectCallback("hud", "BuildSolarStation", btnPower_Clicked);
-			awesomium.WebView.SetObjectCallback("hud", "BuildPowerNode", btnPowerNode_Clicked);
-			awesomium.WebView.SetObjectCallback("hud", "BuildLaserMiner", btnMiner_Clicked);
-			awesomium.WebView.SetObjectCallback("hud", "BuildLaserTower", btnLaserTower_Clicked);
+			//awesomium.WebView.SetObjectCallback("hud", "BuildSolarStation", btnPower_Clicked);
+			//awesomium.WebView.SetObjectCallback("hud", "BuildPowerNode", btnPowerNode_Clicked);
+			//awesomium.WebView.SetObjectCallback("hud", "BuildLaserMiner", btnMiner_Clicked);
+			//awesomium.WebView.SetObjectCallback("hud", "BuildLaserTower", btnLaserTower_Clicked);
 		}
 
 
@@ -201,7 +199,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 			if (theKeyboard[Keys.Escape] == EnhancedKeyState.JUST_PRESSED)
 			{
-				if (creating != null)
+				if (creatingEntityID != null)
 				{
 					OnCancelCreation();
 				}
@@ -234,35 +232,35 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 
 			// Make a new bad guy when a key is pressed for debugging
-			if (theKeyboard[Keys.F8] == EnhancedKeyState.JUST_RELEASED)
-			{
-				Controller aiActor = null;
-				foreach (Controller actor in world.Controllers)
-				{
-					if (actor.Role == ControllerRole.AI)
-					{
-						aiActor = actor;
-						break;
-					}
-				}
+			//if (theKeyboard[Keys.F8] == EnhancedKeyState.JUST_RELEASED)
+			//{
+			//    Controller aiActor = null;
+			//    foreach (Controller actor in world.Controllers)
+			//    {
+			//        if (actor.Role == ControllerRole.AI)
+			//        {
+			//            aiActor = actor;
+			//            break;
+			//        }
+			//    }
 
-				Debug.Assert(aiActor != null, "There is no AI actor in the game");
-				// Allow them to ignore the assert without crashing the game
-				// ReSharper disable ConditionIsAlwaysTrueOrFalse
-				if (aiActor != null)
-					// ReSharper restore ConditionIsAlwaysTrueOrFalse
-				{
-					//world.AddComponent(new Ship1(aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(1600, -10600)));
-					world.Add(new Ship1(world, world, aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(600, -600)));
-				}
-			}
+			//    Debug.Assert(aiActor != null, "There is no AI actor in the game");
+			//    // Allow them to ignore the assert without crashing the game
+			//    // ReSharper disable ConditionIsAlwaysTrueOrFalse
+			//    if (aiActor != null)
+			//        // ReSharper restore ConditionIsAlwaysTrueOrFalse
+			//    {
+			//        //world.AddComponent(new Ship1(aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(1600, -10600)));
+			//        world.Add(new Ship1(world, world, aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(600, -600)));
+			//    }
+			//}
 
 
 			// Move the current creating
-			if (creating != null)
+			if (creatingEntityID != null)
 			{
 				// Update the creating entity to be be where the mouse is
-				creating.Position.Center = ScreenToWorld(theMouse.X, theMouse.Y);
+				world.GetComponent<Position>(creatingEntityID.Value).Center = ScreenToWorld(theMouse.X, theMouse.Y);
 			}
 
 
@@ -311,26 +309,26 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			if (!world.Paused)
 			{
 				// Update the entities
-				List<Component> deleteList = new List<Component>();
-				// TODO: This should not require a regular for loop, and I should not be modifying the component list during this loop
-				for (int index = 0; index < components.Count; index++)
-				{
-					var component = components[index];
-					if (!component.IsDead())
-					{
-						component.Update(deltaTime);
-					}
-					if (component.IsDead())
-					{
-						deleteList.Add(component);
-					}
-				}
+				//List<Component> deleteList = new List<Component>();
+				//// TODO: This should not require a regular for loop, and I should not be modifying the component list during this loop
+				//for (int index = 0; index < components.Count; index++)
+				//{
+				//    var component = components[index];
+				//    if (!component.IsDead())
+				//    {
+				//        component.Update(deltaTime);
+				//    }
+				//    if (component.IsDead())
+				//    {
+				//        deleteList.Add(component);
+				//    }
+				//}
 
-				// Delete any entities that need to be deleted
-				foreach (var entity in deleteList)
-				{
-					components.Remove(entity);
-				}
+				//// Delete any entities that need to be deleted
+				//foreach (var entity in deleteList)
+				//{
+				//    components.Remove(entity);
+				//}
 			}
 
 
@@ -347,11 +345,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		{
 			if (CancelledCreationEvent != null)
 			{
-				CancelledCreationEvent(new EntityEventArgs(creating));
+				// TODO: 2012-08-10 Allow cancelling
+				//CancelledCreationEvent(new EntityEventArgs(creatingEntityID.Value));
 			}
 			
 			// Cancel whatever they are creating
-			creating = null;
+			creatingEntityID = null;
 		}
 
 
@@ -362,13 +361,14 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// <param name="tint">The color to tint this</param>
 		private void DrawSelectionCirclesBack(SpriteBatch spriteBatch, Color tint)
 		{
-			foreach (Entity selectedEntity in selectedEntities)
+			foreach (var selectedEntity in selectedEntities)
 			{
+				Position selectedEntityPosition = world.GetComponent<Position>(selectedEntity);
 				if (scaleFactor < 2)
 				{
-					float sizeRatio = ((selectedEntity.Position.Radius) / 45f);
+					float sizeRatio = ((selectedEntityPosition.Radius) / 45f);
 					spriteBatch.Draw(TextureDictionary.Get("ellipse50back"),
-					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(60, 60) * sizeRatio)),
+					                 world.WorldToScreen(selectedEntityPosition.Center - (new Vector2(60, 60) * sizeRatio)),
 					                 null,
 					                 Color.Green.Blend(tint),
 					                 0,
@@ -379,9 +379,9 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 				else if(scaleFactor < 4)
 				{
-					float sizeRatio = ((selectedEntity.Position.Radius) / 45f) * 2;
+					float sizeRatio = ((selectedEntityPosition.Radius) / 45f) * 2;
 					spriteBatch.Draw(TextureDictionary.Get("ellipse25back"),
-					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
+					                 world.WorldToScreen(selectedEntityPosition.Center - (new Vector2(35, 35) * sizeRatio)),
 					                 null,
 					                 Color.Green.Blend(tint),
 					                 0,
@@ -404,13 +404,14 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// <param name="tint">The color to tint this</param>
 		private void DrawSelectionCirclesFront(SpriteBatch spriteBatch, Color tint)
 		{
-			foreach (Entity selectedEntity in selectedEntities)
+			foreach (var selectedEntity in selectedEntities)
 			{
+				Position selectedEntityPosition = world.GetComponent<Position>(selectedEntity);
 				if (scaleFactor < 2)
 				{
-					float sizeRatio = ((selectedEntity.Position.Radius) / 45f);
+					float sizeRatio = ((selectedEntityPosition.Radius) / 45f);
 					spriteBatch.Draw(TextureDictionary.Get("ellipse50front"),
-					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(60, 60) * sizeRatio)),
+					                 world.WorldToScreen(selectedEntityPosition.Center - (new Vector2(60, 60) * sizeRatio)),
 					                 null,
 					                 Color.Green.Blend(tint),
 					                 0,
@@ -421,9 +422,9 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 				else if(scaleFactor < 4)
 				{
-					float sizeRatio = ((selectedEntity.Position.Radius) / 45f) * 2;
+					float sizeRatio = ((selectedEntityPosition.Radius) / 45f) * 2;
 					spriteBatch.Draw(TextureDictionary.Get("ellipse25front"),
-					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
+					                 world.WorldToScreen(selectedEntityPosition.Center - (new Vector2(35, 35) * sizeRatio)),
 					                 null,
 					                 Color.Green.Blend(tint),
 					                 0,
@@ -434,9 +435,9 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 				else
 				{
-					float sizeRatio = ((selectedEntity.Position.Radius) / 45f) * 2;
+					float sizeRatio = ((selectedEntityPosition.Radius) / 45f) * 2;
 					spriteBatch.Draw(TextureDictionary.Get("ellipse25bold"),
-					                 world.WorldToScreen(selectedEntity.Position.Center - (new Vector2(35, 35) * sizeRatio)),
+					                 world.WorldToScreen(selectedEntityPosition.Center - (new Vector2(35, 35) * sizeRatio)),
 					                 null,
 					                 Color.Green.Blend(tint),
 					                 0,
@@ -475,23 +476,29 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 			spriteBatch.Begin();
 
-			foreach (var entity in components)
-			{
-				entity.Draw(spriteBatch, 1, Color.White);
-			}
+			//foreach (var entity in components)
+			//{
+			//    entity.Draw(spriteBatch, 1, Color.White);
+			//}
 
 			DrawSelectionCirclesFront(spriteBatch, Color.White);
 
-			if(creating != null)
+			if(creatingEntityID != null)
 			{
 				// Draw with a red tint if it's an invalid spot to build
-				if (creating.IsValidToBuildHere())
+				if (IsValidToBuildHere())
 				{
-					creating.Draw(spriteBatch, 1, Color.White);
+					foreach(var animator in world.GetComponents<Animator>(creatingEntityID.Value))
+					{
+						animator.Tint = Color.White;
+					}
 				}
 				else
 				{
-					creating.Draw(spriteBatch, 1, new Color(255, 50, 50, 255));
+					foreach(var animator in world.GetComponents<Animator>(creatingEntityID.Value))
+					{
+						animator.Tint = new Color(255, 50, 50, 255);
+					}
 				}
 			}
 
@@ -617,141 +624,141 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 		#region Button Handlers
 
-		private void btnPower_Clicked(object sender, EventArgs e)
-		{
-			if (!world.Paused)
-			{
-				if(creating != null)
-				{
-					OnCancelCreation();
-				}
+		//private void btnPower_Clicked(object sender, EventArgs e)
+		//{
+		//    if (!world.Paused)
+		//    {
+		//        if(creating != null)
+		//        {
+		//            OnCancelCreation();
+		//        }
 
-				// Create a new power station
-				creating = new SolarStation(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
+		//        // Create a new power station
+		//        creating = new SolarStation(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
 
-				CreateRangeRingsForConstruction(creating);
-				CreatePowerLinker(creating);
-			}
-		}
+		//        CreateRangeRingsForConstruction(creating);
+		//        CreatePowerLinker(creating);
+		//    }
+		//}
 
 
-		private void btnPowerNode_Clicked(object sender, EventArgs e)
-		{
-			if (!world.Paused)
-			{
-				if (creating != null)
-				{
-					OnCancelCreation();
-				}
+		//private void btnPowerNode_Clicked(object sender, EventArgs e)
+		//{
+		//    if (!world.Paused)
+		//    {
+		//        if (creating != null)
+		//        {
+		//            OnCancelCreation();
+		//        }
 
-				// Create a new power node
-				creating = new PowerGridNode(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
+		//        // Create a new power node
+		//        creating = new PowerGridNode(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
 
-				CreateRangeRingsForConstruction(creating);
-				CreatePowerLinker(creating);
-			}
-		}
+		//        CreateRangeRingsForConstruction(creating);
+		//        CreatePowerLinker(creating);
+		//    }
+		//}
 		
-		private void btnMiner_Clicked(object sender, EventArgs e)
-		{
-			if (!world.Paused)
-			{
-				if (creating != null)
-				{
-					OnCancelCreation();
-				}
+		//private void btnMiner_Clicked(object sender, EventArgs e)
+		//{
+		//    if (!world.Paused)
+		//    {
+		//        if (creating != null)
+		//        {
+		//            OnCancelCreation();
+		//        }
 
-				// Create a new power station
-				creating = new LaserMiner(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
+		//        // Create a new power station
+		//        creating = new LaserMiner(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
 
-				CreateRangeRingsForConstruction(creating);
-				CreatePowerLinker(creating);
+		//        CreateRangeRingsForConstruction(creating);
+		//        CreatePowerLinker(creating);
 
-				LaserMiner laserMiner = creating as LaserMiner;
-				Linker linker = new Linker(world, creating.Position);
-				linker.Links.Add(new Tuple<Predicate<Entity>, Color, float>(entity => entity is Asteroid, Color.Green, laserMiner.MiningRange));
+		//        LaserMiner laserMiner = creating as LaserMiner;
+		//        Linker linker = new Linker(world, creating.Position);
+		//        linker.Links.Add(new Tuple<Predicate<Entity>, Color, float>(entity => entity is Asteroid, Color.Green, laserMiner.MiningRange));
 
-				CancelledCreationEvent += linker.KillSelf;
-				//world.StructureStartedEventPreAuth += linker.KillSelf;
-				components.Add(linker);
-			}
-		}
+		//        CancelledCreationEvent += linker.KillSelf;
+		//        //world.StructureStartedEventPreAuth += linker.KillSelf;
+		//        components.Add(linker);
+		//    }
+		//}
 
-		void btnLaserTower_Clicked(object sender, EventArgs e)
-		{
-			if (!world.Paused)
-			{
-				if (creating != null)
-				{
-					OnCancelCreation();
-				}
+		//void btnLaserTower_Clicked(object sender, EventArgs e)
+		//{
+		//    if (!world.Paused)
+		//    {
+		//        if (creating != null)
+		//        {
+		//            OnCancelCreation();
+		//        }
 
-				// Create a new power station
-				creating = new LaserTower(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
+		//        // Create a new power station
+		//        creating = new LaserTower(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
 
-				CreateRangeRingsForConstruction(creating);
-				CreatePowerLinker(creating);
-			}
-		}
-
-
-		private List<ICanKillSelf> CreateRangeRings(ConstructableEntity entity)
-		{
-			var createdSuicidals = new List<ICanKillSelf>(6);
-			var rangeRingDefinitions = new List<Tuple<int, Color, string>>(10);
-			entity.GetRangeRings(ref rangeRingDefinitions);
-
-			foreach (var rangeRingDefinition in rangeRingDefinitions)
-			{
-				Ring ring = new Ring(world,
-				                     entity.Position,
-				                     rangeRingDefinition.Item1,
-				                     rangeRingDefinition.Item2);
-				components.Add(ring);
-				createdSuicidals.Add(ring);
-
-				PositionOffset positionOffset = new PositionOffset(world, entity.Position, new Vector2(-25, -rangeRingDefinition.Item1 - 17));
-				FreeText text = new FreeText(world,
-				                             entity.Position.Center + new Vector2(-25, -rangeRingDefinition.Item1 - 17),
-				                             rangeRingDefinition.Item3,
-				                             rangeRingDefinition.Item2);
-				components.Add(positionOffset);
-				components.Add(text);
-				createdSuicidals.Add(text);
-			}
-
-			return createdSuicidals;
-		}
+		//        CreateRangeRingsForConstruction(creating);
+		//        CreatePowerLinker(creating);
+		//    }
+		//}
 
 
-		private void CreateRangeRingsForConstruction(ConstructableEntity entity)
-		{
-			foreach (var suicidal in CreateRangeRings(entity))
-			{
-				// TODO: I think these events will continue to hold on to the dying entity long after its dead and it will prevent garbage collection
-				CancelledCreationEvent += suicidal.KillSelf;
-				//world.StructureStartedEventPreAuth += suicidal.KillSelf;
-			}
-		}
+		//private List<ICanKillSelf> CreateRangeRings(ConstructableEntity entity)
+		//{
+		//    var createdSuicidals = new List<ICanKillSelf>(6);
+		//    var rangeRingDefinitions = new List<Tuple<int, Color, string>>(10);
+		//    entity.GetRangeRings(ref rangeRingDefinitions);
+
+		//    foreach (var rangeRingDefinition in rangeRingDefinitions)
+		//    {
+		//        Ring ring = new Ring(world,
+		//                             entity.Position,
+		//                             rangeRingDefinition.Item1,
+		//                             rangeRingDefinition.Item2);
+		//        components.Add(ring);
+		//        createdSuicidals.Add(ring);
+
+		//        PositionOffset positionOffset = new PositionOffset(world, entity.Position, new Vector2(-25, -rangeRingDefinition.Item1 - 17));
+		//        FreeText text = new FreeText(world,
+		//                                     entity.Position.Center + new Vector2(-25, -rangeRingDefinition.Item1 - 17),
+		//                                     rangeRingDefinition.Item3,
+		//                                     rangeRingDefinition.Item2);
+		//        components.Add(positionOffset);
+		//        components.Add(text);
+		//        createdSuicidals.Add(text);
+		//    }
+
+		//    return createdSuicidals;
+		//}
 
 
-		private void CreateRangeRingsForSelection(ConstructableEntity entity)
-		{
-			foreach (var suicidal in CreateRangeRings(entity))
-			{
-				// TODO: I think these events will continue to hold on to the dying entity long after its dead and it will prevent garbage collection
-				SelectionChanged += suicidal.KillSelf;
-			}
-		}
+		//private void CreateRangeRingsForConstruction(ConstructableEntity entity)
+		//{
+		//    foreach (var suicidal in CreateRangeRings(entity))
+		//    {
+		//        // TODO: I think these events will continue to hold on to the dying entity long after its dead and it will prevent garbage collection
+		//        CancelledCreationEvent += suicidal.KillSelf;
+		//        //world.StructureStartedEventPreAuth += suicidal.KillSelf;
+		//    }
+		//}
 
 
-		private void CreatePowerLinker(ConstructableEntity entity)
-		{
-			PowerLinker powerLinker = new PowerLinker(world, localActor.PrimaryForce, entity);
-			CancelledCreationEvent += powerLinker.KillSelf;
-			//world.StructureStartedEventPreAuth += powerLinker.KillSelf;
-			components.Add(powerLinker);
-		}
+		//private void CreateRangeRingsForSelection(ConstructableEntity entity)
+		//{
+		//    foreach (var suicidal in CreateRangeRings(entity))
+		//    {
+		//        // TODO: I think these events will continue to hold on to the dying entity long after its dead and it will prevent garbage collection
+		//        SelectionChanged += suicidal.KillSelf;
+		//    }
+		//}
+
+
+		//private void CreatePowerLinker(ConstructableEntity entity)
+		//{
+		//    PowerLinker powerLinker = new PowerLinker(world, localActor.PrimaryForce, entity);
+		//    CancelledCreationEvent += powerLinker.KillSelf;
+		//    //world.StructureStartedEventPreAuth += powerLinker.KillSelf;
+		//    components.Add(powerLinker);
+		//}
 
 		#endregion
 
@@ -787,10 +794,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			if (mouseButton == MouseButton.LEFT)
 			{
 
-				if (!clickHandled && creating != null)
+				if (!clickHandled && creatingEntityID != null)
 				{
 					// Have we just tried to build this guy?
-					if (/*mouse.LeftButton == EnhancedButtonState.JUST_RELEASED &&*/ creating.IsValidToBuildHere())
+					if (/*mouse.LeftButton == EnhancedButtonState.JUST_RELEASED &&*/ IsValidToBuildHere())
 					{
 						// Yes, build this now!
 						BuildStructure();
@@ -804,15 +811,16 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					Vector2 mouseMapCoords = ScreenToWorld(theMouse.X, theMouse.Y);
 
 					// Grab a possible list of clicked entities by using a square-area search
-					List<Entity> possiblyClickedEntities = world.EntitiesInArea(new Rectangle((int)(mouseMapCoords.X + 0.5), (int)(mouseMapCoords.Y + 0.5), 1, 1));
-					foreach (Entity entity in possiblyClickedEntities)
+					List<int> possiblyClickedEntities = world.EntitiesInArea(new Rectangle((int)(mouseMapCoords.X + 0.5), (int)(mouseMapCoords.Y + 0.5), 1, 1));
+					foreach (int entity in possiblyClickedEntities)
 					{
 						// Make sure the unit was clicked
-						if (entity.Position.IsIntersecting(mouseMapCoords, 1))
+						if (world.GetComponent<Position>(entity).IsIntersecting(mouseMapCoords, 1))
 						{
 							selectedEntities.Clear();
 							selectedEntities.Add(entity);
-							entity.DyingEvent += SelectedEntityDying;
+							// TODO: 2012-08-10 Reconnect this event
+							//entity.DyingEvent += SelectedEntityDying;
 
 							OnSelectionChanged();
 
@@ -827,10 +835,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					{
 						// Deselect the selected unit(s)
 
-						foreach (Entity entity in selectedEntities)
-						{
-							entity.DyingEvent -= SelectedEntityDying;
-						}
+						//foreach (Entity entity in selectedEntities)
+						//{
+							// TODO: 2012-08-10 Reconnect this event
+							//entity.DyingEvent -= SelectedEntityDying;
+						//}
 
 						selectedEntities.Clear();
 
@@ -845,58 +854,59 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		{
 			constructionSound.Play(Math.Min(1, world.Scale(1f)), 0, 0);
 
-			// Reflectively look up what they are making, and create an other one of the same thing in the game
-			Type creatingType = creating.GetType();
-			ConstructorInfo creatingTypeConstuctructor = creatingType.GetConstructor(new Type[] { typeof(World), typeof(IComponentList), typeof(Force), typeof(Vector2) });
 
-			if (creatingTypeConstuctructor == null)
-			{
-				System.Console.WriteLine("Failed to find a constructor for the current constructable! Unable to construct entity");
-				Debugger.Break(); // John, there's a problem with the reflection above. Fix it!
-				return;
-			}
+			//// Reflectively look up what they are making, and create an other one of the same thing in the game
+			//Type creatingType = creating.GetType();
+			//ConstructorInfo creatingTypeConstuctructor = creatingType.GetConstructor(new Type[]{ typeof (World), typeof (IComponentList), typeof (Force), typeof (Vector2) });
 
-			ConstructableEntity toBuild = (ConstructableEntity)creatingTypeConstuctructor.Invoke(new object[]{world, world, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y))});
+			//if (creatingTypeConstuctructor == null)
+			//{
+			//    System.Console.WriteLine("Failed to find a constructor for the current constructable! Unable to construct entity");
+			//    Debugger.Break(); // John, there's a problem with the reflection above. Fix it!
+			//    return;
+			//}
 
-			toBuild.StartConstruction();
-			world.Add(toBuild);
+			//ConstructableEntity toBuild = (ConstructableEntity)creatingTypeConstuctructor.Invoke(new object[]{ world, world, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) });
+
+			//toBuild.StartConstruction();
+			//world.Add(toBuild);
 
 
-			// TODO: Find a better place to put this, but I don't think the LaserMiner should know about this
-			// Maybe add an accumulator definition retriever to the entity? Just like the rings?
-			LaserMiner laserMiner = toBuild as LaserMiner;
-			if (laserMiner != null)
-			{
-				Accumulator miningAccumulator = new Accumulator(world,
-				                                                laserMiner.Position.Center + new Vector2(-5, -20),
-				                                                new Vector2(0, -15),
-				                                                new Color(100, 255, 100, 255),
-				                                                120);
-				//laserMiner.AccumulationEvent += miningAccumulator.Accumulate;
-				AddComponent(miningAccumulator);
-			}
+			//// TODO: Find a better place to put this, but I don't think the LaserMiner should know about this
+			//// Maybe add an accumulator definition retriever to the entity? Just like the rings?
+			//LaserMiner laserMiner = toBuild as LaserMiner;
+			//if (laserMiner != null)
+			//{
+			//    Accumulator miningAccumulator = new Accumulator(world,
+			//                                                    laserMiner.Position.Center + new Vector2(-5, -20),
+			//                                                    new Vector2(0, -15),
+			//                                                    new Color(100, 255, 100, 255),
+			//                                                    120);
+			//    //laserMiner.AccumulationEvent += miningAccumulator.Accumulate;
+			//    AddComponent(miningAccumulator);
+			//}
 
-			Accumulator healthAccumulator = new Accumulator(world,
-			                                                toBuild.Position.Center + new Vector2(-5, -20),
-			                                                new Vector2(0, -15),
-			                                                new Color(200, 50, 50, 255),
-			                                                120);
-			toBuild.HitPoints.HitPointsChangedEvent += healthAccumulator.Accumulate;
-			AddComponent(healthAccumulator);
+			//Accumulator healthAccumulator = new Accumulator(world,
+			//                                                toBuild.Position.Center + new Vector2(-5, -20),
+			//                                                new Vector2(0, -15),
+			//                                                new Color(200, 50, 50, 255),
+			//                                                120);
+			//toBuild.HitPoints.HitPointsChangedEvent += healthAccumulator.Accumulate;
+			//AddComponent(healthAccumulator);
 
-			ProgressBar progressBar = new ProgressBar(world, toBuild.Position, new Vector2(0, toBuild.Position.Radius - 6), toBuild.Position.Radius * 2, 6, Color.Gray, Color.RoyalBlue);
-			progressBar.Max = toBuild.MineralsToConstruct;
-			toBuild.ConstructionProgressChangedEvent += progressBar.SetProgress;
-			toBuild.ConstructionCompletedEvent += progressBar.KillSelf;
-			toBuild.HitPoints.DyingEvent += progressBar.KillSelf;
-			AddComponent(progressBar);
+			//ProgressBar progressBar = new ProgressBar(world, toBuild.Position, new Vector2(0, toBuild.Position.Radius - 6), toBuild.Position.Radius * 2, 6, Color.Gray, Color.RoyalBlue);
+			//progressBar.Max = toBuild.MineralsToConstruct;
+			//toBuild.ConstructionProgressChangedEvent += progressBar.SetProgress;
+			//toBuild.ConstructionCompletedEvent += progressBar.KillSelf;
+			//toBuild.HitPoints.DyingEvent += progressBar.KillSelf;
+			//AddComponent(progressBar);
 
-			ProgressBar healthBar = new ProgressBar(world, toBuild.Position, new Vector2(0, toBuild.Position.Radius), toBuild.Position.Radius * 2, 6, Color.Gray, Color.Green);
-			healthBar.Max = toBuild.HitPoints.GetTotal();
-			healthBar.Progress = healthBar.Max;
-			toBuild.HitPoints.HitPointsChangedEvent += healthBar.SetProgress;
-			toBuild.HitPoints.DyingEvent += healthBar.KillSelf;
-			AddComponent(healthBar);
+			//ProgressBar healthBar = new ProgressBar(world, toBuild.Position, new Vector2(0, toBuild.Position.Radius), toBuild.Position.Radius * 2, 6, Color.Gray, Color.Green);
+			//healthBar.Max = toBuild.HitPoints.GetTotal();
+			//healthBar.Progress = healthBar.Max;
+			//toBuild.HitPoints.HitPointsChangedEvent += healthBar.SetProgress;
+			//toBuild.HitPoints.DyingEvent += healthBar.KillSelf;
+			//AddComponent(healthBar);
 
 
 			if (!theKeyboard.IsKeyDown(Keys.LeftShift) && !theKeyboard.IsKeyDown(Keys.RightShift))
@@ -910,38 +920,64 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		{
 			if (SelectionChanged != null)
 			{
-				SelectionChanged(new MultiEntityEventArgs(selectedEntities));
+				// TODO: 2012-08-10 Reconnect this event
+				//SelectionChanged(new MultiEntityEventArgs(selectedEntities));
 			}
 
-			foreach (var selectedEntity in selectedEntities)
-			{
-				ConstructableEntity constructableEntity = selectedEntity as ConstructableEntity;
-				if (constructableEntity != null)
-				{
-					CreateRangeRingsForSelection(constructableEntity);
-				}
-			}
+			// TODO: 2012-08-10 Fix this
+			//foreach (var selectedEntity in selectedEntities)
+			//{
+			//    ConstructableEntity constructableEntity = selectedEntity as ConstructableEntity;
+			//    if (constructableEntity != null)
+			//    {
+			//        CreateRangeRingsForSelection(constructableEntity);
+			//    }
+			//}
 		}
 
 
-		private void SelectedEntityDying(EntityReflectiveEventArgs e)
+		private void SelectedEntityDying(/*EntityReflectiveEventArgs e*/)
 		{
 			// Remove any deleted entities from the selection list
-			Entity dyingEntity = e.Entity;
-			if (dyingEntity != null)
-			{
-				selectedEntities.Remove(dyingEntity);
-				dyingEntity.DyingEvent -= SelectedEntityDying;
+			//Entity dyingEntity = e.Entity;
+			//if (dyingEntity != null)
+			//{
+			//    selectedEntities.Remove(dyingEntity);
+			//    dyingEntity.DyingEvent -= SelectedEntityDying;
 
-				// Tell anyone who is interested in a selection change
-				OnSelectionChanged();
-			}
+			//    // TODO: 2012-08-10 This needs to be turned back on
+			//    // Tell anyone who is interested in a selection change
+			//    //OnSelectionChanged();
+			//}
 		}
 
 
 		private void ResumeGame(Object sender, EventArgs e)
 		{
 			world.Paused = false;
+		}
+
+
+		/// <summary>
+		/// Is this a valid place to build?
+		/// </summary>
+		/// <returns>True if it's legal to build here, false otherwise</returns>
+		public virtual bool IsValidToBuildHere()
+		{
+			bool valid = true;
+
+			//// This will grab all objects who's bounding square intersects with us
+			//List<Entity> nearbyEntities = world.EntitiesInArea(Rect);
+			//foreach (Entity entity in nearbyEntities)
+			//{
+			//    // Now determine if they are really intersecting
+			//    if(entity.Solid && Position.IsIntersecting(entity.Position))
+			//    {
+			//        valid = false;
+			//        break;
+			//    }
+			//}
+			return valid;
 		}
 	}
 }

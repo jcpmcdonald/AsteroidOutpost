@@ -12,8 +12,8 @@ namespace AsteroidOutpost.Components
 	public class PowerGridNode : Component
 	{
 
-		public PowerGridNode(World world)
-			: base(world)
+		public PowerGridNode(World world, int entityID)
+			: base(world, entityID)
 		{
 		}
 

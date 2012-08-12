@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
-using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
@@ -11,13 +10,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AsteroidOutpost.Systems
 {
-	class RenderPowerGridSystem : DrawableGameComponent
+	class PowerGridSystem : DrawableGameComponent
 	{
 		private World world;
 		private SpriteBatch spriteBatch;
 
 
-		public RenderPowerGridSystem(AOGame game, World world)
+		public PowerGridSystem(AOGame game, World world)
 			: base(game)
 		{
 			this.world = world;

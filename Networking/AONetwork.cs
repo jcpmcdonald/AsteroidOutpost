@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Threading;
 using System.Xml.Linq;
 using AsteroidOutpost.Entities;
-using AsteroidOutpost.Entities.Structures;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 
