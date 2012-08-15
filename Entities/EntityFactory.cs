@@ -23,7 +23,7 @@ namespace AsteroidOutpost.Entities
 			asteroidSprite = new Sprite(File.OpenRead(@"..\Sprites\Asteroids.sprx"), world.GraphicsDevice);
 		}
 
-		public static List<Component> Create(String entityName)
+		public static List<Component> Create(String entityName, Dictionary<String, object> values)
 		{
 			int entityID = world.GetNextEntityID();
 			List<Component> newComponents = new List<Component>(8);
@@ -31,12 +31,18 @@ namespace AsteroidOutpost.Entities
 			switch(entityName.ToLower())
 			{
 			case "asteroid":
-				Animator animator = new Animator(world, entityID, asteroidSprite);
-				animator.SpriteAnimator.CurrentSet = "Asteroid " + GlobalRandom.Next(1, 4);
 				float angleStep = 360.0f / asteroidSprite.OrientationLookup.Count;
-				animator.SpriteAnimator.CurrentOrientation = (angleStep * GlobalRandom.Next(0, asteroidSprite.OrientationLookup.Count - 1)).ToString();
+				Animator animator = new Animator(world,
+				                                 entityID,
+				                                 asteroidSprite,
+				                                 (float)values["Sprite.Scale"],
+				                                 (String)values["Sprite.Set"],
+				                                 (String)values["Sprite.Animation"],
+				                                 angleStep * GlobalRandom.Next(0, asteroidSprite.OrientationLookup.Count - 1));
 
-				Position position = new Position(world, entityID, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f), 40);
+				Position position = new Position(world, entityID,
+				                                 (Vector2)values["Transpose.Position"],
+				                                 (int)values["Transpose.Radius"]);
 
 				newComponents.AddRange(new List<Component>{ animator, position });
 				break;

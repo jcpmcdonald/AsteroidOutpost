@@ -373,6 +373,18 @@ namespace AsteroidOutpost.Screens
 			return EntitiesInArea(new Rectangle(x, y, w, h), onlySolids);
 		}
 
+		/// <summary>
+		/// Gets a list of entities that are intersecting with the search area
+		/// </summary>
+		/// <param name="x">The centre of the search area</param>
+		/// <param name="y">The centre of the search area</param>
+		/// <param name="radius">The radius of the search area</param>
+		/// <returns>A list of entities that are intersecting with the search area</returns>
+		public List<int> EntitiesInArea(int x, int y, int radius, bool onlySolids = false)
+		{
+			return EntitiesInArea(new Rectangle((int)(x - (radius / 2f)), (int)(y - (radius / 2f)), radius * 2, radius * 2), onlySolids);
+		}
+
 
 		/// <summary>
 		/// Looks up a entity by ID

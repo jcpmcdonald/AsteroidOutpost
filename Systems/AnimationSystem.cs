@@ -43,7 +43,11 @@ namespace AsteroidOutpost.Systems
 				List<Animator> animators = world.GetComponents<Animator>(entity);
 				foreach (var animator in animators)
 				{
-					animator.SpriteAnimator.Draw(spriteBatch, world.WorldToScreen(world.GetComponent<Position>(entity).Center), 0f, 1f / world.ScaleFactor, animator.Tint);
+					animator.SpriteAnimator.Draw(spriteBatch,
+					                             world.WorldToScreen(world.GetComponent<Position>(entity).Center),
+					                             0f,
+					                             world.Scale(animator.Scale),
+					                             animator.Tint);
 				}
 			}
 
