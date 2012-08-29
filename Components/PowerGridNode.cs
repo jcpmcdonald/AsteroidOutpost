@@ -11,10 +11,14 @@ namespace AsteroidOutpost.Components
 {
 	public class PowerGridNode : Component
 	{
+		private bool producesPower = false;
+		protected bool conductsPower;
 
-		public PowerGridNode(World world, int entityID)
+
+		public PowerGridNode(World world, int entityID, bool conductsPower)
 			: base(world, entityID)
 		{
+			this.conductsPower = conductsPower;
 		}
 
 
@@ -33,13 +37,33 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// True if this conducts power
 		/// </summary>
-		public bool ConductsPower { get; set; }
+		public bool ConductsPower
+		{
+			get
+			{
+				return conductsPower;
+			}
+			set
+			{
+				conductsPower = value;
+			}
+		}
 
 
 		/// <summary>
 		/// True if this produces power  (note that power producers should also conduct power)
 		/// </summary>
-		public bool ProducesPower { get; set; }
+		public bool ProducesPower
+		{
+			get
+			{
+				return producesPower;
+			}
+			set
+			{
+				producesPower = value;
+			}
+		}
 
 
 		/// <summary>
@@ -53,6 +77,13 @@ namespace AsteroidOutpost.Components
 		/// Returns the absolute location showing where the power link should be displayed
 		/// </summary>
 		/// <returns>Returns the absolute location showing where the power link should be displayed</returns>
-		public Vector2 PowerLinkPointAbsolute { get; set; }
+		public Vector2 PowerLinkPointAbsolute
+		{
+			get
+			{
+				Position entityPosition = world.GetComponent<Position>(entityID);
+				return entityPosition.Center + PowerLinkPointRelative;
+			}
+		}
 	}
 }

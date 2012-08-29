@@ -432,8 +432,20 @@ namespace AsteroidOutpost.Screens
 		/// Looks up a component by entityID
 		/// This method is thread safe
 		/// </summary>
+		/// <param name="referenceComponent">A component on the same entity</param>
+		/// <returns>A list of T:Components that are attached to the same entity as the reference, or null if the entity is not found</returns>
+		public List<T> GetComponents<T>(Component referenceComponent) where T : Component
+		{
+			return GetComponents<T>(referenceComponent.EntityID);
+		}
+
+
+		/// <summary>
+		/// Looks up a component by entityID
+		/// This method is thread safe
+		/// </summary>
 		/// <param name="entityID">The entityID to look up</param>
-		/// <returns>A list of components for the given entityID and type, or null if the entity is not found</returns>
+		/// <returns>A single T:Component for the given entityID and type, or null if the entity is not found</returns>
 		public T GetComponent<T>(int entityID) where T : Component
 		{
 			List<T> matchingComponents = GetComponents<T>(entityID);
@@ -446,6 +458,18 @@ namespace AsteroidOutpost.Screens
 
 
 		/// <summary>
+		/// Looks up a component by entityID
+		/// This method is thread safe
+		/// </summary>
+		/// <param name="referenceComponent">A component on the same entity</param>
+		/// <returns>A single T:Component that is attached to the same entity as the reference, or null if the entity is not found</returns>
+		public T GetComponent<T>(Component referenceComponent) where T : Component
+		{
+			return GetComponent<T>(referenceComponent.EntityID);
+		}
+
+
+		/// <summary>
 		/// Retreives a list of components with the type specified
 		/// This method is thread safe
 		/// </summary>
@@ -454,10 +478,31 @@ namespace AsteroidOutpost.Screens
 		{
 			lock (componentDictionary)
 			{
-				return new List<T>(componentDictionary.Where(comp => comp.Value.GetType() == typeof(T)).Select(x => x.Value as T));
+				//return new List<T>(componentDictionary.Where(comp => comp.Value.GetType() == typeof(T)).Select(x => x.Value as T));
+				//return componentDictionary.Where(comp => comp.Value.GetType() == typeof(T)).Select(x => x.Value as T).ToList();
+				//return componentDictionary.Where(compList => compList.Value.OfType<T>()); //.Select(x => x.Value as T).ToList();
+				//return componentDictionary.SelectMany(x => x.Value)
+				List<T> rv = new List<T>();
+				foreach(List<Component> componentList in componentDictionary.Values)
+				{
+					rv.AddRange(componentList.OfType<T>());
+				}
+				return rv;
 			}
 		}
 
+
+		public void SetOwningForce(int entityID, Force force)
+		{
+			if(owningForces.ContainsKey(EntityID))
+			{
+				owningForces[entityID] = force;
+			}
+			else
+			{
+				owningForces.Add(entityID, force);
+			}
+		}
 
 		public Force GetOwningForce(int entityID)
 		{
@@ -632,6 +677,18 @@ namespace AsteroidOutpost.Screens
 			{
 				return powerGrid;
 			}
+		}
+
+
+		internal PowerGrid GetPowerGrid(Force force)
+		{
+			return powerGrid[force.ID];
+		}
+
+
+		internal PowerGrid GetPowerGrid(Component componentInForce)
+		{
+			return powerGrid[GetOwningForce(componentInForce.EntityID).ID];
 		}
 
 
@@ -1024,7 +1081,7 @@ namespace AsteroidOutpost.Screens
 			for (int iGrid = 0; iGrid < powerGridCount; iGrid++)
 			{
 				int owningForceID = br.ReadInt32();
-				PowerGrid.Add(owningForceID, new PowerGrid(this));
+				powerGrid.Add(owningForceID, new PowerGrid(this));
 			}
 
 

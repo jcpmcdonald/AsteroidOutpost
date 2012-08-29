@@ -41,7 +41,7 @@ namespace AsteroidOutpost.Systems
 
 					// BUG: There is a disconnect between the check for minerals (below) and the actual consumption of minerals. Could cause weird behaviour
 					Force owningForce = world.GetOwningForce(constructable.EntityID);
-					if (owningForce.GetMinerals() > mineralsToUse && world.PowerGrid[owningForce.ID].GetPower(constructable.EntityID, powerToUse))
+					if (owningForce.GetMinerals() > mineralsToUse && world.GetPowerGrid(owningForce).GetPower(constructable.EntityID, powerToUse))
 					{
 						// Use some minerals toward my construction
 						int temp = (int)constructable.MineralsLeftToConstruct;

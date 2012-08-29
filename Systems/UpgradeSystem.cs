@@ -40,7 +40,7 @@ namespace AsteroidOutpost.Systems
 
 					// BUG: There is a disconnect between the check for minerals (below) and the actual consumption of minerals. Could cause weird behaviour
 					Force owningForce = world.GetOwningForce(upgradable.EntityID);
-					if (owningForce.GetMinerals() > mineralsToUse && world.PowerGrid[owningForce.ID].GetPower(upgradable.EntityID, powerToUse))
+					if (owningForce.GetMinerals() > mineralsToUse && world.GetPowerGrid(owningForce).GetPower(upgradable.EntityID, powerToUse))
 					{
 						// Use some minerals toward my upgrade
 						int temp = (int)upgradable.MineralsLeftToUpgrade;

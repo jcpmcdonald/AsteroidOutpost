@@ -78,7 +78,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			localSystems.Add(accumulationSystem);
 
 			// Set up some hotkeys
-			//hotkeys.Add(Keys.P, btnPower_Clicked);
+			hotkeys.Add(Keys.P, btnPower_Clicked);
 			//hotkeys.Add(Keys.N, btnPowerNode_Clicked);
 			//hotkeys.Add(Keys.M, btnMiner_Clicked);
 			//hotkeys.Add(Keys.L, btnLaserTower_Clicked);
@@ -92,7 +92,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 			awesomium.WebView.SetObjectCallback("hud", "ResumeGame", ResumeGame);
 
-			//awesomium.WebView.SetObjectCallback("hud", "BuildSolarStation", btnPower_Clicked);
+			awesomium.WebView.SetObjectCallback("hud", "BuildSolarStation", btnPower_Clicked);
 			//awesomium.WebView.SetObjectCallback("hud", "BuildPowerNode", btnPowerNode_Clicked);
 			//awesomium.WebView.SetObjectCallback("hud", "BuildLaserMiner", btnMiner_Clicked);
 			//awesomium.WebView.SetObjectCallback("hud", "BuildLaserTower", btnLaserTower_Clicked);
@@ -260,7 +260,9 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			if (creatingEntityID != null)
 			{
 				// Update the creating entity to be be where the mouse is
-				world.GetComponent<Position>(creatingEntityID.Value).Center = ScreenToWorld(theMouse.X, theMouse.Y);
+				Position position = world.GetComponent<Position>(creatingEntityID.Value);
+				position.Center = ScreenToWorld(theMouse.X, theMouse.Y);
+				world.QuadTree.Move(position);
 			}
 
 
@@ -624,22 +626,32 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 		#region Button Handlers
 
-		//private void btnPower_Clicked(object sender, EventArgs e)
-		//{
-		//    if (!world.Paused)
-		//    {
-		//        if(creating != null)
-		//        {
-		//            OnCancelCreation();
-		//        }
+		private void btnPower_Clicked(object sender, EventArgs e)
+		{
+			if (!world.Paused)
+			{
+				if (creatingEntityID != null)
+				{
+					OnCancelCreation();
+				}
 
-		//        // Create a new power station
-		//        creating = new SolarStation(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
+				// Create a new power station
+				creatingEntityID = EntityFactory.Create("SolarStation",
+				                                        new Dictionary<String, object>(){
+					                                        { "Sprite.Scale", 1f },
+					                                        { "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
+					                                        { "Sprite.Animation", null },
+					                                        { "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					                                        { "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
+					                                        { "Transpose.Radius", 40 },
+					                                        { "OwningForce", localActor.PrimaryForce }
+				                                        });
+				// new SolarStation(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
 
-		//        CreateRangeRingsForConstruction(creating);
-		//        CreatePowerLinker(creating);
-		//    }
-		//}
+				//CreateRangeRingsForConstruction(creating);
+				//CreatePowerLinker(creating);
+			}
+		}
 
 
 		//private void btnPowerNode_Clicked(object sender, EventArgs e)
@@ -852,8 +864,20 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 		private void BuildStructure()
 		{
+			if(creatingEntityID == null)
+			{
+				// Ok, wow. Fail
+				Debugger.Break();
+			}
+
 			constructionSound.Play(Math.Min(1, world.Scale(1f)), 0, 0);
 
+			Constructable constructable = world.GetComponent<Constructable>(creatingEntityID.Value);
+			constructable.IsBeingPlaced = false;
+			constructable.IsConstructing = true;
+
+			PowerGridNode powerNode = world.GetComponent<PowerGridNode>(creatingEntityID.Value);
+			world.GetPowerGrid(powerNode).ConnectToPowerGrid(powerNode);
 
 			//// Reflectively look up what they are making, and create an other one of the same thing in the game
 			//Type creatingType = creating.GetType();

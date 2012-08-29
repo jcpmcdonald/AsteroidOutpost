@@ -16,7 +16,9 @@ namespace AsteroidOutpost.Components
 		protected int level = 1;
 
 		private float mineralsLeftToConstruct;
-		protected bool isConstructing = true;
+		protected bool isBeingPlaced = true;
+		protected bool isConstructing = false;
+		private int mineralsToConstruct;
 
 
 		// Events
@@ -31,9 +33,11 @@ namespace AsteroidOutpost.Components
 		//public static event Action<EntityEventArgs> AnyConstructionCompletedEvent;
 		//public event Action<EntityEventArgs> ConstructionCompletedEvent;
 
-		public Constructable(World world, int entityID)
+		public Constructable(World world, int entityID, int mineralsToConstruct)
 			: base(world, entityID)
 		{
+			this.mineralsToConstruct = mineralsToConstruct;
+			this.mineralsLeftToConstruct = mineralsToConstruct;
 		}
 
 
@@ -75,9 +79,19 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// How many minerals does this constructable take to build?
 		/// </summary>
-		public int MineralsToConstruct { get; set; }
-		
-		
+		public int MineralsToConstruct
+		{
+			get
+			{
+				return mineralsToConstruct;
+			}
+			set
+			{
+				mineralsToConstruct = value;
+			}
+		}
+
+
 		/// <summary>
 		/// How many minerals does this constructable take to build?
 		/// </summary>
@@ -131,6 +145,16 @@ namespace AsteroidOutpost.Components
 			}
 		}
 		
+
+		/// <summary>
+		/// Is this being placed?
+		/// </summary>
+		public virtual bool IsBeingPlaced
+		{
+			get { return isBeingPlaced; }
+			set { isBeingPlaced = value; }
+		}
+
 		
 		/// <summary>
 		/// Is this under construction?

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace AsteroidOutpost.Components
 {
+	// Not *really* a component since it doesn't belong to entities
 	public class PowerGrid
 	{
 		protected World world;

@@ -26,6 +26,33 @@ namespace AsteroidOutpost.Systems
 		public override void Draw(GameTime gameTime)
 		{
 			spriteBatch.Begin();
+
+			// Draw any entities being placed
+			List<Constructable> placingEntities = world.GetComponents<Constructable>();
+			placingEntities =  placingEntities.Where(x => x.IsBeingPlaced).ToList();
+			foreach(var placingEntity in placingEntities)
+			{
+				PowerGridNode relatedPowerNode = world.GetComponent<PowerGridNode>(placingEntity);
+				PowerGrid relatedGrid = world.GetPowerGrid(placingEntity);
+				foreach (var powerLink in relatedGrid.GetAllPowerLinks(relatedPowerNode))
+				{
+					Color linkColor;
+					if (relatedGrid.IsPowerRoutableBetween(relatedPowerNode, powerLink.Value))
+					{
+						linkColor = Color.Yellow;
+					}
+					else
+					{
+						linkColor = Color.Red;
+					}
+
+					spriteBatch.DrawLine(world.WorldToScreen(relatedPowerNode.PowerLinkPointAbsolute),
+					                     world.WorldToScreen(powerLink.Value.PowerLinkPointAbsolute),
+					                     linkColor);
+				}
+			}
+
+
 			foreach (var grid in world.PowerGrid.Values)
 			{
 				Color color;

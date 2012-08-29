@@ -42,8 +42,8 @@ namespace AsteroidOutpost.Scenarios
 		/// <param name="asteroidCount">The number of asteroids to create</param>
 		protected virtual void GenerateAsteroidField(int asteroidCount)
 		{
-			//Force asteroidForce = new Force(world, world.GetNextForceID(), 0, Team.Neutral);
-			//world.AddForce(asteroidForce);
+			Force asteroidForce = new Force(world, world.GetNextForceID(), 0, Team.Neutral);
+			world.AddForce(asteroidForce);
 
 			//EntityFactory.Create("Asteroid", new Dictionary<String, object>(){
 			//    { "Sprite.Set", "Asteroid " + GlobalRandom.Next(1, 4) },
@@ -135,9 +135,11 @@ namespace AsteroidOutpost.Scenarios
 					                     { "Sprite.Scale", scale },
 					                     { "Sprite.Set", "Asteroid " + GlobalRandom.Next(1, 4) },
 					                     { "Sprite.Animation", null },
+					                     { "Sprite.Orientation", GlobalRandom.Next(0, 359) },
 					                     { "Transpose.Position", new Vector2(x, y) },
 					                     { "Transpose.Radius", radius },
-					                     { "Minerals", minerals }
+					                     { "Minerals", minerals },
+					                     { "OwningForce", asteroidForce }
 				                     });
 			}
 		}
