@@ -177,7 +177,7 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// Gets the requested amount of power from a single power-source that is able to provide it
 		/// </summary>
-		/// <param name="startingLocation">Where in the power grid should we begin our quest for power</param>
+		/// <param name="startingEntityID">Where in the power grid should we begin our quest for power</param>
 		/// <param name="amount">The amount of power to retrieve</param>
 		/// <returns>Returns true if successful, false otherwise</returns>
 		internal bool GetPower(int startingEntityID, float amount)
@@ -211,6 +211,18 @@ namespace AsteroidOutpost.Components
 				return powerProducer.GetPower(amount);
 			}
 			return false;
+		}
+
+
+		/// <summary>
+		/// Checks that the requested amount of power is available from a single power-source in the grid
+		/// </summary>
+		/// <param name="startingEntityID">Where in the power grid should we begin our quest for power</param>
+		/// <param name="amount">The amount of power to retrieve</param>
+		/// <returns>Returns true if successful, false otherwise</returns>
+		internal bool HasPower(int startingEntityID, float amount)
+		{
+			return HasPower(world.GetComponents<PowerGridNode>(startingEntityID)[0], amount);
 		}
 
 
@@ -259,7 +271,7 @@ namespace AsteroidOutpost.Components
 				// Add of my unvisited neighbours to the list, sorted by distance
 				foreach (var linkedNode in powerNodes[cursor])
 				{
-					if (!visited.Any(v => v.Item1 == linkedNode) && linkedNode.PowerStateActive)
+					if (visited.All(v => v.Item1 != linkedNode) && linkedNode.PowerStateActive)
 					{
 						// Get the distance from the starting location to the linked node
 						float nodeDistance = cursorDistance + Vector2.Distance(cursor.PowerLinkPointAbsolute, linkedNode.PowerLinkPointAbsolute);

@@ -95,45 +95,43 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// How many minerals does this constructable take to build?
 		/// </summary>
-		public int MineralsLeftToConstruct
+		public float MineralsLeftToConstruct
 		{
 			get
 			{
-				return (int)mineralsLeftToConstruct;
+				return mineralsLeftToConstruct;
 			}
-		}
-
-		public void SetMineralsLeftToConstruct(float value)
-		{
-			int delta = (int)Math.Ceiling(mineralsLeftToConstruct) - (int)Math.Max(Math.Ceiling(value), 0);
-			mineralsLeftToConstruct = Math.Max(value, 0);
-			
-			// Tell all my friends
-			//if (ConstructionProgressChangedEvent != null)
-			//{
-			//    ConstructionProgressChangedEvent(new EntityConstructionProgressEventArgs(this, mineralsLeftToConstruct, delta));
-			//}
-
-
-			if (mineralsLeftToConstruct <= 0)
+			set
 			{
-				//mineralsToUpgrade = 0;
-				mineralsLeftToConstruct = 0;
+				int delta = (int)Math.Ceiling(mineralsLeftToConstruct) - (int)Math.Max(Math.Ceiling(value), 0);
+				mineralsLeftToConstruct = Math.Max(value, 0);
 
-				// This construction is complete
-				IsConstructing = false;
+				// Tell all my friends
+				//if (ConstructionProgressChangedEvent != null)
+				//{
+				//    ConstructionProgressChangedEvent(new EntityConstructionProgressEventArgs(this, mineralsLeftToConstruct, delta));
+				//}
 
-				//if (AnyConstructionCompletedEvent != null)
-				//{
-				//    AnyConstructionCompletedEvent(new EntityEventArgs(this));
-				//}
-				//if (ConstructionCompletedEvent != null)
-				//{
-				//    ConstructionCompletedEvent(new EntityEventArgs(this));
-				//}
+
+				if (mineralsLeftToConstruct <= 0)
+				{
+					//mineralsToUpgrade = 0;
+					mineralsLeftToConstruct = 0;
+
+					// This construction is complete
+					IsConstructing = false;
+
+					//if (AnyConstructionCompletedEvent != null)
+					//{
+					//    AnyConstructionCompletedEvent(new EntityEventArgs(this));
+					//}
+					//if (ConstructionCompletedEvent != null)
+					//{
+					//    ConstructionCompletedEvent(new EntityEventArgs(this));
+					//}
+				}
 			}
 		}
-		
 		
 		
 		public virtual int Level

@@ -23,6 +23,21 @@ namespace AsteroidOutpost.Systems
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 		}
 
+
+		public override void Update(GameTime gameTime)
+		{
+			List<PowerProducer> producers = world.GetComponents<PowerProducer>();
+			foreach(var producer in producers)
+			{
+				if(producer.ProducesPower)
+				{
+					producer.AvailablePower += producer.PowerProductionRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
+				}
+			}
+		}
+
+
+
 		public override void Draw(GameTime gameTime)
 		{
 			spriteBatch.Begin();

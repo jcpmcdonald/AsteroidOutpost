@@ -119,7 +119,7 @@ namespace AsteroidOutpost.Scenarios
 
 
 						// Make sure we aren't intersecting with other asteroids
-						List<int> nearbyEntities = world.EntitiesInArea(x, y, radius);
+						List<int> nearbyEntities = world.EntitiesInArea(x, y, radius, true);
 						foreach (int nearbyEntity in nearbyEntities)
 						{
 							Position position = world.GetComponent<Position>(nearbyEntity);
@@ -152,39 +152,58 @@ namespace AsteroidOutpost.Scenarios
 		/// <returns>Returns a location that the camera should be centered on</returns>
 		protected virtual Vector2 CreateStartingBase(Force force)
 		{
-			//SolarStation startingStation = new SolarStation(world, world, force, Vector2.Zero);
-			//startingStation.StartConstruction();
-			//startingStation.IsConstructing = false;
+			Vector2 origin = new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f);
+			Vector2 delta = Vector2.Zero;
+			bool findNewHome = true;
+			int attempts = 0;
+			while (findNewHome)
+			{
+				findNewHome = false;
 
+				// Expand the search as the number of attepts increase
+				int tryDistance = 200 + (attempts * attempts * 2);
+				delta = new Vector2(GlobalRandom.Next(tryDistance) + GlobalRandom.Next(tryDistance) - tryDistance,
+				                    GlobalRandom.Next(tryDistance) + GlobalRandom.Next(tryDistance) - tryDistance);
 
-			//Vector2 origin = new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f);
-			//bool findNewHome = true;
-			//int attempts = 0;
-			//while (findNewHome)
-			//{
-			//    int tryDistance = 200 + (attempts * attempts * 2);
-			//    Vector2 delta = new Vector2(GlobalRandom.Next(tryDistance) + GlobalRandom.Next(tryDistance) - tryDistance,
-			//                                GlobalRandom.Next(tryDistance) + GlobalRandom.Next(tryDistance) - tryDistance);
-			//    startingStation.Position.Center = origin + delta;
-			//    findNewHome = false;
+				// Ensure no collisions
+				// TODO: Look this radius up
+				int radius = 40;
+				List<int> nearbyEntities = world.EntitiesInArea(origin + delta, radius, true);
+				foreach (int nearbyEntity in nearbyEntities)
+				{
+					Position position = world.GetComponent<Position>(nearbyEntity);
+					if (position.IsIntersecting(origin + delta, radius))
+					{
+						findNewHome = true;
+						attempts++;
+						break;
+					}
+				}
+			}
 
-			//    // Ensure no collisions
-			//    List<Entity> nearbyEntities = world.EntitiesInArea(startingStation.Rect);
-			//    foreach (Entity nearbyEntity in nearbyEntities)
-			//    {
-			//        if (startingStation.Position.IsIntersecting(nearbyEntity.Position))
-			//        {
-			//            findNewHome = true;
-			//            attempts++;
-			//            continue;
-			//        }
-			//    }
-			//}
+			// Create the solar station
+			int creatingEntityID = EntityFactory.Create("SolarStation",
+			                                            new Dictionary<String, object>(){
+				                                            { "Sprite.Scale", 1f },
+				                                            { "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
+				                                            { "Sprite.Animation", null },
+				                                            { "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+				                                            { "Transpose.Position", origin + delta },
+				                                            { "Transpose.Radius", 40 },
+				                                            { "OwningForce", force }
+			                                            });
 
-			//world.Add(startingStation);
+			// Set this building as done constructing
+			Constructable solarStation = world.GetComponent<Constructable>(creatingEntityID);
+			solarStation.IsBeingPlaced = false;
+			solarStation.IsConstructing = false;
 
-			//return startingStation.Position.Center;
-			return new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f);
+			// Hook it up to the grid
+			PowerGridNode powerNode = world.GetComponent<PowerGridNode>(creatingEntityID);
+			world.GetPowerGrid(powerNode).ConnectToPowerGrid(powerNode);
+
+			// Return the starting location
+			return origin + delta;
 		}
 
 	}

@@ -51,6 +51,7 @@ namespace AsteroidOutpost.Screens
 		private PhysicsSystem physicsSystem;
 		private RenderQuadTreeSystem renderQuadTreeSystem;
 		private PowerGridSystem powerGridSystem;
+		private ConstructionSystem constructionSystem;
 
 		private bool paused;
 
@@ -78,6 +79,7 @@ namespace AsteroidOutpost.Screens
 			physicsSystem = new PhysicsSystem(game, this);
 			renderQuadTreeSystem = new RenderQuadTreeSystem(game, this);
 			powerGridSystem = new PowerGridSystem(game, this);
+			constructionSystem = new ConstructionSystem(game, this);
 
 			awesomium = game.Awesomium;
 
@@ -91,6 +93,7 @@ namespace AsteroidOutpost.Screens
 			game.Components.Add(hud);
 			game.Components.Add(renderQuadTreeSystem);
 			game.Components.Add(powerGridSystem);
+			game.Components.Add(constructionSystem);
 		}
 
 
@@ -385,6 +388,17 @@ namespace AsteroidOutpost.Screens
 			return EntitiesInArea(new Rectangle((int)(x - (radius / 2f)), (int)(y - (radius / 2f)), radius * 2, radius * 2), onlySolids);
 		}
 
+		/// <summary>
+		/// Gets a list of entities that are intersecting with the search area
+		/// </summary>
+		/// <param name="location">The centre of the search area</param>
+		/// <param name="radius">The radius of the search area</param>
+		/// <returns>A list of entities that are intersecting with the search area</returns>
+		public List<int> EntitiesInArea(Vector2 location, int radius, bool onlySolids = false)
+		{
+			return EntitiesInArea(new Rectangle((int)(location.X - (radius / 2f)), (int)(location.Y - (radius / 2f)), radius * 2, radius * 2), onlySolids);
+		}
+
 
 		/// <summary>
 		/// Looks up a entity by ID
@@ -449,9 +463,11 @@ namespace AsteroidOutpost.Screens
 		public T GetComponent<T>(int entityID) where T : Component
 		{
 			List<T> matchingComponents = GetComponents<T>(entityID);
-			if(matchingComponents.Count != 1)
+			if(matchingComponents == null || matchingComponents.Count != 1)
 			{
+				// This shouldn't *really* happen
 				Debugger.Break();
+				return null;
 			}
 			return matchingComponents[0];
 		}

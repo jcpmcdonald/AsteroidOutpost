@@ -64,8 +64,7 @@ namespace AsteroidOutpost.Scenarios
 
 			world.PowerGrid.Add(localForce.ID, new PowerGrid(world));
 
-
-			world.HUD.FocusWorldPoint = new Vector2(world.MapWidth / 2f, world.MapHeight / 2f);
+			world.HUD.FocusWorldPoint = CreateStartingBase(localForce);
 
 			//// Create your starting solar station
 			//SolarStation startingStation = new SolarStation(world, world, localController.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f));

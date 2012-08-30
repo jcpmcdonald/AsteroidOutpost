@@ -22,6 +22,7 @@ namespace AsteroidOutpost.Entities
 			world = theWorld;
 			sprites.Add("asteroid", new Sprite(File.OpenRead(@"..\Sprites\Asteroids.sprx"), world.GraphicsDevice));
 			sprites.Add("solarstation", new Sprite(File.OpenRead(@"..\Sprites\SolarStation.sprx"), world.GraphicsDevice));
+			sprites.Add("laserminer", new Sprite(File.OpenRead(@"..\Sprites\LaserMiner.sprx"), world.GraphicsDevice));
 		}
 
 		public static int Create(String entityName, Dictionary<String, object> values)
@@ -74,11 +75,40 @@ namespace AsteroidOutpost.Entities
 				                                 (Vector2)values["Transpose.Position"],
 				                                 (int)values["Transpose.Radius"]);
 
-				PowerProducer powerProducer = new PowerProducer(world, entityID);
+				PowerProducer powerProducer = new PowerProducer(world, entityID, 10, 70);
 
 				Constructable constructable = new Constructable(world, entityID, 200);
 
 				newComponents.AddRange(new List<Component>{ animator, position, powerProducer, constructable });
+				break;
+			}
+			case "laserminer":
+			{
+				Sprite laserMinerSprite = sprites["laserminer"];
+				float angleStep = 360.0f / laserMinerSprite.OrientationLookup.Count;
+
+				float spriteScale = (float)values["Sprite.Scale"];
+
+				String spriteSet = (String)values["Sprite.Set"];
+				String spriteAnimation = (String)values["Sprite.Animation"];
+				int spriteOrientation = (int)values["Sprite.Orientation"];
+
+				Animator animator = new Animator(world,
+				                                 entityID,
+				                                 laserMinerSprite,
+				                                 spriteScale,
+				                                 spriteSet,
+				                                 spriteAnimation,
+				                                 angleStep * (spriteOrientation % laserMinerSprite.OrientationLookup.Count));
+
+				Position position = new Position(world, entityID,
+				                                 (Vector2)values["Transpose.Position"],
+				                                 (int)values["Transpose.Radius"]);
+
+				PowerGridNode powerNode = new PowerGridNode(world, entityID, false);
+				Constructable constructable = new Constructable(world, entityID, 200);
+
+				newComponents.AddRange(new List<Component>{ animator, position, powerNode, constructable });
 				break;
 			}
 

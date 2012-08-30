@@ -94,7 +94,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 			awesomium.WebView.SetObjectCallback("hud", "BuildSolarStation", btnPower_Clicked);
 			//awesomium.WebView.SetObjectCallback("hud", "BuildPowerNode", btnPowerNode_Clicked);
-			//awesomium.WebView.SetObjectCallback("hud", "BuildLaserMiner", btnMiner_Clicked);
+			awesomium.WebView.SetObjectCallback("hud", "BuildLaserMiner", btnLaserMiner_Clicked);
 			//awesomium.WebView.SetObjectCallback("hud", "BuildLaserTower", btnLaserTower_Clicked);
 		}
 
@@ -671,30 +671,43 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		//    }
 		//}
 		
-		//private void btnMiner_Clicked(object sender, EventArgs e)
-		//{
-		//    if (!world.Paused)
-		//    {
-		//        if (creating != null)
-		//        {
-		//            OnCancelCreation();
-		//        }
+		private void btnLaserMiner_Clicked(object sender, EventArgs e)
+		{
+			if (!world.Paused)
+			{
+				if (creatingEntityID != null)
+				{
+					OnCancelCreation();
+				}
 
-		//        // Create a new power station
-		//        creating = new LaserMiner(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
+				// Create a new laser miner
+				creatingEntityID = EntityFactory.Create("LaserMiner",
+				                                        new Dictionary<String, object>(){
+					                                        { "Sprite.Scale", 1f },
+					                                        { "Sprite.Set", null },
+					                                        { "Sprite.Animation", null },
+					                                        { "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					                                        { "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
+					                                        { "Transpose.Radius", 40 },
+					                                        { "OwningForce", localActor.PrimaryForce }
+				                                        });
 
-		//        CreateRangeRingsForConstruction(creating);
-		//        CreatePowerLinker(creating);
+				//// Create a new power station
+				//creating = new LaserMiner(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
 
-		//        LaserMiner laserMiner = creating as LaserMiner;
-		//        Linker linker = new Linker(world, creating.Position);
-		//        linker.Links.Add(new Tuple<Predicate<Entity>, Color, float>(entity => entity is Asteroid, Color.Green, laserMiner.MiningRange));
+				//CreateRangeRingsForConstruction(creating);
+				//CreatePowerLinker(creating);
 
-		//        CancelledCreationEvent += linker.KillSelf;
-		//        //world.StructureStartedEventPreAuth += linker.KillSelf;
-		//        components.Add(linker);
-		//    }
-		//}
+				//LaserMiner laserMiner = creating as LaserMiner;
+				//Linker linker = new Linker(world, creating.Position);
+				//linker.Links.Add(new Tuple<Predicate<Entity>, Color, float>(entity => entity is Asteroid, Color.Green, laserMiner.MiningRange));
+
+				//CancelledCreationEvent += linker.KillSelf;
+				////world.StructureStartedEventPreAuth += linker.KillSelf;
+				//components.Add(linker);
+			}
+		}
+
 
 		//void btnLaserTower_Clicked(object sender, EventArgs e)
 		//{

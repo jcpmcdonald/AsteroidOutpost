@@ -31,7 +31,22 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// True if this node is active and ready to either conduct or produce power (not used for consumers)
 		/// </summary>
-		public bool PowerStateActive { get; set; }
+		public bool PowerStateActive
+		{
+			get
+			{
+				List<Constructable> constructables = world.GetComponents<Constructable>(entityID);
+				if(constructables.Count == 1)
+				{
+					return !constructables[0].IsBeingPlaced && !constructables[0].IsConstructing;
+				}
+				else
+				{
+					// Umm.. I suppose I'm active? Probably
+					return true;
+				}
+			}
+		}
 
 
 		/// <summary>
