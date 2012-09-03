@@ -93,7 +93,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			awesomium.WebView.SetObjectCallback("hud", "ResumeGame", ResumeGame);
 
 			awesomium.WebView.SetObjectCallback("hud", "BuildSolarStation", btnPower_Clicked);
-			//awesomium.WebView.SetObjectCallback("hud", "BuildPowerNode", btnPowerNode_Clicked);
+			awesomium.WebView.SetObjectCallback("hud", "BuildPowerNode", btnPowerNode_Clicked);
 			awesomium.WebView.SetObjectCallback("hud", "BuildLaserMiner", btnLaserMiner_Clicked);
 			//awesomium.WebView.SetObjectCallback("hud", "BuildLaserTower", btnLaserTower_Clicked);
 		}
@@ -352,6 +352,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			}
 			
 			// Cancel whatever they are creating
+			world.DeleteComponents(creatingEntityID.Value);
 			creatingEntityID = null;
 		}
 
@@ -636,16 +637,15 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new power station
-				creatingEntityID = EntityFactory.Create("SolarStation",
-				                                        new Dictionary<String, object>(){
-					                                        { "Sprite.Scale", 1f },
-					                                        { "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
-					                                        { "Sprite.Animation", null },
-					                                        { "Sprite.Orientation", GlobalRandom.Next(0, 359) },
-					                                        { "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
-					                                        { "Transpose.Radius", 40 },
-					                                        { "OwningForce", localActor.PrimaryForce }
-				                                        });
+				creatingEntityID = EntityFactory.CreateSolarStation(new Dictionary<String, object>(){
+					{ "Sprite.Scale", 0.7f },
+					{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
+					{ "Sprite.Animation", null },
+					{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
+					{ "Transpose.Radius", 40 },
+					{ "OwningForce", localActor.PrimaryForce }
+				});
 				// new SolarStation(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
 
 				//CreateRangeRingsForConstruction(creating);
@@ -654,23 +654,29 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		}
 
 
-		//private void btnPowerNode_Clicked(object sender, EventArgs e)
-		//{
-		//    if (!world.Paused)
-		//    {
-		//        if (creating != null)
-		//        {
-		//            OnCancelCreation();
-		//        }
+		private void btnPowerNode_Clicked(object sender, EventArgs e)
+		{
+			if (!world.Paused)
+			{
+				if (creatingEntityID != null)
+				{
+					OnCancelCreation();
+				}
 
-		//        // Create a new power node
-		//        creating = new PowerGridNode(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
+				// Create a new power station
+				creatingEntityID = EntityFactory.CreatePowerNode(new Dictionary<String, object>(){
+					{ "Sprite.Scale", 0.4f },
+					{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
+					{ "Sprite.Animation", null },
+					{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
+					{ "Transpose.Radius", 20 },
+					{ "OwningForce", localActor.PrimaryForce }
+				});
+			}
+		}
 
-		//        CreateRangeRingsForConstruction(creating);
-		//        CreatePowerLinker(creating);
-		//    }
-		//}
-		
+
 		private void btnLaserMiner_Clicked(object sender, EventArgs e)
 		{
 			if (!world.Paused)
@@ -681,16 +687,15 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new laser miner
-				creatingEntityID = EntityFactory.Create("LaserMiner",
-				                                        new Dictionary<String, object>(){
-					                                        { "Sprite.Scale", 1f },
-					                                        { "Sprite.Set", null },
-					                                        { "Sprite.Animation", null },
-					                                        { "Sprite.Orientation", GlobalRandom.Next(0, 359) },
-					                                        { "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
-					                                        { "Transpose.Radius", 40 },
-					                                        { "OwningForce", localActor.PrimaryForce }
-				                                        });
+				creatingEntityID = EntityFactory.CreateLaserMiner(new Dictionary<String, object>(){
+					{ "Sprite.Scale", 0.7f },
+					{ "Sprite.Set", null },
+					{ "Sprite.Animation", null },
+					{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
+					{ "Transpose.Radius", 40 },
+					{ "OwningForce", localActor.PrimaryForce }
+				});
 
 				//// Create a new power station
 				//creating = new LaserMiner(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
@@ -945,11 +950,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			//toBuild.HitPoints.DyingEvent += healthBar.KillSelf;
 			//AddComponent(healthBar);
 
-
-			if (!theKeyboard.IsKeyDown(Keys.LeftShift) && !theKeyboard.IsKeyDown(Keys.RightShift))
-			{
-				OnCancelCreation();
-			}
+			creatingEntityID = null;
+			//if (!theKeyboard.IsKeyDown(Keys.LeftShift) && !theKeyboard.IsKeyDown(Keys.RightShift))
+			//{
+			//    OnCancelCreation();
+			//}
 		}
 
 

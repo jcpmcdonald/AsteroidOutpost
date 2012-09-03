@@ -41,6 +41,7 @@ namespace AsteroidOutpost.Screens
 		private QuadTree<Position> quadTree;
 		private readonly AwesomiumComponent awesomium;
 		private Dictionary<int, List<Component>> componentDictionary = new Dictionary<int, List<Component>>(6000);		// Note: This variable must be kept thread-safe
+		private List<Component> deadComponents = new List<Component>();
 		//private Dictionary<int, Entity> entityDictionary = new Dictionary<int, Entity>(2000);		// Note: This variable must be kept thread-safe
 		private Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
 		private Dictionary<int, Force> owningForces = new Dictionary<int, Force>();
@@ -52,6 +53,7 @@ namespace AsteroidOutpost.Screens
 		private RenderQuadTreeSystem renderQuadTreeSystem;
 		private PowerGridSystem powerGridSystem;
 		private ConstructionSystem constructionSystem;
+		private LaserMinerSystem laserMinerSystem;
 
 		private bool paused;
 
@@ -80,6 +82,7 @@ namespace AsteroidOutpost.Screens
 			renderQuadTreeSystem = new RenderQuadTreeSystem(game, this);
 			powerGridSystem = new PowerGridSystem(game, this);
 			constructionSystem = new ConstructionSystem(game, this);
+			laserMinerSystem = new LaserMinerSystem(game, this);
 
 			awesomium = game.Awesomium;
 
@@ -94,6 +97,7 @@ namespace AsteroidOutpost.Screens
 			game.Components.Add(renderQuadTreeSystem);
 			game.Components.Add(powerGridSystem);
 			game.Components.Add(constructionSystem);
+			game.Components.Add(laserMinerSystem);
 		}
 
 
@@ -842,15 +846,27 @@ namespace AsteroidOutpost.Screens
 				//    }
 				//}
 
-				//foreach (Entity deadEntity in deadEntities)
-				//{
-				//    quadTree.Remove(deadEntity);
+				foreach (Component deadComponent in deadComponents)
+				{
+					Position deadPosition = deadComponent as Position;
+					if(deadPosition != null)
+					{
+						quadTree.Remove(deadPosition);
+					}
 
-				//    lock (componentDictionary)
-				//    {
-				//        componentDictionary.Remove(deadEntity.EntityID);
-				//    }
-				//}
+					lock (componentDictionary)
+					{
+						if(componentDictionary[deadComponent.EntityID].Count == 1)
+						{
+							componentDictionary.Remove(deadComponent.EntityID);
+						}
+						else
+						{
+							componentDictionary[deadComponent.EntityID].Remove(deadComponent);
+						}
+					}
+				}
+				deadComponents.Clear();
 
 			}
 
@@ -1155,7 +1171,14 @@ namespace AsteroidOutpost.Screens
 		}
 
 
-
-
+		public void DeleteComponents(int entityID)
+		{
+			List<Component> components = GetComponents<Component>(entityID);
+			foreach (var component in components)
+			{
+				deadComponents.Add(component);
+				component.SetDead(true, true);
+			}
+		}
 	}
 }

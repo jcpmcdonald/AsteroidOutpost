@@ -133,6 +133,8 @@
     <Compile Include="ColorExtension.cs" />
     <Compile Include="Components\Animator.cs" />
     <Compile Include="Components\Constructable.cs" />
+    <Compile Include="Components\LaserMiner.cs" />
+    <Compile Include="Components\Minable.cs" />
     <Compile Include="Components\PowerGridNode.cs" />
     <Compile Include="Components\PowerProducer.cs" />
     <Compile Include="Components\Upgradable.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="Interfaces\ICanKillSelf.cs" />
     <Compile Include="Interfaces\IComponentList.cs" />
     <Compile Include="Components\Linker.cs" />
+    <Compile Include="MathHelperEx.cs" />
     <Compile Include="Networking\AOReflectiveIncomingMessage.cs" />
     <Compile Include="Networking\AOReflectiveOutgoingMessage.cs" />
     <Compile Include="Networking\ClientJoinedGameHandlerArgs.cs" />
@@ -191,6 +194,7 @@
     <Compile Include="Systems\AccumulationSystem.cs" />
     <Compile Include="Systems\AnimationSystem.cs" />
     <Compile Include="Systems\ConstructionSystem.cs" />
+    <Compile Include="Systems\LaserMinerSystem.cs" />
     <Compile Include="Systems\PhysicsSystem.cs" />
     <Compile Include="Systems\PowerGridSystem.cs" />
     <Compile Include="Systems\RenderQuadTreeSystem.cs" />

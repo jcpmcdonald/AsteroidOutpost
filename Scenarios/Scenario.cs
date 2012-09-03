@@ -130,17 +130,16 @@ namespace AsteroidOutpost.Scenarios
 						}
 					}
 				}
-				EntityFactory.Create("Asteroid",
-				                     new Dictionary<String, object>(){
-					                     { "Sprite.Scale", scale },
-					                     { "Sprite.Set", "Asteroid " + GlobalRandom.Next(1, 4) },
-					                     { "Sprite.Animation", null },
-					                     { "Sprite.Orientation", GlobalRandom.Next(0, 359) },
-					                     { "Transpose.Position", new Vector2(x, y) },
-					                     { "Transpose.Radius", radius },
-					                     { "Minerals", minerals },
-					                     { "OwningForce", asteroidForce }
-				                     });
+				EntityFactory.CreateAsteroid(new Dictionary<String, object>(){
+					{ "Sprite.Scale", scale },
+					{ "Sprite.Set", "Asteroid " + GlobalRandom.Next(1, 4) },
+					{ "Sprite.Animation", null },
+					{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					{ "Transpose.Position", new Vector2(x, y) },
+					{ "Transpose.Radius", radius },
+					{ "Minerals", minerals },
+					{ "OwningForce", asteroidForce }
+				});
 			}
 		}
 
@@ -182,16 +181,15 @@ namespace AsteroidOutpost.Scenarios
 			}
 
 			// Create the solar station
-			int creatingEntityID = EntityFactory.Create("SolarStation",
-			                                            new Dictionary<String, object>(){
-				                                            { "Sprite.Scale", 1f },
-				                                            { "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
-				                                            { "Sprite.Animation", null },
-				                                            { "Sprite.Orientation", GlobalRandom.Next(0, 359) },
-				                                            { "Transpose.Position", origin + delta },
-				                                            { "Transpose.Radius", 40 },
-				                                            { "OwningForce", force }
-			                                            });
+			int creatingEntityID = EntityFactory.CreateSolarStation(new Dictionary<String, object>(){
+				{ "Sprite.Scale", 0.7f },
+				{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
+				{ "Sprite.Animation", null },
+				{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+				{ "Transpose.Position", origin + delta },
+				{ "Transpose.Radius", 40 },
+				{ "OwningForce", force }
+			});
 
 			// Set this building as done constructing
 			Constructable solarStation = world.GetComponent<Constructable>(creatingEntityID);
