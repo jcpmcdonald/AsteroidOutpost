@@ -400,7 +400,7 @@ namespace AsteroidOutpost.Screens
 		/// <returns>A list of entities that are intersecting with the search area</returns>
 		public List<int> EntitiesInArea(Vector2 location, int radius, bool onlySolids = false)
 		{
-			return EntitiesInArea(new Rectangle((int)(location.X - (radius / 2f)), (int)(location.Y - (radius / 2f)), radius * 2, radius * 2), onlySolids);
+			return EntitiesInArea(new Rectangle((int)(location.X - radius), (int)(location.Y - radius), radius * 2, radius * 2), onlySolids);
 		}
 
 

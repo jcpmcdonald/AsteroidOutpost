@@ -290,6 +290,12 @@ namespace AsteroidOutpost.Systems
 							                     color);
 						}
 
+
+						// Draw link radius
+						spriteBatch.DrawEllipse(world.WorldToScreen(laserMinerPosition.Center),
+						                        laserMiner.MiningRange,
+						                        Color.Red,
+						                        world.HUD.DrawEllipseGuides);
 					}
 				}
 				else if (laserMiner.State == MiningState.Mining)

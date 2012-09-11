@@ -145,6 +145,7 @@
     <Compile Include="Components\HitPoints.cs" />
     <Compile Include="Components\PositionOffset.cs" />
     <Compile Include="Components\ProgressBar.cs" />
+    <Compile Include="EllipseExtension.cs" />
     <Compile Include="EnhancedKeyboardState.cs" />
     <Compile Include="EnhancedMouseState.cs" />
     <Compile Include="Entities\Beacon.cs" />

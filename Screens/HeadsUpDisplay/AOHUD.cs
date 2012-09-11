@@ -231,6 +231,15 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			}
 
 
+			if ((theKeyboard[Keys.LeftControl] == EnhancedKeyState.PRESSED || theKeyboard[Keys.RightControl] == EnhancedKeyState.PRESSED) &&
+			    (theKeyboard[Keys.LeftShift] == EnhancedKeyState.RELEASED && theKeyboard[Keys.RightShift] == EnhancedKeyState.RELEASED &&
+			     theKeyboard[Keys.LeftAlt] == EnhancedKeyState.RELEASED && theKeyboard[Keys.RightAlt] == EnhancedKeyState.RELEASED)
+			    && theKeyboard[Keys.E] == EnhancedKeyState.JUST_PRESSED)
+			{
+				DrawEllipseGuides = !DrawEllipseGuides;
+			}
+
+
 			// Make a new bad guy when a key is pressed for debugging
 			//if (theKeyboard[Keys.F8] == EnhancedKeyState.JUST_RELEASED)
 			//{
@@ -343,6 +352,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		}
 
 
+		// Used for debugging purposes
+		public bool DrawEllipseGuides { get; set; }
+
+
 		private void OnCancelCreation()
 		{
 			if (CancelledCreationEvent != null)
@@ -367,35 +380,22 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			foreach (var selectedEntity in selectedEntities)
 			{
 				Position selectedEntityPosition = world.GetComponent<Position>(selectedEntity);
-				if (scaleFactor < 2)
-				{
-					float sizeRatio = ((selectedEntityPosition.Radius) / 45f);
-					spriteBatch.Draw(TextureDictionary.Get("ellipse50back"),
-					                 world.WorldToScreen(selectedEntityPosition.Center - (new Vector2(60, 60) * sizeRatio)),
-					                 null,
-					                 Color.Green.Blend(tint),
-					                 0,
-					                 Vector2.Zero,
-					                 sizeRatio / world.ScaleFactor,
-					                 SpriteEffects.None,
-					                 0);
-				}
-				else if(scaleFactor < 4)
-				{
-					float sizeRatio = ((selectedEntityPosition.Radius) / 45f) * 2;
-					spriteBatch.Draw(TextureDictionary.Get("ellipse25back"),
-					                 world.WorldToScreen(selectedEntityPosition.Center - (new Vector2(35, 35) * sizeRatio)),
-					                 null,
-					                 Color.Green.Blend(tint),
-					                 0,
-					                 Vector2.Zero,
-					                 sizeRatio / world.ScaleFactor,
-					                 SpriteEffects.None,
-					                 0);
-				}
-				else
-				{
-				}
+				spriteBatch.DrawEllipseBack(world.WorldToScreen(selectedEntityPosition.Center),
+				                            world.Scale(selectedEntityPosition.Radius),
+				                            Color.Green);
+
+				//if(DrawEllipseGuides)
+				//{
+				//    // Draw a bunch of elliptical guides for debugging purposes
+				//    for(float theta = 0; theta < Math.PI * 2; theta += (float)Math.PI / 6f)
+				//    {
+				//        spriteBatch.DrawLine(world.WorldToScreen(selectedEntityPosition.Center),
+				//                             world.WorldToScreen(selectedEntityPosition.Center +
+				//                                                 new Vector2((float)Math.Sin(theta),
+				//                                                             (float)Math.Cos(theta)) * selectedEntityPosition.Radius),
+				//                             Color.White);
+				//    }
+				//}
 			}
 		}
 
@@ -410,45 +410,10 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			foreach (var selectedEntity in selectedEntities)
 			{
 				Position selectedEntityPosition = world.GetComponent<Position>(selectedEntity);
-				if (scaleFactor < 2)
-				{
-					float sizeRatio = ((selectedEntityPosition.Radius) / 45f);
-					spriteBatch.Draw(TextureDictionary.Get("ellipse50front"),
-					                 world.WorldToScreen(selectedEntityPosition.Center - (new Vector2(60, 60) * sizeRatio)),
-					                 null,
-					                 Color.Green.Blend(tint),
-					                 0,
-					                 Vector2.Zero,
-					                 sizeRatio / world.ScaleFactor,
-					                 SpriteEffects.None,
-					                 0);
-				}
-				else if(scaleFactor < 4)
-				{
-					float sizeRatio = ((selectedEntityPosition.Radius) / 45f) * 2;
-					spriteBatch.Draw(TextureDictionary.Get("ellipse25front"),
-					                 world.WorldToScreen(selectedEntityPosition.Center - (new Vector2(35, 35) * sizeRatio)),
-					                 null,
-					                 Color.Green.Blend(tint),
-					                 0,
-					                 Vector2.Zero,
-					                 sizeRatio / world.ScaleFactor,
-					                 SpriteEffects.None,
-					                 0);
-				}
-				else
-				{
-					float sizeRatio = ((selectedEntityPosition.Radius) / 45f) * 2;
-					spriteBatch.Draw(TextureDictionary.Get("ellipse25bold"),
-					                 world.WorldToScreen(selectedEntityPosition.Center - (new Vector2(35, 35) * sizeRatio)),
-					                 null,
-					                 Color.Green.Blend(tint),
-					                 0,
-					                 Vector2.Zero,
-					                 sizeRatio / world.ScaleFactor,
-					                 SpriteEffects.None,
-					                 0);
-				}
+				spriteBatch.DrawEllipseFront(world.WorldToScreen(selectedEntityPosition.Center),
+				                             world.Scale(selectedEntityPosition.Radius),
+				                             Color.Green,
+				                             DrawEllipseGuides);
 			}
 		}
 
@@ -478,11 +443,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			}
 
 			spriteBatch.Begin();
-
-			//foreach (var entity in components)
-			//{
-			//    entity.Draw(spriteBatch, 1, Color.White);
-			//}
 
 			DrawSelectionCirclesFront(spriteBatch, Color.White);
 
