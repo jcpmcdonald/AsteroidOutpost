@@ -352,8 +352,10 @@ namespace AsteroidOutpost
 		private void WebView_JSConsoleMessageAdded(object sender, JSConsoleMessageEventArgs e)
 		{
 			// JavaScript Error!
-			System.Console.WriteLine("{0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);
+			Console.WriteLine("{0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);
+#if DEBUG
 			Debugger.Break();
+#endif
 		}
 
 		#endregion
