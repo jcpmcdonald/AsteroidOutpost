@@ -28,141 +28,69 @@ namespace AsteroidOutpost.Entities
 		}
 
 
-		public static int CreateAsteroid(Dictionary<String, object> values)
+		public static int Create(String entityName, Dictionary<String, object> values)
 		{
 			int entityID = world.GetNextEntityID();
 			world.SetOwningForce(entityID, (Force)values["OwningForce"]);
 
-			Sprite asteroidSprite = sprites["asteroid"];
-			float angleStep = 360.0f / asteroidSprite.OrientationLookup.Count;
-
-			Animator animator = new Animator(world,
-			                                 entityID,
-			                                 asteroidSprite,
-			                                 (float)values["Sprite.Scale"],
-			                                 (String)values["Sprite.Set"],
-			                                 (String)values["Sprite.Animation"],
-			                                 angleStep * ((int)values["Sprite.Orientation"] % asteroidSprite.OrientationLookup.Count));
-
-			Position position = new Position(world, entityID,
-			                                 (Vector2)values["Transpose.Position"],
-			                                 (int)values["Transpose.Radius"]);
-
-			Minable minable = new Minable(world, entityID, (int)values["Minerals"]);
-
-
-			world.AddComponent(animator);
-			world.AddComponent(position);
-			world.AddComponent(minable);
-			return entityID;
-		}
-
-
-		public static int CreateSolarStation(Dictionary<String, object> values)
-		{
-			int entityID = world.GetNextEntityID();
-			world.SetOwningForce(entityID, (Force)values["OwningForce"]);
-
-			Sprite solarStationSprite = sprites["solarstation"];
-			float angleStep = 360.0f / solarStationSprite.OrientationLookup.Count;
+			Sprite sprite = null;
 			float spriteScale = (float)values["Sprite.Scale"];
 			String spriteSet = (String)values["Sprite.Set"];
 			String spriteAnimation = (String)values["Sprite.Animation"];
 			int spriteOrientation = (int)values["Sprite.Orientation"];
 
-			Animator animator = new Animator(world,
-			                                 entityID,
-			                                 solarStationSprite,
-			                                 spriteScale,
-			                                 spriteSet,
-			                                 spriteAnimation,
-			                                 angleStep * (spriteOrientation % solarStationSprite.OrientationLookup.Count));
+
+			switch(entityName.ToLower())
+			{
+			case "asteroid":
+				sprite = sprites[entityName.ToLower()];
+				world.AddComponent(new Minable(world, entityID, (int)values["Minerals"]));
+				break;
+
+			case "solarstation":
+				sprite = sprites[entityName.ToLower()];
+				PowerProducer powerProducer = new PowerProducer(world, entityID, 10, 70);
+				powerProducer.PowerLinkPointRelative = new Vector2(-1, -13);
+				world.AddComponent(powerProducer);
+				world.AddComponent(new Constructable(world, entityID, 200));
+				break;
+
+			case "powernode":
+				sprite = sprites[entityName.ToLower()];
+				PowerGridNode powerNode = new PowerGridNode(world, entityID, true);
+				powerNode.PowerLinkPointRelative = new Vector2(0, -16);
+				world.AddComponent(powerNode);
+				world.AddComponent(new Constructable(world, entityID, 50));
+				break;
+
+			case "laserminer":
+				sprite = sprites[entityName.ToLower()];
+				world.AddComponent(new LaserMiner(world, entityID));
+				world.AddComponent(new PowerGridNode(world, entityID, false));
+				world.AddComponent(new Constructable(world, entityID, 200));
+				break;
+			}
+
+
 
 			Position position = new Position(world, entityID,
 			                                 (Vector2)values["Transpose.Position"],
 			                                 (int)values["Transpose.Radius"]);
-
-			PowerProducer powerProducer = new PowerProducer(world, entityID, 10, 70);
-			powerProducer.PowerLinkPointRelative = new Vector2(-1, -13);
-			Constructable constructable = new Constructable(world, entityID, 200);
-
-			world.AddComponent(animator);
 			world.AddComponent(position);
-			world.AddComponent(powerProducer);
-			world.AddComponent(constructable);
-			return entityID;
-		}
 
+			if(sprite != null)
+			{
+				float angleStep = 360.0f / sprite.OrientationLookup.Count;
+				Animator animator = new Animator(world,
+				                                 entityID,
+				                                 sprite,
+				                                 spriteScale,
+				                                 spriteSet,
+				                                 spriteAnimation,
+				                                 angleStep * (spriteOrientation % sprite.OrientationLookup.Count));
+				world.AddComponent(animator);
+			}
 
-		public static int CreateLaserMiner(Dictionary<String, object> values)
-		{
-			int entityID = world.GetNextEntityID();
-			world.SetOwningForce(entityID, (Force)values["OwningForce"]);
-
-			Sprite laserMinerSprite = sprites["laserminer"];
-			float angleStep = 360.0f / laserMinerSprite.OrientationLookup.Count;
-			float spriteScale = (float)values["Sprite.Scale"];
-			String spriteSet = (String)values["Sprite.Set"];
-			String spriteAnimation = (String)values["Sprite.Animation"];
-			int spriteOrientation = (int)values["Sprite.Orientation"];
-
-			Animator animator = new Animator(world,
-			                                 entityID,
-			                                 laserMinerSprite,
-			                                 spriteScale,
-			                                 spriteSet,
-			                                 spriteAnimation,
-			                                 angleStep * (spriteOrientation % laserMinerSprite.OrientationLookup.Count));
-
-			Position position = new Position(world, entityID,
-			                                 (Vector2)values["Transpose.Position"],
-			                                 (int)values["Transpose.Radius"]);
-
-			LaserMiner laserMiner = new LaserMiner(world, entityID);
-			PowerGridNode powerNode = new PowerGridNode(world, entityID, false);
-			Constructable constructable = new Constructable(world, entityID, 200);
-
-			world.AddComponent(animator);
-			world.AddComponent(position);
-			world.AddComponent(powerNode);
-			world.AddComponent(constructable);
-			world.AddComponent(laserMiner);
-			return entityID;
-		}
-
-
-		public static int CreatePowerNode(Dictionary<String, object> values)
-		{
-			int entityID = world.GetNextEntityID();
-			world.SetOwningForce(entityID, (Force)values["OwningForce"]);
-
-			Sprite sprite = sprites["powernode"];
-			float angleStep = 360.0f / sprite.OrientationLookup.Count;
-			float spriteScale = (float)values["Sprite.Scale"];
-			String spriteSet = (String)values["Sprite.Set"];
-			String spriteAnimation = (String)values["Sprite.Animation"];
-			int spriteOrientation = (int)values["Sprite.Orientation"];
-
-			Animator animator = new Animator(world,
-			                                 entityID,
-			                                 sprite,
-			                                 spriteScale,
-			                                 spriteSet,
-			                                 spriteAnimation,
-			                                 angleStep * (spriteOrientation % sprite.OrientationLookup.Count));
-
-			Position position = new Position(world, entityID,
-			                                 (Vector2)values["Transpose.Position"],
-			                                 (int)values["Transpose.Radius"]);
-
-			PowerGridNode powerNode = new PowerGridNode(world, entityID, true);
-			powerNode.PowerLinkPointRelative = new Vector2(0, -16);
-			Constructable constructable = new Constructable(world, entityID, 50);
-
-			world.AddComponent(animator);
-			world.AddComponent(position);
-			world.AddComponent(powerNode);
-			world.AddComponent(constructable);
 			return entityID;
 		}
 

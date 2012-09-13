@@ -597,7 +597,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new power station
-				creatingEntityID = EntityFactory.CreateSolarStation(new Dictionary<String, object>(){
+				creatingEntityID = EntityFactory.Create("solarstation", new Dictionary<String, object>(){
 					{ "Sprite.Scale", 0.7f },
 					{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
 					{ "Sprite.Animation", null },
@@ -624,7 +624,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new power station
-				creatingEntityID = EntityFactory.CreatePowerNode(new Dictionary<String, object>(){
+				creatingEntityID = EntityFactory.Create("powernode", new Dictionary<String, object>(){
 					{ "Sprite.Scale", 0.4f },
 					{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
 					{ "Sprite.Animation", null },
@@ -647,7 +647,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new laser miner
-				creatingEntityID = EntityFactory.CreateLaserMiner(new Dictionary<String, object>(){
+				creatingEntityID = EntityFactory.Create("laserminer", new Dictionary<String, object>(){
 					{ "Sprite.Scale", 0.6f },
 					{ "Sprite.Set", null },
 					{ "Sprite.Animation", null },
@@ -676,19 +676,25 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 		void btnLaserTower_Clicked(object sender, EventArgs e)
 		{
-		//    if (!world.Paused)
-		//    {
-		//        if (creating != null)
-		//        {
-		//            OnCancelCreation();
-		//        }
+			if (!world.Paused)
+			{
 
-		//        // Create a new power station
-		//        creating = new LaserTower(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
+				if (creatingEntityID != null)
+				{
+					OnCancelCreation();
+				}
 
-		//        CreateRangeRingsForConstruction(creating);
-		//        CreatePowerLinker(creating);
-		//    }
+				// Create a new laser miner
+				//creatingEntityID = EntityFactory.CreateLaserTower(new Dictionary<String, object>(){
+				//    { "Sprite.Scale", 0.6f },
+				//    { "Sprite.Set", null },
+				//    { "Sprite.Animation", null },
+				//    { "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+				//    { "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
+				//    { "Transpose.Radius", 30 },
+				//    { "OwningForce", localActor.PrimaryForce }
+				//});
+			}
 		}
 
 
