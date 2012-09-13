@@ -205,12 +205,10 @@ namespace AsteroidOutpost.Systems
 				if (minables.Count == 1)
 				{
 					Position minablePosition = world.GetComponent<Position>(entity);
-					if(laserPosition.Distance(minablePosition) - minablePosition.Radius < laserMiner.MiningRange)
+					if(laserPosition.Distance(minablePosition) < laserMiner.MiningRange)
 					{
-						//Asteroid asteroid = (Asteroid)entity;s
 						if (!MathHelperEx.IsObstructed(world, laserPosition, minablePosition))
 						{
-							//laserMiner.nearbyAsteroids.Add(minables[0]);
 							rv.Add(minables[0]);
 						}
 					}
