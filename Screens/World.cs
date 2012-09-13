@@ -40,7 +40,8 @@ namespace AsteroidOutpost.Screens
 		private LayeredStarField layeredStarField;
 		private QuadTree<Position> quadTree;
 		private readonly AwesomiumComponent awesomium;
-		private Dictionary<int, List<Component>> componentDictionary = new Dictionary<int, List<Component>>(6000);		// Note: This variable must be kept thread-safe
+		private Dictionary<int, List<Component>> entityDictionary = new Dictionary<int, List<Component>>(2000);		// Note: This variable must be kept thread-safe
+		private Dictionary<Type, List<Component>> componentDictionary = new Dictionary<Type, List<Component>>(10);		// Note: This variable must be kept thread-safe
 		private List<Component> deadComponents = new List<Component>();
 		//private Dictionary<int, Entity> entityDictionary = new Dictionary<int, Entity>(2000);		// Note: This variable must be kept thread-safe
 		private Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
@@ -241,15 +242,23 @@ namespace AsteroidOutpost.Screens
 				network.ListenToEvents(component);
 
 				// Add this to a dictionary for quick ID-based lookups
-				lock (componentDictionary)
+				lock (entityDictionary)
 				{
-					if(componentDictionary.ContainsKey(component.EntityID))
+					if(entityDictionary.ContainsKey(component.EntityID))
 					{
-						componentDictionary[component.EntityID].Add(component);
+						entityDictionary[component.EntityID].Add(component);
 					}
 					else
 					{
-						componentDictionary.Add(component.EntityID, new List<Component>() {component});
+						entityDictionary.Add(component.EntityID, new List<Component>(){ component });
+					}
+					if(componentDictionary.ContainsKey(component.GetType()))
+					{
+						componentDictionary[component.GetType()].Add(component);
+					}
+					else
+					{
+						componentDictionary.Add(component.GetType(), new List<Component>(){ component });
 					}
 				}
 
@@ -433,11 +442,11 @@ namespace AsteroidOutpost.Screens
 		/// <returns>A list of components for the given entityID and type, or null if the entity is not found</returns>
 		public List<T> GetComponents<T>(int entityID) where T : Component
 		{
-			lock (componentDictionary)
+			lock (entityDictionary)
 			{
-				if (componentDictionary.ContainsKey(entityID))
+				if (entityDictionary.ContainsKey(entityID))
 				{
-					return componentDictionary[entityID].OfType<T>().ToList();
+					return entityDictionary[entityID].OfType<T>().ToList();
 				}
 
 				//Debugger.Break();
@@ -496,19 +505,31 @@ namespace AsteroidOutpost.Screens
 		/// <returns>Returns a list of components of the type specified</returns>
 		public List<T> GetComponents<T>() where T: Component
 		{
-			lock (componentDictionary)
+			lock(componentDictionary)
 			{
-				//return new List<T>(componentDictionary.Where(comp => comp.Value.GetType() == typeof(T)).Select(x => x.Value as T));
-				//return componentDictionary.Where(comp => comp.Value.GetType() == typeof(T)).Select(x => x.Value as T).ToList();
-				//return componentDictionary.Where(compList => compList.Value.OfType<T>()); //.Select(x => x.Value as T).ToList();
-				//return componentDictionary.SelectMany(x => x.Value)
-				List<T> rv = new List<T>();
-				foreach(List<Component> componentList in componentDictionary.Values)
+				if(componentDictionary.ContainsKey(typeof(T)))
 				{
-					rv.AddRange(componentList.OfType<T>());
+					return componentDictionary[typeof (T)].Select(x => x as T).ToList();
 				}
-				return rv;
+				else
+				{
+					return new List<T>(0);
+				}
 			}
+
+			//lock (entityDictionary)
+			//{
+			//    //return new List<T>(componentDictionary.Where(comp => comp.Value.GetType() == typeof(T)).Select(x => x.Value as T));
+			//    //return componentDictionary.Where(comp => comp.Value.GetType() == typeof(T)).Select(x => x.Value as T).ToList();
+			//    //return componentDictionary.Where(compList => compList.Value.OfType<T>()); //.Select(x => x.Value as T).ToList();
+			//    //return componentDictionary.SelectMany(x => x.Value)
+			//    List<T> rv = new List<T>();
+			//    foreach(List<Component> componentList in entityDictionary.Values)
+			//    {
+			//        rv.AddRange(componentList.OfType<T>());
+			//    }
+			//    return rv;
+			//}
 		}
 
 
@@ -854,16 +875,19 @@ namespace AsteroidOutpost.Screens
 						quadTree.Remove(deadPosition);
 					}
 
-					lock (componentDictionary)
+					lock (entityDictionary)
 					{
-						if(componentDictionary[deadComponent.EntityID].Count == 1)
+						if(entityDictionary[deadComponent.EntityID].Count == 1)
 						{
-							componentDictionary.Remove(deadComponent.EntityID);
+							entityDictionary.Remove(deadComponent.EntityID);
 						}
 						else
 						{
-							componentDictionary[deadComponent.EntityID].Remove(deadComponent);
+							entityDictionary[deadComponent.EntityID].Remove(deadComponent);
 						}
+
+						// I don't think it matters if we leave some empty lists behind
+						componentDictionary[deadComponent.GetType()].Remove(deadComponent);
 					}
 				}
 				deadComponents.Clear();
