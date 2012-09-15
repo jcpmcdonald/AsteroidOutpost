@@ -244,7 +244,7 @@ namespace AsteroidOutpost.Systems
 				Position asteroidPos = world.GetComponent<Position>(laserMiner.nearbyAsteroids[0]);
 				int randFactor = asteroidPos.Radius / 2;
 				laserMiner.MiningDestinationOffset = new Vector2(GlobalRandom.Next(-randFactor, randFactor),
-				                                      GlobalRandom.Next(-randFactor, randFactor));
+				                                                 GlobalRandom.Next(-randFactor, randFactor));
 			}
 		}
 
@@ -266,13 +266,12 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var laserMiner in laserMiners)
 			{
-				if(laserMiner.FirstUpdate)
+				if (laserMiner.FirstUpdate)
 				{
 					Constructable constructable = world.GetComponent<Constructable>(laserMiner);
 					if (constructable.IsBeingPlaced)
 					{
 						// Draw the links to nearby minables
-
 						Color color = new Color((int)(20f + world.Scale(150)),
 						                        0,
 						                        0,
@@ -290,10 +289,7 @@ namespace AsteroidOutpost.Systems
 
 
 						// Draw link radius
-						spriteBatch.DrawEllipse(world.WorldToScreen(laserMinerPosition.Center),
-						                        laserMiner.MiningRange,
-						                        Color.Red,
-						                        world.HUD.DrawEllipseGuides);
+						DrawLinkRadius(spriteBatch, laserMiner, laserMinerPosition);
 					}
 				}
 				else if (laserMiner.State == MiningState.Mining)
@@ -322,11 +318,21 @@ namespace AsteroidOutpost.Systems
 					                     world.WorldToScreen(minablePosition.Center + laserMiner.MiningDestinationOffset),
 					                     color);
 				}
+
 			}
 
 			spriteBatch.End();
 
 			base.Draw(gameTime);
+		}
+
+
+		private void DrawLinkRadius(SpriteBatch spriteBatch, LaserMiner laserMiner, Position laserMinerPosition)
+		{
+			spriteBatch.DrawEllipse(world.WorldToScreen(laserMinerPosition.Center),
+			                        laserMiner.MiningRange,
+			                        Color.Red,
+			                        world.HUD.DrawEllipseGuides);
 		}
 	}
 }

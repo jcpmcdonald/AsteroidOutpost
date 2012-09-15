@@ -130,7 +130,7 @@ namespace AsteroidOutpost.Scenarios
 						}
 					}
 				}
-				EntityFactory.Create("asteroid", new Dictionary<String, object>(){
+				EntityFactory.Create("Asteroid", new Dictionary<String, object>(){
 					{ "Sprite.Scale", scale },
 					{ "Sprite.Set", "Asteroid " + GlobalRandom.Next(1, 4) },
 					{ "Sprite.Animation", null },
@@ -181,7 +181,7 @@ namespace AsteroidOutpost.Scenarios
 			}
 
 			// Create the solar station
-			int creatingEntityID = EntityFactory.Create("solarstation", new Dictionary<String, object>(){
+			int creatingEntityID = EntityFactory.Create("Solar Station", new Dictionary<String, object>(){
 				{ "Sprite.Scale", 0.7f },
 				{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
 				{ "Sprite.Animation", null },

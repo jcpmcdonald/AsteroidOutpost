@@ -23,7 +23,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 	/// <summary>
 	/// The HUD is how the user interacts with the game
 	/// </summary>
-	public class AOHUD : DrawableGameComponent, IComponentList
+	public class AOHUD : DrawableGameComponent
 	{
 
 		private SpriteBatch spriteBatch;
@@ -35,7 +35,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		private EnhancedMouseState theMouse = new EnhancedMouseState();
 		private EnhancedKeyboardState theKeyboard = new EnhancedKeyboardState();
 
-		readonly List<int> selectedEntities = new List<int>();
+		private readonly List<int> selectedEntities = new List<int>();
 		public event Action<MultiEntityEventArgs> SelectionChanged;
 
 
@@ -43,11 +43,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		private readonly AwesomiumComponent awesomium;
 		private float scaleFactor = 1.0f;			// 1.0 = no scaling, 0.5 = zoomed in, 2.0 = zoomed out
 		private float desiredScaleFactor = 1.0f;
-
-		// These are entities that are drawn in the HUD layer
-		private readonly List<GameComponent> localSystems = new List<GameComponent>(8);
-		private readonly AccumulationSystem accumulationSystem;
-		private readonly List<Component> components = new List<Component>(100);
 
 		//private Form inGameMenu;
 		private Controller localActor;
@@ -73,9 +68,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			: base(game)
 		{
 			this.world = world;
-
-			accumulationSystem = new AccumulationSystem(game, world, 500);
-			localSystems.Add(accumulationSystem);
 
 			// Set up some hotkeys
 			hotkeys.Add(Keys.P, btnPower_Clicked);
@@ -111,26 +103,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		}
 
 
-		public void AddComponent(Component component)
-		{
-			components.Add(component);
-		}
-
-
-		/// <summary>
-		/// Looks up a component by ID
-		/// This method is thread safe
-		/// </summary>
-		/// <param name="id">The ID to look up</param>
-		/// <returns>The component with the given ID, or null if the entity is not found</returns>
-		public Component GetComponent(int id)
-		{
-			// I don't think this method should ever be called locally because none of the entities here will have IDs
-			Debugger.Break();
-			return null;
-		}
-
-
 		void btnCloseInGameMenu_Clicked(object sender, EventArgs e)
 		{
 			//inGameMenu.Visible = false;
@@ -147,11 +119,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		public override void Update(GameTime gameTime)
 		{
 			TimeSpan deltaTime = gameTime.ElapsedGameTime;
-
-			foreach(GameComponent system in localSystems)
-			{
-				system.Update(gameTime);
-			}
 
 			theMouse.UpdateState();
 			theKeyboard.UpdateState();
@@ -278,24 +245,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			// Move the screen
 			if (isDraggingScreen && theMouse.MiddleButton == EnhancedButtonState.PRESSED)
 			{
-				// Let them grab  the screen with the middle mouse button
-				if (middleMouseGrabPoint == null)
-				{
-					// Store the map location of the grab
-					//middleMouseGrabPoint = ScreenToWorld(mouse.X, mouse.Y);
-				}
-				else
-				{
-					// Move the focus screen such that the mouse will be above their grab point
-					Vector2 diff = Vector2.Subtract(middleMouseGrabPoint.Value, ScreenToWorld(theMouse.X, theMouse.Y));
-					focusWorldPoint = Vector2.Add(diff, focusWorldPoint);
-				}
+				// Move the focus screen such that the mouse will be above their grab point
+				Vector2 diff = Vector2.Subtract(middleMouseGrabPoint.Value, ScreenToWorld(theMouse.X, theMouse.Y));
+				focusWorldPoint = Vector2.Add(diff, focusWorldPoint);
 			}
 			else
 			{
-				//middleMouseGrabPoint = null;
-
-
 				// Move the screen if they move the mouse to the edge, or press the arrow keys
 				double screenMovementRate = 0.450 * scaleFactor; // * 1000 = pixels/second
 				if ((theMouse.X >= 0 && theMouse.X < 15) || theKeyboard.IsKeyDown(Keys.Left))
@@ -314,32 +269,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					focusWorldPoint.Y += (float)(screenMovementRate * deltaTime.TotalMilliseconds);
 				}
-			}
-
-
-			if (!world.Paused)
-			{
-				// Update the entities
-				//List<Component> deleteList = new List<Component>();
-				//// TODO: This should not require a regular for loop, and I should not be modifying the component list during this loop
-				//for (int index = 0; index < components.Count; index++)
-				//{
-				//    var component = components[index];
-				//    if (!component.IsDead())
-				//    {
-				//        component.Update(deltaTime);
-				//    }
-				//    if (component.IsDead())
-				//    {
-				//        deleteList.Add(component);
-				//    }
-				//}
-
-				//// Delete any entities that need to be deleted
-				//foreach (var entity in deleteList)
-				//{
-				//    components.Remove(entity);
-				//}
 			}
 
 
@@ -437,11 +366,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// <param name="tint">The color to tint this</param>
 		public override void Draw(GameTime gameTime)
 		{
-			foreach(DrawableGameComponent system in localSystems.Where(x => x is DrawableGameComponent))
-			{
-				system.Draw(gameTime);
-			}
-
 			spriteBatch.Begin();
 
 			DrawSelectionCirclesFront(spriteBatch, Color.White);
@@ -538,13 +462,13 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					if(localActor == null)
 					{
-						//CreateConstuctionPanel(0, size.Height - 370);
+						// Show constuction panel?
 					}
 					localActor = value;
 				}
 				else
 				{
-					// TODO: Delete the construction panel
+					// Hide constuction panel?
 				}
 			}
 		}
@@ -559,21 +483,19 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			{
 				if(value <= 0.5f)
 				{
-					//scaleFactor = 0.5f;
 					desiredScaleFactor = 0.5f;
 				}
 				else if (value >= 7.0f)
 				{
-					//scaleFactor = 7.0f;
 					desiredScaleFactor = 7.0f;
 				}
 				else
 				{
-					//scaleFactor = value;
 					desiredScaleFactor = value;
 				}
 			}
 		}
+
 
 		public float Scale(float value)
 		{
@@ -597,7 +519,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new power station
-				creatingEntityID = EntityFactory.Create("solarstation", new Dictionary<String, object>(){
+				creatingEntityID = EntityFactory.Create("Solar Station", new Dictionary<String, object>(){
 					{ "Sprite.Scale", 0.7f },
 					{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
 					{ "Sprite.Animation", null },
@@ -606,10 +528,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					{ "Transpose.Radius", 40 },
 					{ "OwningForce", localActor.PrimaryForce }
 				});
-				// new SolarStation(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
-
-				//CreateRangeRingsForConstruction(creating);
-				//CreatePowerLinker(creating);
 			}
 		}
 
@@ -624,7 +542,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new power station
-				creatingEntityID = EntityFactory.Create("powernode", new Dictionary<String, object>(){
+				creatingEntityID = EntityFactory.Create("Power Node", new Dictionary<String, object>(){
 					{ "Sprite.Scale", 0.4f },
 					{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
 					{ "Sprite.Animation", null },
@@ -647,7 +565,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				// Create a new laser miner
-				creatingEntityID = EntityFactory.Create("laserminer", new Dictionary<String, object>(){
+				creatingEntityID = EntityFactory.Create("Laser Miner", new Dictionary<String, object>(){
 					{ "Sprite.Scale", 0.6f },
 					{ "Sprite.Set", null },
 					{ "Sprite.Animation", null },
@@ -656,20 +574,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					{ "Transpose.Radius", 30 },
 					{ "OwningForce", localActor.PrimaryForce }
 				});
-
-				//// Create a new power station
-				//creating = new LaserMiner(world, this, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)));
-
-				//CreateRangeRingsForConstruction(creating);
-				//CreatePowerLinker(creating);
-
-				//LaserMiner laserMiner = creating as LaserMiner;
-				//Linker linker = new Linker(world, creating.Position);
-				//linker.Links.Add(new Tuple<Predicate<Entity>, Color, float>(entity => entity is Asteroid, Color.Green, laserMiner.MiningRange));
-
-				//CancelledCreationEvent += linker.KillSelf;
-				////world.StructureStartedEventPreAuth += linker.KillSelf;
-				//components.Add(linker);
 			}
 		}
 
@@ -684,16 +588,16 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					OnCancelCreation();
 				}
 
-				// Create a new laser miner
-				//creatingEntityID = EntityFactory.CreateLaserTower(new Dictionary<String, object>(){
-				//    { "Sprite.Scale", 0.6f },
-				//    { "Sprite.Set", null },
-				//    { "Sprite.Animation", null },
-				//    { "Sprite.Orientation", GlobalRandom.Next(0, 359) },
-				//    { "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
-				//    { "Transpose.Radius", 30 },
-				//    { "OwningForce", localActor.PrimaryForce }
-				//});
+				// Create a new laser tower
+				creatingEntityID = EntityFactory.Create("Laser Tower", new Dictionary<String, object>(){
+					{ "Sprite.Scale", 0.6f },
+					{ "Sprite.Set", null },
+					{ "Sprite.Animation", null },
+					{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
+					{ "Transpose.Radius", 30 },
+					{ "OwningForce", localActor.PrimaryForce }
+				});
 			}
 		}
 
@@ -856,12 +760,18 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 			constructionSound.Play(Math.Min(1, world.Scale(1f)), 0, 0);
 
-			Constructable constructable = world.GetComponent<Constructable>(creatingEntityID.Value);
-			constructable.IsBeingPlaced = false;
-			constructable.IsConstructing = true;
+			List<Constructable> constructables = world.GetComponents<Constructable>(creatingEntityID.Value);
+			if(constructables.Count == 1)
+			{
+				constructables[0].IsBeingPlaced = false;
+				constructables[0].IsConstructing = true;
+			}
 
-			PowerGridNode powerNode = world.GetComponent<PowerGridNode>(creatingEntityID.Value);
-			world.GetPowerGrid(powerNode).ConnectToPowerGrid(powerNode);
+			List<PowerGridNode> powerNodes = world.GetComponents<PowerGridNode>(creatingEntityID.Value);
+			if(powerNodes.Count == 1)
+			{
+				world.GetPowerGrid(powerNodes[0]).ConnectToPowerGrid(powerNodes[0]);
+			}
 
 			//// Reflectively look up what they are making, and create an other one of the same thing in the game
 			//Type creatingType = creating.GetType();
@@ -873,48 +783,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			//    Debugger.Break(); // John, there's a problem with the reflection above. Fix it!
 			//    return;
 			//}
-
-			//ConstructableEntity toBuild = (ConstructableEntity)creatingTypeConstuctructor.Invoke(new object[]{ world, world, LocalActor.PrimaryForce, ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) });
-
-			//toBuild.StartConstruction();
-			//world.Add(toBuild);
-
-
-			//// TODO: Find a better place to put this, but I don't think the LaserMiner should know about this
-			//// Maybe add an accumulator definition retriever to the entity? Just like the rings?
-			//LaserMiner laserMiner = toBuild as LaserMiner;
-			//if (laserMiner != null)
-			//{
-			//    Accumulator miningAccumulator = new Accumulator(world,
-			//                                                    laserMiner.Position.Center + new Vector2(-5, -20),
-			//                                                    new Vector2(0, -15),
-			//                                                    new Color(100, 255, 100, 255),
-			//                                                    120);
-			//    //laserMiner.AccumulationEvent += miningAccumulator.Accumulate;
-			//    AddComponent(miningAccumulator);
-			//}
-
-			//Accumulator healthAccumulator = new Accumulator(world,
-			//                                                toBuild.Position.Center + new Vector2(-5, -20),
-			//                                                new Vector2(0, -15),
-			//                                                new Color(200, 50, 50, 255),
-			//                                                120);
-			//toBuild.HitPoints.HitPointsChangedEvent += healthAccumulator.Accumulate;
-			//AddComponent(healthAccumulator);
-
-			//ProgressBar progressBar = new ProgressBar(world, toBuild.Position, new Vector2(0, toBuild.Position.Radius - 6), toBuild.Position.Radius * 2, 6, Color.Gray, Color.RoyalBlue);
-			//progressBar.Max = toBuild.MineralsToConstruct;
-			//toBuild.ConstructionProgressChangedEvent += progressBar.SetProgress;
-			//toBuild.ConstructionCompletedEvent += progressBar.KillSelf;
-			//toBuild.HitPoints.DyingEvent += progressBar.KillSelf;
-			//AddComponent(progressBar);
-
-			//ProgressBar healthBar = new ProgressBar(world, toBuild.Position, new Vector2(0, toBuild.Position.Radius), toBuild.Position.Radius * 2, 6, Color.Gray, Color.Green);
-			//healthBar.Max = toBuild.HitPoints.GetTotal();
-			//healthBar.Progress = healthBar.Max;
-			//toBuild.HitPoints.HitPointsChangedEvent += healthBar.SetProgress;
-			//toBuild.HitPoints.DyingEvent += healthBar.KillSelf;
-			//AddComponent(healthBar);
 
 			creatingEntityID = null;
 			//if (!theKeyboard.IsKeyDown(Keys.LeftShift) && !theKeyboard.IsKeyDown(Keys.RightShift))
@@ -941,6 +809,39 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			//        CreateRangeRingsForSelection(constructableEntity);
 			//    }
 			//}
+
+			if(selectedEntities.Count == 1)
+			{
+				EntityName name = world.GetComponent<EntityName>(selectedEntities[0]);
+				HitPoints hitPoints = world.GetNullableComponent<HitPoints>(selectedEntities[0]);
+
+				JSObject newSelection = new JSObject();
+				newSelection["name"] = new JSValue(name.Name);
+				if(hitPoints != null)
+				{
+					newSelection["health"] = new JSValue(hitPoints.Get());
+					newSelection["maxhealth"] = new JSValue(hitPoints.GetTotal());
+				}
+				else
+				{
+					newSelection["health"] = new JSValue("");
+					newSelection["maxhealth"] = new JSValue("");
+				}
+				newSelection["level"] = new JSValue(1);
+				newSelection["team"] = new JSValue(world.GetOwningForce(selectedEntities[0]).Team.ToString());
+				awesomium.WebView.CallJavascriptFunction("", "SelectionChanged", new JSValue(newSelection));
+			}
+			else
+			{
+				//awesomium.WebView.CallJavascriptFunction("", "SelectionChanged", new JSValue());
+				JSObject newSelection = new JSObject();
+				newSelection["name"] = new JSValue("-");
+				newSelection["health"] = new JSValue("");
+				newSelection["maxhealth"] = new JSValue("");
+				newSelection["level"] = new JSValue("");
+				newSelection["team"] = new JSValue("");
+				awesomium.WebView.CallJavascriptFunction("", "SelectionChanged", new JSValue(newSelection));
+			}
 		}
 
 
@@ -974,7 +875,22 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		{
 			bool valid = true;
 
-			//// This will grab all objects who's bounding square intersects with us
+			// This will grab all objects who's bounding square intersects with us
+			Position buildingPosition = world.GetComponent<Position>(creatingEntityID.Value);
+			List<int> nearbyEntities = world.EntitiesInArea(buildingPosition.Center, buildingPosition.Radius, true);
+			foreach (var nearbyEntity in nearbyEntities)
+			{
+				if(nearbyEntity != creatingEntityID)
+				{
+					Position position = world.GetComponent<Position>(nearbyEntity);
+					if (position.IsIntersecting(buildingPosition))
+					{
+						valid = false;
+						break;
+					}
+				}
+			}
+
 			//List<Entity> nearbyEntities = world.EntitiesInArea(Rect);
 			//foreach (Entity entity in nearbyEntities)
 			//{

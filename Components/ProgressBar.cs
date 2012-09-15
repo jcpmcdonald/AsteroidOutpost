@@ -27,7 +27,7 @@ namespace AsteroidOutpost.Components
 			: base(world, entityID)
 		{
 			this.position = new PositionOffset(world, entityID, position, positionOffset);
-			world.HUD.AddComponent(this.position);
+			world.AddComponent(this.position);
 
 			this.length = length;
 			this.thickness = thickness;

@@ -55,6 +55,7 @@ namespace AsteroidOutpost.Screens
 		private PowerGridSystem powerGridSystem;
 		private ConstructionSystem constructionSystem;
 		private LaserMinerSystem laserMinerSystem;
+		private AccumulationSystem accumulationSystem;
 
 		private bool paused;
 
@@ -84,6 +85,7 @@ namespace AsteroidOutpost.Screens
 			powerGridSystem = new PowerGridSystem(game, this);
 			constructionSystem = new ConstructionSystem(game, this);
 			laserMinerSystem = new LaserMinerSystem(game, this);
+			accumulationSystem = new AccumulationSystem(game, this, 500);
 
 			awesomium = game.Awesomium;
 
@@ -91,6 +93,7 @@ namespace AsteroidOutpost.Screens
 			quadTree = new QuadTree<Position>(0, 0, 20000, 20000);
 
 			animationSystem.DrawOrder = 1000;
+			accumulationSystem.DrawOrder = 1100;
 
 			game.Components.Add(animationSystem);
 			game.Components.Add(physicsSystem);
@@ -99,6 +102,7 @@ namespace AsteroidOutpost.Screens
 			game.Components.Add(powerGridSystem);
 			game.Components.Add(constructionSystem);
 			game.Components.Add(laserMinerSystem);
+			game.Components.Add(accumulationSystem);
 		}
 
 
@@ -478,7 +482,7 @@ namespace AsteroidOutpost.Screens
 			List<T> matchingComponents = GetComponents<T>(entityID);
 			if(matchingComponents == null || matchingComponents.Count != 1)
 			{
-				// This shouldn't *really* happen
+				// Use the GetNullableComponent if you plan for this to happen
 				Debugger.Break();
 				return null;
 			}
@@ -495,6 +499,35 @@ namespace AsteroidOutpost.Screens
 		public T GetComponent<T>(Component referenceComponent) where T : Component
 		{
 			return GetComponent<T>(referenceComponent.EntityID);
+		}
+
+
+		/// <summary>
+		/// Looks up a component by entityID
+		/// This method is thread safe
+		/// </summary>
+		/// <param name="entityID">The entityID to look up</param>
+		/// <returns>A single T:Component for the given entityID and type, or null if the entity is not found</returns>
+		public T GetNullableComponent<T>(int entityID) where T : Component
+		{
+			List<T> matchingComponents = GetComponents<T>(entityID);
+			if(matchingComponents == null || matchingComponents.Count != 1)
+			{
+				return null;
+			}
+			return matchingComponents[0];
+		}
+
+
+		/// <summary>
+		/// Looks up a component by entityID
+		/// This method is thread safe
+		/// </summary>
+		/// <param name="referenceComponent">A component on the same entity</param>
+		/// <returns>A single T:Component that is attached to the same entity as the reference, or null if the entity is not found</returns>
+		public T GetNullableComponent<T>(Component referenceComponent) where T : Component
+		{
+			return GetNullableComponent<T>(referenceComponent.EntityID);
 		}
 
 
@@ -1203,6 +1236,13 @@ namespace AsteroidOutpost.Screens
 				deadComponents.Add(component);
 				component.SetDead(true, true);
 			}
+		}
+
+
+		public void DeleteComponent(Component component)
+		{
+			deadComponents.Add(component);
+			component.SetDead(true, true);
 		}
 	}
 }
