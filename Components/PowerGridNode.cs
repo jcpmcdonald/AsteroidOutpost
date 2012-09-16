@@ -29,14 +29,14 @@ namespace AsteroidOutpost.Components
 		{
 			get
 			{
-				List<Constructable> constructables = world.GetComponents<Constructable>(EntityID);
-				if(constructables.Count == 1)
+				Constructable constructable = world.GetNullableComponent<Constructable>(EntityID);
+				if(constructable != null)
 				{
-					return !constructables[0].IsBeingPlaced && !constructables[0].IsConstructing;
+					return !constructable.IsBeingPlaced && !constructable.IsConstructing;
 				}
 				else
 				{
-					// Umm.. I suppose I'm active? Probably
+					// I suppose I'm active?
 					return true;
 				}
 			}

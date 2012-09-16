@@ -201,22 +201,17 @@ namespace AsteroidOutpost.Systems
 
 			foreach (int entity in fairlyNearEntities)
 			{
-				List<Minable> minables = world.GetComponents<Minable>(entity);
-				if (minables.Count == 1)
+				Minable minable = world.GetNullableComponent<Minable>(entity);
+				if (minable != null)
 				{
 					Position minablePosition = world.GetComponent<Position>(entity);
 					if(laserPosition.Distance(minablePosition) < laserMiner.MiningRange)
 					{
 						if (!MathHelperEx.IsObstructed(world, laserPosition, minablePosition))
 						{
-							rv.Add(minables[0]);
+							rv.Add(minable);
 						}
 					}
-				}
-				else if(minables.Count > 1)
-				{
-					// Why does one entity have multiple minable components?
-					Debugger.Break();
 				}
 			}
 

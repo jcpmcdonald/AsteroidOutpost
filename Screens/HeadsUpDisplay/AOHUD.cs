@@ -769,17 +769,17 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 			constructionSound.Play(Math.Min(1, world.Scale(1f)), 0, 0);
 
-			List<Constructable> constructables = world.GetComponents<Constructable>(creatingEntityID.Value);
-			if(constructables.Count == 1)
+			Constructable constructable = world.GetNullableComponent<Constructable>(creatingEntityID.Value);
+			if(constructable != null)
 			{
-				constructables[0].IsBeingPlaced = false;
-				constructables[0].IsConstructing = true;
+				constructable.IsBeingPlaced = false;
+				constructable.IsConstructing = true;
 			}
 
-			List<PowerGridNode> powerNodes = world.GetComponents<PowerGridNode>(creatingEntityID.Value);
-			if(powerNodes.Count == 1)
+			PowerGridNode powerNode = world.GetNullableComponent<PowerGridNode>(creatingEntityID.Value);
+			if(powerNode != null)
 			{
-				world.GetPowerGrid(powerNodes[0]).ConnectToPowerGrid(powerNodes[0]);
+				world.GetPowerGrid(powerNode).ConnectToPowerGrid(powerNode);
 			}
 
 			//// Reflectively look up what they are making, and create an other one of the same thing in the game

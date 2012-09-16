@@ -450,7 +450,7 @@ namespace AsteroidOutpost.Screens
 		/// </summary>
 		/// <param name="entityID">The entityID to look up</param>
 		/// <returns>A list of components for the given entityID and type, or null if the entity is not found</returns>
-		public List<T> GetComponents<T>(int entityID) where T : Component
+		public IEnumerable<T> GetComponents<T>(int entityID) where T : Component
 		{
 			lock (entityDictionary)
 			{
@@ -471,7 +471,7 @@ namespace AsteroidOutpost.Screens
 		/// </summary>
 		/// <param name="referenceComponent">A component on the same entity</param>
 		/// <returns>A list of T:Components that are attached to the same entity as the reference, or null if the entity is not found</returns>
-		public List<T> GetComponents<T>(Component referenceComponent) where T : Component
+		public IEnumerable<T> GetComponents<T>(Component referenceComponent) where T : Component
 		{
 			return GetComponents<T>(referenceComponent.EntityID);
 		}
@@ -485,14 +485,22 @@ namespace AsteroidOutpost.Screens
 		/// <returns>A single T:Component for the given entityID and type, or null if the entity is not found</returns>
 		public T GetComponent<T>(int entityID) where T : Component
 		{
-			List<T> matchingComponents = GetComponents<T>(entityID);
-			if(matchingComponents == null || matchingComponents.Count != 1)
+			T nullableComponent = GetNullableComponent<T>(entityID);
+			if(nullableComponent == null)
 			{
-				// Use the GetNullableComponent if you plan for this to happen
+				// If you are expecting this, use GetNullableComponent instead
 				Debugger.Break();
-				return null;
 			}
-			return matchingComponents[0];
+			return nullableComponent;
+
+			//T matchingComponent = GetComponents<T>(entityID);
+			//if(matchingComponents == null || matchingComponents.Count != 1)
+			//{
+			//    // Use the GetNullableComponent if you plan for this to happen
+			//    Debugger.Break();
+			//    return null;
+			//}
+			//return matchingComponents[0];
 		}
 
 
@@ -516,12 +524,35 @@ namespace AsteroidOutpost.Screens
 		/// <returns>A single T:Component for the given entityID and type, or null if the entity is not found</returns>
 		public T GetNullableComponent<T>(int entityID) where T : Component
 		{
-			List<T> matchingComponents = GetComponents<T>(entityID);
-			if(matchingComponents == null || matchingComponents.Count != 1)
+			lock (entityDictionary)
 			{
+				List<Component> entity;
+				if (entityDictionary.TryGetValue(entityID, out entity))
+				{
+					IEnumerator<T> matches = entity.OfType<T>().GetEnumerator();
+					T firstMatch = null;
+					if(matches.MoveNext())
+					{
+						firstMatch = matches.Current;
+
+						if(matches.MoveNext())
+						{
+							// There were two or more records, error
+							Debugger.Break();
+						}
+					}
+					return firstMatch;
+				}
+
+				//Debugger.Break();
 				return null;
 			}
-			return matchingComponents[0];
+			//T matchingComponent = GetComponents<T>(entityID);
+			//if(matchingComponents == null || matchingComponents.Count != 1)
+			//{
+			//    return null;
+			//}
+			//return matchingComponents[0];
 		}
 
 
@@ -1268,8 +1299,7 @@ namespace AsteroidOutpost.Screens
 
 		public void DeleteComponents(int entityID)
 		{
-			List<Component> components = GetComponents<Component>(entityID);
-			foreach (var component in components)
+			foreach (var component in GetComponents<Component>(entityID))
 			{
 				deadComponents.Add(component);
 				component.SetDead(true, true);

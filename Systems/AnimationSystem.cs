@@ -40,12 +40,11 @@ namespace AsteroidOutpost.Systems
 			List<int> visibleEntities = world.QuadTree.GetObjects(world.HUD.FocusScreen).Select(x => x.EntityID).ToList();
 			foreach (int entity in visibleEntities)
 			{
-				List<Animator> animators = world.GetComponents<Animator>(entity);
-				foreach (var animator in animators)
+				foreach (var animator in world.GetComponents<Animator>(entity))
 				{
 					animator.SpriteAnimator.Draw(spriteBatch,
 					                             world.WorldToScreen(world.GetComponent<Position>(entity).Center),
-					                             0f,
+					                             MathHelper.ToRadians(animator.OrientationDiff),
 					                             world.Scale(animator.Scale),
 					                             animator.Tint);
 				}

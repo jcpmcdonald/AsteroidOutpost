@@ -73,7 +73,7 @@ namespace AsteroidOutpost.Systems
 				if (upgradable.IsUpgrading)
 				{
 					float percentComplete = (float)((upgradable.CurrentUpgrade.MineralCost - upgradable.MineralsLeftToUpgrade) / upgradable.CurrentUpgrade.MineralCost);
-					Position position = world.GetComponents<Position>(upgradable.EntityID)[0];
+					Position position = world.GetComponent<Position>(upgradable.EntityID);
 
 					// Draw a progress bar
 					spriteBatch.FillRectangle(world.Scale(new Vector2(-position.Radius, position.Radius - 6)) + world.WorldToScreen(position.Center), world.Scale(new Vector2(position.Width, 6)), Color.Gray);

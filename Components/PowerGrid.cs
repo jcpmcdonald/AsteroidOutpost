@@ -182,7 +182,7 @@ namespace AsteroidOutpost.Components
 		/// <returns>Returns true if successful, false otherwise</returns>
 		internal bool GetPower(int startingEntityID, float amount)
 		{
-			return GetPower(world.GetComponents<PowerGridNode>(startingEntityID)[0], amount);
+			return GetPower(world.GetComponent<PowerGridNode>(startingEntityID), amount);
 		}
 
 
@@ -222,7 +222,7 @@ namespace AsteroidOutpost.Components
 		/// <returns>Returns true if successful, false otherwise</returns>
 		internal bool HasPower(int startingEntityID, float amount)
 		{
-			return HasPower(world.GetComponents<PowerGridNode>(startingEntityID)[0], amount);
+			return HasPower(world.GetComponent<PowerGridNode>(startingEntityID), amount);
 		}
 
 
