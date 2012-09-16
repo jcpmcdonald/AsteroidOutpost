@@ -24,8 +24,7 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
-			List<LaserWeapon> lasers = world.GetComponents<LaserWeapon>();
-			foreach (var laser in lasers)
+			foreach (var laser in world.GetComponents<LaserWeapon>())
 			{
 				Position position = world.GetComponent<Position>(laser);
 				List<int> possibleTargets = world.EntitiesInArea(position.Center, laser.Range);
@@ -70,8 +69,7 @@ namespace AsteroidOutpost.Systems
 		{
 			spriteBatch.Begin();
 
-			List<LaserWeapon> lasers = world.GetComponents<LaserWeapon>();
-			foreach (var laser in lasers)
+			foreach (var laser in world.GetComponents<LaserWeapon>())
 			{
 				if(laser.Target != null)
 				{

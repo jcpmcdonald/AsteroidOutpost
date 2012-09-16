@@ -7,6 +7,7 @@ using System.Text;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using XNASpriteLib;
 
 namespace AsteroidOutpost.Entities
@@ -18,15 +19,22 @@ namespace AsteroidOutpost.Entities
 		private static Dictionary<String, Sprite> sprites = new Dictionary<String, Sprite>();
 
 
+		public static void LoadContent(GraphicsDevice graphicsDevice)
+		{
+			// Note: The world doesn't exist yet, so don't use it here
+			sprites.Add("asteroid", new Sprite(File.OpenRead(@"..\Sprites\Asteroids.sprx"), graphicsDevice));
+			sprites.Add("solar station", new Sprite(File.OpenRead(@"..\Sprites\SolarStation.sprx"), graphicsDevice));
+			sprites.Add("laser miner", new Sprite(File.OpenRead(@"..\Sprites\LaserMiner.sprx"), graphicsDevice));
+			sprites.Add("power node", new Sprite(File.OpenRead(@"..\Sprites\PowerNode.sprx"), graphicsDevice));
+			sprites.Add("laser tower", new Sprite(File.OpenRead(@"..\Sprites\LaserTower.sprx"), graphicsDevice));
+			sprites.Add("space ship", new Sprite(File.OpenRead(@"..\Sprites\Spaceship128.sprx"), graphicsDevice));
+			sprites.Add("beacon", new Sprite(File.OpenRead(@"..\Sprites\Beacon.sprx"), graphicsDevice));
+		}
+
+
 		public static void Init(World theWorld)
 		{
 			world = theWorld;
-			sprites.Add("asteroid", new Sprite(File.OpenRead(@"..\Sprites\Asteroids.sprx"), world.GraphicsDevice));
-			sprites.Add("solar station", new Sprite(File.OpenRead(@"..\Sprites\SolarStation.sprx"), world.GraphicsDevice));
-			sprites.Add("laser miner", new Sprite(File.OpenRead(@"..\Sprites\LaserMiner.sprx"), world.GraphicsDevice));
-			sprites.Add("power node", new Sprite(File.OpenRead(@"..\Sprites\PowerNode.sprx"), world.GraphicsDevice));
-			sprites.Add("laser tower", new Sprite(File.OpenRead(@"..\Sprites\LaserTower.sprx"), world.GraphicsDevice));
-			sprites.Add("space ship", new Sprite(File.OpenRead(@"..\Sprites\Spaceship128.sprx"), world.GraphicsDevice));
 		}
 
 
@@ -41,6 +49,10 @@ namespace AsteroidOutpost.Entities
 			String spriteAnimation = (String)values["Sprite.Animation"];
 			int spriteOrientation = (int)values["Sprite.Orientation"];
 
+
+			Position position = new Position(world, entityID,
+			                                 (Vector2)values["Transpose.Position"],
+			                                 (int)values["Transpose.Radius"]);
 
 			switch(entityName.ToLower())
 			{
@@ -100,6 +112,13 @@ namespace AsteroidOutpost.Entities
 				world.AddComponent(new FleetMovementBehaviour(world, entityID));
 				break;
 
+			case "beacon":
+				sprite = sprites[entityName.ToLower()];
+				world.AddComponent(new EntityName(world, entityID, entityName));
+				world.AddComponent(new Spin(world, entityID, 90f));
+				position.Solid = false;
+				break;
+
 			default:
 				Console.WriteLine("Unrecognized Entity Name");
 				Debugger.Break();
@@ -108,9 +127,6 @@ namespace AsteroidOutpost.Entities
 
 
 
-			Position position = new Position(world, entityID,
-			                                 (Vector2)values["Transpose.Position"],
-			                                 (int)values["Transpose.Radius"]);
 			world.AddComponent(position);
 
 			if(sprite != null)

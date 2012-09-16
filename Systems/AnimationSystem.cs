@@ -23,12 +23,16 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
-			List<Animator> animators = world.GetComponents<Animator>();
-			foreach (Animator animator in animators)
+			foreach (Animator animator in world.GetComponents<Animator>())
 			{
 				animator.SpriteAnimator.Update(gameTime);
 			}
-			base.Update(gameTime);
+
+			foreach (Spin spinner in world.GetComponents<Spin>())
+			{
+				Animator animator = world.GetComponent<Animator>(spinner);
+				animator.SetOrientation(animator.ExactAngle + (spinner.RotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds));
+			}
 		}
 
 
@@ -44,7 +48,7 @@ namespace AsteroidOutpost.Systems
 				{
 					animator.SpriteAnimator.Draw(spriteBatch,
 					                             world.WorldToScreen(world.GetComponent<Position>(entity).Center),
-					                             MathHelper.ToRadians(animator.OrientationDiff),
+					                             MathHelper.ToRadians(animator.AngleDiff),
 					                             world.Scale(animator.Scale),
 					                             animator.Tint);
 				}

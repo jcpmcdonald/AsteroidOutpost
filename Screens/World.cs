@@ -573,13 +573,13 @@ namespace AsteroidOutpost.Screens
 		/// This method is thread safe
 		/// </summary>
 		/// <returns>Returns a list of components of the type specified</returns>
-		public List<T> GetComponents<T>() where T: Component
+		public IEnumerable<T> GetComponents<T>() where T: Component
 		{
 			lock(componentDictionary)
 			{
 				if(componentDictionary.ContainsKey(typeof(T)))
 				{
-					return componentDictionary[typeof (T)].Select(x => x as T).ToList();
+					return componentDictionary[typeof (T)].Select(x => x as T);
 				}
 				else
 				{

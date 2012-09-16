@@ -57,9 +57,9 @@ namespace AsteroidOutpost
 
 		}
 
-		private bool isEnemy(Entity entity)
+		private bool IsEnemy(int entityID)
 		{
-			return (entity.OwningForce.Team == Team.Team1 || entity.OwningForce.Team == Team.Team2);
+			return (world.GetOwningForce(entityID).Team == Team.Team1 || world.GetOwningForce(entityID).Team == Team.Team2);
 		}
 	}
 }

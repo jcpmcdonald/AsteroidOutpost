@@ -89,6 +89,17 @@ namespace AsteroidOutpost.Scenarios
 			//ConstructableEntity.AnyConstructionCompletedEvent += ConstructableEntity_StructureFinishedEvent;
 			//ConstructableEntity.AnyUpgradeCompletedEvent += ConstructableEntity_UpgradeFinishedEvent;
 
+			// Create a beacon
+			EntityFactory.Create("Beacon", new Dictionary<String, object>(){
+				{ "Sprite.Scale", 0.7f },
+				{ "Sprite.Set", null },
+				{ "Sprite.Animation", "Rotate" },
+				{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+				{ "Transpose.Position", new Vector2((world.MapWidth / 2.0f) + 200, world.MapHeight / 2.0f) },
+				{ "Transpose.Radius", 40 },
+				{ "OwningForce", localForce }
+			});
+
 
 			//Beacon minerBeacon = new Beacon(world, world, localForce, new Vector2((world.MapWidth / 2.0f) + 200, world.MapHeight / 2.0f), 40);
 			//beacons.Add(minerBeacon);

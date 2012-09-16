@@ -64,11 +64,9 @@ namespace AsteroidOutpost.Systems
 		/// </summary>
 		public override void Draw(GameTime gameTime)
 		{
-			List<Upgradable> upgradables = world.GetComponents<Upgradable>();
-
 			spriteBatch.Begin();
 
-			foreach (var upgradable in upgradables)
+			foreach (var upgradable in world.GetComponents<Upgradable>())
 			{
 				if (upgradable.IsUpgrading)
 				{

@@ -44,9 +44,7 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
-			List<LaserMiner> laserMiners = world.GetComponents<LaserMiner>();
-
-			foreach (var laserMiner in laserMiners)
+			foreach (var laserMiner in  world.GetComponents<LaserMiner>())
 			{
 				if (laserMiner.FirstUpdate)
 				{
@@ -257,9 +255,7 @@ namespace AsteroidOutpost.Systems
 		{
 			spriteBatch.Begin();
 
-			List<LaserMiner> laserMiners = world.GetComponents<LaserMiner>();
-
-			foreach (var laserMiner in laserMiners)
+			foreach (var laserMiner in world.GetComponents<LaserMiner>())
 			{
 				if (laserMiner.FirstUpdate)
 				{

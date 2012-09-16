@@ -28,7 +28,7 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
-			List<FleetMovementBehaviour> fleetMovementBehaviours = world.GetComponents<FleetMovementBehaviour>();
+			IEnumerable<FleetMovementBehaviour> fleetMovementBehaviours = world.GetComponents<FleetMovementBehaviour>();
 			//List<IGrouping<int, FleetMovementBehaviour>> fleetDictionary = fleetMovementBehaviours.GroupBy(x => x.FleetID).ToList();
 			Dictionary<int, List<FleetMovementBehaviour>> fleetDictionary = fleetMovementBehaviours.GroupBy(x => x.FleetID).ToDictionary(group => group.Key, group => group.ToList());
 			

@@ -218,11 +218,11 @@ namespace AsteroidOutpost
 			//Beacon.LoadContent(GraphicsDevice, Content);
 			//FreeText.LoadContent(GraphicsDevice, Content);
 
-			TextureDictionary.Add("Sprites\\Power", "power");
-			TextureDictionary.Add("Sprites\\Asteroids", "asteroids");
-			TextureDictionary.Add("Sprites\\Miners", "miners");
-			TextureDictionary.Add("Sprites\\SolarStation", "solarStation");
-			TextureDictionary.Add("Sprites\\Spaceship", "spaceship");
+			//TextureDictionary.Add("Sprites\\Power", "power");
+			//TextureDictionary.Add("Sprites\\Asteroids", "asteroids");
+			//TextureDictionary.Add("Sprites\\Miners", "miners");
+			//TextureDictionary.Add("Sprites\\SolarStation", "solarStation");
+			//TextureDictionary.Add("Sprites\\Spaceship", "spaceship");
 
 			TextureDictionary.Add("Ellipse25", "ellipse25");
 			TextureDictionary.Add("Ellipse25Bold", "ellipse25bold");
@@ -237,6 +237,8 @@ namespace AsteroidOutpost
 			TextureDictionary.Add("powerline", "powerline");
 
 			TextureDictionary.Add("Cursor");
+
+			EntityFactory.LoadContent(GraphicsDevice);
 
 			menuMusic = Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 04 Inner Battles (Bignic Remix)");
 			MediaPlayer.IsRepeating = true;
@@ -311,7 +313,7 @@ namespace AsteroidOutpost
 			String mapName = e.Arguments[0].ToString();
 			if (World != null)
 			{
-				// The world should always be null before starting to make a new one
+				// The world should always be null before starting to make a new one, right?
 				Debugger.Break();
 			}
 
@@ -324,8 +326,9 @@ namespace AsteroidOutpost
 		{
 			awesomium.WebView.LoadCompleted -= HUD_LoadCompleted;
 
-			RandomScenario randomScenario = new RandomScenario(this, 1);
-			world.StartServer(randomScenario);
+			//RandomScenario randomScenario = new RandomScenario(this, 1);
+			TutorialScenario tutorial = new TutorialScenario(this, 1);
+			world.StartServer(tutorial);
 		}
 
 

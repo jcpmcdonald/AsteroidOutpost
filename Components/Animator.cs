@@ -12,12 +12,6 @@ namespace AsteroidOutpost.Components
 	public class Animator : Component
 	{
 
-		//public Animator(World world, int entityID, Sprite sprite, float scale = 1.0f, String set = null, String animation = null, String orientation = null)
-		//    : base(world, entityID)
-		//{
-		//    Init(scale, sprite, set, animation, orientation);
-		//}
-
 		public Animator(World world, int entityID, Sprite sprite, float scale, String set, String animation, float orientation)
 			: base(world, entityID)
 		{
@@ -46,7 +40,12 @@ namespace AsteroidOutpost.Components
 		public float Scale { get; set; }
 		public SpriteAnimator SpriteAnimator { get; set; }
 		public Color Tint { get; set; }
-		public float OrientationDiff { get; set; }
+
+		/// <summary>
+		/// The angle difference between the exact angle this was set to, and the orientation of the frame being displayed
+		/// </summary>
+		public float AngleDiff { get; set; }
+		public float ExactAngle { get; private set; }
 
 		public void SetOrientation(float exactAngle, bool exact = false)
 		{
@@ -58,6 +57,9 @@ namespace AsteroidOutpost.Components
 			{
 				exactAngle -= 360f;
 			}
+
+			// Store this just in case someone wants to use it
+			ExactAngle = exactAngle;
 
 			float angleStep = 360.0f / SpriteAnimator.Sprite.OrientationLookup.Count;
 			float roundedAngle = ((int)((exactAngle + (angleStep / 2)) / angleStep)) * angleStep;
@@ -74,11 +76,11 @@ namespace AsteroidOutpost.Components
 			SpriteAnimator.CurrentOrientation = roundedAngle.ToString();
 			if(exact)
 			{
-				OrientationDiff = exactAngle - roundedAngle;
+				AngleDiff = exactAngle - roundedAngle;
 			}
 			else
 			{
-				OrientationDiff = 0;
+				AngleDiff = 0;
 			}
 		}
 	}

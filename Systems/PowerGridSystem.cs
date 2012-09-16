@@ -26,8 +26,7 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
-			List<PowerProducer> producers = world.GetComponents<PowerProducer>();
-			foreach(var producer in producers)
+			foreach(var producer in world.GetComponents<PowerProducer>())
 			{
 				if(producer.ProducesPower)
 				{
@@ -43,7 +42,7 @@ namespace AsteroidOutpost.Systems
 			spriteBatch.Begin();
 
 			// Draw any entities being placed
-			List<Constructable> placingEntities = world.GetComponents<Constructable>();
+			IEnumerable<Constructable> placingEntities = world.GetComponents<Constructable>();
 			placingEntities =  placingEntities.Where(x => x.IsBeingPlaced).ToList();
 			foreach(var placingEntity in placingEntities)
 			{

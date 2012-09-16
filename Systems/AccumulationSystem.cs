@@ -44,8 +44,7 @@ namespace AsteroidOutpost.Systems
 		public override void Update(GameTime gameTime)
 		{
 			// Update the floating text objects
-			List<FloatingText> floatingTexts = world.GetComponents<FloatingText>();
-			foreach (var floatingText in floatingTexts)
+			foreach (var floatingText in world.GetComponents<FloatingText>())
 			{
 				//floatingText.CumulativeTime += gameTime.ElapsedGameTime;
 				float fadeAmount = floatingText.FadeRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -75,8 +74,7 @@ namespace AsteroidOutpost.Systems
 			{
 				timeSinceLastPost = timeSinceLastPost.Subtract(new TimeSpan(0, 0, 0, 0, postFrequency));
 
-				List<Accumulator> accumulators = world.GetComponents<Accumulator>();
-				foreach (Accumulator accumulator in accumulators)
+				foreach (Accumulator accumulator in world.GetComponents<Accumulator>())
 				{
 					if (accumulator.Value != 0)
 					{
@@ -102,8 +100,7 @@ namespace AsteroidOutpost.Systems
 		{
 			spriteBatch.Begin();
 
-			List<FloatingText> floatingTexts = world.GetComponents<FloatingText>();
-			foreach (var floatingText in floatingTexts)
+			foreach (var floatingText in world.GetComponents<FloatingText>())
 			{
 				Position position = world.GetComponent<Position>(floatingText);
 				spriteBatch.DrawString(font,

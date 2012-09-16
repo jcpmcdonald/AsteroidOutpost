@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using AsteroidOutpost.Entities.Weapons;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
