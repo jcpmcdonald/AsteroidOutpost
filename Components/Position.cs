@@ -41,28 +41,28 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public Position(BinaryReader br)
-			: base(br)
-		{
-			offset = br.ReadVector2();
-			velocity = br.ReadVector2();
-			radius = br.ReadInt32();
-		}
+		//public Position(BinaryReader br)
+		//    : base(br)
+		//{
+		//    offset = br.ReadVector2();
+		//    velocity = br.ReadVector2();
+		//    radius = br.ReadInt32();
+		//}
 		
 		
-		/// <summary>
-		/// Serializes this object
-		/// </summary>
-		/// <param name="bw">The binary writer to serialize to</param>
-		public override void Serialize(BinaryWriter bw)
-		{
-			// Always serialize the base first because we can't pick the deserialization order
-			base.Serialize(bw);
+		///// <summary>
+		///// Serializes this object
+		///// </summary>
+		///// <param name="bw">The binary writer to serialize to</param>
+		//public override void Serialize(BinaryWriter bw)
+		//{
+		//    // Always serialize the base first because we can't pick the deserialization order
+		//    base.Serialize(bw);
 
-			bw.Write(offset);
-			bw.Write(velocity);
-			bw.Write(radius);
-		}
+		//    bw.Write(offset);
+		//    bw.Write(velocity);
+		//    bw.Write(radius);
+		//}
 
 
 

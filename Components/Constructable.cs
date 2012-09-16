@@ -41,30 +41,30 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		protected Constructable(BinaryReader br)
-			: base(br)
-		{
-			level = br.ReadInt32();
+		//protected Constructable(BinaryReader br)
+		//    : base(br)
+		//{
+		//    level = br.ReadInt32();
 
-			mineralsLeftToConstruct = br.ReadSingle();
-			isConstructing = br.ReadBoolean();
-		}
+		//    mineralsLeftToConstruct = br.ReadSingle();
+		//    isConstructing = br.ReadBoolean();
+		//}
 
 
-		/// <summary>
-		/// Serialize this Component
-		/// </summary>
-		/// <param name="bw">The BinaryWriter to stream to</param>
-		public override void Serialize(BinaryWriter bw)
-		{
-			// Always serialize the base first because we can't pick the deserialization order
-			base.Serialize(bw);
+		///// <summary>
+		///// Serialize this Component
+		///// </summary>
+		///// <param name="bw">The BinaryWriter to stream to</param>
+		//public override void Serialize(BinaryWriter bw)
+		//{
+		//    // Always serialize the base first because we can't pick the deserialization order
+		//    base.Serialize(bw);
 
-			bw.Write(level);
+		//    bw.Write(level);
 
-			bw.Write(mineralsLeftToConstruct);
-			bw.Write(isConstructing);
-		}
+		//    bw.Write(mineralsLeftToConstruct);
+		//    bw.Write(isConstructing);
+		//}
 
 
 		//public override void PostDeserializeLink(World world)

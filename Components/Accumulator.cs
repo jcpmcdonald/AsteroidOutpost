@@ -25,13 +25,6 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public Accumulator(BinaryReader br)
-			: base(br)
-		{
-			//postDeserializePositionID = br.ReadInt32();
-		}
-
-
 
 
 		public void Accumulate(IQuantifiable e)

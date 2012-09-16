@@ -10,13 +10,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AsteroidOutpost.Components
 {
-	public class Component : ISerializable, ICanKillSelf, IIdentifiable
+	public class Component : ICanKillSelf, IIdentifiable
 	{
 		protected World world;
 
 		// This ID will uniquely identify this object in the game
-		private Guid guid;
-		protected int entityID = -1;
 		private bool deleteMe;
 
 
@@ -27,60 +25,43 @@ namespace AsteroidOutpost.Components
 
 		public Component(World world, int entityID)
 		{
-			guid = Guid.NewGuid();
-			this.entityID = entityID;
+			GUID = Guid.NewGuid();
+			this.EntityID = entityID;
 			this.world = world;
 		}
 
-		protected Component(BinaryReader br)
-		{
-			entityID = br.ReadInt32();
-		}
+		//protected Component(BinaryReader br)
+		//{
+		//    entityID = br.ReadInt32();
+		//}
 
 
 		/// <summary>
 		/// Serializes this object
 		/// </summary>
 		/// <param name="bw">The binary writer to serialize to</param>
-		public virtual void Serialize(BinaryWriter bw)
-		{
-			bw.Write(entityID);
-		}
+		//public virtual void Serialize(BinaryWriter bw)
+		//{
+		//    bw.Write(entityID);
+		//}
 
 
 		/// <summary>
 		/// After deserializing, this should be called to link this object to other objects
 		/// </summary>
 		/// <param name="world"></param>
-		public virtual void PostDeserializeLink(World world)
-		{
-			this.world = world;
-		}
+		//public virtual void PostDeserializeLink(World world)
+		//{
+		//    this.world = world;
+		//}
 
 
 		/// <summary>
 		/// Gets the Entity's ID
 		/// </summary>
-		public int EntityID
-		{
-			get { return entityID; }
-			set
-			{
-				entityID = value;
-			}
-		}
+		public int EntityID { get; set; }
 
-		public Guid GUID
-		{
-			get
-			{
-				return guid;
-			}
-			set
-			{
-				guid = value;
-			}
-		}
+		public Guid GUID { get; set; }
 
 
 		public void KillSelf(EventArgs e)

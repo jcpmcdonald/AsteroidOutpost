@@ -208,28 +208,37 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 
 			// Make a new bad guy when a key is pressed for debugging
-			//if (theKeyboard[Keys.F8] == EnhancedKeyState.JUST_RELEASED)
-			//{
-			//    Controller aiActor = null;
-			//    foreach (Controller actor in world.Controllers)
-			//    {
-			//        if (actor.Role == ControllerRole.AI)
-			//        {
-			//            aiActor = actor;
-			//            break;
-			//        }
-			//    }
+			if (theKeyboard[Keys.F8] == EnhancedKeyState.JUST_RELEASED)
+			{
+				Controller aiActor = null;
+				foreach (Controller actor in world.Controllers)
+				{
+					if (actor.Role == ControllerRole.AI)
+					{
+						aiActor = actor;
+						break;
+					}
+				}
 
-			//    Debug.Assert(aiActor != null, "There is no AI actor in the game");
-			//    // Allow them to ignore the assert without crashing the game
-			//    // ReSharper disable ConditionIsAlwaysTrueOrFalse
-			//    if (aiActor != null)
-			//        // ReSharper restore ConditionIsAlwaysTrueOrFalse
-			//    {
-			//        //world.AddComponent(new Ship1(aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(1600, -10600)));
-			//        world.Add(new Ship1(world, world, aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(600, -600)));
-			//    }
-			//}
+				if (aiActor == null)
+				{
+					Console.WriteLine("There is no AI actor in the game");
+				}
+				else
+				{
+					//world.Add(new Ship1(world, world, aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(600, -600)));
+
+					EntityFactory.Create("Space Ship", new Dictionary<String, object>(){
+						{ "Sprite.Scale", 0.7f },
+						{ "Sprite.Set", null },
+						{ "Sprite.Animation", null },
+						{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+						{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
+						{ "Transpose.Radius", 40 },
+						{ "OwningForce", aiActor.PrimaryForce }
+					});
+				}
+			}
 
 
 			// Move the current creating
@@ -819,8 +828,8 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				newSelection["name"] = new JSValue(name.Name);
 				if(hitPoints != null)
 				{
-					newSelection["health"] = new JSValue(hitPoints.Get());
-					newSelection["maxhealth"] = new JSValue(hitPoints.GetTotal());
+					newSelection["health"] = new JSValue(hitPoints.GetHitPoints());
+					newSelection["maxhealth"] = new JSValue(hitPoints.GetTotalHitPoints());
 				}
 				else
 				{

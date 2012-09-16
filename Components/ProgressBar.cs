@@ -49,20 +49,20 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		protected ProgressBar(BinaryReader br)
-			: base(br)
-		{
-			postDeserializePositionID = br.ReadInt32();
-		}
+		//protected ProgressBar(BinaryReader br)
+		//    : base(br)
+		//{
+		//    postDeserializePositionID = br.ReadInt32();
+		//}
 
 
-		public override void Serialize(BinaryWriter bw)
-		{
-			// Always serialize the base first because we can't pick the deserialization order
-			base.Serialize(bw);
+		//public override void Serialize(BinaryWriter bw)
+		//{
+		//    // Always serialize the base first because we can't pick the deserialization order
+		//    base.Serialize(bw);
 
-			bw.Write(position.EntityID);
-		}
+		//    bw.Write(position.EntityID);
+		//}
 
 		//public override void PostDeserializeLink(World world)
 		//{

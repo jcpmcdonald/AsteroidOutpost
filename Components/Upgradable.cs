@@ -49,52 +49,52 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		protected Upgradable(BinaryReader br)
-			: base(br)
-		{
-			CurrentUpgrade = null;
-			mineralsToUpgrade = br.ReadInt32();
-			mineralsLeftToUpgrade = br.ReadSingle();
-			IsUpgrading = br.ReadBoolean();
+		//protected Upgradable(BinaryReader br)
+		//    : base(br)
+		//{
+		//    CurrentUpgrade = null;
+		//    mineralsToUpgrade = br.ReadInt32();
+		//    mineralsLeftToUpgrade = br.ReadSingle();
+		//    IsUpgrading = br.ReadBoolean();
 
-			int constructedUpgradesCount = br.ReadInt32();
-			for (int i = 0; i < constructedUpgradesCount; i++)
-			{
-				constructedUpgrades.Add(GetUpgradeByName(br.ReadString()));
-			}
+		//    int constructedUpgradesCount = br.ReadInt32();
+		//    for (int i = 0; i < constructedUpgradesCount; i++)
+		//    {
+		//        constructedUpgrades.Add(GetUpgradeByName(br.ReadString()));
+		//    }
 
-			if (IsUpgrading)
-			{
-				CurrentUpgrade = GetUpgradeByName(br.ReadString());
-			}
-		}
+		//    if (IsUpgrading)
+		//    {
+		//        CurrentUpgrade = GetUpgradeByName(br.ReadString());
+		//    }
+		//}
 
 
-		/// <summary>
-		/// Serialize this Component
-		/// </summary>
-		/// <param name="bw">The BinaryWriter to stream to</param>
-		public override void Serialize(BinaryWriter bw)
-		{
-			// Always serialize the base first because we can't pick the deserialization order
-			base.Serialize(bw);
+		///// <summary>
+		///// Serialize this Component
+		///// </summary>
+		///// <param name="bw">The BinaryWriter to stream to</param>
+		//public override void Serialize(BinaryWriter bw)
+		//{
+		//    // Always serialize the base first because we can't pick the deserialization order
+		//    base.Serialize(bw);
 
-			bw.Write(mineralsToUpgrade);
-			bw.Write(mineralsLeftToUpgrade);
-			bw.Write(IsUpgrading);
+		//    bw.Write(mineralsToUpgrade);
+		//    bw.Write(mineralsLeftToUpgrade);
+		//    bw.Write(IsUpgrading);
 
-			// Serialize the upgrades
-			bw.Write(constructedUpgrades.Count);
-			foreach(Upgrade constructedUpgrade in constructedUpgrades)
-			{
-				bw.Write(constructedUpgrade.Name);
-			}
+		//    // Serialize the upgrades
+		//    bw.Write(constructedUpgrades.Count);
+		//    foreach(Upgrade constructedUpgrade in constructedUpgrades)
+		//    {
+		//        bw.Write(constructedUpgrade.Name);
+		//    }
 
-			if (IsUpgrading)
-			{
-				bw.Write(CurrentUpgrade.Name);
-			}
-		}
+		//    if (IsUpgrading)
+		//    {
+		//        bw.Write(CurrentUpgrade.Name);
+		//    }
+		//}
 
 
 		/// <summary>

@@ -14,11 +14,10 @@ namespace AsteroidOutpost.Systems
 	class ConstructionSystem : DrawableGameComponent
 	{
 		private readonly World world;
+		private SpriteBatch spriteBatch;
 
 		private const float powerUsageRate = 12.0f;
 		private const float mineralUsageRate = 30.0f;
-
-		private SpriteBatch spriteBatch;
 
 		public ConstructionSystem(AOGame game, World world)
 			: base(game)
@@ -65,8 +64,6 @@ namespace AsteroidOutpost.Systems
 		/// <summary>
 		/// Update this constructing building
 		/// </summary>
-		/// <param name="deltaTime"></param>
-		/// <returns></returns>
 		public override void Update(GameTime gameTime)
 		{
 			List<Constructable> constructables = world.GetComponents<Constructable>().Where(x => x.IsConstructing).ToList();
@@ -118,9 +115,6 @@ namespace AsteroidOutpost.Systems
 		/// <summary>
 		/// Draw this constructing entity to the screen
 		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="scaleModifier"></param>
-		/// <param name="tint"></param>
 		public override void Draw(GameTime gameTime)
 		{
 			List<Constructable> constructables = world.GetComponents<Constructable>().Where(x => x.IsConstructing || x.IsBeingPlaced).ToList();

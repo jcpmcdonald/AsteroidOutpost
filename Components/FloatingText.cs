@@ -49,14 +49,5 @@ namespace AsteroidOutpost.Components
 			FadeRate = fadeRate;
 			//CumulativeTime = new TimeSpan(0);
 		}
-
-
-		public FloatingText(BinaryReader br)
-			: base(br)
-		{
-			//Text = br.ReadString();
-			//offset = br.ReadVector2();
-			//Color = new Color(br.ReadByte(), br.ReadByte(), br.ReadByte(), br.ReadByte());
-		}
 	}
 }

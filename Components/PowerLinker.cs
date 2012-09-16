@@ -26,39 +26,39 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public PowerLinker(BinaryReader br)
-			: base(br)
-		{
-			postDeserializeOwningForceID = br.ReadInt32();
-		}
+		//public PowerLinker(BinaryReader br)
+		//    : base(br)
+		//{
+		//    postDeserializeOwningForceID = br.ReadInt32();
+		//}
 
-		public override void Serialize(BinaryWriter bw)
-		{
-			// Always serialize the base first because we can't pick the deserialization order
-			base.Serialize(bw);
+		//public override void Serialize(BinaryWriter bw)
+		//{
+		//    // Always serialize the base first because we can't pick the deserialization order
+		//    base.Serialize(bw);
 
-			if (owningForce == null)
-			{
-				// I don't think this should ever be the case
-				Debugger.Break();
-				bw.Write(-1);
-			}
-			bw.Write(owningForce.ID);
-		}
+		//    if (owningForce == null)
+		//    {
+		//        // I don't think this should ever be the case
+		//        Debugger.Break();
+		//        bw.Write(-1);
+		//    }
+		//    bw.Write(owningForce.ID);
+		//}
 
-		/// <summary>
-		/// After deserializing, this should be called to link this object to other objects
-		/// </summary>
-		/// <param name="world"></param>
-		public override void PostDeserializeLink(World world)
-		{
-			owningForce = world.GetForceByID(postDeserializeOwningForceID);
-			if (owningForce == null)
-			{
-				// I think something is wrong, there should always be an owning force
-				Debugger.Break();
-			}
-		}
+		///// <summary>
+		///// After deserializing, this should be called to link this object to other objects
+		///// </summary>
+		///// <param name="world"></param>
+		//public override void PostDeserializeLink(World world)
+		//{
+		//    owningForce = world.GetForceByID(postDeserializeOwningForceID);
+		//    if (owningForce == null)
+		//    {
+		//        // I think something is wrong, there should always be an owning force
+		//        Debugger.Break();
+		//    }
+		//}
 
 
 		//public override void Draw(SpriteBatch spriteBatch, float scaleModifier, Color tint)

@@ -29,29 +29,29 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public Linker(BinaryReader br)
-			: base(br)
-		{
-			//postDeserializePositionID = br.ReadInt32();
-		}
+		//public Linker(BinaryReader br)
+		//    : base(br)
+		//{
+		//    //postDeserializePositionID = br.ReadInt32();
+		//}
 
 
-		/// <summary>
-		/// After deserializing, this should be called to link this object to other objects
-		/// </summary>
-		/// <param name="world"></param>
-		public override void PostDeserializeLink(World world)
-		{
-			base.PostDeserializeLink(world);
+		///// <summary>
+		///// After deserializing, this should be called to link this object to other objects
+		///// </summary>
+		///// <param name="world"></param>
+		//public override void PostDeserializeLink(World world)
+		//{
+		//    base.PostDeserializeLink(world);
 
-			// TODO: 2012-08-10 I probably need this down the line
-			//position = world.GetComponents(postDeserializePositionID) as Position;
+		//    // TODO: 2012-08-10 I probably need this down the line
+		//    //position = world.GetComponents(postDeserializePositionID) as Position;
 
-			//if (position == null)
-			//{
-			//    Debugger.Break();
-			//}
-		}
+		//    //if (position == null)
+		//    //{
+		//    //    Debugger.Break();
+		//    //}
+		//}
 
 
 		public List<Tuple<Predicate<int>, Color, float>> Links

@@ -48,10 +48,10 @@ namespace AsteroidOutpost.Entities.Weapons
 			if(state == LaserState.SHOOTING)
 			{
 				// Make sure we are in-range
-				if (owner.Position.Distance(target.Position) <= MaxRange && target.HitPoints.Get() > 0)
+				if (owner.Position.Distance(target.Position) <= MaxRange && target.HitPoints.GetHitPoints() > 0)
 				{
 					Debug.Assert(target != owner && target.OwningForce != owner.OwningForce, "Why are you hitting yourself? Why are you hitting yourself?");
-					target.HitPoints.Set(target.HitPoints.Get() - (float)(10.0 * deltaTime.TotalSeconds));
+					target.HitPoints.SetHitPoints(target.HitPoints.GetHitPoints() - (float)(10.0 * deltaTime.TotalSeconds));
 				}
 				else
 				{

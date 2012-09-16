@@ -19,12 +19,6 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		protected Minable(BinaryReader br)
-			: base(br)
-		{
-		}
-
-
 		public int Minerals
 		{
 			get

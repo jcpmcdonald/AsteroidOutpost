@@ -31,28 +31,28 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public Ring(BinaryReader br)
-			: base(br)
-		{
-			postDeserializePositionID = br.ReadInt32();
+		//public Ring(BinaryReader br)
+		//    : base(br)
+		//{
+		//    postDeserializePositionID = br.ReadInt32();
 
-			color = new Color(br.ReadByte(), br.ReadByte(), br.ReadByte(), br.ReadByte());
-			Init();
-		}
+		//    color = new Color(br.ReadByte(), br.ReadByte(), br.ReadByte(), br.ReadByte());
+		//    Init();
+		//}
 
 
-		public override void Serialize(BinaryWriter bw)
-		{
-			// Always serialize the base first because we can't pick the deserialization order
-			base.Serialize(bw);
+		//public override void Serialize(BinaryWriter bw)
+		//{
+		//    // Always serialize the base first because we can't pick the deserialization order
+		//    base.Serialize(bw);
 
-			bw.Write(position.EntityID);
+		//    bw.Write(position.EntityID);
 
-			bw.Write(color.R);
-			bw.Write(color.G);
-			bw.Write(color.B);
-			bw.Write(color.A);
-		}
+		//    bw.Write(color.R);
+		//    bw.Write(color.G);
+		//    bw.Write(color.B);
+		//    bw.Write(color.A);
+		//}
 
 
 		/// <summary>

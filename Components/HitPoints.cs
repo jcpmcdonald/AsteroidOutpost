@@ -28,30 +28,30 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public HitPoints(BinaryReader br)
-			: base(br)
-		{
-			totalHitPoints = br.ReadInt32();
-			hitPoints = br.ReadSingle();
-		}
+		//public HitPoints(BinaryReader br)
+		//    : base(br)
+		//{
+		//    totalHitPoints = br.ReadInt32();
+		//    hitPoints = br.ReadSingle();
+		//}
 
-		public override void Serialize(BinaryWriter bw)
-		{
-			// Always serialize the base first because we can't pick the deserialization order
-			base.Serialize(bw);
+		//public override void Serialize(BinaryWriter bw)
+		//{
+		//    // Always serialize the base first because we can't pick the deserialization order
+		//    base.Serialize(bw);
 
-			bw.Write(totalHitPoints);
-			bw.Write(hitPoints);
-		}
+		//    bw.Write(totalHitPoints);
+		//    bw.Write(hitPoints);
+		//}
 
 
 		/// <summary>
 		/// Sets the hit-points of this entity
 		/// </summary>
 		/// <param name="value">What to set the hit points to</param>
-		public void Set(float value)
+		public void SetHitPoints(float value)
 		{
-			Set(value, world.IsServer);
+			SetHitPoints(value, world.IsServer);
 		}
 
 
@@ -60,7 +60,7 @@ namespace AsteroidOutpost.Components
 		/// </summary>
 		/// <param name="value">What to set the hit points to</param>
 		/// <param name="authoratative">If you are not authoritative, you will be treated like a client with no control</param>
-		public void Set(float value, bool authoratative)
+		public void SetHitPoints(float value, bool authoratative)
 		{
 			int initialHitPoints = (int)hitPoints;
 
@@ -72,7 +72,7 @@ namespace AsteroidOutpost.Components
 			// Tell everyone that's interested in hit point changes
 			if (initialHitPoints != hitPoints && HitPointsChangedEvent != null)
 			{
-				HitPointsChangedEvent(new EntityHitPointsChangedEventArgs(this, hitPoints, (int)(hitPoints) - initialHitPoints));
+				//HitPointsChangedEvent(new EntityHitPointsChangedEventArgs(this, hitPoints, (int)(hitPoints) - initialHitPoints));
 			}
 
 			if (authoratative && hitPoints <= 0.0f)
@@ -87,7 +87,7 @@ namespace AsteroidOutpost.Components
 		/// Gets the current hit points
 		/// </summary>
 		/// <returns>The current hit points</returns>
-		public float Get()
+		public float GetHitPoints()
 		{
 			return hitPoints;
 		}
@@ -97,7 +97,7 @@ namespace AsteroidOutpost.Components
 		/// Gets the total hit points
 		/// </summary>
 		/// <returns>The total hit points</returns>
-		public int GetTotal()
+		public int GetTotalHitPoints()
 		{
 			return totalHitPoints;
 		}

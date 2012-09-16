@@ -19,27 +19,6 @@ namespace AsteroidOutpost.Components
 
 	class LaserMiner : Component
 	{
-		private MiningState state = MiningState.Idle;
-		private TimeSpan timeSinceLastStageChange;
-		
-		private float miningRate = 25;          // minerals per second while mining
-		private float energyUsageRate = 5;      // power per second while mining
-		private int chargeTime = 3000;          // charging time in milliseconds
-		private int mineTime = 900;             // mining time in milliseconds
-		private int miningRange = 90;
-		
-		
-		// Remember which asteroid we mined last so that we can mine the next asteroid
-		private int miningAsteroid = -1;
-		private Vector2 miningDestinationOffset = Vector2.Zero;
-		private Vector2 miningSourceOffset = Vector2.Zero;
-
-		// Collect minerals here, and only extract a whole number of minerals from asteroids
-		private double partialMineralsToExtract = 0;
-
-		private bool firstUpdate = true;
-		private bool rescanForAsteroids = true;
-
 		public readonly List<Minable> nearbyAsteroids = new List<Minable>();
 
 		// Local event only
@@ -49,171 +28,65 @@ namespace AsteroidOutpost.Components
 		public LaserMiner(World world, int entityID)
 			: base(world, entityID)
 		{
+			State = MiningState.Idle;
+			RescanForAsteroids = true;
+			FirstUpdate = true;
+			PartialMineralsToExtract = 0;
+			MiningSourceOffset = Vector2.Zero;
+			MiningDestinationOffset = Vector2.Zero;
+			MiningAsteroid = -1;
+			MiningRate = 25;
+			EnergyUsageRate = 5;
+			ChargeTime = 3000;
+			MineTime = 900;
+			MiningRange = 90;
 		}
 
 
-		protected LaserMiner(BinaryReader br)
-			: base(br)
-		{
-		}
+		/// <summary>
+		/// Minerals per second while mining
+		/// </summary>
+		public float MiningRate { get; set; }
+
+		/// <summary>
+		/// Power per second while mining
+		/// </summary>
+		public float EnergyUsageRate { get; set; }
+
+		/// <summary>
+		/// Charging time in milliseconds
+		/// </summary>
+		public int ChargeTime { get; set; }
+
+		/// <summary>
+		/// Mining time in milliseconds
+		/// </summary>
+		public int MineTime { get; set; }
+
+		public int MiningRange { get; set; }
+
+		/// <summary>
+		/// The asteroid we are minning
+		/// </summary>
+		public int MiningAsteroid { get; set; }
+
+		public Vector2 MiningDestinationOffset { get; set; }
 
 
-		public float MiningRate
-		{
-			get
-			{
-				return miningRate;
-			}
-			set
-			{
-				miningRate = value;
-			}
-		}
+		public Vector2 MiningSourceOffset { get; set; }
 
-		public float EnergyUsageRate
-		{
-			get
-			{
-				return energyUsageRate;
-			}
-			set
-			{
-				energyUsageRate = value;
-			}
-		}
+		/// <summary>
+		/// Collect minerals here, and only extract a whole number of minerals from asteroids
+		/// </summary>
+		public double PartialMineralsToExtract { get; set; }
 
-		public int ChargeTime
-		{
-			get
-			{
-				return chargeTime;
-			}
-			set
-			{
-				chargeTime = value;
-			}
-		}
+		public bool FirstUpdate { get; set; }
 
-		public int MineTime
-		{
-			get
-			{
-				return mineTime;
-			}
-			set
-			{
-				mineTime = value;
-			}
-		}
+		public bool RescanForAsteroids { get; set; }
 
-		public int MiningRange
-		{
-			get
-			{
-				return miningRange;
-			}
-			set
-			{
-				miningRange = value;
-			}
-		}
+		public MiningState State { get; set; }
 
-		public int MiningAsteroid
-		{
-			get
-			{
-				return miningAsteroid;
-			}
-			set
-			{
-				miningAsteroid = value;
-			}
-		}
-
-		public Vector2 MiningDestinationOffset
-		{
-			get
-			{
-				return miningDestinationOffset;
-			}
-			set
-			{
-				miningDestinationOffset = value;
-			}
-		}
-
-		
-		public Vector2 MiningSourceOffset
-		{
-			get
-			{
-				return miningSourceOffset;
-			}
-			set
-			{
-				miningSourceOffset = value;
-			}
-		}
-
-		public double PartialMineralsToExtract
-		{
-			get
-			{
-				return partialMineralsToExtract;
-			}
-			set
-			{
-				partialMineralsToExtract = value;
-			}
-		}
-
-		public bool FirstUpdate
-		{
-			get
-			{
-				return firstUpdate;
-			}
-			set
-			{
-				firstUpdate = value;
-			}
-		}
-
-		public bool RescanForAsteroids
-		{
-			get
-			{
-				return rescanForAsteroids;
-			}
-			set
-			{
-				rescanForAsteroids = value;
-			}
-		}
-
-		public MiningState State
-		{
-			get
-			{
-				return state;
-			}
-			set
-			{
-				state = value;
-			}
-		}
-
-		public TimeSpan TimeSinceLastStageChange
-		{
-			get
-			{
-				return timeSinceLastStageChange;
-			}
-			set
-			{
-				timeSinceLastStageChange = value;
-			}
-		}
+		public TimeSpan TimeSinceLastStageChange { get; set; }
 
 
 		public virtual void OnAccumulate(int wholeMineralsToExtract)

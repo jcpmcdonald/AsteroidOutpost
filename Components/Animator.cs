@@ -12,26 +12,20 @@ namespace AsteroidOutpost.Components
 	public class Animator : Component
 	{
 
-		public Animator(World world, int entityID, Sprite sprite, float scale = 1.0f, String set = null, String animation = null, String orientation = null)
+		//public Animator(World world, int entityID, Sprite sprite, float scale = 1.0f, String set = null, String animation = null, String orientation = null)
+		//    : base(world, entityID)
+		//{
+		//    Init(scale, sprite, set, animation, orientation);
+		//}
+
+		public Animator(World world, int entityID, Sprite sprite, float scale, String set, String animation, float orientation)
 			: base(world, entityID)
 		{
 			Init(scale, sprite, set, animation, orientation);
 		}
 
-		public Animator(World world, int entityID, Sprite sprite, float scale, String set, String animation, float orientation)
-			: base(world, entityID)
-		{
-			Init(scale, sprite, set, animation, orientation.ToString());
-		}
 
-
-		protected Animator(BinaryReader br)
-			: base(br)
-		{
-		}
-
-
-		private void Init(float scale, Sprite sprite, String set = null, String animation = null, String orientation = null)
+		private void Init(float scale, Sprite sprite, String set, String animation, float orientation)
 		{
 			Scale = scale;
 			Tint = Color.White;
@@ -45,15 +39,47 @@ namespace AsteroidOutpost.Components
 			{
 				SpriteAnimator.CurrentAnimation = animation;
 			}
-			if (orientation != null)
-			{
-				SpriteAnimator.CurrentOrientation = orientation;
-			}
+			SetOrientation(orientation);
 		}
 
 
 		public float Scale { get; set; }
 		public SpriteAnimator SpriteAnimator { get; set; }
 		public Color Tint { get; set; }
+		public float OrientationDiff { get; set; }
+
+		public void SetOrientation(float exactAngle, bool exact = false)
+		{
+			while (exactAngle < 0)
+			{
+				exactAngle += 360f;
+			}
+			while (exactAngle >= 360)
+			{
+				exactAngle -= 360f;
+			}
+
+			float angleStep = 360.0f / SpriteAnimator.Sprite.OrientationLookup.Count;
+			float roundedAngle = ((int)((exactAngle + (angleStep / 2)) / angleStep)) * angleStep;
+
+			while (roundedAngle < 0)
+			{
+				roundedAngle += 360f;
+			}
+			while (roundedAngle >= 360)
+			{
+				roundedAngle -= 360f;
+			}
+
+			SpriteAnimator.CurrentOrientation = roundedAngle.ToString();
+			if(exact)
+			{
+				OrientationDiff = exactAngle - roundedAngle;
+			}
+			else
+			{
+				OrientationDiff = 0;
+			}
+		}
 	}
 }

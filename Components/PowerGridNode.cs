@@ -22,12 +22,6 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		protected PowerGridNode(BinaryReader br)
-			: base(br)
-		{
-		}
-
-
 		/// <summary>
 		/// True if this node is active and ready to either conduct or produce power (not used for consumers)
 		/// </summary>
@@ -35,7 +29,7 @@ namespace AsteroidOutpost.Components
 		{
 			get
 			{
-				List<Constructable> constructables = world.GetComponents<Constructable>(entityID);
+				List<Constructable> constructables = world.GetComponents<Constructable>(EntityID);
 				if(constructables.Count == 1)
 				{
 					return !constructables[0].IsBeingPlaced && !constructables[0].IsConstructing;
@@ -96,7 +90,7 @@ namespace AsteroidOutpost.Components
 		{
 			get
 			{
-				Position entityPosition = world.GetComponent<Position>(entityID);
+				Position entityPosition = world.GetComponent<Position>(EntityID);
 				return entityPosition.Center + PowerLinkPointRelative;
 			}
 		}

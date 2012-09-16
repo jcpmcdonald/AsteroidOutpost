@@ -20,12 +20,6 @@ namespace AsteroidOutpost.Components
 			PowerProductionRate = powerProductionRate;
 			MaxPower = maxPower;
 		}
-
-
-		protected PowerProducer(BinaryReader br)
-			: base(br)
-		{
-		}
 		
 		public float MaxPower { get; set; }
 		public float AvailablePower

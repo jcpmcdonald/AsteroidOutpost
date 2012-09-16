@@ -27,28 +27,28 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		/// <summary>
-		/// Initializes this Entity from a BinaryReader
-		/// </summary>
-		/// <param name="br">The BinaryReader to Deserialize from</param>
-		public PositionOffset(BinaryReader br)
-			: base(br)
-		{
-			postDeserializeParentID = br.ReadInt32();
-		}
+		///// <summary>
+		///// Initializes this Entity from a BinaryReader
+		///// </summary>
+		///// <param name="br">The BinaryReader to Deserialize from</param>
+		//public PositionOffset(BinaryReader br)
+		//    : base(br)
+		//{
+		//    postDeserializeParentID = br.ReadInt32();
+		//}
 
 
-		/// <summary>
-		/// Serializes this object
-		/// </summary>
-		/// <param name="bw">The binary writer to serialize to</param>
-		public override void Serialize(BinaryWriter bw)
-		{
-			// Always serialize the base first because we can't pick the deserialization order
-			base.Serialize(bw);
+		///// <summary>
+		///// Serializes this object
+		///// </summary>
+		///// <param name="bw">The binary writer to serialize to</param>
+		//public override void Serialize(BinaryWriter bw)
+		//{
+		//    // Always serialize the base first because we can't pick the deserialization order
+		//    base.Serialize(bw);
 
-			bw.Write(parent.EntityID);
-		}
+		//    bw.Write(parent.EntityID);
+		//}
 
 
 		/// <summary>

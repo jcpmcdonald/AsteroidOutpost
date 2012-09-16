@@ -26,6 +26,7 @@ namespace AsteroidOutpost.Entities
 			sprites.Add("laser miner", new Sprite(File.OpenRead(@"..\Sprites\LaserMiner.sprx"), world.GraphicsDevice));
 			sprites.Add("power node", new Sprite(File.OpenRead(@"..\Sprites\PowerNode.sprx"), world.GraphicsDevice));
 			sprites.Add("laser tower", new Sprite(File.OpenRead(@"..\Sprites\LaserTower.sprx"), world.GraphicsDevice));
+			sprites.Add("space ship", new Sprite(File.OpenRead(@"..\Sprites\Spaceship128.sprx"), world.GraphicsDevice));
 		}
 
 
@@ -85,6 +86,18 @@ namespace AsteroidOutpost.Entities
 			case "laser tower":
 				sprite = sprites[entityName.ToLower()];
 				world.AddComponent(new EntityName(world, entityID, entityName));
+				world.AddComponent(new PowerGridNode(world, entityID, false));
+				world.AddComponent(new Constructable(world, entityID, 150));
+				world.AddComponent(new HitPoints(world, entityID, 150));
+				world.AddComponent(new LaserWeapon(world, entityID, 150, 15, Color.Red));
+				break;
+
+			case "space ship":
+				sprite = sprites[entityName.ToLower()];
+				world.AddComponent(new EntityName(world, entityID, entityName));
+				world.AddComponent(new HitPoints(world, entityID, 150));
+				world.AddComponent(new LaserWeapon(world, entityID, 150, 0, Color.DarkRed));
+				world.AddComponent(new FleetMovementBehaviour(world, entityID));
 				break;
 
 			default:

@@ -56,6 +56,8 @@ namespace AsteroidOutpost.Screens
 		private ConstructionSystem constructionSystem;
 		private LaserMinerSystem laserMinerSystem;
 		private AccumulationSystem accumulationSystem;
+		private LaserWeaponSystem laserWeaponSystem;
+		private MovementSystem movementSystem;
 
 		private bool paused;
 
@@ -86,6 +88,8 @@ namespace AsteroidOutpost.Screens
 			constructionSystem = new ConstructionSystem(game, this);
 			laserMinerSystem = new LaserMinerSystem(game, this);
 			accumulationSystem = new AccumulationSystem(game, this, 500);
+			laserWeaponSystem = new LaserWeaponSystem(game, this);
+			movementSystem = new MovementSystem(game, this);
 
 			awesomium = game.Awesomium;
 
@@ -103,6 +107,8 @@ namespace AsteroidOutpost.Screens
 			game.Components.Add(constructionSystem);
 			game.Components.Add(laserMinerSystem);
 			game.Components.Add(accumulationSystem);
+			game.Components.Add(laserWeaponSystem);
+			game.Components.Add(movementSystem);
 		}
 
 
@@ -563,6 +569,38 @@ namespace AsteroidOutpost.Screens
 			//    }
 			//    return rv;
 			//}
+		}
+		
+		
+		/// <summary>
+		/// Looks up weapons by entityID
+		/// This method is thread safe
+		/// </summary>
+		/// <param name="entityID">The entityID to look up</param>
+		/// <returns>A list of IWeapons associated with the entity</returns>
+		public List<IWeapon> GetWeapons(int entityID)
+		{
+			lock (entityDictionary)
+			{
+				if (entityDictionary.ContainsKey(entityID))
+				{
+					return entityDictionary[entityID].OfType<IWeapon>().ToList();
+				}
+
+				//Debugger.Break();
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Looks up weapons by a reference component
+		/// This method is thread safe
+		/// </summary>
+		/// <param name="referenceComponent">A component that is attached to the entity in question</param>
+		/// <returns>A list of IWeapons associated with the reference component's entity</returns>
+		public List<IWeapon> GetWeapons(Component referenceComponent)
+		{
+			return GetWeapons(referenceComponent.EntityID);
 		}
 
 

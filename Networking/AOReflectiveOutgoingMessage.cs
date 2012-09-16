@@ -83,7 +83,9 @@ namespace AsteroidOutpost.Networking
 				}
 				else if (parameter is Component)
 				{
-					((Component)parameter).Serialize(bw);
+					// TODO: Serialize this component
+					Debugger.Break();
+					//((Component)parameter).Serialize(bw);
 				}
 				else if (parameter is Entity)
 				{
