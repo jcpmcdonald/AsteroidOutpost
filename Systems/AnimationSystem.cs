@@ -31,7 +31,7 @@ namespace AsteroidOutpost.Systems
 			foreach (Spin spinner in world.GetComponents<Spin>())
 			{
 				Animator animator = world.GetComponent<Animator>(spinner);
-				animator.SetOrientation(animator.ExactAngle + (spinner.RotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds));
+				animator.SetOrientation(animator.Angle + (spinner.RotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds), spinner.RotateFrame);
 			}
 		}
 
@@ -48,7 +48,7 @@ namespace AsteroidOutpost.Systems
 				{
 					animator.SpriteAnimator.Draw(spriteBatch,
 					                             world.WorldToScreen(world.GetComponent<Position>(entity).Center),
-					                             MathHelper.ToRadians(animator.AngleDiff),
+					                             MathHelper.ToRadians(animator.FrameAngle),
 					                             world.Scale(animator.Scale),
 					                             animator.Tint);
 				}

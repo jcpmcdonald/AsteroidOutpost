@@ -44,25 +44,25 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// The angle difference between the exact angle this was set to, and the orientation of the frame being displayed
 		/// </summary>
-		public float AngleDiff { get; set; }
-		public float ExactAngle { get; private set; }
+		public float FrameAngle { get; set; }
+		public float Angle { get; private set; }
 
-		public void SetOrientation(float exactAngle, bool exact = false)
+		public void SetOrientation(float angle, bool rotateFrame = false)
 		{
-			while (exactAngle < 0)
+			while (angle < 0)
 			{
-				exactAngle += 360f;
+				angle += 360f;
 			}
-			while (exactAngle >= 360)
+			while (angle >= 360)
 			{
-				exactAngle -= 360f;
+				angle -= 360f;
 			}
 
 			// Store this just in case someone wants to use it
-			ExactAngle = exactAngle;
+			Angle = angle;
 
 			float angleStep = 360.0f / SpriteAnimator.Sprite.OrientationLookup.Count;
-			float roundedAngle = ((int)((exactAngle + (angleStep / 2)) / angleStep)) * angleStep;
+			float roundedAngle = ((int)((angle + (angleStep / 2)) / angleStep)) * angleStep;
 
 			while (roundedAngle < 0)
 			{
@@ -74,13 +74,13 @@ namespace AsteroidOutpost.Components
 			}
 
 			SpriteAnimator.CurrentOrientation = roundedAngle.ToString();
-			if(exact)
+			if(rotateFrame)
 			{
-				AngleDiff = exactAngle - roundedAngle;
+				FrameAngle = angle - roundedAngle;
 			}
 			else
 			{
-				AngleDiff = 0;
+				FrameAngle = 0;
 			}
 		}
 	}

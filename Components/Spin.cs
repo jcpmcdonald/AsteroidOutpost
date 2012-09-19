@@ -8,12 +8,15 @@ namespace AsteroidOutpost.Components
 {
 	class Spin : Component
 	{
-		public Spin(World world, int entityID, float rotationSpeed)
+		public Spin(World world, int entityID, float rotationSpeed, bool rotateFrame = false)
 			: base(world, entityID)
 		{
-			this.RotationSpeed = rotationSpeed;
+			RotationSpeed = rotationSpeed;
+			RotateFrame = rotateFrame;
 		}
 
+
 		public float RotationSpeed { get; private set; }
+		public bool RotateFrame { get; set; }
 	}
 }
