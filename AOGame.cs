@@ -308,7 +308,7 @@ namespace AsteroidOutpost
 
 		private void StartWorld(object sender, JSCallbackEventArgs e)
 		{
-			awesomium.WebView.LoadCompleted += HUD_LoadCompleted;
+			//awesomium.WebView.LoadCompleted += HUD_LoadCompleted;
 
 			String mapName = e.Arguments[0].ToString();
 			if (World != null)
@@ -318,18 +318,36 @@ namespace AsteroidOutpost
 			}
 
 			world = new World(this);
+			EntityFactory.Init(world);
+
+
+			Scenario scenario;
+			switch(mapName.ToLower())
+			{
+			case "tutorial":
+				scenario = new TutorialScenario(this, 1);
+				break;
+
+			case "random":
+				scenario = new RandomScenario(this, 1);
+				break;
+
+			default:
+				goto case "random";
+			}
+			world.StartServer(scenario);
 
 			Components.Add(World);
 		}
 
-		void HUD_LoadCompleted(object sender, EventArgs e)
-		{
-			awesomium.WebView.LoadCompleted -= HUD_LoadCompleted;
+		//void HUD_LoadCompleted(object sender, EventArgs e)
+		//{
+		//    awesomium.WebView.LoadCompleted -= HUD_LoadCompleted;
 
-			//RandomScenario randomScenario = new RandomScenario(this, 1);
-			TutorialScenario tutorial = new TutorialScenario(this, 1);
-			world.StartServer(tutorial);
-		}
+		//    //RandomScenario randomScenario = new RandomScenario(this, 1);
+		//    TutorialScenario tutorial = new TutorialScenario(this, 1);
+		//    world.StartServer(tutorial);
+		//}
 
 
 		/// <summary>
