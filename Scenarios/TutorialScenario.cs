@@ -90,12 +90,35 @@ namespace AsteroidOutpost.Scenarios
 			//ConstructableEntity.AnyUpgradeCompletedEvent += ConstructableEntity_UpgradeFinishedEvent;
 
 			// Create a beacon
-			EntityFactory.Create("Beacon", new Dictionary<String, object>(){
+			//EntityFactory.Create("Beacon", new Dictionary<String, object>(){
+			//    { "Sprite.Scale", 0.7f },
+			//    { "Sprite.Set", null },
+			//    { "Sprite.Animation", "Rotate" },
+			//    { "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+			//    { "Transpose.Position", new Vector2((world.MapWidth / 2.0f) + 200, world.MapHeight / 2.0f) },
+			//    { "Transpose.Radius", 40 },
+			//    { "OwningForce", localForce }
+			//});
+
+
+
+			EntityFactory.Create("Space Ship (rotate frame)", new Dictionary<String, object>(){
 				{ "Sprite.Scale", 0.7f },
 				{ "Sprite.Set", null },
 				{ "Sprite.Animation", "Rotate" },
-				{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+				{ "Sprite.Orientation", 0 },
 				{ "Transpose.Position", new Vector2((world.MapWidth / 2.0f) + 200, world.MapHeight / 2.0f) },
+				{ "Transpose.Radius", 40 },
+				{ "OwningForce", localForce }
+			});
+
+
+			EntityFactory.Create("Space Ship (use frames only)", new Dictionary<String, object>(){
+				{ "Sprite.Scale", 0.7f },
+				{ "Sprite.Set", null },
+				{ "Sprite.Animation", "Rotate" },
+				{ "Sprite.Orientation", 0 },
+				{ "Transpose.Position", new Vector2((world.MapWidth / 2.0f) + 300, world.MapHeight / 2.0f) },
 				{ "Transpose.Radius", 40 },
 				{ "OwningForce", localForce }
 			});

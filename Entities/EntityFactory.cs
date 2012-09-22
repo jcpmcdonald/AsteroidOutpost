@@ -119,6 +119,21 @@ namespace AsteroidOutpost.Entities
 				position.Solid = false;
 				break;
 
+
+
+
+			case "space ship (rotate frame)":
+				sprite = sprites["space ship"];
+				world.AddComponent(new EntityName(world, entityID, entityName));
+				world.AddComponent(new Spin(world, entityID, 15f, true));
+				break;
+
+			case "space ship (use frames only)":
+				sprite = sprites["space ship"];
+				world.AddComponent(new EntityName(world, entityID, entityName));
+				world.AddComponent(new Spin(world, entityID, 15f, false));
+				break;
+
 			default:
 				Console.WriteLine("Unrecognized Entity Name");
 				Debugger.Break();
