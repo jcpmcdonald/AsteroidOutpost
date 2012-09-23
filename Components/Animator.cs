@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 using XNASpriteLib;
@@ -38,8 +39,10 @@ namespace AsteroidOutpost.Components
 
 
 		public float Scale { get; set; }
-		public SpriteAnimator SpriteAnimator { get; set; }
 		public Color Tint { get; set; }
+
+		[XmlIgnore]
+		public SpriteAnimator SpriteAnimator { get; set; }
 
 		/// <summary>
 		/// The angle difference between the exact angle this was set to, and the orientation of the frame being displayed

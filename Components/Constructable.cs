@@ -12,13 +12,7 @@ namespace AsteroidOutpost.Components
 {
 	internal class Constructable : Component
 	{
-		// TODO: 2012-08-10 Do I still want to have entity levels?
-		protected int level = 1;
-
 		private float mineralsLeftToConstruct;
-		protected bool isBeingPlaced = true;
-		protected bool isConstructing = false;
-		private int mineralsToConstruct;
 
 
 		// Events
@@ -36,7 +30,9 @@ namespace AsteroidOutpost.Components
 		public Constructable(World world, int entityID, int mineralsToConstruct)
 			: base(world, entityID)
 		{
-			this.mineralsToConstruct = mineralsToConstruct;
+			IsConstructing = false;
+			IsBeingPlaced = true;
+			this.MineralsToConstruct = mineralsToConstruct;
 			this.mineralsLeftToConstruct = mineralsToConstruct;
 		}
 
@@ -79,17 +75,7 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// How many minerals does this constructable take to build?
 		/// </summary>
-		public int MineralsToConstruct
-		{
-			get
-			{
-				return mineralsToConstruct;
-			}
-			set
-			{
-				mineralsToConstruct = value;
-			}
-		}
+		public int MineralsToConstruct { get; set; }
 
 
 		/// <summary>
@@ -103,7 +89,7 @@ namespace AsteroidOutpost.Components
 			}
 			set
 			{
-				int delta = (int)Math.Ceiling(mineralsLeftToConstruct) - (int)Math.Max(Math.Ceiling(value), 0);
+				//int delta = (int)Math.Ceiling(mineralsLeftToConstruct) - (int)Math.Max(Math.Ceiling(value), 0);
 				mineralsLeftToConstruct = Math.Max(value, 0);
 
 				// Tell all my friends
@@ -132,36 +118,18 @@ namespace AsteroidOutpost.Components
 				}
 			}
 		}
-		
-		
-		public virtual int Level
-		{
-			get{ return level; }
-			set
-			{
-				level = value;
-			}
-		}
-		
+
 
 		/// <summary>
 		/// Is this being placed?
 		/// </summary>
-		public virtual bool IsBeingPlaced
-		{
-			get { return isBeingPlaced; }
-			set { isBeingPlaced = value; }
-		}
+		public virtual bool IsBeingPlaced { get; set; }
 
-		
+
 		/// <summary>
 		/// Is this under construction?
 		/// </summary>
-		public virtual bool IsConstructing
-		{
-			get { return isConstructing; }
-			set { isConstructing = value; }
-		}
+		public virtual bool IsConstructing { get; set; }
 
 
 		//public void CancelConstruction()

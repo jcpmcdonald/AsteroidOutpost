@@ -6,100 +6,55 @@ using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
+using Microsoft.Xna.Framework;
 
 namespace AsteroidOutpost.Components
 {
 	public class HitPoints : Component
 	{
-		private int totalHitPoints = 100;
-		private float hitPoints = 100;
-		
-		
+		private float armour;
+
 		// Events
 		[EventReplication(EventReplication.ServerToClients)]
 		public event Action<EntityHitPointsChangedEventArgs> HitPointsChangedEvent;
 
 
-		public HitPoints(World world, int entityID, int totalHitPoints)
+		public HitPoints(World world, int entityID, int totalArmour)
 			: base(world, entityID)
 		{
-			this.totalHitPoints = totalHitPoints;
-			hitPoints = totalHitPoints;
-		}
-
-
-		//public HitPoints(BinaryReader br)
-		//    : base(br)
-		//{
-		//    totalHitPoints = br.ReadInt32();
-		//    hitPoints = br.ReadSingle();
-		//}
-
-		//public override void Serialize(BinaryWriter bw)
-		//{
-		//    // Always serialize the base first because we can't pick the deserialization order
-		//    base.Serialize(bw);
-
-		//    bw.Write(totalHitPoints);
-		//    bw.Write(hitPoints);
-		//}
-
-
-		/// <summary>
-		/// Sets the hit-points of this entity
-		/// </summary>
-		/// <param name="value">What to set the hit points to</param>
-		public void SetHitPoints(float value)
-		{
-			SetHitPoints(value, world.IsServer);
-		}
-
-
-		/// <summary>
-		/// Sets the hit-points of this entity
-		/// </summary>
-		/// <param name="value">What to set the hit points to</param>
-		/// <param name="authoratative">If you are not authoritative, you will be treated like a client with no control</param>
-		public void SetHitPoints(float value, bool authoratative)
-		{
-			int initialHitPoints = (int)hitPoints;
-
-			// Hit points can't go below zero
-			hitPoints = Math.Max(0.0f, value);
-			// Or above the max
-			hitPoints = Math.Min(value, totalHitPoints);
-
-			// Tell everyone that's interested in hit point changes
-			if (initialHitPoints != hitPoints && HitPointsChangedEvent != null)
-			{
-				//HitPointsChangedEvent(new EntityHitPointsChangedEventArgs(this, hitPoints, (int)(hitPoints) - initialHitPoints));
-			}
-
-			if (authoratative && hitPoints <= 0.0f)
-			{
-				// We have just died
-				SetDead(true);
-			}
+			TotalArmour = totalArmour;
+			armour = totalArmour;
 		}
 
 
 		/// <summary>
 		/// Gets the current hit points
 		/// </summary>
-		/// <returns>The current hit points</returns>
-		public float GetHitPoints()
+		/// <value> The current hit points </value>
+		public float Armour
 		{
-			return hitPoints;
+			get
+			{
+				return armour;
+			}
+			set
+			{
+				int initialHitPoints = (int)armour;
+				armour = MathHelper.Clamp(value, 0, TotalArmour);
+
+				// Tell everyone that's interested in hit point changes
+				if (initialHitPoints != (int)armour && HitPointsChangedEvent != null)
+				{
+					//HitPointsChangedEvent(new EntityHitPointsChangedEventArgs(this, hitPoints, (int)(hitPoints) - initialHitPoints));
+				}
+			}
 		}
 
 
 		/// <summary>
 		/// Gets the total hit points
 		/// </summary>
-		/// <returns>The total hit points</returns>
-		public int GetTotalHitPoints()
-		{
-			return totalHitPoints;
-		}
+		/// <value> The total hit points </value>
+		public int TotalArmour { get; set; }
 	}
 }

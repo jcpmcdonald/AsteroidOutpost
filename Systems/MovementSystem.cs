@@ -44,7 +44,7 @@ namespace AsteroidOutpost.Systems
 						// Find a suitable target
 						int vehicleEntityID = vehicle.EntityID;
 						var livingThings = world.GetComponents<HitPoints>().Where(x => x.EntityID != vehicleEntityID &&
-						                                                               x.GetHitPoints() > 0 &&
+						                                                               x.Armour > 0 &&
 						                                                               world.GetOwningForce(x.EntityID).Team != Team.Neutral &&
 						                                                               world.GetOwningForce(x.EntityID).Team != world.GetOwningForce(vehicleEntityID).Team);
 

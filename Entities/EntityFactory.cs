@@ -108,7 +108,7 @@ namespace AsteroidOutpost.Entities
 				sprite = sprites[entityName.ToLower()];
 				world.AddComponent(new EntityName(world, entityID, entityName));
 				world.AddComponent(new HitPoints(world, entityID, 150));
-				world.AddComponent(new LaserWeapon(world, entityID, 150, 0, Color.DarkRed));
+				world.AddComponent(new LaserWeapon(world, entityID, 150, 10, Color.DarkRed));
 				world.AddComponent(new FleetMovementBehaviour(world, entityID));
 				break;
 

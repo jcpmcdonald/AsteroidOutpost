@@ -58,6 +58,7 @@ namespace AsteroidOutpost.Screens
 		private AccumulationSystem accumulationSystem;
 		private LaserWeaponSystem laserWeaponSystem;
 		private MovementSystem movementSystem;
+		private HitPointSystem hitPointSystem;
 
 		private bool paused;
 
@@ -90,6 +91,7 @@ namespace AsteroidOutpost.Screens
 			accumulationSystem = new AccumulationSystem(game, this, 500);
 			laserWeaponSystem = new LaserWeaponSystem(game, this);
 			movementSystem = new MovementSystem(game, this);
+			hitPointSystem = new HitPointSystem(game, this);
 
 			awesomium = game.Awesomium;
 
@@ -109,6 +111,7 @@ namespace AsteroidOutpost.Screens
 			game.Components.Add(accumulationSystem);
 			game.Components.Add(laserWeaponSystem);
 			game.Components.Add(movementSystem);
+			game.Components.Add(hitPointSystem);
 		}
 
 
@@ -1294,7 +1297,7 @@ namespace AsteroidOutpost.Screens
 			foreach (var component in GetComponents<Component>(entityID))
 			{
 				deadComponents.Add(component);
-				component.SetDead(true, true);
+				//component.SetDead(true, true);
 			}
 		}
 
@@ -1302,7 +1305,7 @@ namespace AsteroidOutpost.Screens
 		public void DeleteComponent(Component component)
 		{
 			deadComponents.Add(component);
-			component.SetDead(true, true);
+			//component.SetDead(true, true);
 		}
 	}
 }

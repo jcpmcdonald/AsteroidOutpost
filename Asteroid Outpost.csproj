@@ -99,6 +99,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Awesomium.Core, Version=1.6.6.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86" />
+    <Reference Include="fastJSON">
+      <HintPath>..\3rd Party\FastJson\fastJSON\bin\Debug\fastJSON.dll</HintPath>
+    </Reference>
     <Reference Include="LuaInterface">
       <HintPath>LuaInterface\LuaInterface.dll</HintPath>
     </Reference>
@@ -194,6 +197,7 @@
     <Compile Include="Systems\AccumulationSystem.cs" />
     <Compile Include="Systems\AnimationSystem.cs" />
     <Compile Include="Systems\ConstructionSystem.cs" />
+    <Compile Include="Systems\HitPointSystem.cs" />
     <Compile Include="Systems\LaserMinerSystem.cs" />
     <Compile Include="Systems\LaserWeaponSystem.cs" />
     <Compile Include="Systems\MovementSystem.cs" />

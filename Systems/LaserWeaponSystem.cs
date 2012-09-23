@@ -59,7 +59,7 @@ namespace AsteroidOutpost.Systems
 					laser.Target = closestTargetPosition.EntityID;
 
 					HitPoints targetHitPoints = world.GetComponent<HitPoints>(laser.Target.Value);
-					targetHitPoints.SetHitPoints(targetHitPoints.GetHitPoints() - (laser.Damage * (float)gameTime.ElapsedGameTime.TotalSeconds));
+					targetHitPoints.Armour -= (laser.Damage * (float)gameTime.ElapsedGameTime.TotalSeconds);
 				}
 			}
 		}
