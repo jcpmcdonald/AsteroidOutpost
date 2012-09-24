@@ -852,12 +852,13 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				}
 
 				JSON.Instance.Parameters.EnableAnonymousTypes = true;
-				//String json = JSON.Instance.ToJSON(entities);
+				String json = JSON.Instance.ToJSON(entities);
 //#if DEBUG
 //                awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue(JSON.Instance.Beautify(json)));
 //#else
-				awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue(JSON.Instance.ToJSON(entities)));
-//#endif
+				//awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue(json));
+				awesomium.WebView.ExecuteJavascriptWithResult("UpdateSelection(" + json + ")");
+				//#endif
 
 				//EntityName name = world.GetComponent<EntityName>(selectedEntities[0]);
 				//HitPoints hitPoints = world.GetNullableComponent<HitPoints>(selectedEntities[0]);

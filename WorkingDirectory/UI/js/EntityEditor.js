@@ -9,6 +9,7 @@ function UpdateEditor(newSelection)
 	{
 		if(newSelection == null)
 		{
+			currentSelection = newSelection;
 			if($("#editorPanel").is('*'))
 			{
 				$("#editorPanel").remove();
@@ -16,31 +17,33 @@ function UpdateEditor(newSelection)
 			}
 		}
 		
-		var editorPanel = GetOrCreate('editorPanel', $('body'), '<div id="editorPanel" class="panel"></div>');
-		
 		var entityID = FirstProperty(newSelection);
 		if(entityID != null)
 		{
+			var editorPanel;
 			var selection;
-			if(entityID == FirstProperty(newSelection))
+			if(entityID === FirstProperty(currentSelection))
 			{
 				// We are looking at the same entity, process the differences
-				selection = Diff(newSelection, currentSelection);
+				selection = Diff(newSelection[entityID], currentSelection[entityID]);
 			}
 			else
 			{
 				// This is a new selection, clear out the old data then re-populate
-				//editorPanel.empty();
-				selection = newSelection;
+				$("#editorPanel").remove();
+				selection = newSelection[entityID];
 			}
 			
-			for(component in selection[entityID])
+			editorPanel = GetOrCreate('editorPanel', $('body'), '<div id="editorPanel" class="panel"></div>');
+			currentSelection = newSelection;
+			
+			for(component in selection)
 			{
 				// For each component, create a section
 				var componentHeader = GetOrCreate(entityID + '-' + component + '-header', editorPanel, '<h3 id="' + entityID + '-' + component + '-header">' + component + '</h3>');
 				var componentBody = GetOrCreate(entityID + '-' + component + '-body', editorPanel, '<div id="' + entityID + '-' + component + '-body"></div>');
 				
-				for(dataPoint in selection[entityID][component])
+				for(dataPoint in selection[component])
 				{
 					if(dataPoint == "GUID")
 					{
@@ -51,18 +54,23 @@ function UpdateEditor(newSelection)
 					var baseID = entityID + '-' + component + '-' + dataPoint;
 					var dataLabel = GetOrCreate(baseID + '-label', componentBody, '<div id="' + baseID + '-label" class="editorLabel">' + dataPoint + '</div>');
 					
-					switch(typeof(selection[entityID][component][dataPoint]))
+					switch(typeof(selection[component][dataPoint]))
 					{
 					case "string":
-						componentBody.append('<div><input type="text" id="' + baseID + '-text" value="' + selection[entityID][component][dataPoint] + '"></div>');
+						var textField = GetOrCreate(baseID + '-text', componentBody, '<input type="text" id="' + baseID + '-text">');
+						textField.val(selection[component][dataPoint]);
+						//value="' + selection[entityID][component][dataPoint] + '"
+						//componentBody.append('<div><input type="text" id="' + baseID + '-text" value="' + selection[entityID][component][dataPoint] + '"></div>');
 						break;
 						
 					case "number":
-						CreateNumberEditor(componentBody, $("#" + baseID + "-label"), baseID, selection[entityID][component][dataPoint]);
+						CreateNumberEditor(componentBody, dataLabel, baseID, selection[component][dataPoint]);
 						break;
 						
 					case "boolean":
-						$("#" + baseID + "-label").append(': <input type="checkbox">');
+						var checkbox = GetOrCreate(baseID + '-checkbox', dataLabel, ': <input type="checkbox" id="' + baseID + '-checkbox">');
+						checkbox.prop('checked', selection[component][dataPoint]);
+						//$("#" + baseID + "-label").append(': <input type="checkbox">');
 						
 						break;
 					}
@@ -93,11 +101,19 @@ function GetOrCreate(name, appendTo, value)
 
 
 
-function CreateNumberEditor(componentBody, componentLabel, baseID, value)
+function CreateNumberEditor(componentBody, dataLabel, baseID, value)
 {
-	componentLabel.append(': <input type="text" id="' + baseID + 'SliderText" style="border:0; color:#f6931f; font-weight:bold; background-color:transparent" value="' + value + '">');
+	var sliderText = GetOrCreate(baseID + '-slider-text', dataLabel, ': <input type="text" id="' + baseID + '-slider-text" style="border:0; color:#f6931f; font-weight:bold; background-color:transparent">');
+	sliderText.val(value);
 	
-	componentBody.append("<div id='" + baseID + "Slider'></div>");
+	var newSlider = false;
+	var slider = $('#' + baseID + '-slider');
+	if(!slider.is('*'))
+	{
+		componentBody.append("<div id='" + baseID + "-slider'></div>");
+		newSlider = true;
+	}
+	
 	var max = value * 2;
 	var step = max / 100;
 	
@@ -110,16 +126,24 @@ function CreateNumberEditor(componentBody, componentLabel, baseID, value)
 	}else{
 		step = 1;
 	}
-	$("#" +  baseID + "Slider").slider({
-		range: "min",
-		value: value,
-		min: 0,
-		max: max,
-		step: step,
-		slide: function( event, ui ) {
-			$("#" + event.target.id + "Text").val(ui.value);
-		}
-	});
+	
+	if(newSlider)
+	{
+		$("#" +  baseID + "-slider").slider({
+			range: "min",
+			value: value,
+			min: 0,
+			max: max,
+			step: step,
+			slide: function( event, ui ) {
+				$("#" + event.target.id + "-text").val(ui.value);
+			}
+		});
+	}
+	else
+	{
+		$("#" +  baseID + "-slider").slider("option", { value: value, max: max, step: step });
+	}
 }
 
 
