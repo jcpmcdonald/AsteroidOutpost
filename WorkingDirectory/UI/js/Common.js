@@ -69,27 +69,30 @@ function Diff(newValues, oldValues)
 	var diff = null;
 	for(var p in newValues)
 	{
-		if (oldValues.hasOwnProperty(p) && newValues[p] !== oldValues[p])
+		if (oldValues.hasOwnProperty(p))
 		{
-			if(typeof(newValues[p]) == 'object')
+			if(newValues[p] !== oldValues[p])
 			{
-				var innerDiff = Diff(newValues[p], oldValues[p]);
-				if(innerDiff != null)
+				if(typeof(newValues[p]) == 'object')
+				{
+					var innerDiff = Diff(newValues[p], oldValues[p]);
+					if(innerDiff != null)
+					{
+						if(diff == null)
+						{
+							diff = {};
+						}
+						diff[p] = innerDiff;
+					}
+				}
+				else
 				{
 					if(diff == null)
 					{
 						diff = {};
 					}
-					diff[p] = innerDiff;
+					diff[p] = newValues[p];
 				}
-			}
-			else
-			{
-				if(diff == null)
-				{
-					diff = {};
-				}
-				diff[p] = newValues[p];
 			}
 		}
 		else
