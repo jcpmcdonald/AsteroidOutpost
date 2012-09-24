@@ -55,3 +55,52 @@ function FormatNumber(nStr)
 	}
 	return nStr;
 }
+
+
+
+
+function Diff(newValues, oldValues)
+{
+	if(oldValues == null)
+	{
+		return newValues;
+	}
+	
+	var diff = null;
+	for(var p in newValues)
+	{
+		if (oldValues.hasOwnProperty(p) && newValues[p] !== oldValues[p])
+		{
+			if(typeof(newValues[p]) == 'object')
+			{
+				var innerDiff = Diff(newValues[p], oldValues[p]);
+				if(innerDiff != null)
+				{
+					if(diff == null)
+					{
+						diff = {};
+					}
+					diff[p] = innerDiff;
+				}
+			}
+			else
+			{
+				if(diff == null)
+				{
+					diff = {};
+				}
+				diff[p] = newValues[p];
+			}
+		}
+		else
+		{
+			if(diff == null)
+			{
+				diff = {};
+			}
+			diff[p] = newValues[p];
+		}
+	}
+	return diff;
+}
+

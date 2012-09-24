@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
@@ -25,6 +26,7 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// True if this node is active and ready to either conduct or produce power (not used for consumers)
 		/// </summary>
+		[XmlIgnore]
 		public bool PowerStateActive
 		{
 			get
@@ -86,6 +88,7 @@ namespace AsteroidOutpost.Components
 		/// Returns the absolute location showing where the power link should be displayed
 		/// </summary>
 		/// <returns>Returns the absolute location showing where the power link should be displayed</returns>
+		[XmlIgnore]
 		public Vector2 PowerLinkPointAbsolute
 		{
 			get

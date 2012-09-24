@@ -1,11 +1,44 @@
 //"use strict";
 
-function SelectionChanged(newSelection)
+var EditorMode = true;
+
+function UpdateSelection(selection)
 {
-	$("#selectionTitle").text(newSelection.name);
-	$("#health").text(newSelection.health + " / " + newSelection.maxhealth);
-	$("#level").text(newSelection.level);
-	$("#team").text(newSelection.team);
+	if(selection != null)
+	{
+		if(typeof(selection) === "string")
+		{
+			selection = eval("(" + selection + ")");
+		}
+		
+		
+		for(entityID in selection)
+		{
+			if(selection[entityID].EntityName !== undefined)
+			{
+				$("#selectionTitle").text(selection[entityID].EntityName.Name);
+			}
+			if(selection[entityID].HitPoints !== undefined)
+			{
+				$("#health").text(Math.round(selection[entityID].HitPoints.Armour) + " / " + selection[entityID].HitPoints.TotalArmour);
+			}
+			//$("#selectionTitle").text(selection[entityID].EntityName.Name);
+			//$("#health").text(selection.health + " / " + selection.maxhealth);
+			//$("#level").text(selection.level);
+			//$("#team").text(selection.team);
+			
+			// Only do this once (for now)
+			break;
+		}
+		
+	}
+	else
+	{
+		$("#selectionTitle").html("&nbsp;");
+		$("#health").text("");
+	}
+	
+	UpdateEditor(selection);
 }
 
 function SetResources(newResources)
@@ -99,12 +132,63 @@ $(document).ready(function()
 	if(!InXNA())
 	{
 		// Show a dummy structure
-		SelectionChanged({
-			"name": "Solar Station",
-			"health": 110,
-			"maxhealth": 150,
-			"level": 1,
-			"team": "Team1"
+		UpdateSelection({
+			"0" : {
+				"EntityName" : {
+					"Name" : "Solar Station",
+					"GUID" : "Flsp0Nra4Um1VieH6zRgNg=="
+				},
+				"PowerProducer" : {
+					"MaxPower" : 70,
+					"AvailablePower" : 19.27076,
+					"PowerProductionRate" : 10,
+					"ConductsPower" : true,
+					"ProducesPower" : true,
+					"PowerLinkPointRelative" : {
+						"X" : -1,
+						"Y" : -13
+					},
+					"GUID" : "bPWxGkDFFU+jB62HmRN1HA=="
+				},
+				"Constructable" : {
+					"MineralsToConstruct" : 200,
+					"MineralsLeftToConstruct" : 200,
+					"IsBeingPlaced" : false,
+					"IsConstructing" : false,
+					"GUID" : "dQz6/7Jjfk+6Slcu4NZLHQ=="
+				},
+				"HitPoints" : {
+					"Armour" : 250,
+					"TotalArmour" : 250,
+					"GUID" : "pHMJfGX6oUG6LcG1poDh+Q=="
+				},
+				"Position" : {
+					"Center" : {
+						"X" : 9924,
+						"Y" : 9926
+					},
+					"Solid" : true,
+					"Velocity" : {
+						"X" : 0,
+						"Y" : 0
+					},
+					"Radius" : 40,
+					"GUID" : "gMDlDXhPi068aSaaz56Wkw=="
+				},
+				"Animator" : {
+					"Scale" : 0.7,
+					"Tint" : {
+						"R" : 255,
+						"G" : 255,
+						"B" : 255,
+						"A" : 255,
+						"PackedValue" : 4294967295
+					},
+					"FrameAngle" : 0,
+					"Angle" : 180,
+					"GUID" : "HvZ6suwYMkKhN1nggqpiaQ=="
+				}
+			}
 		});
 		
 		// With some dummy minerals

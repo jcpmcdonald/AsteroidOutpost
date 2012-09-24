@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Xml.Serialization;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Eventing;
@@ -125,6 +126,7 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// Gets the width
 		/// </summary>
+		[XmlIgnore]
 		public int Width
 		{
 			get { return radius * 2; }
@@ -134,6 +136,7 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// Gets the height
 		/// </summary>
+		[XmlIgnore]
 		public int Height
 		{
 			get { return radius * 2; }
@@ -143,6 +146,7 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// Gets the Top
 		/// </summary>
+		[XmlIgnore]
 		public int Top
 		{
 			get { return (int)(Center.Y + 0.5) - radius; }
@@ -152,6 +156,7 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// Gets the Left
 		/// </summary>
+		[XmlIgnore]
 		public int Left
 		{
 			get { return (int)(Center.X + 0.5) - radius; }
@@ -161,6 +166,7 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// Gets the Right
 		/// </summary>
+		[XmlIgnore]
 		public int Right
 		{
 			get { return (int)(Center.X + 0.5) + radius; }
@@ -170,6 +176,7 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// Gets the bottom
 		/// </summary>
+		[XmlIgnore]
 		public int Bottom
 		{
 			get { return (int)(Center.Y + 0.5) + radius; }
@@ -179,6 +186,7 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// The rectangle that defines the object's boundaries.
 		/// </summary>
+		[XmlIgnore]
 		public Rectangle Rect
 		{
 			get

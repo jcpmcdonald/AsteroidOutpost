@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Input;
+using fastJSON;
 
 
 namespace AsteroidOutpost.Screens.HeadsUpDisplay
@@ -287,6 +288,8 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				resources["minerals"] = new JSValue((int)(LocalActor.PrimaryForce.GetMinerals() + 0.5));
 				awesomium.WebView.CallJavascriptFunction("", "SetResources", new JSValue(resources));
 			}
+
+			UpdateSelection();
 		}
 
 
@@ -726,10 +729,21 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 						// Make sure the unit was clicked
 						if (world.GetComponent<Position>(entity).IsIntersecting(mouseMapCoords, 1))
 						{
-							selectedEntities.Clear();
-							selectedEntities.Add(entity);
-							// TODO: 2012-08-10 Reconnect this event
-							//entity.DyingEvent += SelectedEntityDying;
+							if(theKeyboard.IsKeyDown(Keys.LeftShift) || theKeyboard.IsKeyDown(Keys.RightShift))
+							{
+								// Multi-select
+								selectedEntities.Add(entity);
+								// TODO: 2012-08-10 Reconnect this event
+								//entity.DyingEvent += SelectedEntityDying;
+							}
+							else
+							{
+								// Single select
+								selectedEntities.Clear();
+								selectedEntities.Add(entity);
+								// TODO: 2012-08-10 Reconnect this event
+								//entity.DyingEvent += SelectedEntityDying;
+							}
 
 							OnSelectionChanged();
 
@@ -819,37 +833,54 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			//    }
 			//}
 
-			if(selectedEntities.Count == 1)
-			{
-				EntityName name = world.GetComponent<EntityName>(selectedEntities[0]);
-				HitPoints hitPoints = world.GetNullableComponent<HitPoints>(selectedEntities[0]);
+			//UpdateSelection();
+		}
 
-				JSObject newSelection = new JSObject();
-				newSelection["name"] = new JSValue(name.Name);
-				if(hitPoints != null)
+
+		/// <summary>
+		/// Updates the UI's selection information
+		/// </summary>
+		private void UpdateSelection()
+		{
+			if(selectedEntities.Count >= 1)
+			{
+				// Note: I'm using Strings instead of ints because it serializes to JSON a little more cleanly
+				Dictionary<String, Dictionary<String, Component>> entities = new Dictionary<String, Dictionary<String, Component>>(selectedEntities.Count);
+				foreach (var selectedEntity in selectedEntities)
 				{
-					newSelection["health"] = new JSValue(hitPoints.GetHitPoints());
-					newSelection["maxhealth"] = new JSValue(hitPoints.GetTotalHitPoints());
+					entities[selectedEntity.ToString()] = world.GetComponents<Component>(selectedEntities[0]).ToDictionary(component => component.GetComponentClassName(), component => component);
 				}
-				else
-				{
-					newSelection["health"] = new JSValue("");
-					newSelection["maxhealth"] = new JSValue("");
-				}
-				newSelection["level"] = new JSValue(1);
-				newSelection["team"] = new JSValue(world.GetOwningForce(selectedEntities[0]).Team.ToString());
-				awesomium.WebView.CallJavascriptFunction("", "SelectionChanged", new JSValue(newSelection));
+
+				JSON.Instance.Parameters.EnableAnonymousTypes = true;
+				//String json = JSON.Instance.ToJSON(entities);
+//#if DEBUG
+//                awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue(JSON.Instance.Beautify(json)));
+//#else
+				awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue(JSON.Instance.ToJSON(entities)));
+//#endif
+
+				//EntityName name = world.GetComponent<EntityName>(selectedEntities[0]);
+				//HitPoints hitPoints = world.GetNullableComponent<HitPoints>(selectedEntities[0]);
+
+				//JSObject newSelection = new JSObject();
+				//newSelection["name"] = new JSValue(name.Name);
+				//if(hitPoints != null)
+				//{
+				//    newSelection["health"] = new JSValue(hitPoints.GetHitPoints());
+				//    newSelection["maxhealth"] = new JSValue(hitPoints.GetTotalHitPoints());
+				//}
+				//else
+				//{
+				//    newSelection["health"] = new JSValue("");
+				//    newSelection["maxhealth"] = new JSValue("");
+				//}
+				//newSelection["level"] = new JSValue(1);
+				//newSelection["team"] = new JSValue(world.GetOwningForce(selectedEntities[0]).Team.ToString());
+				//awesomium.WebView.CallJavascriptFunction("", "SelectionChanged", new JSValue(newSelection));
 			}
 			else
 			{
-				//awesomium.WebView.CallJavascriptFunction("", "SelectionChanged", new JSValue());
-				JSObject newSelection = new JSObject();
-				newSelection["name"] = new JSValue("-");
-				newSelection["health"] = new JSValue("");
-				newSelection["maxhealth"] = new JSValue("");
-				newSelection["level"] = new JSValue("");
-				newSelection["team"] = new JSValue("");
-				awesomium.WebView.CallJavascriptFunction("", "SelectionChanged", new JSValue(newSelection));
+				awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue());
 			}
 		}
 
