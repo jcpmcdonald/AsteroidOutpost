@@ -103,7 +103,7 @@ function GetOrCreate(name, appendTo, value)
 
 function CreateNumberEditor(componentBody, dataLabel, baseID, value)
 {
-	var sliderText = GetOrCreate(baseID + '-slider-text', dataLabel, ': <input type="text" id="' + baseID + '-slider-text" style="border:0; color:#f6931f; font-weight:bold; background-color:transparent">');
+	var sliderText = GetOrCreate(baseID + '-slider-text', dataLabel, ': <input type="text" id="' + baseID + '-slider-text" style="border:0; color:#f6931f; font-weight:bold; background-color:transparent; width: 150px;">');
 	sliderText.val(value);
 	
 	var newSlider = false;
