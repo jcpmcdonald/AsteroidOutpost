@@ -162,7 +162,6 @@
     <Compile Include="Interfaces\IQuantifiable.cs" />
     <Compile Include="Eventing\LocalEvents.cs" />
     <Compile Include="Eventing\ReflectiveEvents.cs" />
-    <Compile Include="Components\FloatingText.cs" />
     <Compile Include="Interfaces\IUpdatable.cs" />
     <Compile Include="Components\Position.cs" />
     <Compile Include="GlobalRandom.cs" />

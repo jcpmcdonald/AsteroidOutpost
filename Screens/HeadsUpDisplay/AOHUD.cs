@@ -845,6 +845,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			if(selectedEntities.Count >= 1)
 			{
 				// Note: I'm using Strings instead of ints because it serializes to JSON a little more cleanly
+				// This is defined as a: Dictionary<entityID, Dictionary<componentName, Component>>
 				Dictionary<String, Dictionary<String, Component>> entities = new Dictionary<String, Dictionary<String, Component>>(selectedEntities.Count);
 				foreach (var selectedEntity in selectedEntities)
 				{
