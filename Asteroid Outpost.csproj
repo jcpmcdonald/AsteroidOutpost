@@ -102,9 +102,6 @@
     <Reference Include="fastJSON">
       <HintPath>..\3rd Party\FastJson\fastJSON\bin\Debug\fastJSON.dll</HintPath>
     </Reference>
-    <Reference Include="LuaInterface">
-      <HintPath>LuaInterface\LuaInterface.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
@@ -133,7 +130,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorExtension.cs" />
+    <Compile Include="ColorEx.cs" />
     <Compile Include="ColorF.cs" />
     <Compile Include="Components\Animator.cs" />
     <Compile Include="Components\Constructable.cs" />
@@ -151,12 +148,12 @@
     <Compile Include="Components\Accumulator.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\HitPoints.cs" />
-    <Compile Include="EllipseExtension.cs" />
+    <Compile Include="EllipseEx.cs" />
     <Compile Include="EnhancedKeyboardState.cs" />
     <Compile Include="EnhancedMouseState.cs" />
     <Compile Include="Entities\Beacon.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
-    <Compile Include="FrameRateCounter.cs" />
+    <Compile Include="Systems\FrameRateCounter.cs" />
     <Compile Include="Interfaces\IIdentifiable.cs" />
     <Compile Include="Interfaces\IKillable.cs" />
     <Compile Include="Interfaces\IQuantifiable.cs" />
@@ -204,7 +201,7 @@
     <Compile Include="Systems\PowerGridSystem.cs" />
     <Compile Include="Systems\RenderQuadTreeSystem.cs" />
     <Compile Include="Systems\UpgradeSystem.cs" />
-    <Compile Include="TextureDictionary.cs" />
+    <Compile Include="Texture2DEx.cs" />
     <Compile Include="Screens\HeadsUpDisplay\Radar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

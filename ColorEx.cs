@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace AsteroidOutpost
 {
-	static class ColorExtension
+	static class ColorEx
 	{
 		public static Color Blend(this Color color1, Color color2)
 		{

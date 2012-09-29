@@ -59,6 +59,7 @@ namespace AsteroidOutpost
 
 		private LayeredStarField starField;
 		private World world;
+		private Texture2D cursorTexture;
 
 		#endregion
 
@@ -105,7 +106,6 @@ namespace AsteroidOutpost
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
-			TextureDictionary.SetContent(Content);
 
 			settings = new Settings();
 			//world = new World(this);
@@ -209,36 +209,9 @@ namespace AsteroidOutpost
 
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			//Ship1.LoadContent(GraphicsDevice, Content);
-			//SolarStation.LoadContent(GraphicsDevice, Content);
-			//Asteroid.LoadContent(GraphicsDevice, Content);
-			//LaserMiner.LoadContent(GraphicsDevice, Content);
-			//LaserTower.LoadContent(GraphicsDevice, Content);
-			//PowerGridNode.LoadContent(GraphicsDevice, Content);
-			//Beacon.LoadContent(GraphicsDevice, Content);
-			//FreeText.LoadContent(GraphicsDevice, Content);
-
-			//TextureDictionary.Add("Sprites\\Power", "power");
-			//TextureDictionary.Add("Sprites\\Asteroids", "asteroids");
-			//TextureDictionary.Add("Sprites\\Miners", "miners");
-			//TextureDictionary.Add("Sprites\\SolarStation", "solarStation");
-			//TextureDictionary.Add("Sprites\\Spaceship", "spaceship");
-
-			TextureDictionary.Add("Ellipse25", "ellipse25");
-			TextureDictionary.Add("Ellipse25Bold", "ellipse25bold");
-			TextureDictionary.Add("Ellipse25Back", "ellipse25back");
-			TextureDictionary.Add("Ellipse25Front", "ellipse25front");
-			TextureDictionary.Add("Ellipse50", "ellipse50");
-			TextureDictionary.Add("Ellipse50Back", "ellipse50back");
-			TextureDictionary.Add("Ellipse50Front", "ellipse50front");
-			TextureDictionary.Add("Ellipse100", "ellipse100");
-			TextureDictionary.Add("Ellipse220", "ellipse220");
-
-			TextureDictionary.Add("powerline", "powerline");
-
-			TextureDictionary.Add("Cursor");
-
+			cursorTexture = Texture2DEx.FromStreamWithPremultAlphas(GraphicsDevice, File.OpenRead(@"..\Content\Cursor.png"));
 			EntityFactory.LoadContent(GraphicsDevice);
+			EllipseEx.LoadContent(GraphicsDevice);
 
 			menuMusic = Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 04 Inner Battles (Bignic Remix)");
 			MediaPlayer.IsRepeating = true;
@@ -299,7 +272,7 @@ namespace AsteroidOutpost
 			// Draw Awesomium and the cursor last
 			spriteBatch.Begin();
 			spriteBatch.Draw(awesomium.WebViewTexture, GraphicsDevice.Viewport.Bounds, Color.White);
-			spriteBatch.Draw(TextureDictionary.Get("Cursor"), new Vector2(Mouse.GetState().X - 20, Mouse.GetState().Y - 20), Color.White);
+			spriteBatch.Draw(cursorTexture, new Vector2(Mouse.GetState().X - 20, Mouse.GetState().Y - 20), Color.White);
 			spriteBatch.End();
 		}
 

@@ -1,16 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AsteroidOutpost
 {
-	static class EllipseExtension
+	static class EllipseEx
 	{
+		static Dictionary<String, Texture2D> textures = new Dictionary<string, Texture2D>(16);
+
+
+		public static void LoadContent(GraphicsDevice graphicsDevice)
+		{
+			textures.Add("ellipse25", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse25.png")));
+			textures.Add("ellipse25bold", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse25Bold.png")));
+			textures.Add("ellipse25back", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse25Back.png")));
+			textures.Add("ellipse25front", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse25Front.png")));
+			textures.Add("ellipse50", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse50.png")));
+			textures.Add("ellipse50back", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse50Back.png")));
+			textures.Add("ellipse50front", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse50Front.png")));
+			textures.Add("ellipse100", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse100.png")));
+			textures.Add("ellipse220", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse220.png")));
+		}
+
+
 		public static void DrawEllipseBack(this SpriteBatch spriteBatch, Vector2 center, float radius, Color color)
 		{
 			float textureEllipseWidth;
@@ -29,7 +48,7 @@ namespace AsteroidOutpost
 
 
 			float scale = (radius / textureEllipseWidth);
-			spriteBatch.Draw(TextureDictionary.Get("ellipse" + textureEllipseWidth + "back"),
+			spriteBatch.Draw(textures["ellipse" + textureEllipseWidth + "back"],
 			                 center - (new Vector2(textureWidth * (float)Math.Sqrt(3), textureWidth) * scale),
 			                 null,
 			                 color,
@@ -60,7 +79,7 @@ namespace AsteroidOutpost
 
 
 			float scale = (radius / textureEllipseWidth);
-			spriteBatch.Draw(TextureDictionary.Get("ellipse" + textureEllipseWidth + "front"),
+			spriteBatch.Draw(textures["ellipse" + textureEllipseWidth + "front"],
 			                 center - (new Vector2(textureWidth * (float)Math.Sqrt(3), textureWidth) * scale),
 			                 null,
 			                 color,
@@ -114,7 +133,7 @@ namespace AsteroidOutpost
 
 
 			float scale = (radius / textureEllipseWidth);
-			spriteBatch.Draw(TextureDictionary.Get("ellipse" + textureEllipseWidth),
+			spriteBatch.Draw(textures["ellipse" + textureEllipseWidth],
 			                 center - (new Vector2(textureWidth * (float)Math.Sqrt(3), textureWidth) * scale),
 			                 null,
 			                 color,
