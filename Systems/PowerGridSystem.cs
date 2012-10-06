@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
@@ -14,13 +16,20 @@ namespace AsteroidOutpost.Systems
 	{
 		private World world;
 		private SpriteBatch spriteBatch;
-
+		private Texture2D powerBar;
 
 		public PowerGridSystem(AOGame game, World world)
 			: base(game)
 		{
 			this.world = world;
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
+		}
+
+
+		protected override void LoadContent()
+		{
+			powerBar = Texture2DEx.FromStreamWithPremultAlphas(Game.GraphicsDevice, File.OpenRead(@"..\Content\PowerBar.png"));
+			base.LoadContent();
 		}
 
 
@@ -40,6 +49,64 @@ namespace AsteroidOutpost.Systems
 		public override void Draw(GameTime gameTime)
 		{
 			spriteBatch.Begin();
+
+
+			// Draw power level bars
+			foreach (var producer in world.GetComponents<PowerProducer>())
+			{
+				if(producer.ProducesPower)
+				{
+					Position producerPosition = world.GetComponent<Position>(producer);
+
+					const float invisiblePoint = 1.5f;
+					const float fadePoint = 1.2f;
+					if(world.ScaleFactor < invisiblePoint)
+					{
+						// Default to completely visible
+						float fadePercent = 0.0f;
+						if(world.ScaleFactor > fadePoint)
+						{
+							// Fade out as we get further away
+							fadePercent = (world.ScaleFactor - fadePoint) / (invisiblePoint - fadePoint);
+						}
+
+						float percentFull = producer.AvailablePower / producer.MaxPower;
+						float scale = 0.5f;
+						int fillToHeight = (int)((powerBar.Height * percentFull) + 0.5f);
+
+						// Draw the depleted part of the bar
+						spriteBatch.Draw(powerBar,
+						                 world.WorldToScreen(new Vector2(producerPosition.Left + 10,
+						                                                 producerPosition.Top)),
+						                 new Rectangle(0,
+						                               0,
+						                               powerBar.Width,
+						                               powerBar.Height - fillToHeight),
+						                 Color.White * (1 - fadePercent),
+						                 0f,
+						                 Vector2.Zero,
+						                 world.Scale(scale),
+						                 SpriteEffects.None,
+						                 0);
+
+						// Draw the available part of the bar
+						spriteBatch.Draw(powerBar,
+						                 world.WorldToScreen(new Vector2(producerPosition.Left + 10,
+						                                                 producerPosition.Top + ((powerBar.Height - fillToHeight) * scale))),
+						                 new Rectangle(0,
+						                               powerBar.Height - fillToHeight,
+						                               powerBar.Width,
+						                               fillToHeight),
+						                 Color.Green * (1 - fadePercent),
+						                 0f,
+						                 Vector2.Zero,
+						                 world.Scale(scale),
+						                 SpriteEffects.None,
+						                 0);
+					}
+				}
+			}
+
 
 			// Draw any entities being placed
 			IEnumerable<Constructable> placingEntities = world.GetComponents<Constructable>();
