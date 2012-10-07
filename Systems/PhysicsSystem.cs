@@ -29,6 +29,7 @@ namespace AsteroidOutpost.Systems
 				{
 					// Move!
 					position.Center += velocity.CurrentVelocity * (float)deltaTime.TotalSeconds;
+					world.QuadTree.Move(position);
 				}
 			}
 

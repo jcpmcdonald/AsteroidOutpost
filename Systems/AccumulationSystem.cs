@@ -47,6 +47,8 @@ namespace AsteroidOutpost.Systems
 			List<FloatingText> deadFloatingTexts = new List<FloatingText>();
 			foreach (var floatingText in floatingTexts)
 			{
+				// TODO: 2012-10-07 Fix up this code, it doesn't fade very well. Zoom in and see for yourself
+
 				//floatingText.CumulativeTime += gameTime.ElapsedGameTime;
 				float fadeAmount = floatingText.FadeRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
 				floatingText.Position += floatingText.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;

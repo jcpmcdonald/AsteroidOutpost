@@ -107,7 +107,7 @@ namespace AsteroidOutpost.Entities
 				world.AddComponent(laserMiner);
 				world.AddComponent(new PowerGridNode(world, entityID, false));
 				world.AddComponent(new Constructable(world, entityID, 200));
-				Accumulator accumulator = new Accumulator(world, entityID, new Vector2(-5, -5), new Vector2(0, -12), Color.DarkGreen, 50);
+				Accumulator accumulator = new Accumulator(world, entityID, new Vector2(-5, -4), new Vector2(0, -26), Color.DarkGreen, 50);
 				laserMiner.AccumulationEvent += accumulator.Accumulate;
 				world.AddComponent(accumulator);
 				world.AddComponent(new HitPoints(world, entityID, 150));

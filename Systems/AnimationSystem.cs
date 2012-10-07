@@ -41,8 +41,7 @@ namespace AsteroidOutpost.Systems
 			spriteBatch.Begin();
 
 			// Draw all the visible entities
-			List<int> visibleEntities = world.QuadTree.GetObjects(world.HUD.FocusScreen).Select(x => x.EntityID).ToList();
-			foreach (int entity in visibleEntities)
+			foreach (int entity in world.QuadTree.GetObjects(world.HUD.FocusScreen).Select(x => x.EntityID))
 			{
 				foreach (var animator in world.GetComponents<Animator>(entity))
 				{

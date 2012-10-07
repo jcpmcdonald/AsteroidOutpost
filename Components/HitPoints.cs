@@ -55,12 +55,6 @@ namespace AsteroidOutpost.Components
 		}
 
 
-		public void SetArmour(float value)
-		{
-			Armour = value;
-		}
-
-
 		/// <summary>
 		/// Gets the total hit points
 		/// </summary>
