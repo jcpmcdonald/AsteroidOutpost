@@ -71,13 +71,13 @@ namespace AsteroidOutpost.Systems
 						}
 
 						float percentFull = producer.AvailablePower / producer.MaxPower;
-						float scale = 0.5f;
+						float scale = 0.4f;
 						int fillToHeight = (int)((powerBar.Height * percentFull) + 0.5f);
 
 						// Draw the depleted part of the bar
 						spriteBatch.Draw(powerBar,
 						                 world.WorldToScreen(new Vector2(producerPosition.Left + 10,
-						                                                 producerPosition.Top)),
+						                                                 producerPosition.Top + 5)),
 						                 new Rectangle(0,
 						                               0,
 						                               powerBar.Width,
@@ -92,7 +92,7 @@ namespace AsteroidOutpost.Systems
 						// Draw the available part of the bar
 						spriteBatch.Draw(powerBar,
 						                 world.WorldToScreen(new Vector2(producerPosition.Left + 10,
-						                                                 producerPosition.Top + ((powerBar.Height - fillToHeight) * scale))),
+						                                                 producerPosition.Top + 5 + ((powerBar.Height - fillToHeight) * scale))),
 						                 new Rectangle(0,
 						                               powerBar.Height - fillToHeight,
 						                               powerBar.Width,

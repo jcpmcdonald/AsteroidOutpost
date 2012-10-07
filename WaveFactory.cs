@@ -36,6 +36,15 @@ namespace AsteroidOutpost
 			{
 				// TODO: 2012-08-10 Fix spawning bad guys
 				// Make something
+				EntityFactory.Create("Space Ship", new Dictionary<String, object>(){
+						{ "Sprite.Scale", 0.7f },
+						{ "Sprite.Set", null },
+						{ "Sprite.Animation", null },
+						{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+						{ "Transpose.Position", world.ScreenToWorld(roughPosition) },
+						{ "Transpose.Radius", 40 },
+						{ "OwningForce", aiActor.PrimaryForce }
+					});
 				//world.Add(new Ship1(world, world, aiActor.PrimaryForce, roughPosition));
 				aiCreated += 100;
 			}

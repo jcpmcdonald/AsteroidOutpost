@@ -222,7 +222,7 @@ namespace AsteroidOutpost.Systems
 			laserMiner.TimeSinceLastStageChange = TimeSpan.FromMilliseconds(0);
 
 			// Start mining
-			miningSound.Play(Math.Max(1, world.Scale(0.5f)), 0, 0);
+			miningSound.Play(Math.Max(1, world.Scale(0.5f)) * 0.3f, 0, 0);
 			laserMiner.State = MiningState.Mining;
 
 			// Move to the next asteroid
