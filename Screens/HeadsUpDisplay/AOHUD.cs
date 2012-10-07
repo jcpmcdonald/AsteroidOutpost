@@ -5,6 +5,7 @@ using System.Reflection;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Systems;
 using Awesomium.Core;
@@ -64,7 +65,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		/// <summary>
 		/// Construct a HUD
 		/// </summary>
-		/// <param name="gameScreen">A reference to the game object</param>
 		public AOHUD(AOGame game, World world)
 			: base(game)
 		{
@@ -733,16 +733,33 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 							{
 								// Multi-select
 								selectedEntities.Add(entity);
-								// TODO: 2012-08-10 Reconnect this event
-								//entity.DyingEvent += SelectedEntityDying;
+
+								// Connect to the death event
+								HitPoints hitPoints = world.GetNullableComponent<HitPoints>(entity);
+								if(hitPoints != null)
+								{
+									hitPoints.DyingEvent += SelectedEntityDying;
+								}
 							}
 							else
 							{
 								// Single select
+
+								// Disconnect from the death events
+								foreach (HitPoints selectedHitPoints in selectedEntities.Select(selectedEntity => world.GetNullableComponent<HitPoints>(selectedEntity)).Where(selectedHitPoints => selectedHitPoints != null))
+								{
+									selectedHitPoints.DyingEvent -= SelectedEntityDying;
+								}
+
 								selectedEntities.Clear();
 								selectedEntities.Add(entity);
-								// TODO: 2012-08-10 Reconnect this event
-								//entity.DyingEvent += SelectedEntityDying;
+
+								// Connect to the death event
+								HitPoints hitPoints = world.GetNullableComponent<HitPoints>(entity);
+								if(hitPoints != null)
+								{
+									hitPoints.DyingEvent += SelectedEntityDying;
+								}
 							}
 
 							OnSelectionChanged();
@@ -758,11 +775,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					{
 						// Deselect the selected unit(s)
 
-						//foreach (Entity entity in selectedEntities)
-						//{
-							// TODO: 2012-08-10 Reconnect this event
-							//entity.DyingEvent -= SelectedEntityDying;
-						//}
+						// Disconnect from the death events
+						foreach (HitPoints selectedHitPoints in selectedEntities.Select(selectedEntity => world.GetNullableComponent<HitPoints>(selectedEntity)).Where(selectedHitPoints => selectedHitPoints != null))
+						{
+							selectedHitPoints.DyingEvent -= SelectedEntityDying;
+						}
 
 						selectedEntities.Clear();
 
@@ -819,19 +836,8 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		{
 			if (SelectionChanged != null)
 			{
-				// TODO: 2012-08-10 Reconnect this event
-				//SelectionChanged(new MultiEntityEventArgs(selectedEntities));
+				SelectionChanged(new MultiEntityEventArgs(selectedEntities));
 			}
-
-			// TODO: 2012-08-10 Fix this
-			//foreach (var selectedEntity in selectedEntities)
-			//{
-			//    ConstructableEntity constructableEntity = selectedEntity as ConstructableEntity;
-			//    if (constructableEntity != null)
-			//    {
-			//        CreateRangeRingsForSelection(constructableEntity);
-			//    }
-			//}
 
 			//UpdateSelection();
 		}
@@ -887,19 +893,18 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		}
 
 
-		private void SelectedEntityDying(/*EntityReflectiveEventArgs e*/)
+		private void SelectedEntityDying(EntityDyingEventArgs e)
 		{
 			// Remove any deleted entities from the selection list
-			//Entity dyingEntity = e.Entity;
-			//if (dyingEntity != null)
-			//{
-			//    selectedEntities.Remove(dyingEntity);
-			//    dyingEntity.DyingEvent -= SelectedEntityDying;
+			HitPoints dyingHitPoints = e.Component as HitPoints;
+			if (dyingHitPoints != null)
+			{
+				selectedEntities.Remove(dyingHitPoints.EntityID);
+				dyingHitPoints.DyingEvent -= SelectedEntityDying;
 
-			//    // TODO: 2012-08-10 This needs to be turned back on
-			//    // Tell anyone who is interested in a selection change
-			//    //OnSelectionChanged();
-			//}
+				// Tell anyone who is interested in a selection change
+				OnSelectionChanged();
+			}
 		}
 
 

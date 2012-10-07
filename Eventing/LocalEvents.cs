@@ -19,20 +19,20 @@ namespace AsteroidOutpost.Entities.Eventing
 
 	public class MultiEntityEventArgs : EventArgs
 	{
-		public MultiEntityEventArgs(List<Entity> entity)
+		public MultiEntityEventArgs(List<int> entityIDs)
 		{
-			Entities = entity;
+			EntityIDs = entityIDs;
 		}
 
-		public List<Entity> Entities { get; private set; }
+		public List<int> EntityIDs { get; private set; }
 	}
 
 
 	public class EntityUpgradeEventArgs : EntityEventArgs
 	{
 
-		public EntityUpgradeEventArgs(Entity entity, Upgrade theUpgrade)
-			: base(entity)
+		public EntityUpgradeEventArgs(int entityID, Upgrade theUpgrade)
+			: base(entityID)
 		{
 			Upgrade = theUpgrade;
 		}
@@ -43,13 +43,13 @@ namespace AsteroidOutpost.Entities.Eventing
 
 	public class EntityEventArgs : EventArgs
 	{
-		public EntityEventArgs(Entity entity)
+		public EntityEventArgs(int entityID)
 		{
-			Entity = entity;
+			EntityID = entityID;
 		}
 
 
-		public Entity Entity { get; private set; }
+		public int EntityID { get; private set; }
 	}
 
 

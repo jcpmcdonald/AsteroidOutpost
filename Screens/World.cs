@@ -972,6 +972,12 @@ namespace AsteroidOutpost.Screens
 						quadTree.Remove(deadPosition);
 					}
 
+					PowerGridNode powerGridNode = deadComponent as PowerGridNode;
+					if(powerGridNode != null)
+					{
+						GetPowerGrid(powerGridNode).Disconnect(powerGridNode);
+					}
+
 					lock (entityDictionary)
 					{
 						if(entityDictionary[deadComponent.EntityID].Count == 1)

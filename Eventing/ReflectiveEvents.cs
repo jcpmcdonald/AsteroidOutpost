@@ -31,10 +31,10 @@ namespace AsteroidOutpost.Eventing
 
 	public class EntityMovedEventArgs : ComponentReflectiveEventArgs
 	{
-		public EntityMovedEventArgs(Component component, Vector2 newPosition, Vector2 delta)
-			: base(component, "SetCenter", new object[] { newPosition })
+		public EntityMovedEventArgs(Position position, Vector2 delta)
+			: base(position, "SetCenter", new object[] { position.Center })
 		{
-			NewPosition = newPosition;
+			NewPosition = position.Center;
 			Delta = delta;
 		}
 
@@ -43,17 +43,17 @@ namespace AsteroidOutpost.Eventing
 	}
 
 
-	public class EntityHitPointsChangedEventArgs : ComponentReflectiveEventArgs, IQuantifiable
+	public class EntityArmourChangedEventArgs : ComponentReflectiveEventArgs, IQuantifiable
 	{
-		public EntityHitPointsChangedEventArgs(Component component, float theNewHitPoints, int delta)
-			: base(component, "Set", new object[] { theNewHitPoints })
+		public EntityArmourChangedEventArgs(HitPoints hitPoints, int delta)
+			: base(hitPoints, "SetArmour", new object[] { hitPoints.Armour })
 		{
-			NewHitPoints = theNewHitPoints;
+			NewArmour = hitPoints.Armour;
 			Delta = delta;
 		}
 
-		public float NewHitPoints { get; private set; }
-		public int Quantity { get { return (int)NewHitPoints; } }
+		public float NewArmour { get; private set; }
+		public int Quantity { get { return (int)Delta; } }
 		public int Delta { get; private set; }
 	}
 
@@ -111,11 +111,10 @@ namespace AsteroidOutpost.Eventing
 	}
 
 
-	public class ComponentDyingEventArgs : ComponentReflectiveEventArgs
+	public class EntityDyingEventArgs : ComponentReflectiveEventArgs
 	{
-		//public EntityDyingEventArgs(Entity theEntity) : base(theEntity, "SetHitPoints", new object[] { 0.0f, true })
-		public ComponentDyingEventArgs(Component component)
-			: base(component, "SetDead", new object[] { true, true })
+		public EntityDyingEventArgs(HitPoints hitPoints)
+			: base(hitPoints, "SetDead", new object[] { true, true })
 		{
 		}
 	}

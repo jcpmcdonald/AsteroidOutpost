@@ -16,7 +16,10 @@ namespace AsteroidOutpost.Components
 
 		// Events
 		[EventReplication(EventReplication.ServerToClients)]
-		public event Action<EntityHitPointsChangedEventArgs> HitPointsChangedEvent;
+		public event Action<EntityArmourChangedEventArgs> ArmourChangedEvent;
+
+		[EventReplication(EventReplication.ServerToClients)]
+		public event Action<EntityDyingEventArgs> DyingEvent;
 
 
 		public HitPoints(World world, int entityID, int totalArmour)
@@ -41,13 +44,20 @@ namespace AsteroidOutpost.Components
 			{
 				int initialHitPoints = (int)armour;
 				armour = MathHelper.Clamp(value, 0, TotalArmour);
+				int delta = (int)(armour) - initialHitPoints;
 
 				// Tell everyone that's interested in hit point changes
-				if (initialHitPoints != (int)armour && HitPointsChangedEvent != null)
+				if (delta != 0 && ArmourChangedEvent != null)
 				{
-					//HitPointsChangedEvent(new EntityHitPointsChangedEventArgs(this, hitPoints, (int)(hitPoints) - initialHitPoints));
+					ArmourChangedEvent(new EntityArmourChangedEventArgs(this, delta));
 				}
 			}
+		}
+
+
+		public void SetArmour(float value)
+		{
+			Armour = value;
 		}
 
 
@@ -56,5 +66,14 @@ namespace AsteroidOutpost.Components
 		/// </summary>
 		/// <value> The total hit points </value>
 		public int TotalArmour { get; set; }
+
+
+		public void OnDeath()
+		{
+			if(DyingEvent != null)
+			{
+				DyingEvent(new EntityDyingEventArgs(this));
+			}
+		}
 	}
 }

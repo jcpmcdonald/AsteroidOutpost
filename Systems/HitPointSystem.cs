@@ -30,7 +30,7 @@ namespace AsteroidOutpost.Systems
 				if (authoratative && hitPoints.Armour <= 0.0f)
 				{
 					// We have just died
-					//SetDead(true);
+					hitPoints.OnDeath();
 					world.DeleteComponents(hitPoints.EntityID);
 				}
 			}

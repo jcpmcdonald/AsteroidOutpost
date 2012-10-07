@@ -69,7 +69,6 @@ namespace AsteroidOutpost.Scenarios
 			int minY = 0; // MapY;?
 			int maxX = world.MapWidth;
 			int maxY = world.MapHeight;
-			int startingMinerals;
 			Random rand = new Random();
 			for (int i = 0; i < asteroidCount; i++)
 			{
