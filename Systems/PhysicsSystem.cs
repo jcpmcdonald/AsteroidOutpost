@@ -18,22 +18,17 @@ namespace AsteroidOutpost.Systems
 			this.world = world;
 		}
 
-		public override void Initialize()
-		{
-
-			base.Initialize();
-		}
-
 		public override void Update(GameTime gameTime)
 		{
 			TimeSpan deltaTime = gameTime.ElapsedGameTime;
 
-			foreach (Position position in world.GetComponents<Position>())
+			foreach (Velocity velocity in world.GetComponents<Velocity>())
 			{
-				if (position.Velocity != Vector2.Zero)
+				Position position = world.GetComponent<Position>(velocity);
+				if (velocity.CurrentVelocity != Vector2.Zero)
 				{
 					// Move!
-					position.Center += position.Velocity * (float)deltaTime.TotalSeconds;
+					position.Center += velocity.CurrentVelocity * (float)deltaTime.TotalSeconds;
 				}
 			}
 

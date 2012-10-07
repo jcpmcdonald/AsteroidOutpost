@@ -143,6 +143,7 @@
     <Compile Include="Components\PowerProducer.cs" />
     <Compile Include="Components\Spin.cs" />
     <Compile Include="Components\Upgradable.cs" />
+    <Compile Include="Components\Velocity.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="AIController.cs" />
     <Compile Include="Components\Accumulator.cs" />

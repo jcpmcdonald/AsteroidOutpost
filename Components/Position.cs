@@ -15,10 +15,6 @@ namespace AsteroidOutpost.Components
 	public class Position : Component, IQuadStorable
 	{
 		private Vector2 offset;		// from the origin (0,0)
-		private Vector2 velocity;
-		private int radius;
-
-		private bool solid = true;
 
 
 		//[EventReplication(EventReplication.ServerToClients)]
@@ -28,17 +24,18 @@ namespace AsteroidOutpost.Components
 		public Position(World world, int entityID, Vector2 center, int radius = 0)
 			: base(world, entityID)
 		{
+			Solid = true;
 			offset = center;
-			this.radius = radius;
+			this.Radius = radius;
 		}
 
 
 		public Position(World world, int entityID, Vector2 center, Vector2 velocity, int radius = 0)
 			: base(world, entityID)
 		{
+			Solid = true;
 			offset = center;
-			this.velocity = velocity;
-			this.radius = radius;
+			this.Radius = radius;
 		}
 
 
@@ -61,7 +58,7 @@ namespace AsteroidOutpost.Components
 				//hasMoved = true;		// For the QuadTree, TODO: Change this!!
 				if (MovedEvent != null)
 				{
-					MovedEvent(new EntityMovedEventArgs(this, Center, delta));
+					MovedEvent(new EntityMovedEventArgs(this, delta));
 				}
 			}
 		}
@@ -78,49 +75,13 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// Gets whether this entity is solid or not
 		/// </summary>
-		public bool Solid
-		{
-			get
-			{
-				return solid;
-			}
-			set
-			{
-				solid = value;
-			}
-		}
-
-
-		/// <summary>
-		/// Gets or sets the velocity
-		/// </summary>
-		public Vector2 Velocity
-		{
-			get
-			{
-				return velocity;
-			}
-			set
-			{
-				velocity = value;
-			}
-		}
+		public bool Solid { get; set; }
 
 
 		/// <summary>
 		/// Gets or set the radius
 		/// </summary>
-		public int Radius
-		{
-			get
-			{
-				return radius;
-			}
-			set
-			{
-				radius = value;
-			}
-		}
+		public int Radius { get; set; }
 
 
 		/// <summary>
@@ -129,7 +90,7 @@ namespace AsteroidOutpost.Components
 		[XmlIgnore]
 		public int Width
 		{
-			get { return radius * 2; }
+			get { return Radius * 2; }
 		}
 
 
@@ -139,7 +100,7 @@ namespace AsteroidOutpost.Components
 		[XmlIgnore]
 		public int Height
 		{
-			get { return radius * 2; }
+			get { return Radius * 2; }
 		}
 
 
@@ -149,7 +110,7 @@ namespace AsteroidOutpost.Components
 		[XmlIgnore]
 		public int Top
 		{
-			get { return (int)(Center.Y + 0.5) - radius; }
+			get { return (int)(Center.Y + 0.5) - Radius; }
 		}
 
 
@@ -159,7 +120,7 @@ namespace AsteroidOutpost.Components
 		[XmlIgnore]
 		public int Left
 		{
-			get { return (int)(Center.X + 0.5) - radius; }
+			get { return (int)(Center.X + 0.5) - Radius; }
 		}
 
 
@@ -169,7 +130,7 @@ namespace AsteroidOutpost.Components
 		[XmlIgnore]
 		public int Right
 		{
-			get { return (int)(Center.X + 0.5) + radius; }
+			get { return (int)(Center.X + 0.5) + Radius; }
 		}
 
 
@@ -179,7 +140,7 @@ namespace AsteroidOutpost.Components
 		[XmlIgnore]
 		public int Bottom
 		{
-			get { return (int)(Center.Y + 0.5) + radius; }
+			get { return (int)(Center.Y + 0.5) + Radius; }
 		}
 
 
@@ -193,8 +154,8 @@ namespace AsteroidOutpost.Components
 			{
 				return new Rectangle(Left,
 				                     Top,
-				                     radius * 2,
-				                     radius * 2);
+				                     Radius * 2,
+				                     Radius * 2);
 			}
 		}
 
@@ -202,11 +163,11 @@ namespace AsteroidOutpost.Components
 
 		public bool IsIntersecting(Position other)
 		{
-			return IsIntersecting(other.Center, other.radius);
+			return IsIntersecting(other.Center, other.Radius);
 		}
 		public bool IsIntersecting(Vector2 point, int otherRadius)
 		{
-			return Distance(point) < (radius + otherRadius);
+			return Distance(point) < (Radius + otherRadius);
 		}
 
 

@@ -38,7 +38,18 @@ namespace AsteroidOutpost.Systems
 				List<Position> fleetPositions = fleet.Select(x => world.GetComponent<Position>(x)).ToList();
 				foreach (var vehicle in fleet)
 				{
+
+					if(vehicle.Target != null)
+					{
+						Position targetPosition = world.GetNullableComponent<Position>(vehicle.Target.Value);
+						if(targetPosition == null)
+						{
+							vehicle.Target = null;
+						}
+					}
+
 					Position position = world.GetComponent<Position>(vehicle);
+					Velocity velocity = world.GetComponent<Velocity>(vehicle);
 					if (vehicle.Target == null)
 					{
 						// Find a suitable target
@@ -74,10 +85,10 @@ namespace AsteroidOutpost.Systems
 						List<IWeapon> weapons = world.GetWeapons(vehicle);
 						IWeapon primaryWeapon = weapons.First(x => x.Range == weapons.Min(y => y.Range));
 
-						if (position.Distance(targetPosition) - primaryWeapon.Range > MinDistanceToStop(position, vehicle))
+						if (position.Distance(targetPosition) - primaryWeapon.Range > MinDistanceToStop(velocity, vehicle))
 						{
 							// Move toward the target and flock with my flock-mates
-							vehicle.AccelerationVector = targetPosition.Center - position.Center - position.Velocity;
+							vehicle.AccelerationVector = targetPosition.Center - position.Center - velocity.CurrentVelocity;
 							vehicle.AccelerationVector.Normalize();
 
 							Vector2 cohesion = Cohere(position, fleetPositions) * cohesionFactor;
@@ -90,11 +101,11 @@ namespace AsteroidOutpost.Systems
 							Animator animator = world.GetComponent<Animator>(vehicle);
 							animator.SetOrientation(MathHelper.ToDegrees((float)Math.Atan2(vehicle.AccelerationVector.X, -vehicle.AccelerationVector.Y)), true);
 
-							AccelerateAlong(position, vehicle, gameTime);
+							AccelerateAlong(velocity, vehicle, gameTime);
 						}
 						else
 						{
-							Decelerate(position, vehicle, gameTime);
+							Decelerate(velocity, vehicle, gameTime);
 						}
 
 					}
@@ -211,29 +222,29 @@ namespace AsteroidOutpost.Systems
 		//}
 
 
-		private float MinDistanceToStop(Position position, FleetMovementBehaviour vehicle)
+		private float MinDistanceToStop(Velocity velocity, FleetMovementBehaviour vehicle)
 		{
-			return (float)(0.5 * vehicle.AccelerationMagnitude * Math.Pow(position.Velocity.Length() / vehicle.AccelerationMagnitude, 2.0));
+			return (float)(0.5 * vehicle.AccelerationMagnitude * Math.Pow(velocity.CurrentVelocity.Length() / vehicle.AccelerationMagnitude, 2.0));
 		}
 		
 		
-		internal void AccelerateAlong(Position position, FleetMovementBehaviour vehicle, GameTime gameTime)
+		internal void AccelerateAlong(Velocity velocity, FleetMovementBehaviour vehicle, GameTime gameTime)
 		{
 			vehicle.AccelerationVector = Vector2.Normalize(vehicle.AccelerationVector);
-			position.Velocity += vehicle.AccelerationVector * vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds;
+			velocity.CurrentVelocity += vehicle.AccelerationVector * vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds;
 		}
 
-		protected void Decelerate(Position position, FleetMovementBehaviour vehicle, GameTime gameTime)
+		protected void Decelerate(Velocity velocity, FleetMovementBehaviour vehicle, GameTime gameTime)
 		{
-			if (position.Velocity.X != 0 || position.Velocity.Y != 0)
+			if (velocity.CurrentVelocity != Vector2.Zero)
 			{
-				if ((vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds) >= position.Velocity.Length())
+				if ((vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds) >= velocity.CurrentVelocity.Length())
 				{
-					position.Velocity = Vector2.Zero;
+					velocity.CurrentVelocity = Vector2.Zero;
 				}
 				else
 				{
-					position.Velocity -= Vector2.Normalize(position.Velocity) * vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds;
+					velocity.CurrentVelocity -= Vector2.Normalize(velocity.CurrentVelocity) * vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds;
 				}
 			}
 		}

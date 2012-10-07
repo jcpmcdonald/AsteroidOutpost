@@ -128,6 +128,7 @@ namespace AsteroidOutpost.Entities
 				world.AddComponent(new HitPoints(world, entityID, 150));
 				world.AddComponent(new LaserWeapon(world, entityID, 150, 10, Color.DarkRed));
 				world.AddComponent(new FleetMovementBehaviour(world, entityID));
+				world.AddComponent(new Velocity(world, entityID, Vector2.Zero));
 				break;
 
 			case "beacon":
@@ -144,12 +145,14 @@ namespace AsteroidOutpost.Entities
 				sprite = sprites["space ship"];
 				world.AddComponent(new EntityName(world, entityID, entityName));
 				world.AddComponent(new Spin(world, entityID, 15f, true));
+				world.AddComponent(new Velocity(world, entityID, Vector2.Zero));
 				break;
 
 			case "space ship (use frames only)":
 				sprite = sprites["space ship"];
 				world.AddComponent(new EntityName(world, entityID, entityName));
 				world.AddComponent(new Spin(world, entityID, 15f, false));
+				world.AddComponent(new Velocity(world, entityID, Vector2.Zero));
 				break;
 
 			default:
