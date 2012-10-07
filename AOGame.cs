@@ -1,23 +1,17 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using AsteroidOutpost.Components;
+using System.Threading;
 using AsteroidOutpost.Entities;
-using AsteroidOutpost.Networking;
 using AsteroidOutpost.Scenarios;
 using AsteroidOutpost.Screens;
-using AsteroidOutpost.Screens.HeadsUpDisplay;
 using Awesomium.Core;
 using AwesomiumXNA;
-using C3.XNA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Threading;
 using Microsoft.Xna.Framework.Media;
-using AsteroidOutpost.Systems;
 
 namespace AsteroidOutpost
 {
@@ -60,6 +54,8 @@ namespace AsteroidOutpost
 		private LayeredStarField starField;
 		private World world;
 		private Texture2D cursorTexture;
+
+		private Stopwatch stopwatch = new Stopwatch();
 
 		#endregion
 
@@ -104,6 +100,8 @@ namespace AsteroidOutpost
 
 		private void Init(int width, int height, bool fullScreen)
 		{
+			stopwatch.Start();
+
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 
@@ -210,6 +208,9 @@ namespace AsteroidOutpost
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			cursorTexture = Texture2DEx.FromStreamWithPremultAlphas(GraphicsDevice, File.OpenRead(@"..\Content\Cursor.png"));
+
+			//ThreadPool.QueueUserWorkItem(delegate { EntityFactory.LoadContent(GraphicsDevice); });
+			//ThreadPool.QueueUserWorkItem(delegate { EllipseEx.LoadContent(GraphicsDevice); });
 			EntityFactory.LoadContent(GraphicsDevice);
 			EllipseEx.LoadContent(GraphicsDevice);
 
@@ -225,7 +226,10 @@ namespace AsteroidOutpost
 		{
 			// Note: Is this abuse?
 			MediaPlayer.Stop();
-			menuMusic.Dispose();
+			if(menuMusic != null)
+			{
+				menuMusic.Dispose();
+			}
 		}
 
 
@@ -235,6 +239,12 @@ namespace AsteroidOutpost
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
+			if(stopwatch.IsRunning)
+			{
+				stopwatch.Stop();
+				Console.WriteLine("Loaded in " + stopwatch.ElapsedMilliseconds + "ms");
+			}
+
 			base.Update(gameTime);
 			Window.Title = String.Format("{0, 0} FPS {1, 30} ms / frame", frameRateCounter.FPS, Math.Round(frameRateCounter.MillisecondsPerFrame, 3));
 

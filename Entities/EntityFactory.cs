@@ -15,8 +15,8 @@ namespace AsteroidOutpost.Entities
 	internal static class EntityFactory
 	{
 		private static World world;
-
 		private static Dictionary<String, Sprite> sprites = new Dictionary<String, Sprite>();
+		private static object loadSync = new object();
 
 
 		public static void LoadContent(GraphicsDevice graphicsDevice)
@@ -29,6 +29,24 @@ namespace AsteroidOutpost.Entities
 			sprites.Add("laser tower", new Sprite(File.OpenRead(@"..\Sprites\LaserTower.sprx"), graphicsDevice));
 			sprites.Add("space ship", new Sprite(File.OpenRead(@"..\Sprites\Spaceship128.sprx"), graphicsDevice));
 			sprites.Add("beacon", new Sprite(File.OpenRead(@"..\Sprites\Beacon.sprx"), graphicsDevice));
+
+			lock (LoadSync)
+			{
+				LoadProgress = 100;
+			}
+		}
+
+		public static int LoadProgress { get; private set; }
+		public static object LoadSync
+		{
+			get
+			{
+				return loadSync;
+			}
+			private set
+			{
+				loadSync = value;
+			}
 		}
 
 
