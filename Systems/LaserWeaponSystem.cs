@@ -71,11 +71,21 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var laser in world.GetComponents<LaserWeapon>())
 			{
-				if(laser.Target != null)
+				Constructable constructable = world.GetComponent<Constructable>(laser);
+				if (constructable.IsBeingPlaced)
+				{
+					// Draw attack range
+					Position position = world.GetComponent<Position>(laser);
+					spriteBatch.DrawEllipse(world.WorldToScreen(position.Center),
+					                        laser.Range,
+					                        Color.Red,
+					                        world.HUD.DrawEllipseGuides);
+				}
+				else if (laser.Target != null)
 				{
 					Position position = world.GetComponent<Position>(laser);
 					Position targetPosition = world.GetNullableComponent<Position>(laser.Target.Value);
-					if(targetPosition != null)
+					if (targetPosition != null)
 					{
 						spriteBatch.DrawLine(world.WorldToScreen(position.Center),
 						                     world.WorldToScreen(targetPosition.Center),
