@@ -40,3 +40,8 @@
 	background-image: url("../images/LaserTower.png");
 	background-repeat: no-repeat;
 }
+#MissileTower
+{
+	background-image: url("../images/MissileTower.png");
+	background-repeat: no-repeat;
+}

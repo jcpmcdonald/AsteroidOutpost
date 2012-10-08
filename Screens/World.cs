@@ -57,6 +57,7 @@ namespace AsteroidOutpost.Screens
 		private LaserMinerSystem laserMinerSystem;
 		private AccumulationSystem accumulationSystem;
 		private LaserWeaponSystem laserWeaponSystem;
+		private MissileWeaponSystem missileWeaponSystem;
 		private MovementSystem movementSystem;
 		private HitPointSystem hitPointSystem;
 
@@ -90,6 +91,7 @@ namespace AsteroidOutpost.Screens
 			laserMinerSystem = new LaserMinerSystem(game, this);
 			accumulationSystem = new AccumulationSystem(game, this, 500);
 			laserWeaponSystem = new LaserWeaponSystem(game, this);
+			missileWeaponSystem = new MissileWeaponSystem(game, this);
 			movementSystem = new MovementSystem(game, this);
 			hitPointSystem = new HitPointSystem(game, this);
 
@@ -110,6 +112,7 @@ namespace AsteroidOutpost.Screens
 			game.Components.Add(laserMinerSystem);
 			game.Components.Add(accumulationSystem);
 			game.Components.Add(laserWeaponSystem);
+			game.Components.Add(missileWeaponSystem);
 			game.Components.Add(movementSystem);
 			game.Components.Add(hitPointSystem);
 		}

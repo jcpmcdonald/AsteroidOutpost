@@ -71,10 +71,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			this.world = world;
 
 			// Set up some hotkeys
-			hotkeys.Add(Keys.P, btnPower_Clicked);
+			hotkeys.Add(Keys.S, btnPower_Clicked);
 			hotkeys.Add(Keys.N, btnPowerNode_Clicked);
 			hotkeys.Add(Keys.M, btnLaserMiner_Clicked);
 			hotkeys.Add(Keys.L, btnLaserTower_Clicked);
+			hotkeys.Add(Keys.I, btnMissileTower_Clicked);
 
 
 			// Create callbacks for Awesomium content to communicate with the hud
@@ -89,6 +90,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			awesomium.WebView.SetObjectCallback("hud", "BuildPowerNode", btnPowerNode_Clicked);
 			awesomium.WebView.SetObjectCallback("hud", "BuildLaserMiner", btnLaserMiner_Clicked);
 			awesomium.WebView.SetObjectCallback("hud", "BuildLaserTower", btnLaserTower_Clicked);
+			awesomium.WebView.SetObjectCallback("hud", "BuildMissileTower", btnMissileTower_Clicked);
 		}
 
 
@@ -602,6 +604,30 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 				// Create a new laser tower
 				creatingEntityID = EntityFactory.Create("Laser Tower", new Dictionary<String, object>(){
+					{ "Sprite.Scale", 0.6f },
+					{ "Sprite.Set", null },
+					{ "Sprite.Animation", null },
+					{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
+					{ "Transpose.Radius", 30 },
+					{ "OwningForce", localActor.PrimaryForce }
+				});
+			}
+		}
+
+
+		void btnMissileTower_Clicked(object sender, EventArgs e)
+		{
+			if (!world.Paused)
+			{
+
+				if (creatingEntityID != null)
+				{
+					OnCancelCreation();
+				}
+
+				// Create a new missile tower
+				creatingEntityID = EntityFactory.Create("Missile Tower", new Dictionary<String, object>(){
 					{ "Sprite.Scale", 0.6f },
 					{ "Sprite.Set", null },
 					{ "Sprite.Animation", null },

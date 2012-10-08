@@ -138,6 +138,7 @@
     <Compile Include="Components\LaserWeapon.cs" />
     <Compile Include="Components\Minable.cs" />
     <Compile Include="Components\FleetMovementBehaviour.cs" />
+    <Compile Include="Components\MissileWeapon.cs" />
     <Compile Include="Components\Name.cs" />
     <Compile Include="Components\PowerGridNode.cs" />
     <Compile Include="Components\PowerProducer.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="Systems\HitPointSystem.cs" />
     <Compile Include="Systems\LaserMinerSystem.cs" />
     <Compile Include="Systems\LaserWeaponSystem.cs" />
+    <Compile Include="Systems\MissileWeaponSystem.cs" />
     <Compile Include="Systems\MovementSystem.cs" />
     <Compile Include="Systems\PhysicsSystem.cs" />
     <Compile Include="Systems\PowerGridSystem.cs" />
