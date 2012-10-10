@@ -28,6 +28,7 @@ namespace AsteroidOutpost.Entities
 			sprites.Add("power node", new Sprite(File.OpenRead(@"..\Sprites\PowerNode.sprx"), graphicsDevice));
 			sprites.Add("laser tower", new Sprite(File.OpenRead(@"..\Sprites\LaserTower.sprx"), graphicsDevice));
 			sprites.Add("missile tower", new Sprite(File.OpenRead(@"..\Sprites\MissileTower.sprx"), graphicsDevice));
+			sprites.Add("missile", new Sprite(File.OpenRead(@"..\Sprites\Missile.sprx"), graphicsDevice));
 			sprites.Add("space ship", new Sprite(File.OpenRead(@"..\Sprites\Spaceship128.sprx"), graphicsDevice));
 			sprites.Add("beacon", new Sprite(File.OpenRead(@"..\Sprites\Beacon.sprx"), graphicsDevice));
 
@@ -66,7 +67,8 @@ namespace AsteroidOutpost.Entities
 			float spriteScale = (float)values["Sprite.Scale"];
 			String spriteSet = (String)values["Sprite.Set"];
 			String spriteAnimation = (String)values["Sprite.Animation"];
-			int spriteOrientation = (int)values["Sprite.Orientation"];
+			float spriteOrientation = (float)values["Sprite.Orientation"];
+			bool spriteRotateFrame = values.ContainsKey("Sprite.RotateFrame");
 
 
 			Position position = new Position(world, entityID,
@@ -129,7 +131,19 @@ namespace AsteroidOutpost.Entities
 				world.AddComponent(new PowerGridNode(world, entityID, false));
 				world.AddComponent(new Constructable(world, entityID, 200));
 				world.AddComponent(new HitPoints(world, entityID, 100));
-				world.AddComponent(new MissileWeapon(world, entityID, 300, 25, 500, 5));
+				world.AddComponent(new MissileWeapon(world, entityID, 300, 25, 1500, 50));
+				break;
+
+			case "missile":
+				sprite = sprites[entityName.ToLower()];
+				world.AddComponent(new EntityName(world, entityID, entityName));
+				world.AddComponent(new HitPoints(world, entityID, 100));
+				world.AddComponent(new MissileProjectile(world,
+				                                         entityID,
+				                                         25,
+				                                         50,
+				                                         values.ContainsKey("TargetEntityID") ? (int?)values["TargetEntityID"] : null));
+				world.AddComponent(new Velocity(world, entityID, Vector2.Zero));
 				break;
 
 			case "space ship":
@@ -151,15 +165,15 @@ namespace AsteroidOutpost.Entities
 
 
 
-			case "space ship (rotate frame)":
-				sprite = sprites["space ship"];
+			case "(rotate frame)":
+				sprite = sprites["missile"];
 				world.AddComponent(new EntityName(world, entityID, entityName));
 				world.AddComponent(new Spin(world, entityID, 15f, true));
 				world.AddComponent(new Velocity(world, entityID, Vector2.Zero));
 				break;
 
-			case "space ship (use frames only)":
-				sprite = sprites["space ship"];
+			case "(use frames only)":
+				sprite = sprites["missile"];
 				world.AddComponent(new EntityName(world, entityID, entityName));
 				world.AddComponent(new Spin(world, entityID, 15f, false));
 				world.AddComponent(new Velocity(world, entityID, Vector2.Zero));
@@ -184,7 +198,10 @@ namespace AsteroidOutpost.Entities
 				                                 spriteScale,
 				                                 spriteSet,
 				                                 spriteAnimation,
-				                                 angleStep * (spriteOrientation % sprite.OrientationLookup.Count));
+				                                 //spriteOrientation,
+				                                 angleStep * (spriteOrientation % sprite.OrientationLookup.Count),
+				                                 spriteRotateFrame);
+
 				world.AddComponent(animator);
 			}
 

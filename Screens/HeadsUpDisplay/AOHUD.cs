@@ -235,7 +235,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 						{ "Sprite.Scale", 0.7f },
 						{ "Sprite.Set", null },
 						{ "Sprite.Animation", null },
-						{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+						{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
 						{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
 						{ "Transpose.Radius", 40 },
 						{ "OwningForce", aiActor.PrimaryForce }
@@ -537,7 +537,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					{ "Sprite.Scale", 0.7f },
 					{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
 					{ "Sprite.Animation", null },
-					{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
 					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
 					{ "Transpose.Radius", 40 },
 					{ "OwningForce", localActor.PrimaryForce }
@@ -560,7 +560,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					{ "Sprite.Scale", 0.4f },
 					{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
 					{ "Sprite.Animation", null },
-					{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
 					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
 					{ "Transpose.Radius", 20 },
 					{ "OwningForce", localActor.PrimaryForce }
@@ -583,7 +583,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					{ "Sprite.Scale", 0.6f },
 					{ "Sprite.Set", null },
 					{ "Sprite.Animation", null },
-					{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
 					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
 					{ "Transpose.Radius", 30 },
 					{ "OwningForce", localActor.PrimaryForce }
@@ -607,7 +607,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					{ "Sprite.Scale", 0.6f },
 					{ "Sprite.Set", null },
 					{ "Sprite.Animation", null },
-					{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
 					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
 					{ "Transpose.Radius", 30 },
 					{ "OwningForce", localActor.PrimaryForce }
@@ -631,7 +631,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 					{ "Sprite.Scale", 0.6f },
 					{ "Sprite.Set", null },
 					{ "Sprite.Animation", null },
-					{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
 					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
 					{ "Transpose.Radius", 30 },
 					{ "OwningForce", localActor.PrimaryForce }

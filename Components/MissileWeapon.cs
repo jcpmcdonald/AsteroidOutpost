@@ -22,6 +22,7 @@ namespace AsteroidOutpost.Components
 		public int Range { get; set; }
 		public float Damage { get; set; }
 		public float FireRate { get; set; }
+		public TimeSpan TimeSinceLastShot { get; set; }
 		public float Acceleration { get; set; }
 
 		public int? Target { get; set; }

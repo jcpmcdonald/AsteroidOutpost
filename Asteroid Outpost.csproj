@@ -138,6 +138,7 @@
     <Compile Include="Components\LaserWeapon.cs" />
     <Compile Include="Components\Minable.cs" />
     <Compile Include="Components\FleetMovementBehaviour.cs" />
+    <Compile Include="Components\MissileProjectile.cs" />
     <Compile Include="Components\MissileWeapon.cs" />
     <Compile Include="Components\Name.cs" />
     <Compile Include="Components\PowerGridNode.cs" />

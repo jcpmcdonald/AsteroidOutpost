@@ -41,7 +41,7 @@ function UpdateSelection(selection)
 		$("#health").text("");
 	}
 	
-	UpdateEditor(selection);
+	//UpdateEditor(selection);
 }
 
 function SetResources(newResources)
@@ -135,124 +135,66 @@ $(document).ready(function()
 	if(!InXNA())
 	{
 		// Show a dummy structure
-		UpdateSelection({
-			"0" : {
-				"EntityName" : {
-					"Name" : "Solar Station",
-					"GUID" : "Flsp0Nra4Um1VieH6zRgNg=="
-				},
-				"PowerProducer" : {
-					"MaxPower" : 70,
-					"AvailablePower" : 19.27076,
-					"PowerProductionRate" : 10,
-					"ConductsPower" : true,
-					"ProducesPower" : true,
-					"PowerLinkPointRelative" : {
-						"X" : -1,
-						"Y" : -13
+		UpdateSelection(
+			{
+				"0" : {
+					"EntityName" : {
+						"Name" : "Solar Station",
+						"GUID" : "Flsp0Nra4Um1VieH6zRgNg=="
 					},
-					"GUID" : "bPWxGkDFFU+jB62HmRN1HA=="
-				},
-				"Constructable" : {
-					"MineralsToConstruct" : 200,
-					"MineralsLeftToConstruct" : 200,
-					"IsBeingPlaced" : false,
-					"IsConstructing" : false,
-					"GUID" : "dQz6/7Jjfk+6Slcu4NZLHQ=="
-				},
-				"HitPoints" : {
-					"Armour" : 250,
-					"TotalArmour" : 250,
-					"GUID" : "pHMJfGX6oUG6LcG1poDh+Q=="
-				},
-				"Position" : {
-					"Center" : {
-						"X" : 9924,
-						"Y" : 9926
+					"PowerProducer" : {
+						"MaxPower" : 70,
+						"AvailablePower" : 19.27076,
+						"PowerProductionRate" : 10,
+						"ConductsPower" : true,
+						"ProducesPower" : true,
+						"PowerLinkPointRelative" : {
+							"X" : -1,
+							"Y" : -13
+						},
+						"GUID" : "bPWxGkDFFU+jB62HmRN1HA=="
 					},
-					"Solid" : true,
-					"Velocity" : {
-						"X" : 0,
-						"Y" : 0
+					"Constructable" : {
+						"MineralsToConstruct" : 200,
+						"MineralsLeftToConstruct" : 200,
+						"IsBeingPlaced" : false,
+						"IsConstructing" : false,
+						"GUID" : "dQz6/7Jjfk+6Slcu4NZLHQ=="
 					},
-					"Radius" : 40,
-					"GUID" : "gMDlDXhPi068aSaaz56Wkw=="
-				},
-				"Animator" : {
-					"Scale" : 0.7,
-					"Tint" : {
-						"R" : 255,
-						"G" : 255,
-						"B" : 255,
-						"A" : 255,
-						"PackedValue" : 4294967295
+					"HitPoints" : {
+						"Armour" : 250,
+						"TotalArmour" : 250,
+						"GUID" : "pHMJfGX6oUG6LcG1poDh+Q=="
 					},
-					"FrameAngle" : 0,
-					"Angle" : 180,
-					"GUID" : "HvZ6suwYMkKhN1nggqpiaQ=="
+					"Position" : {
+						"Center" : {
+							"X" : 9924,
+							"Y" : 9926
+						},
+						"Solid" : true,
+						"Velocity" : {
+							"X" : 0,
+							"Y" : 0
+						},
+						"Radius" : 40,
+						"GUID" : "gMDlDXhPi068aSaaz56Wkw=="
+					},
+					"Animator" : {
+						"Scale" : 0.7,
+						"Tint" : {
+							"R" : 255,
+							"G" : 255,
+							"B" : 255,
+							"A" : 255,
+							"PackedValue" : 4294967295
+						},
+						"FrameAngle" : 0,
+						"Angle" : 180,
+						"GUID" : "HvZ6suwYMkKhN1nggqpiaQ=="
+					}
 				}
 			}
-		});
-		
-		
-		UpdateSelection({
-			"0" : {
-				"EntityName" : {
-					"Name" : "Solar Station2",
-					"GUID" : "Flsp0Nra4Um1VieH6zRgNg=="
-				},
-				"PowerProducer" : {
-					"MaxPower" : 70,
-					"AvailablePower" : 19.27076,
-					"PowerProductionRate" : 10,
-					"ConductsPower" : true,
-					"ProducesPower" : true,
-					"PowerLinkPointRelative" : {
-						"X" : -1,
-						"Y" : -13
-					},
-					"GUID" : "bPWxGkDFFU+jB62HmRN1HA=="
-				},
-				"Constructable" : {
-					"MineralsToConstruct" : 200,
-					"MineralsLeftToConstruct" : 200,
-					"IsBeingPlaced" : false,
-					"IsConstructing" : false,
-					"GUID" : "dQz6/7Jjfk+6Slcu4NZLHQ=="
-				},
-				"HitPoints" : {
-					"Armour" : 250,
-					"TotalArmour" : 250,
-					"GUID" : "pHMJfGX6oUG6LcG1poDh+Q=="
-				},
-				"Position" : {
-					"Center" : {
-						"X" : 9924,
-						"Y" : 9926
-					},
-					"Solid" : true,
-					"Velocity" : {
-						"X" : 0,
-						"Y" : 0
-					},
-					"Radius" : 40,
-					"GUID" : "gMDlDXhPi068aSaaz56Wkw=="
-				},
-				"Animator" : {
-					"Scale" : 0.7,
-					"Tint" : {
-						"R" : 255,
-						"G" : 255,
-						"B" : 255,
-						"A" : 255,
-						"PackedValue" : 4294967295
-					},
-					"FrameAngle" : 0,
-					"Angle" : 180,
-					"GUID" : "HvZ6suwYMkKhN1nggqpiaQ=="
-				}
-			}
-		});
+		);
 		
 		// With some dummy minerals
 		SetResources({"minerals": 1000});

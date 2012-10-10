@@ -13,14 +13,14 @@ namespace AsteroidOutpost.Components
 	public class Animator : Component
 	{
 
-		public Animator(World world, int entityID, Sprite sprite, float scale, String set, String animation, float orientation)
+		public Animator(World world, int entityID, Sprite sprite, float scale, String set, String animation, float orientation, bool rotateFrame = false)
 			: base(world, entityID)
 		{
-			Init(scale, sprite, set, animation, orientation);
+			Init(scale, sprite, set, animation, orientation, rotateFrame);
 		}
 
 
-		private void Init(float scale, Sprite sprite, String set, String animation, float orientation)
+		private void Init(float scale, Sprite sprite, String set, String animation, float orientation, bool rotateFrame)
 		{
 			Scale = scale;
 			Tint = Color.White;
@@ -34,7 +34,7 @@ namespace AsteroidOutpost.Components
 			{
 				SpriteAnimator.CurrentAnimation = animation;
 			}
-			SetOrientation(orientation);
+			SetOrientation(orientation, rotateFrame);
 		}
 
 

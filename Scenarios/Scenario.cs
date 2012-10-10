@@ -133,7 +133,7 @@ namespace AsteroidOutpost.Scenarios
 					{ "Sprite.Scale", scale },
 					{ "Sprite.Set", "Asteroid " + GlobalRandom.Next(1, 4) },
 					{ "Sprite.Animation", null },
-					{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+					{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
 					{ "Transpose.Position", new Vector2(x, y) },
 					{ "Transpose.Radius", radius },
 					{ "Minerals", minerals },
@@ -184,7 +184,7 @@ namespace AsteroidOutpost.Scenarios
 				{ "Sprite.Scale", 0.7f },
 				{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
 				{ "Sprite.Animation", null },
-				{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+				{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
 				{ "Transpose.Position", origin + delta },
 				{ "Transpose.Radius", 40 },
 				{ "OwningForce", force }

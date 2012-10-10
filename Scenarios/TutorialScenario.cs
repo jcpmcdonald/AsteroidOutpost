@@ -102,22 +102,22 @@ namespace AsteroidOutpost.Scenarios
 
 
 
-			EntityFactory.Create("Space Ship (rotate frame)", new Dictionary<String, object>(){
+			EntityFactory.Create("(rotate frame)", new Dictionary<String, object>(){
 				{ "Sprite.Scale", 0.7f },
 				{ "Sprite.Set", null },
 				{ "Sprite.Animation", "Rotate" },
-				{ "Sprite.Orientation", 0 },
+				{ "Sprite.Orientation", 0f },
 				{ "Transpose.Position", new Vector2((world.MapWidth / 2.0f) + 200, world.MapHeight / 2.0f) },
 				{ "Transpose.Radius", 40 },
 				{ "OwningForce", localForce }
 			});
 
 
-			EntityFactory.Create("Space Ship (use frames only)", new Dictionary<String, object>(){
+			EntityFactory.Create("(use frames only)", new Dictionary<String, object>(){
 				{ "Sprite.Scale", 0.7f },
 				{ "Sprite.Set", null },
 				{ "Sprite.Animation", "Rotate" },
-				{ "Sprite.Orientation", 0 },
+				{ "Sprite.Orientation", 0f },
 				{ "Transpose.Position", new Vector2((world.MapWidth / 2.0f) + 300, world.MapHeight / 2.0f) },
 				{ "Transpose.Radius", 40 },
 				{ "OwningForce", localForce }

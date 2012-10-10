@@ -28,7 +28,7 @@ namespace AsteroidOutpost.Networking
 
 			if(targetMethodInfo == null)
 			{
-				Console.WriteLine("Warning!! " + GetType() + " is referring to a method that can not be found!");
+				//Console.WriteLine("Warning!! " + GetType() + " is referring to a method that can not be found!");
 				//Debugger.Break();
 			}
 #endif
