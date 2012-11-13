@@ -87,10 +87,10 @@ namespace AsteroidOutpost.Networking
 					Debugger.Break();
 					//((Component)parameter).Serialize(bw);
 				}
-				else if (parameter is Entity)
-				{
-					((Entity)parameter).Serialize(bw);
-				}
+				//else if (parameter is Entity)
+				//{
+				//    ((Entity)parameter).Serialize(bw);
+				//}
 				else if (parameter is Force)
 				{
 					((Force)parameter).Serialize(bw);

@@ -154,7 +154,6 @@
     <Compile Include="EllipseEx.cs" />
     <Compile Include="EnhancedKeyboardState.cs" />
     <Compile Include="EnhancedMouseState.cs" />
-    <Compile Include="Entities\Beacon.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
     <Compile Include="Screens\Layer.cs" />
     <Compile Include="Systems\FrameRateCounter.cs" />
@@ -166,9 +165,6 @@
     <Compile Include="Interfaces\IUpdatable.cs" />
     <Compile Include="Components\Position.cs" />
     <Compile Include="GlobalRandom.cs" />
-    <Compile Include="Interfaces\IControllerIDProvider.cs" />
-    <Compile Include="Interfaces\ICanKillSelf.cs" />
-    <Compile Include="Interfaces\IComponentList.cs" />
     <Compile Include="Interfaces\IWeapon.cs" />
     <Compile Include="MathHelperEx.cs" />
     <Compile Include="Networking\AOReflectiveIncomingMessage.cs" />
@@ -212,7 +208,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="AOGame.cs" />
     <Compile Include="Interfaces\IMappable.cs" />
-    <Compile Include="Entities\Entity.cs" />
     <Compile Include="WaveFactory.cs" />
   </ItemGroup>
   <ItemGroup>

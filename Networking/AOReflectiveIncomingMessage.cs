@@ -74,44 +74,44 @@ namespace AsteroidOutpost.Networking
 				types[i] = Type.GetType(br.ReadString());
 
 				// Read the parameter value based on the parameter type
-				if (types[i] == typeof(bool))
+				if (types[i] == typeof (bool))
 				{
 					parameters[i] = br.ReadBoolean();
 				}
-				else if (types[i] == typeof(string))
+				else if (types[i] == typeof (string))
 				{
 					parameters[i] = br.ReadString();
 				}
-				else if (types[i] == typeof(int))
+				else if (types[i] == typeof (int))
 				{
 					parameters[i] = br.ReadInt32();
 				}
-				else if (types[i] == typeof(float))
+				else if (types[i] == typeof (float))
 				{
 					parameters[i] = br.ReadSingle();
 				}
-				else if (types[i] == typeof(double))
+				else if (types[i] == typeof (double))
 				{
 					parameters[i] = br.ReadDouble();
 				}
-				else if (types[i] == typeof(Vector2))
+				else if (types[i] == typeof (Vector2))
 				{
 					parameters[i] = new Vector2(br.ReadSingle(), br.ReadSingle());
 				}
-				else if (types[i] == typeof(byte[]))
+				else if (types[i] == typeof (byte[]))
 				{
 					int count = br.ReadInt32();
 					parameters[i] = br.ReadBytes(count);
 				}
-				else if (types[i].IsSubclassOf(typeof(Component)) ||
-						types[i].IsSubclassOf(typeof(Entity)) ||
-						types[i] == typeof(Force) || 
-					    types[i] == typeof(Controller) ||
-					    types[i] == typeof(AIController))
+				else if (types[i].IsSubclassOf(typeof (Component)) ||
+				         //types[i].IsSubclassOf(typeof(Entity)) ||
+				         types[i] == typeof (Force) ||
+				         types[i] == typeof (Controller) ||
+				         types[i] == typeof (AIController))
 				{
 					// Use reflection to make a new object of... whatever type was sent to us
-					ConstructorInfo componentConstructor = types[i].GetConstructor(new Type[] { typeof(BinaryReader) });
-					parameters[i] = componentConstructor.Invoke(new object[] { br });
+					ConstructorInfo componentConstructor = types[i].GetConstructor(new Type[]{ typeof (BinaryReader) });
+					parameters[i] = componentConstructor.Invoke(new object[]{ br });
 				}
 				else
 				{

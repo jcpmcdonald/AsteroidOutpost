@@ -30,7 +30,7 @@ namespace AsteroidOutpost.Screens
 		GameData
 	}
 
-	public class World : DrawableGameComponent, IReflectionTarget, IControllerIDProvider, IComponentList
+	public class World : DrawableGameComponent, IReflectionTarget
 	{
 		public const UInt32 Version = 2;
 		public const UInt32 StreamIdent = 0x607A0BAD;  // Get it?

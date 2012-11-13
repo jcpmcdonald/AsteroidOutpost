@@ -11,18 +11,15 @@ namespace AsteroidOutpost
 {
 	class AIController : Controller
 	{
-		private IControllerIDProvider actorIDProvider;
 
-		public AIController(World world, IControllerIDProvider actorIDProvider, Force primaryForce)
+		public AIController(World world, Force primaryForce)
 			: base(world, ControllerRole.AI, primaryForce)
 		{
-			this.actorIDProvider = actorIDProvider;
 		}
 
-		public AIController(IControllerIDProvider actorIDProvider, BinaryReader br)
+		public AIController(BinaryReader br)
 			: base(br)
 		{
-			this.actorIDProvider = actorIDProvider;
 		}
 
 

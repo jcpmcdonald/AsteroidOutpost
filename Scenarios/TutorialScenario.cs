@@ -19,7 +19,7 @@ namespace AsteroidOutpost.Scenarios
 		private int lasersBuilt = 0;
 
 
-		private List<Beacon> beacons = new List<Beacon>(4);
+		//private List<Beacon> beacons = new List<Beacon>(4);
 
 
 		//private Button btnNext;
@@ -58,7 +58,7 @@ namespace AsteroidOutpost.Scenarios
 			world.AddController(localController);
 
 			Force aiForce = new Force(world, world.GetNextForceID(), 1000, Team.AI);
-			Controller aiController = new AIController(world, world, aiForce);
+			Controller aiController = new AIController(world, aiForce);
 			world.AddForce(aiForce);
 			world.AddController(aiController);
 

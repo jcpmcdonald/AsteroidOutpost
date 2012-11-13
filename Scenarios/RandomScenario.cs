@@ -52,7 +52,7 @@ namespace AsteroidOutpost.Scenarios
 
 
 			Force aiForce = new Force(world, world.GetNextForceID(), 0, Team.AI);
-			Controller aiController = new AIController(world, world, aiForce);
+			Controller aiController = new AIController(world, aiForce);
 			world.AddForce(aiForce);
 			world.AddController(aiController);
 
