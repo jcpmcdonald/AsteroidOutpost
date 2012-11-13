@@ -156,6 +156,7 @@
     <Compile Include="EnhancedMouseState.cs" />
     <Compile Include="Entities\Beacon.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
+    <Compile Include="Screens\Layer.cs" />
     <Compile Include="Systems\FrameRateCounter.cs" />
     <Compile Include="Interfaces\IIdentifiable.cs" />
     <Compile Include="Interfaces\IKillable.cs" />

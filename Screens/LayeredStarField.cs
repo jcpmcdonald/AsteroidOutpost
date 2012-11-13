@@ -12,15 +12,19 @@ namespace AsteroidOutpost.Screens
 {
 	public class LayeredStarField : DrawableGameComponent
 	{
-		List<Layer> starLayers = new List<Layer>();
-		List<Layer> anomalies = new List<Layer>();
-		List<Layer> distantAnomalies = new List<Layer>();
+		private List<Layer> starLayers = new List<Layer>();
+		private List<Layer> anomalies = new List<Layer>();
+		private List<Layer> distantAnomalies = new List<Layer>();
 		private Vector2 offset = Vector2.Zero;
 		private Vector2? lastFocusPoint;
 
+		private AOGame aoGame;
 
-		public LayeredStarField(Game game) : base(game)
+
+		public LayeredStarField(Game game)
+			: base(game)
 		{
+			this.aoGame = (AOGame)game;
 		}
 
 
@@ -38,7 +42,7 @@ namespace AsteroidOutpost.Screens
 			starLayers.Add(new Layer(Game.Content.Load<Texture2D>("Scenes\\stars1"),
 			                         0.025f,
 			                         new Rectangle(GlobalRandom.Next(64), GlobalRandom.Next(64), GlobalRandom.Next(128, 512 - 64), GlobalRandom.Next(128, 512 - 64))));
-			
+
 			starLayers.Add(new Layer(Game.Content.Load<Texture2D>("Scenes\\stars1"),
 			                         0.0125f,
 			                         new Rectangle(GlobalRandom.Next(64), GlobalRandom.Next(64), GlobalRandom.Next(128, 512 - 64), GlobalRandom.Next(128, 512 - 64))));
@@ -59,28 +63,34 @@ namespace AsteroidOutpost.Screens
 
 		public override void Update(GameTime gameTime)
 		{
-			//if (lastFocusPoint == null)
-			//{
-			//    // can't really do anything
-			//}
-			//else
-			//{
-			//    Vector2 delta = lastFocusPoint.Value - world.HUD.FocusWorldPoint;
-			//    Move(delta);
-			//}
+			if (this.aoGame.World == null)
+			{
+				// world is not started yet, so do nothing
+				return;
+			}
 
-			//lastFocusPoint = world.HUD.FocusWorldPoint;
+			if (lastFocusPoint == null)
+			{
+				// can't really do anything
+			}
+			else
+			{
+				Vector2 delta = lastFocusPoint.Value - this.aoGame.World.HUD.FocusWorldPoint;
+				Move(delta);
+			}
+
+			lastFocusPoint = this.aoGame.World.HUD.FocusWorldPoint;
 		}
 
 
-		
+
 
 
 		public void Draw(SpriteBatch spriteBatch, Color tint)
 		{
 			spriteBatch.GraphicsDevice.Clear(Color.Black.Blend(tint));
 
-			
+
 
 			foreach (var starLayer in starLayers)
 			{
@@ -100,171 +110,16 @@ namespace AsteroidOutpost.Screens
 			}
 		}
 
+
 		public void Move(float x, float y)
 		{
 			Move(new Vector2(x, y));
 		}
 
+
 		public void Move(Vector2 delta)
 		{
 			offset += delta;
-		}
-	}
-
-
-
-
-	class Layer
-	{
-		private Texture2D texture;
-		private float speed;
-		private Rectangle imgSize;
-		private Vector2 position;
-		private bool looping;
-		private Color tint = Color.White;
-		private float scale = 1.0f;
-
-
-		public Layer(Texture2D texture, float speed, Rectangle imgSize)
-		{
-			init(texture, speed, imgSize, Vector2.Zero, true);
-		}
-
-
-		public Layer(Texture2D texture, float speed, Vector2 position)
-		{
-			init(texture, speed, texture.Bounds, position, false);
-		}
-
-
-		private void init(Texture2D texture, float speed, Rectangle imgSize, Vector2 position, bool looping)
-		{
-			this.texture = texture;
-			this.speed = speed;
-			this.imgSize = imgSize;
-			this.position = position;
-			this.looping = looping;
-		}
-
-
-		public Rectangle ImgSize
-		{
-			get
-			{
-				return imgSize;
-			}
-		}
-
-		public float Speed
-		{
-			get
-			{
-				return speed;
-			}
-		}
-
-		public Texture2D Texture
-		{
-			get
-			{
-				return texture;
-			}
-		}
-
-
-		public Vector2 Position
-		{
-			get
-			{
-				return position;
-			}
-		}
-
-		public Color Tint
-		{
-			get
-			{
-				return tint;
-			}
-			set
-			{
-				tint = value;
-			}
-		}
-
-		public float Scale
-		{
-			get
-			{
-				return scale;
-			}
-			set
-			{
-				scale = value;
-			}
-		}
-
-
-		public void Draw(SpriteBatch spriteBatch, Color tint, Vector2 offset)
-		{
-
-			if (looping)
-			{
-#if true
-				Rectangle viewportRect = new Rectangle(0, 0, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height);
-#else
-				Rectangle viewportRect = new Rectangle(200, 200, 640, 480);
-				spriteBatch.DrawRectangle(viewportRect, Color.Green);
-				spriteBatch.FillRectangle(new Rectangle(viewportRect.Center.X - 2, viewportRect.Center.Y -2, 4, 4), Color.Green);
-#endif
-
-				int gridsHorizontal = (int)((viewportRect.Width / (imgSize.Width * scale)) + 1) + 1;
-				int gridsVertical = (int)((viewportRect.Height / (imgSize.Height * scale)) + 1) + 1;
-
-
-				Vector2 start = //world.WorldToScreen(world.HUD.FocusWorldPoint)
-				                new Vector2(viewportRect.Center.X, viewportRect.Center.Y)
-				                + new Vector2((offset.X * speed), (offset.Y * speed));
-
-				start = new Vector2(start.X % (imgSize.Width * scale), start.Y % (imgSize.Height * scale))
-				        - new Vector2((imgSize.Width * scale), (imgSize.Height * scale));
-
-				start = start + new Vector2(viewportRect.X, viewportRect.Y);
-
-				for (int x = 0; x < gridsHorizontal; x++)
-				{
-					for (int y = 0; y < gridsVertical; y++)
-					{
-						Vector2 destinationLocation = start + new Vector2(x * imgSize.Width * scale, y * imgSize.Height * scale);
-						//spriteBatch.DrawRectangle(destinationLocation, new Vector2(imgSize.Width, imgSize.Height), Color.Red);
-
-						spriteBatch.Draw(texture,
-						                 destinationLocation,
-						                 new Rectangle(imgSize.X, imgSize.Y, (int)(imgSize.Width * scale), (int)(imgSize.Height * scale)),
-						                 tint.Blend(this.tint),
-						                 0,
-						                 Vector2.Zero,
-						                 scale,
-						                 SpriteEffects.None,
-						                 0);
-					}
-				}
-
-				//spriteBatch.DrawString(Fonts.ControlFont, "Width = " + gridsHorizontal, new Vector2(100), Color.White);
-			}
-			else
-			{
-				spriteBatch.Draw(texture,
-				                 position + (offset * speed),
-				                 null,
-				                 tint.Blend(this.tint),
-				                 0,
-				                 Vector2.Zero,
-				                 scale,
-				                 SpriteEffects.None,
-				                 0);
-			}
-
 		}
 	}
 }
