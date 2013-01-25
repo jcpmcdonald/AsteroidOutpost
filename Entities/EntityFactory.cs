@@ -142,6 +142,7 @@ namespace AsteroidOutpost.Entities
 				                                         entityID,
 				                                         25,
 				                                         50,
+				                                         100,
 				                                         values.ContainsKey("TargetEntityID") ? (int?)values["TargetEntityID"] : null));
 				world.AddComponent(new Velocity(world, entityID, Vector2.Zero));
 				break;

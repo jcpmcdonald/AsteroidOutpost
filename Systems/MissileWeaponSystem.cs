@@ -27,17 +27,17 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
-			foreach (var missileWeapon in world.GetComponents<MissileWeapon>())
+			foreach (var missileLauncher in world.GetComponents<MissileWeapon>())
 			{
-				missileWeapon.TimeSinceLastShot += gameTime.ElapsedGameTime;
-				Position closestTargetPosition = AcquireTarget(missileWeapon);
-				missileWeapon.Target = closestTargetPosition != null ? (int?)closestTargetPosition.EntityID : null;
+				missileLauncher.TimeSinceLastShot += gameTime.ElapsedGameTime;
+				Position closestTargetPosition = AcquireTarget(missileLauncher);
+				missileLauncher.Target = closestTargetPosition != null ? (int?)closestTargetPosition.EntityID : null;
 
 				// See if we can shoot yet
-				if(missileWeapon.Target != null && missileWeapon.TimeSinceLastShot.TotalMilliseconds > missileWeapon.FireRate)
+				if(missileLauncher.Target != null && missileLauncher.TimeSinceLastShot.TotalMilliseconds > missileLauncher.FireRate)
 				{
-					Position position = world.GetComponent<Position>(missileWeapon);
-					Position targetPosition = world.GetComponent<Position>(missileWeapon.Target.Value);
+					Position position = world.GetComponent<Position>(missileLauncher);
+					Position targetPosition = world.GetComponent<Position>(missileLauncher.Target.Value);
 					Vector2 accelerationVector = Vector2.Normalize(targetPosition.Center - position.Center);
 
 					int missileID = EntityFactory.Create("Missile", new Dictionary<String, object>(){
@@ -48,20 +48,20 @@ namespace AsteroidOutpost.Systems
 						//{ "Sprite.RotateFrame", true },
 						{ "Transpose.Position", position.Center },
 						{ "Transpose.Radius", 10 },
-						{ "OwningForce", world.GetOwningForce(missileWeapon.EntityID) },
-						{ "TargetEntityID", missileWeapon.Target }
+						{ "OwningForce", world.GetOwningForce(missileLauncher.EntityID) },
+						{ "TargetEntityID", missileLauncher.Target }
 					});
 
 					Animator missileAnimator = world.GetComponent<Animator>(missileID);
 					missileAnimator.SetOrientation(MathHelper.ToDegrees((float)Math.Atan2(accelerationVector.X, -accelerationVector.Y)), true);
 
-					missileWeapon.TimeSinceLastShot = TimeSpan.Zero;
+					missileLauncher.TimeSinceLastShot = TimeSpan.Zero;
 				}
 
-				if(missileWeapon.Target != null)
+				if(missileLauncher.Target != null)
 				{
-					Position position = world.GetComponent<Position>(missileWeapon);
-					Position targetPosition = world.GetComponent<Position>(missileWeapon.Target.Value);
+					Position position = world.GetComponent<Position>(missileLauncher);
+					Position targetPosition = world.GetComponent<Position>(missileLauncher.Target.Value);
 					Vector2 directionToTarget = Vector2.Normalize(targetPosition.Center - position.Center);
 					
 					if(directionToTarget.Length() > 1.00001)
@@ -70,7 +70,7 @@ namespace AsteroidOutpost.Systems
 					}
 
 					// Rotate the tower to face the target:
-					Animator towerAnimator = world.GetComponent<Animator>(missileWeapon);
+					Animator towerAnimator = world.GetComponent<Animator>(missileLauncher);
 					towerAnimator.SetOrientation(MathHelper.ToDegrees((float)Math.Atan2(directionToTarget.X, -directionToTarget.Y)), false);
 				}
 			}
@@ -100,6 +100,13 @@ namespace AsteroidOutpost.Systems
 					}
 					velocity.CurrentVelocity = Vector2.Normalize(velocity.CurrentVelocity) * velocityMagnitude;
 
+					
+					// Boom?
+					if(position.Distance(targetPosition) <= missile.DetonationDistance)
+					{
+						world.DeleteComponents(missile.EntityID);
+						HitPointSystem.InflictDamageOn(world.GetComponent<HitPoints>(missile.Target.Value), missile.Damage);
+					}
 				}
 			}
 		}

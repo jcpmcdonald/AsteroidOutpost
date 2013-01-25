@@ -35,5 +35,11 @@ namespace AsteroidOutpost.Systems
 				}
 			}
 		}
+
+
+		public static void InflictDamageOn(HitPoints victim, float amount)
+		{
+			victim.Armour -= amount;
+		}
 	}
 }

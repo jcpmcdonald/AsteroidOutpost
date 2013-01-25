@@ -158,11 +158,9 @@
     <Compile Include="Screens\Layer.cs" />
     <Compile Include="Systems\FrameRateCounter.cs" />
     <Compile Include="Interfaces\IIdentifiable.cs" />
-    <Compile Include="Interfaces\IKillable.cs" />
     <Compile Include="Interfaces\IQuantifiable.cs" />
     <Compile Include="Eventing\LocalEvents.cs" />
     <Compile Include="Eventing\ReflectiveEvents.cs" />
-    <Compile Include="Interfaces\IUpdatable.cs" />
     <Compile Include="Components\Position.cs" />
     <Compile Include="GlobalRandom.cs" />
     <Compile Include="Interfaces\IWeapon.cs" />
@@ -207,7 +205,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="AOGame.cs" />
-    <Compile Include="Interfaces\IMappable.cs" />
     <Compile Include="WaveFactory.cs" />
   </ItemGroup>
   <ItemGroup>
