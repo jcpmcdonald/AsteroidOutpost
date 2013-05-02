@@ -17,6 +17,7 @@ namespace AsteroidOutpost.Scenarios
 		private static readonly TimeSpan timeBetweenWaves = TimeSpan.FromMinutes(1);
 		private TimeSpan waveTimer = timeBetweenWaves;
 		private int sequence = 0;
+		private Force friendlyForce;
 
 		//private 
 
@@ -35,17 +36,17 @@ namespace AsteroidOutpost.Scenarios
 			int initialMinerals = 1000;
 			for (int iPlayer = 0; iPlayer < playerCount; iPlayer++)
 			{
-				Force force = new Force(world, world.GetNextForceID(), initialMinerals, (Team)iPlayer);
-				world.AddForce(force);
-				world.PowerGrid.Add(force.ID, new PowerGrid(world));
-				Vector2 focusPoint = CreateStartingBase(force);
+				friendlyForce = new Force(world, world.GetNextForceID(), initialMinerals, (Team)iPlayer);
+				world.AddForce(friendlyForce);
+				world.PowerGrid.Add(friendlyForce.ID, new PowerGrid(world));
+				Vector2 focusPoint = CreateStartingBase(friendlyForce);
 
 
 				if (iPlayer == 0)
 				{
 					world.HUD.FocusWorldPoint = focusPoint;
 
-					Controller controller = new Controller(world, ControllerRole.Local, force);
+					Controller controller = new Controller(world, ControllerRole.Local, friendlyForce);
 					world.AddController(controller);
 				}
 			}
@@ -56,11 +57,23 @@ namespace AsteroidOutpost.Scenarios
 			world.AddForce(aiForce);
 			world.AddController(aiController);
 
+			theGame.World.EntityDied += World_EntityDied;
 
 			theGame.Awesomium.WebView.CallJavascriptFunction("", "MakeTimerPanel", new JSValue());
 		}
 
-		
+
+
+		void World_EntityDied()
+		{
+			// Check to see if the player has lost
+			if(!world.GetEntitiesOwnedBy(friendlyForce).Any())
+			{
+				// DEAD!
+				Console.WriteLine("DEAD!");
+			}
+		}
+
 
 
 		public override void Update(TimeSpan deltaTime)

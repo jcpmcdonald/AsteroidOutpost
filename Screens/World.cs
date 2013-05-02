@@ -38,28 +38,28 @@ namespace AsteroidOutpost.Screens
 		private SpriteBatch spriteBatch;
 
 		private LayeredStarField layeredStarField;
-		private QuadTree<Position> quadTree;
+		private readonly QuadTree<Position> quadTree;
 		private readonly AwesomiumComponent awesomium;
-		private Dictionary<int, List<Component>> entityDictionary = new Dictionary<int, List<Component>>(2000);		// Note: This variable must be kept thread-safe
-		private Dictionary<Type, List<Component>> componentDictionary = new Dictionary<Type, List<Component>>(10);		// Note: This variable must be kept thread-safe
-		private List<Component> deadComponents = new List<Component>();
+		private readonly Dictionary<int, List<Component>> entityDictionary = new Dictionary<int, List<Component>>(2000);		// Note: This variable must be kept thread-safe
+		private readonly Dictionary<Type, List<Component>> componentDictionary = new Dictionary<Type, List<Component>>(10);		// Note: This variable must be kept thread-safe
+		private readonly List<Component> deadComponents = new List<Component>();
 		//private Dictionary<int, Entity> entityDictionary = new Dictionary<int, Entity>(2000);		// Note: This variable must be kept thread-safe
-		private Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
-		private Dictionary<int, Force> owningForces = new Dictionary<int, Force>();
-		private AOHUD hud;
+		private readonly Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
+		private readonly Dictionary<int, Force> owningForces = new Dictionary<int, Force>();
+		private readonly AOHUD hud;
 		private Scenario scenario;
 
-		private AnimationSystem animationSystem;
-		private PhysicsSystem physicsSystem;
-		private RenderQuadTreeSystem renderQuadTreeSystem;
-		private PowerGridSystem powerGridSystem;
-		private ConstructionSystem constructionSystem;
-		private LaserMinerSystem laserMinerSystem;
-		private AccumulationSystem accumulationSystem;
-		private LaserWeaponSystem laserWeaponSystem;
-		private MissileWeaponSystem missileWeaponSystem;
-		private MovementSystem movementSystem;
-		private HitPointSystem hitPointSystem;
+		private readonly AnimationSystem animationSystem;
+		private readonly PhysicsSystem physicsSystem;
+		private readonly RenderQuadTreeSystem renderQuadTreeSystem;
+		private readonly PowerGridSystem powerGridSystem;
+		private readonly ConstructionSystem constructionSystem;
+		private readonly LaserMinerSystem laserMinerSystem;
+		private readonly AccumulationSystem accumulationSystem;
+		private readonly LaserWeaponSystem laserWeaponSystem;
+		private readonly MissileWeaponSystem missileWeaponSystem;
+		private readonly MovementSystem movementSystem;
+		private readonly HitPointSystem hitPointSystem;
 
 		private bool paused;
 
@@ -76,7 +76,8 @@ namespace AsteroidOutpost.Screens
 
 		public event Action<EntityEventArgs> StructureStartedEventPreAuth;
 		public event Action<EntityEventArgs> StructureStartedEventPostAuth;
-		
+
+		public event Action EntityDied;
 		
 		public World(AOGame game) : base(game)
 		{
@@ -254,7 +255,7 @@ namespace AsteroidOutpost.Screens
 					                                                       new object[]{component}));
 				}
 
-				// Tell the network to listen to anything that may happen
+				// Tell my network object to listen to anything that may happen
 				network.ListenToEvents(component);
 
 				// Add this to a dictionary for quick ID-based lookups
@@ -288,92 +289,11 @@ namespace AsteroidOutpost.Screens
 		}
 
 
-		/// <summary>
-		/// Adds the entity to the game. If isAuthoritative is set to false, this will send a request to the server instead
-		/// </summary>
-		/// <param name="entity">The entity to add to the game</param>
-		/// <param name="isAuthoritative">If true, indicates that this instance of the game is a server OR that we have been told to do this by the server</param>
-		//public void Add(Entity entity, bool isAuthoritative)
-		//{
-		//    if (entity != null)
-		//    {
-		//        if (entity.EntityID == -1)
-		//        {
-		//            // Assign an ID and replicate this object to the clients
-		//            entity.EntityID = PopNextComponentID();
-		//        }
-		//        else if(isAuthoritative && !isServer)
-		//        {
-		//            lock(entityDictionary)
-		//            {
-		//                if (entityDictionary.ContainsKey(entity.EntityID))
-		//                {
-		//                    // This entity already exists locally. Post-auth and exit
-		//                    if (StructureStartedEventPostAuth != null)
-		//                    {
-		//                        StructureStartedEventPostAuth(new EntityEventArgs(entity));
-		//                    }
-
-		//                    return;
-		//                }
-		//            }
-		//        }
-
-		//        if (isServer)
-		//        {
-		//            network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.EntityID,
-		//                                                                   "Add",
-		//                                                                   new object[]{ entity, true }));
-		//        }
-		//        else if(!isAuthoritative)
-		//        {
-		//            network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.EntityID,
-		//                                                                   "Add",
-		//                                                                   new object[]{ entity }));
-		//        }
-
-
-		//        // Tell the network to listen to anything that may happen
-		//        network.ListenToEvents(entity);
-
-		//        // Add this to the quad tree for rapid area-based lookups
-		//        quadTree.Add(entity);
-
-		//        // Add this to a dictionary for quick ID-based lookups
-		//        lock (entityDictionary)
-		//        {
-		//            entityDictionary.Add(entity.EntityID, entity);
-		//        }
-
-		//        // Pre and Post-auth. Post only if we're the server, it happens later on the client
-		//        if (StructureStartedEventPreAuth != null)
-		//        {
-		//            StructureStartedEventPreAuth(new EntityEventArgs(entity));
-		//        }
-		//        if (isServer && StructureStartedEventPostAuth != null)
-		//        {
-		//            StructureStartedEventPostAuth(new EntityEventArgs(entity));
-		//        }
-
-		//    }
-		//}
-
 		private int PopNextComponentID()
 		{
 			return nextComponentID++;
 		}
 
-
-		/// <summary>
-		/// Gets a complete list of the Entities that are in the game
-		/// </summary>
-		//public ICollection<Position> Entities
-		//{
-		//    get
-		//    {
-		//        return quadTree;
-		//    }
-		//}
 
 		/// <summary>
 		/// Gets a list of entities that are intersecting with the search area
@@ -430,27 +350,6 @@ namespace AsteroidOutpost.Screens
 
 
 		/// <summary>
-		/// Looks up a entity by ID
-		/// This method is thread safe
-		/// </summary>
-		/// <param name="id">The ID to look up</param>
-		/// <returns>The entity with the given ID, or null if the entity is not found</returns>
-		//public Entity GetEntity(int id)
-		//{
-		//    lock (entityDictionary)
-		//    {
-		//        if (entityDictionary.ContainsKey(id))
-		//        {
-		//            return entityDictionary[id];
-		//        }
-
-		//        //Debugger.Break();
-		//        return null;
-		//    }
-		//}
-
-
-		/// <summary>
 		/// Looks up a component by entityID
 		/// This method is thread safe
 		/// </summary>
@@ -498,15 +397,6 @@ namespace AsteroidOutpost.Screens
 				Debugger.Break();
 			}
 			return nullableComponent;
-
-			//T matchingComponent = GetComponents<T>(entityID);
-			//if(matchingComponents == null || matchingComponents.Count != 1)
-			//{
-			//    // Use the GetNullableComponent if you plan for this to happen
-			//    Debugger.Break();
-			//    return null;
-			//}
-			//return matchingComponents[0];
 		}
 
 
@@ -553,12 +443,6 @@ namespace AsteroidOutpost.Screens
 				//Debugger.Break();
 				return null;
 			}
-			//T matchingComponent = GetComponents<T>(entityID);
-			//if(matchingComponents == null || matchingComponents.Count != 1)
-			//{
-			//    return null;
-			//}
-			//return matchingComponents[0];
 		}
 
 
@@ -592,20 +476,6 @@ namespace AsteroidOutpost.Screens
 					return new List<T>(0);
 				}
 			}
-
-			//lock (entityDictionary)
-			//{
-			//    //return new List<T>(componentDictionary.Where(comp => comp.Value.GetType() == typeof(T)).Select(x => x.Value as T));
-			//    //return componentDictionary.Where(comp => comp.Value.GetType() == typeof(T)).Select(x => x.Value as T).ToList();
-			//    //return componentDictionary.Where(compList => compList.Value.OfType<T>()); //.Select(x => x.Value as T).ToList();
-			//    //return componentDictionary.SelectMany(x => x.Value)
-			//    List<T> rv = new List<T>();
-			//    foreach(List<Component> componentList in entityDictionary.Values)
-			//    {
-			//        rv.AddRange(componentList.OfType<T>());
-			//    }
-			//    return rv;
-			//}
 		}
 		
 		
@@ -658,34 +528,10 @@ namespace AsteroidOutpost.Screens
 			return owningForces[entityID];
 		}
 
-
-		/// <summary>
-		/// Looks up a component by ID
-		/// This method is thread safe
-		/// </summary>
-		/// <param name="id">The ID to look up</param>
-		/// <returns>The component with the given ID, or null if the component is not found</returns>
-		//public IReflectionTarget GetTarget(int id)
-		//{
-		//    Component component = GetComponents(id);
-		//    if(component != null)
-		//    {
-		//        return component;
-		//    }
-		//    else
-		//    {
-		//        Entity entity = GetEntity(id);
-		//        if(entity != null)
-		//        {
-		//            return entity;
-		//        }
-		//        else
-		//        {
-		//            Debugger.Break();
-		//            return null;
-		//        }
-		//    }
-		//}
+		public IEnumerable<int> GetEntitiesOwnedBy(Force force)
+		{
+			return owningForces.Where(pair => pair.Value == force).Select(pair => pair.Key);
+		}
 
 
 		/// <summary>
@@ -806,7 +652,7 @@ namespace AsteroidOutpost.Screens
 		}
 
 
-		// TODO: Not sure I should have this helper methos here to pass a message to a system. Think about removing this
+		// TODO: Not sure I should have this helper method here to pass a message to a system. Think about removing this
 		public bool DrawQuadTree
 		{
 			get
@@ -927,46 +773,6 @@ namespace AsteroidOutpost.Screens
 				}
 
 
-				//// Update the components and entities
-				//List<Component> deadComponents = new List<Component>();
-				//foreach (Component component in componentDictionary.Values)
-				//{
-				//    if (!component.IsDead())
-				//    {
-				//        component.Update(deltaTime);
-				//    }
-				//    if (component.IsDead())
-				//    {
-				//        deadComponents.Add(component);
-				//    }
-				//}
-
-				//List<Entity> deadEntities = new List<Entity>();
-				//foreach (Entity entity in entityDictionary.Values)
-				//{
-				//    if (!entity.IsDead())
-				//    {
-				//        entity.Update(deltaTime);
-				//    }
-				//    if (entity.IsDead())
-				//    {
-				//        deadEntities.Add(entity);
-				//    }
-
-
-				//    // TODO: Find a way to listen for move events instead of always updating the position
-				//    quadTree.Move(entity);
-				//}
-
-				// Delete any components or entities that need to be deleted
-				//foreach (Component deadComponent in deadComponents)
-				//{
-				//    lock (componentDictionary)
-				//    {
-				//        componentDictionary.Remove(deadComponent.EntityID);
-				//    }
-				//}
-
 				foreach (Component deadComponent in deadComponents)
 				{
 					Position deadPosition = deadComponent as Position;
@@ -986,6 +792,12 @@ namespace AsteroidOutpost.Screens
 						if(entityDictionary[deadComponent.EntityID].Count == 1)
 						{
 							entityDictionary.Remove(deadComponent.EntityID);
+							owningForces.Remove(deadComponent.EntityID);
+
+							if(EntityDied != null)
+							{
+								EntityDied();
+							}
 						}
 						else
 						{
@@ -1015,20 +827,11 @@ namespace AsteroidOutpost.Screens
 		/// </summary>
 		public override void Draw(GameTime gameTime)
 		{
+			// Draw the back of the HUD before we draw most everything else
 			spriteBatch.Begin();
-
-			// Draw the back of the HUD
 			hud.DrawBack(spriteBatch, Color.White);
-
-			//foreach (var grid in powerGrid.Values)
-			//{
-			//    grid.Draw(spriteBatch);
-			//}
-			
 			spriteBatch.End();
 
-			// Draw the front of the HUD
-			//hud.DrawFront(spriteBatch, Color.White);
 			base.Draw(gameTime);
 		}
 
@@ -1306,7 +1109,6 @@ namespace AsteroidOutpost.Screens
 			foreach (var component in GetComponents<Component>(entityID))
 			{
 				deadComponents.Add(component);
-				//component.SetDead(true, true);
 			}
 		}
 
@@ -1314,7 +1116,6 @@ namespace AsteroidOutpost.Screens
 		public void DeleteComponent(Component component)
 		{
 			deadComponents.Add(component);
-			//component.SetDead(true, true);
 		}
 	}
 }

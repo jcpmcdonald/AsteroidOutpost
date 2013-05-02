@@ -40,7 +40,7 @@ namespace AsteroidOutpost
 						{ "Sprite.Scale", 0.7f },
 						{ "Sprite.Set", null },
 						{ "Sprite.Animation", null },
-						{ "Sprite.Orientation", GlobalRandom.Next(0, 359) },
+						{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
 						{ "Transpose.Position", roughPosition },
 						{ "Transpose.Radius", 40 },
 						{ "OwningForce", aiActor.PrimaryForce }
