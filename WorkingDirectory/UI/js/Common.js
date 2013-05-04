@@ -16,6 +16,12 @@ $(document).ready(function ()
 });
 
 
+// Inject a new function to make working inside scopes a little nicer
+window.scopeOf = function(selector){
+    return angular.element('[ng-controller=' + selector + ']').scope();
+};
+
+
 function XNACall(param)
 {
 	if (typeof xna === 'undefined')

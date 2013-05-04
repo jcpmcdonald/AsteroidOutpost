@@ -2,47 +2,90 @@
 
 var EditorMode = true;
 
-function UpdateSelection(selection)
+
+function SelectionInfoController($scope)
 {
-	if(selection != null)
-	{
-		if(typeof(selection) === "string")
-		{
-			var before = new Date();
-			selection = eval("(" + selection + ")");
-			var after = new Date();
-			console.log("Eval = " + (after.getTime() - before.getTime()));
+	$scope.selectedUnits = [];
+	
+	$scope.selectedUnitsView = function(){
+		if ($scope.selectedUnits == null || $scope.selectedUnits.length == 0){
+			return 'none';
+		}else if ($scope.selectedUnits.length == 1){
+			return 'one';
+		}else if ($scope.selectedUnits.length > 1){
+			return 'many';
 		}
-		
-		
-		for(entityID in selection)
-		{
-			if(selection[entityID].EntityName !== undefined)
-			{
-				$("#selectionTitle").text(selection[entityID].EntityName.Name);
-			}
-			if(selection[entityID].HitPoints !== undefined)
-			{
-				$("#health").text(Math.round(selection[entityID].HitPoints.Armour) + " / " + selection[entityID].HitPoints.TotalArmour);
-			}
-			//$("#selectionTitle").text(selection[entityID].EntityName.Name);
-			//$("#health").text(selection.health + " / " + selection.maxhealth);
-			//$("#level").text(selection.level);
-			//$("#team").text(selection.team);
-			
-			// Only do this once (for now)
-			break;
-		}
-		
-	}
-	else
-	{
-		$("#selectionTitle").html("&nbsp;");
-		$("#health").text("");
 	}
 	
-	//UpdateEditor(selection);
+	
+	$scope.hasHitPoints = function(){
+		return ($scope.selectedUnits != null &&
+				$scope.selectedUnits.length == 1 &&
+				typeof $scope.selectedUnits[0].HitPoints != 'undefined');
+	}
+	
+	$scope.isConstructing = function(){
+		return ($scope.selectedUnits != null &&
+				$scope.selectedUnits.length == 1 &&
+				typeof $scope.selectedUnits[0].Constructable != 'undefined' &&
+				$scope.selectedUnits[0].Constructable.IsConstructing == true &&
+				$scope.selectedUnits[0].Constructable.IsBeingPlaced == false);
+	}
 }
+
+function UpdateSelection(selection)
+{
+	if(typeof(selection) === "string")
+	{
+		var before = new Date();
+		selection = eval("(" + selection + ")");
+		var after = new Date();
+		console.log("Eval = " + (after.getTime() - before.getTime()));
+	}
+	
+	scopeOf('SelectionInfoController').selectedUnits = selection;
+	scopeOf('SelectionInfoController').$apply();
+}
+	
+	// if(selection != null)
+	// {
+		// if(typeof(selection) === "string")
+		// {
+			// var before = new Date();
+			// selection = eval("(" + selection + ")");
+			// var after = new Date();
+			// console.log("Eval = " + (after.getTime() - before.getTime()));
+		// }
+		// 
+		// 
+		// for(entityID in selection)
+		// {
+			// if(selection[entityID].EntityName !== undefined)
+			// {
+				// $("#selectionTitle").text(selection[entityID].EntityName.Name);
+			// }
+			// if(selection[entityID].HitPoints !== undefined)
+			// {
+				// $("#health").text(Math.round(selection[entityID].HitPoints.Armour) + " / " + selection[entityID].HitPoints.TotalArmour);
+			// }
+			// //$("#selectionTitle").text(selection[entityID].EntityName.Name);
+			// //$("#health").text(selection.health + " / " + selection.maxhealth);
+			// //$("#level").text(selection.level);
+			// //$("#team").text(selection.team);
+			// 
+			// // Only do this once (for now)
+			// break;
+		// }
+		// 
+	// }
+	// else
+	// {
+		// $("#selectionTitle").html("&nbsp;");
+		// $("#health").text("");
+	// }
+	// 
+	// //UpdateEditor(selection);
+// }
 
 function SetResources(newResources)
 {
@@ -136,8 +179,8 @@ $(document).ready(function()
 	{
 		// Show a dummy structure
 		UpdateSelection(
-			{
-				"0" : {
+			[
+				{
 					"EntityName" : {
 						"Name" : "Solar Station",
 						"GUID" : "Flsp0Nra4Um1VieH6zRgNg=="
@@ -154,17 +197,17 @@ $(document).ready(function()
 						},
 						"GUID" : "bPWxGkDFFU+jB62HmRN1HA=="
 					},
-					"Constructable" : {
-						"MineralsToConstruct" : 200,
-						"MineralsLeftToConstruct" : 200,
-						"IsBeingPlaced" : false,
-						"IsConstructing" : false,
-						"GUID" : "dQz6/7Jjfk+6Slcu4NZLHQ=="
-					},
 					"HitPoints" : {
 						"Armour" : 250,
 						"TotalArmour" : 250,
 						"GUID" : "pHMJfGX6oUG6LcG1poDh+Q=="
+					},
+					"Constructable" : {
+						"MineralsToConstruct" : 200,
+						"MineralsLeftToConstruct" : 200,
+						"IsBeingPlaced" : false,
+						"IsConstructing" : true,
+						"GUID" : "dQz6/7Jjfk+6Slcu4NZLHQ=="
 					},
 					"Position" : {
 						"Center" : {
@@ -193,8 +236,9 @@ $(document).ready(function()
 						"GUID" : "HvZ6suwYMkKhN1nggqpiaQ=="
 					}
 				}
-			}
+			]
 		);
+		
 		
 		// With some dummy minerals
 		SetResources({"minerals": 1000});
@@ -222,7 +266,7 @@ $(document).ready(function()
 	}
 	
 	
-	// Add a call to all the construction buttons 
+	// Add a call attribute to all the construction buttons dynamically
 	$(".constructionButton").each( function(){
 		$(this).attr("call", "hud.Build" + this.id + "()");
 	});
@@ -239,6 +283,7 @@ $(document).ready(function()
 	$(".button").mouseleave( function(event) {
 		$(this).removeClass("buttonPressed");
 	});
+	
 	
 	
 	// Capture mouse up/down events so we can tell XNA if we've handled the action or not
@@ -265,41 +310,24 @@ $(document).ready(function()
 /// #### Console
 /// #########################################################
 
-function addConsoleMessage(name, message)
+$username = "me";
+
+function ConsoleController($scope)
 {
-	$("#history").append('<div class="consoleLine"><span class="consoleID">' +
-							name +
-							'</span><span class="consoleText">' +
-							message +
-							'</span><span class="consoleTime">' +
-							(new Date()).toLocaleTimeString() +
-							'</span></div>');
-	$("#history").scrollTop($("#history").prop("scrollHeight"));
+	$scope.consoleLines = [ {username:'System', message:'Welcome', timestamp:new Date()} ];
 	
-	// Execute javascript on request
-	if(message.toLowerCase().indexOf("/js ") == 0)
+	$scope.addConsoleMessage = function()
 	{
-		eval(message.substr(4));
+		// Execute javascript on request
+		if($scope.consoleInput.toLowerCase().indexOf("/js ") == 0)
+		{
+			eval($scope.consoleInput.substr(4));
+		}
+		
+		$scope.consoleLines.push({username:$username, message:$scope.consoleInput, timestamp:new Date() });
+		$scope.consoleInput = "";
+		
+		setTimeout(function(){$("#history").scrollTop($("#history").prop("scrollHeight"))}, 10);
 	}
 }
-
-$(document).ready(function()
-{
-	var username = "me";
-	
-	$("#consoleInput").keyup(function(event){
-		if(event.which == 13)
-		{
-			var text = $("#consoleInput").val().trim();
-			$("#consoleInput").val("");
-			if(text == "")
-			{
-				return;
-			}
-			
-			addConsoleMessage(username, text);
-		}
-	});
-});
-
 
