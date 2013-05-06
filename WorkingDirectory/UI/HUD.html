@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="css/Style.css" />
 	<link rel="stylesheet" type="text/css" href="css/HUD.css" />
-	<link rel="stylesheet" type="text/css" href="css/ui-darkness/jquery-ui-1.8.23.custom.css" />
+	<link rel="stylesheet" type="text/css" href="css/ui-darkness/jquery-ui.custom.min.css" />
 	
 	<script type="text/javascript" src="js/jquery-latest.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-latest.js"></script>
@@ -34,16 +34,21 @@
 			
 			<div ng-switch-when="one">
 				<div id="selectionTitle">{{selectedUnits[0].EntityName.Name}}</div>
-				<div ng-switch="hasHitPoints()">
-					<div ng-switch-when="true">
-						<span id="lblHealth" class="selectionLabel">H:</span><span id="health" class="selectionData">{{selectedUnits[0].HitPoints.Armour}} / {{selectedUnits[0].HitPoints.TotalArmour}}</span>
-					</div>
-				</div>
-				<div ng-switch="isConstructing()">
-					<div ng-switch-when="true">
-						<span id="lblLevel" class="selectionLabel">C:</span><span id="constructionProgress" class="selectionData">{{selectedUnits[0].Constructable.MineralsLeftToConstruct}} / {{selectedUnits[0].Constructable.MineralsToConstruct}}</span>
-					</div>
-				</div>
+				<div ng-switch="has('HitPoints')"><div ng-switch-when="true">
+						<span id="lblHealth" class="selectionLabel"></span><span id="health" class="selectionData">{{selectedUnits[0].HitPoints.Armour}} / {{selectedUnits[0].HitPoints.TotalArmour}}</span>
+				</div></div>
+				
+				<div ng-switch="isConstructing()"><div ng-switch-when="true">
+						<span id="lblContructing" class="selectionLabel"></span><span id="constructionProgress" class="selectionData">{{selectedUnits[0].Constructable.MineralsLeftToConstruct}} / {{selectedUnits[0].Constructable.MineralsToConstruct}}</span>
+				</div></div>
+				
+				<div ng-switch="has('PowerProducer')"><div ng-switch-when="true">
+						<span id="lblPower" class="selectionLabel"></span><span id="power" class="selectionData">{{selectedUnits[0].PowerProducer.AvailablePower}} / {{selectedUnits[0].PowerProducer.MaxPower}}</span>
+				</div></div>
+				
+				<div ng-switch="has('Minable')"><div ng-switch-when="true">
+						<span id="lblMinable" class="selectionLabel"></span><span id="minable" class="selectionData">{{selectedUnits[0].Minable.Minerals}}</span>
+				</div></div>
 			</div>
 			
 			<div ng-switch-when="many">Multi-select is not implemented yet</div>

@@ -7,7 +7,7 @@ function UpdateEditor(newSelection)
 {
 	if(EditorMode)
 	{
-		if(newSelection == null)
+		if(newSelection == null || newSelection.length == 0)
 		{
 			currentSelection = newSelection;
 			if($("#editorPanel").is('*'))
@@ -16,22 +16,21 @@ function UpdateEditor(newSelection)
 				return;
 			}
 		}
-		
-		var entityID = FirstProperty(newSelection);
-		if(entityID != null)
+		else
 		{
+			var entityID = newSelection[0].EntityID;
 			var editorPanel;
 			var selection;
-			if(entityID === FirstProperty(currentSelection))
+			if(currentSelection != null && currentSelection.length == 1 && entityID == currentSelection[0].EntityID)
 			{
 				// We are looking at the same entity, process the differences
-				selection = Diff(newSelection[entityID], currentSelection[entityID]);
+				selection = Diff(newSelection, currentSelection);
 			}
 			else
 			{
 				// This is a new selection, clear out the old data then re-populate
 				$("#editorPanel").remove();
-				selection = newSelection[entityID];
+				selection = newSelection[0];
 			}
 			
 			editorPanel = GetOrCreate('editorPanel', $('body'), '<div id="editorPanel" class="panel"></div>');
@@ -39,6 +38,12 @@ function UpdateEditor(newSelection)
 			
 			for(component in selection)
 			{
+				if(component == "EntityID")
+				{
+					// Ignore
+					continue;
+				}
+				
 				// For each component, create a section
 				var componentHeader = GetOrCreate(entityID + '-' + component + '-header', editorPanel, '<h3 id="' + entityID + '-' + component + '-header">' + component + '</h3>');
 				var componentBody = GetOrCreate(entityID + '-' + component + '-body', editorPanel, '<div id="' + entityID + '-' + component + '-body"></div>');

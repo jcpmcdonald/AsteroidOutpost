@@ -885,21 +885,22 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				//}
 
 
-				List<Dictionary<String, Component>> entities = new List<Dictionary<String, Component>>(selectedEntities.Count);
+				List<Dictionary<String, Object>> entities = new List<Dictionary<String, Object>>(selectedEntities.Count);
+				int index = 0;
 				foreach (var selectedEntity in selectedEntities)
 				{
-					entities.Add(world.GetComponents<Component>(selectedEntities[0]).ToDictionary(component => component.GetComponentClassName(), component => component));
+					entities.Add(world.GetComponents<Component>(selectedEntity).ToDictionary(component => component.GetComponentClassName(), component => (Object)component));
+					entities[index].Add("EntityID", selectedEntity);
+					index++;
 				}
 
 
 				JSON.Instance.Parameters.EnableAnonymousTypes = true;
 				String json = JSON.Instance.ToJSON(entities);
-//#if DEBUG
-//                awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue(JSON.Instance.Beautify(json)));
-//#else
-				//awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue(json));
-				awesomium.WebView.ExecuteJavascriptWithResult("UpdateSelection(" + json + ")");
-				//#endif
+#if DEBUG
+				json = JSON.Instance.Beautify(json);
+#endif
+				awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue(json));
 			}
 			else
 			{

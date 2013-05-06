@@ -5,7 +5,7 @@
 	bottom: 0px;
 	
 	height: 150px;
-	width: 250px;
+	width: 350px;
 	
 	padding: 0px;
 	border-radius: 0px 15px 0px 0px;
@@ -20,9 +20,37 @@
 
 .selectionLabel
 {
-	padding-left: 15px;
-	padding-right: 5px;
+	margin-left: 15px;
+	margin-right: 5px;
 	color: #AAAAAA;
+}
+
+#lblHealth
+{
+	padding-left: 20px;
+	background-image: url("../images/HitPoints.png");
+	background-size: 20px 20px;
+}
+
+#lblContructing
+{
+	padding-left: 20px;
+	background-image: url("../images/Constructing.png");
+	background-size: 25px 25px;
+}
+
+#lblPower
+{
+	padding-left: 20px;
+	background-image: url("../images/Power.png");
+	background-size: 20px 20px;
+}
+
+#lblMinable
+{
+	padding-left: 20px;
+	background-image: url("../images/Minerals.png");
+	background-size: 20px 20px;
 }
 
 .selectionData

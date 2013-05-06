@@ -1,11 +1,12 @@
 //"use strict";
 
-var EditorMode = true;
-
-
 function SelectionInfoController($scope)
 {
 	$scope.selectedUnits = [];
+	
+	$scope.$watch('selectedUnits', function() {
+		UpdateEditor($scope.selectedUnits);
+	});
 	
 	$scope.selectedUnitsView = function(){
 		if ($scope.selectedUnits == null || $scope.selectedUnits.length == 0){
@@ -17,19 +18,18 @@ function SelectionInfoController($scope)
 		}
 	}
 	
-	
-	$scope.hasHitPoints = function(){
-		return ($scope.selectedUnits != null &&
-				$scope.selectedUnits.length == 1 &&
-				typeof $scope.selectedUnits[0].HitPoints != 'undefined');
-	}
-	
 	$scope.isConstructing = function(){
 		return ($scope.selectedUnits != null &&
 				$scope.selectedUnits.length == 1 &&
 				typeof $scope.selectedUnits[0].Constructable != 'undefined' &&
 				$scope.selectedUnits[0].Constructable.IsConstructing == true &&
 				$scope.selectedUnits[0].Constructable.IsBeingPlaced == false);
+	}
+	
+	$scope.has = function($component){
+		return ($scope.selectedUnits != null &&
+				$scope.selectedUnits.length == 1 &&
+				typeof $scope.selectedUnits[0][$component] != 'undefined');
 	}
 }
 
@@ -181,6 +181,7 @@ $(document).ready(function()
 		UpdateSelection(
 			[
 				{
+					"EntityID": 0,
 					"EntityName" : {
 						"Name" : "Solar Station",
 						"GUID" : "Flsp0Nra4Um1VieH6zRgNg=="
