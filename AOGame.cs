@@ -137,6 +137,7 @@ namespace AsteroidOutpost
 			// Create somewhere to log messages to
 			awesomium.WebView.CreateObject("console");
 			awesomium.WebView.SetObjectCallback("console", "log", JSConsoleLog);
+			awesomium.WebView.SetObjectCallback("console", "dir", JSConsoleLog);
 
 			awesomium.WebView.JSConsoleMessageAdded += WebView_JSConsoleMessageAdded;
 		}

@@ -1,6 +1,9 @@
 //"use strict";
 
 
+var ready = false;
+
+
 function SelectionInfoController($scope)
 {
 	$scope.selectedUnits = [];
@@ -9,12 +12,24 @@ function SelectionInfoController($scope)
 	
 	
 	$scope.$watch('selectedUnits', function() {
-		UpdateEditor($scope.selectedUnits);
-		//$scope.hitPointsProgressBar = null;
-		$.each($scope.progressBars, function(index, progressBar){
-			progressBar.progressbar = null;
-		});
-		console.log("selectedUnitsUpdated!");
+		
+		var onWatch = function(){
+			UpdateEditor($scope.selectedUnits);
+			//$scope.hitPointsProgressBar = null;
+			$.each($scope.progressBars, function(index, progressBar){
+				progressBar.progressbar = null;
+			});
+			console.log("selectedUnitsUpdated!");
+		}
+		
+		if(ready)
+		{
+			onWatch();
+		}
+		else
+		{
+			setTimeout(function(){ onWatch() }, 0);
+		}
 	});
 	
 	
@@ -24,9 +39,11 @@ function SelectionInfoController($scope)
 		var newProgressBar = {divID:$divID, component:$component, value:$value, max:$max};
 		$scope.progressBars.push( newProgressBar );
 		
+		
+		
+		
 		$scope.$watch('selectedUnits[0].' + newProgressBar.component + "." + newProgressBar.value, function() {
 			setTimeout(function(){
-				console.log(newProgressBar);
 				if($scope.has(newProgressBar.component))
 				{
 					if(newProgressBar.progressbar == null)
@@ -38,9 +55,11 @@ function SelectionInfoController($scope)
 					console.log("Value: " + $scope.selectedUnits[0][newProgressBar.component][newProgressBar.value]);
 					console.log("Max: " + $scope.selectedUnits[0][newProgressBar.component][newProgressBar.max]);
 					newProgressBar.progressbar.progressbar( "option", "max", $scope.selectedUnits[0][newProgressBar.component][newProgressBar.max]);
+					console.log("Max set");
 					newProgressBar.progressbar.progressbar( "option", "value", Math.round($scope.selectedUnits[0][newProgressBar.component][newProgressBar.value]));
+					console.log("Value set");
 				}
-			}, 0);
+			}, 10);
 		});
 	}
 	
@@ -88,17 +107,33 @@ function SelectionInfoController($scope)
 	}
 }
 
-function UpdateSelection(selection)
+function UpdateSelection(newSelection)
 {
-	if(typeof(selection) === "string")
+	if(typeof(newSelection) === "string")
 	{
 		//var before = new Date();
-		selection = eval("(" + selection + ")");
+		newSelection = eval("(" + newSelection + ")");
 		//var after = new Date();
 		//console.log("Eval = " + (after.getTime() - before.getTime()));
 	}
 	
-	scopeOf('SelectionInfoController').selectedUnits = selection;
+	// var currentlySelectedEntities = [];
+	// $.each(scopeOf('SelectionInfoController').selectedUnits, function(index, selectedUnit){
+		// currentlySelectedEntities.push(selectedUnit.EntityID);
+	// });
+	// console.log("Currently Selected Entities: " + currentlySelectedEntities);
+	// 
+	// 
+	// var newlySelectedEntities = [];
+	// $.each(newSelection, function(index, selectedUnit){
+		// newlySelectedEntities.push(selectedUnit.EntityID);
+	// });
+	// console.log("Newly Selected Entities: " + newlySelectedEntities);
+	
+	var difference = $.extend(true, scopeOf('SelectionInfoController').selectedUnits, newSelection);
+	//console.dir(difference);
+	
+	//scopeOf('SelectionInfoController').selectedUnits = newSelection;
 	scopeOf('SelectionInfoController').$apply();
 }
 
@@ -187,6 +222,7 @@ function docMouseUp(event)
 
 $(document).ready(function()
 {
+	ready = true;
 	
 	//scopeOf("SelectionInfoController").AddProgressBar("hitPointsProgressBar", "HitPoints", "Armour", "TotalArmour");
 	scopeOf("SelectionInfoController").AddProgressBar("powerLevelProgressBar", "PowerProducer", "AvailablePower", "MaxPower");
@@ -201,7 +237,7 @@ $(document).ready(function()
 		UpdateSelection(
 			[
 				{
-					"EntityID": 0,
+					"EntityID": 10,
 					"EntityName" : {
 						"Name" : "Solar Station",
 						"GUID" : "Flsp0Nra4Um1VieH6zRgNg=="
