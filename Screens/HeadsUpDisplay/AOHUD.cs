@@ -291,7 +291,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				awesomium.WebView.CallJavascriptFunction("", "SetResources", new JSValue(resources));
 			}
 
-			UpdateSelection();
+			//UpdateSelection();
 		}
 
 

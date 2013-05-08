@@ -1,12 +1,67 @@
 //"use strict";
 
+
 function SelectionInfoController($scope)
 {
 	$scope.selectedUnits = [];
+	//$scope.hitPointsProgressBar = null;
+	$scope.progressBars = [];
+	
 	
 	$scope.$watch('selectedUnits', function() {
 		UpdateEditor($scope.selectedUnits);
+		//$scope.hitPointsProgressBar = null;
+		$.each($scope.progressBars, function(index, progressBar){
+			progressBar.progressbar = null;
+		});
+		console.log("selectedUnitsUpdated!");
 	});
+	
+	
+	$scope.AddProgressBar = function($divID, $component, $value, $max) {
+		// Grab the div
+		//var div = $("#" + $name);
+		var newProgressBar = {divID:$divID, component:$component, value:$value, max:$max};
+		$scope.progressBars.push( newProgressBar );
+		
+		$scope.$watch('selectedUnits[0].' + newProgressBar.component + "." + newProgressBar.value, function() {
+			setTimeout(function(){
+				console.log(newProgressBar);
+				if($scope.has(newProgressBar.component))
+				{
+					if(newProgressBar.progressbar == null)
+					{
+						newProgressBar.progressbar = $("#" + newProgressBar.divID);
+						newProgressBar.progressbar.progressbar();
+						console.log("New Progress Bar!");
+					}
+					console.log("Value: " + $scope.selectedUnits[0][newProgressBar.component][newProgressBar.value]);
+					console.log("Max: " + $scope.selectedUnits[0][newProgressBar.component][newProgressBar.max]);
+					newProgressBar.progressbar.progressbar( "option", "max", $scope.selectedUnits[0][newProgressBar.component][newProgressBar.max]);
+					newProgressBar.progressbar.progressbar( "option", "value", Math.round($scope.selectedUnits[0][newProgressBar.component][newProgressBar.value]));
+				}
+			}, 0);
+		});
+	}
+	
+	
+	// $scope.UpdateProgressBarFor = function($name){
+		// if($scope.has("HitPoints"))
+		// {
+			// if($scope.hitPointsProgressBar == null)
+			// {
+				// $scope.hitPointsProgressBar = $("#HitPointsProgressBar");
+				// $scope.hitPointsProgressBar.progressbar();
+			// }
+			// $scope.hitPointsProgressBar.progressbar( "option", "max", $scope.selectedUnits[0].HitPoints.TotalArmour);
+			// $scope.hitPointsProgressBar.progressbar( "option", "value", $scope.selectedUnits[0].HitPoints.Armour);
+		// }
+	// }
+	
+	
+	// $scope.UpdateProgressBars = function(){
+		// 
+	// }
 	
 	$scope.selectedUnitsView = function(){
 		if ($scope.selectedUnits == null || $scope.selectedUnits.length == 0){
@@ -37,55 +92,16 @@ function UpdateSelection(selection)
 {
 	if(typeof(selection) === "string")
 	{
-		var before = new Date();
+		//var before = new Date();
 		selection = eval("(" + selection + ")");
-		var after = new Date();
-		console.log("Eval = " + (after.getTime() - before.getTime()));
+		//var after = new Date();
+		//console.log("Eval = " + (after.getTime() - before.getTime()));
 	}
 	
 	scopeOf('SelectionInfoController').selectedUnits = selection;
 	scopeOf('SelectionInfoController').$apply();
 }
-	
-	// if(selection != null)
-	// {
-		// if(typeof(selection) === "string")
-		// {
-			// var before = new Date();
-			// selection = eval("(" + selection + ")");
-			// var after = new Date();
-			// console.log("Eval = " + (after.getTime() - before.getTime()));
-		// }
-		// 
-		// 
-		// for(entityID in selection)
-		// {
-			// if(selection[entityID].EntityName !== undefined)
-			// {
-				// $("#selectionTitle").text(selection[entityID].EntityName.Name);
-			// }
-			// if(selection[entityID].HitPoints !== undefined)
-			// {
-				// $("#health").text(Math.round(selection[entityID].HitPoints.Armour) + " / " + selection[entityID].HitPoints.TotalArmour);
-			// }
-			// //$("#selectionTitle").text(selection[entityID].EntityName.Name);
-			// //$("#health").text(selection.health + " / " + selection.maxhealth);
-			// //$("#level").text(selection.level);
-			// //$("#team").text(selection.team);
-			// 
-			// // Only do this once (for now)
-			// break;
-		// }
-		// 
-	// }
-	// else
-	// {
-		// $("#selectionTitle").html("&nbsp;");
-		// $("#health").text("");
-	// }
-	// 
-	// //UpdateEditor(selection);
-// }
+
 
 function SetResources(newResources)
 {
@@ -172,6 +188,10 @@ function docMouseUp(event)
 $(document).ready(function()
 {
 	
+	//scopeOf("SelectionInfoController").AddProgressBar("hitPointsProgressBar", "HitPoints", "Armour", "TotalArmour");
+	scopeOf("SelectionInfoController").AddProgressBar("powerLevelProgressBar", "PowerProducer", "AvailablePower", "MaxPower");
+	//var newProgressBar = {divID: "HitPointsProgressBar", component: "HitPoints", value: "Armour", max: "TotalArmour"};
+	
 	///
 	/// This section attempts to immatate what XNA will be doing in-game. It makes it easier to debug
 	///
@@ -199,7 +219,7 @@ $(document).ready(function()
 						"GUID" : "bPWxGkDFFU+jB62HmRN1HA=="
 					},
 					"HitPoints" : {
-						"Armour" : 250,
+						"Armour" : 70,
 						"TotalArmour" : 250,
 						"GUID" : "pHMJfGX6oUG6LcG1poDh+Q=="
 					},
@@ -243,6 +263,14 @@ $(document).ready(function()
 		
 		// With some dummy minerals
 		SetResources({"minerals": 1000});
+		
+		//console.log("Ready!");
+		//scopeOf("SelectionInfoController").UpdateProgressBars();
+		//console.log("Done Ready!");
+		
+		//scopeOf("SelectionInfoController").hitPointsProgressBar = $("#hitPointsProgress");
+		//scopeOf("SelectionInfoController").hitPointsProgressBar.progressbar({value: 20});
+		//$("#hitPointsProgress").progressbar();
 		
 		// Show the in-game menu when you press ESC
 		$(document).keydown(function(event)
@@ -328,7 +356,9 @@ function ConsoleController($scope)
 		$scope.consoleLines.push({username:$username, message:$scope.consoleInput, timestamp:new Date() });
 		$scope.consoleInput = "";
 		
-		setTimeout(function(){$("#history").scrollTop($("#history").prop("scrollHeight"))}, 10);
+		setTimeout(function(){
+			$("#history").scrollTop($("#history").prop("scrollHeight"))
+		}, 0);
 	}
 }
 
