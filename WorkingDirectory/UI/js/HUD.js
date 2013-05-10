@@ -33,54 +33,38 @@ function SelectionInfoController($scope)
 	});
 	
 	
-	$scope.AddProgressBar = function($divID, $component, $value, $max) {
+	$scope.AddProgressBar = function($divID, $component, $value, $max, $invert) {
+		$invert = typeof $invert !== 'undefined' ? $invert : false;
+		
 		// Grab the div
 		//var div = $("#" + $name);
 		var newProgressBar = {divID:$divID, component:$component, value:$value, max:$max};
 		$scope.progressBars.push( newProgressBar );
 		
 		
-		
-		
 		$scope.$watch('selectedUnits[0].' + newProgressBar.component + "." + newProgressBar.value, function() {
 			setTimeout(function(){
 				if($scope.has(newProgressBar.component))
 				{
-					if(newProgressBar.progressbar == null)
+					if(newProgressBar.progressbar == null || !$("#" + newProgressBar.divID).is(':data(progressbar)'))
 					{
 						newProgressBar.progressbar = $("#" + newProgressBar.divID);
 						newProgressBar.progressbar.progressbar();
-						console.log("New Progress Bar!");
 					}
-					console.log("Value: " + $scope.selectedUnits[0][newProgressBar.component][newProgressBar.value]);
-					console.log("Max: " + $scope.selectedUnits[0][newProgressBar.component][newProgressBar.max]);
 					newProgressBar.progressbar.progressbar( "option", "max", $scope.selectedUnits[0][newProgressBar.component][newProgressBar.max]);
-					console.log("Max set");
-					newProgressBar.progressbar.progressbar( "option", "value", Math.round($scope.selectedUnits[0][newProgressBar.component][newProgressBar.value]));
-					console.log("Value set");
+					if(!$invert)
+					{
+						newProgressBar.progressbar.progressbar( "option", "value", $scope.selectedUnits[0][newProgressBar.component][newProgressBar.value]);
+					}
+					else
+					{
+						newProgressBar.progressbar.progressbar( "option", "value", $scope.selectedUnits[0][newProgressBar.component][newProgressBar.max] - $scope.selectedUnits[0][newProgressBar.component][newProgressBar.value]);
+					}
 				}
 			}, 10);
 		});
 	}
 	
-	
-	// $scope.UpdateProgressBarFor = function($name){
-		// if($scope.has("HitPoints"))
-		// {
-			// if($scope.hitPointsProgressBar == null)
-			// {
-				// $scope.hitPointsProgressBar = $("#HitPointsProgressBar");
-				// $scope.hitPointsProgressBar.progressbar();
-			// }
-			// $scope.hitPointsProgressBar.progressbar( "option", "max", $scope.selectedUnits[0].HitPoints.TotalArmour);
-			// $scope.hitPointsProgressBar.progressbar( "option", "value", $scope.selectedUnits[0].HitPoints.Armour);
-		// }
-	// }
-	
-	
-	// $scope.UpdateProgressBars = function(){
-		// 
-	// }
 	
 	$scope.selectedUnitsView = function(){
 		if ($scope.selectedUnits == null || $scope.selectedUnits.length == 0){
@@ -107,6 +91,20 @@ function SelectionInfoController($scope)
 	}
 }
 
+function SetSelection(newSelection)
+{
+	if(typeof(newSelection) === "string")
+	{
+		//var before = new Date();
+		newSelection = eval("(" + newSelection + ")");
+		//var after = new Date();
+		//console.log("Eval = " + (after.getTime() - before.getTime()));
+	}
+	
+	scopeOf('SelectionInfoController').selectedUnits = newSelection;
+	scopeOf('SelectionInfoController').$apply();
+}
+
 function UpdateSelection(newSelection)
 {
 	if(typeof(newSelection) === "string")
@@ -117,23 +115,7 @@ function UpdateSelection(newSelection)
 		//console.log("Eval = " + (after.getTime() - before.getTime()));
 	}
 	
-	// var currentlySelectedEntities = [];
-	// $.each(scopeOf('SelectionInfoController').selectedUnits, function(index, selectedUnit){
-		// currentlySelectedEntities.push(selectedUnit.EntityID);
-	// });
-	// console.log("Currently Selected Entities: " + currentlySelectedEntities);
-	// 
-	// 
-	// var newlySelectedEntities = [];
-	// $.each(newSelection, function(index, selectedUnit){
-		// newlySelectedEntities.push(selectedUnit.EntityID);
-	// });
-	// console.log("Newly Selected Entities: " + newlySelectedEntities);
-	
-	var difference = $.extend(true, scopeOf('SelectionInfoController').selectedUnits, newSelection);
-	//console.dir(difference);
-	
-	//scopeOf('SelectionInfoController').selectedUnits = newSelection;
+	var difference = $.extend(scopeOf('SelectionInfoController').selectedUnits, newSelection);
 	scopeOf('SelectionInfoController').$apply();
 }
 
@@ -224,9 +206,11 @@ $(document).ready(function()
 {
 	ready = true;
 	
-	//scopeOf("SelectionInfoController").AddProgressBar("hitPointsProgressBar", "HitPoints", "Armour", "TotalArmour");
+	scopeOf("SelectionInfoController").AddProgressBar("hitPointsProgressBar", "HitPoints", "Armour", "TotalArmour");
+	scopeOf("SelectionInfoController").AddProgressBar("constructionProgressBar", "Constructable", "MineralsLeftToConstruct", "MineralsToConstruct", true);
 	scopeOf("SelectionInfoController").AddProgressBar("powerLevelProgressBar", "PowerProducer", "AvailablePower", "MaxPower");
-	//var newProgressBar = {divID: "HitPointsProgressBar", component: "HitPoints", value: "Armour", max: "TotalArmour"};
+	scopeOf("SelectionInfoController").AddProgressBar("mineralsProgressBar", "Minable", "Minerals", "StartingMinerals");
+	
 	
 	///
 	/// This section attempts to immatate what XNA will be doing in-game. It makes it easier to debug
@@ -300,13 +284,6 @@ $(document).ready(function()
 		// With some dummy minerals
 		SetResources({"minerals": 1000});
 		
-		//console.log("Ready!");
-		//scopeOf("SelectionInfoController").UpdateProgressBars();
-		//console.log("Done Ready!");
-		
-		//scopeOf("SelectionInfoController").hitPointsProgressBar = $("#hitPointsProgress");
-		//scopeOf("SelectionInfoController").hitPointsProgressBar.progressbar({value: 20});
-		//$("#hitPointsProgress").progressbar();
 		
 		// Show the in-game menu when you press ESC
 		$(document).keydown(function(event)

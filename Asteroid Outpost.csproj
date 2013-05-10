@@ -52,7 +52,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>WorkingDirectory\binDebug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;WINDOWS UNLIMITED_FPS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;WINDOWS </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoStdLib>true</NoStdLib>

@@ -30,7 +30,7 @@
 		<div ng-switch="selectedUnitsView()">
 		
 			<div ng-switch-when="none">
-				<div id="selectionTitle">Nothing!</div>
+				<div id="selectionTitle"></div>
 			</div>
 			
 			<div ng-switch-when="one">
@@ -39,16 +39,16 @@
 					<span id="lblHealth" class="selectionLabel"></span>
 					<div id="hitPointsProgressBar" class="selectionProgressBar">
 						<span class="selectionProgressData">
-							{{selectedUnits[0].HitPoints.Armour}} / {{selectedUnits[0].HitPoints.TotalArmour}}
+							{{selectedUnits[0].HitPoints.Armour | number:0}} / {{selectedUnits[0].HitPoints.TotalArmour | number:0}}
 						</span>
 					</div>
 				</div></div>
 				
 				<div ng-switch="isConstructing()"><div ng-switch-when="true">
 					<span id="lblContructing" class="selectionLabel"></span>
-					<div class="selectionProgressBar">
+					<div id="constructionProgressBar" class="selectionProgressBar">
 						<span class="selectionProgressData">
-							{{selectedUnits[0].Constructable.MineralsLeftToConstruct}} / {{selectedUnits[0].Constructable.MineralsToConstruct}}
+							{{selectedUnits[0].Constructable.MineralsLeftToConstruct | number:0}} / {{selectedUnits[0].Constructable.MineralsToConstruct | number:0}}
 						</span>
 					</div>
 				</div></div>
@@ -57,13 +57,18 @@
 					<span id="lblPower" class="selectionLabel"></span>
 					<div id="powerLevelProgressBar" class="selectionProgressBar">
 						<span class="selectionProgressData">
-							{{selectedUnits[0].PowerProducer.AvailablePower | number:1}} / {{selectedUnits[0].PowerProducer.MaxPower}}
+							{{selectedUnits[0].PowerProducer.AvailablePower | number:0}} / {{selectedUnits[0].PowerProducer.MaxPower | number:0}}
 						</span>
 					</div>
 				</div></div>
 				
 				<div ng-switch="has('Minable')"><div ng-switch-when="true">
-					<span id="lblMinable" class="selectionLabel"></span><span id="minable" class="">{{selectedUnits[0].Minable.Minerals}}</span>
+					<span id="lblMinable" class="selectionLabel"></span>
+					<div id="mineralsProgressBar" class="selectionProgressBar">
+						<span id="minable" class="selectionProgressData">
+							{{selectedUnits[0].Minable.Minerals | number:0}} / {{selectedUnits[0].Minable.StartingMinerals | number:0}}
+						</span>
+					</div>
 				</div></div>
 			</div>
 			

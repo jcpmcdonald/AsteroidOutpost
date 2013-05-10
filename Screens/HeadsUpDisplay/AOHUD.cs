@@ -865,26 +865,31 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				SelectionChanged(new MultiEntityEventArgs(selectedEntities));
 			}
 
-			UpdateSelection();
+			SetSelection();
 		}
 
+
+		/// <summary>
+		/// Sets the UI's selection information
+		/// </summary>
+		private void SetSelection()
+		{
+			awesomium.WebView.CallJavascriptFunction("", "SetSelection", GetSelectionJSValue());
+		}
 
 		/// <summary>
 		/// Updates the UI's selection information
 		/// </summary>
 		private void UpdateSelection()
 		{
+			awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", GetSelectionJSValue());
+		}
+
+
+		private JSValue GetSelectionJSValue()
+		{
 			if(selectedEntities.Count >= 1)
 			{
-				// Note: I'm using Strings instead of ints because it serializes to JSON a little more cleanly
-				// This is defined as a: Dictionary<entityID, Dictionary<componentName, Component>>
-				//Dictionary<String, Dictionary<String, Component>> entities = new Dictionary<String, Dictionary<String, Component>>(selectedEntities.Count);
-				//foreach (var selectedEntity in selectedEntities)
-				//{
-				//    entities[selectedEntity.ToString()] = world.GetComponents<Component>(selectedEntities[0]).ToDictionary(component => component.GetComponentClassName(), component => component);
-				//}
-
-
 				List<Dictionary<String, Object>> entities = new List<Dictionary<String, Object>>(selectedEntities.Count);
 				int index = 0;
 				foreach (var selectedEntity in selectedEntities)
@@ -900,11 +905,11 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 #if DEBUG
 				json = JSON.Instance.Beautify(json);
 #endif
-				awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue(json));
+				return new JSValue(json);
 			}
 			else
 			{
-				awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue());
+				return new JSValue();
 			}
 		}
 
