@@ -3,17 +3,29 @@
 <html ng-app>
 <head>
 	<meta charset="utf-8">
+	
+	<link rel="stylesheet" type="text/css" href="css/ui-darkness/jquery-ui.custom.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery.jqplot.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/Style.css" />
 	<link rel="stylesheet" type="text/css" href="css/HUD.css" />
-	<link rel="stylesheet" type="text/css" href="css/ui-darkness/jquery-ui.custom.min.css" />
 	
 	<script type="text/javascript" src="js/jquery-latest.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-latest.js"></script>
 	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+	<script type="text/javascript" src="js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+	<script type="text/javascript" src="js/plugins/jqplot.highlighter.min.js"></script>
+	<script type="text/javascript" src="js/plugins/jqplot.canvasTextRenderer.min.js"></script>
+	<script type="text/javascript" src="js/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+	<script type="text/javascript" src="js/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
+	<script type="text/javascript" src="js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+	
+	
 	<script type="text/javascript" src="js/KeyDefinitions.js"></script>
 	<script type="text/javascript" src="js/Common.js"></script>
 	<script type="text/javascript" src="js/EntityEditor.js"></script>
 	<script type="text/javascript" src="js/HUD.js"></script>
+	<script type="text/javascript" src="js/PerformanceMonitor.js"></script>
 
 </head>
 <body>
@@ -99,6 +111,8 @@
 		<div id="radarContainer">
 		</div>
 	</div-->
+	
+	<div id="performanceGraph" class="panel"></div>
 	
 	
 	<div id="console" class="panel" ng-controller="ConsoleController">

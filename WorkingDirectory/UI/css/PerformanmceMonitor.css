@@ -1,0 +1,53 @@
+
+
+
+#performanceGraph
+{
+	top: 150px;
+	left: 0px;
+	
+	width:300px;
+	height:150px;
+	
+	padding: 5px;
+	
+	border-radius: 0px 15px 15px 0px;
+	border-style: solid solid solid none;
+}
+
+
+.jqplot-title
+{
+	color: white;
+}
+
+.jqplot-axis
+{
+	color: white;
+}
+
+
+.jqplot-yaxis-tick
+{
+	/*left: 16px;*/
+	font-size: small;
+	margin-right: 8px;
+}
+
+.jqplot-yaxis-label
+{
+	font-size: small;
+}
+
+
+table.jqplot-table-legend, table.jqplot-cursor-legend {
+    background-color: rgba(100, 100, 100, 0);
+    color: white;
+    border: 0px;
+    font-size: 0.75em;
+    position: absolute;
+}
+table.jqplot-table-legend {
+    margin: 0px;
+    
+}

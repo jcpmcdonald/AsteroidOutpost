@@ -111,7 +111,7 @@ namespace AsteroidOutpost
 			Components.Add(starField);
 
 			frameRateCounter = new FrameRateCounter(this);
-			Components.Add(frameRateCounter);
+			//Components.Add(frameRateCounter);
 
 			initGraphicsMode(width, height, fullScreen);
 
@@ -138,6 +138,13 @@ namespace AsteroidOutpost
 			awesomium.WebView.CreateObject("console");
 			awesomium.WebView.SetObjectCallback("console", "log", JSConsoleLog);
 			awesomium.WebView.SetObjectCallback("console", "dir", JSConsoleLog);
+
+			awesomium.WebView.CreateObject("performanceMonitor");
+			JSValue[] updateTime = new JSValue[2];
+			updateTime[0] = new JSValue(5);
+			updateTime[1] = new JSValue(6);
+			//awesomium.WebView.SetObjectProperty("performanceMonitor", "drawTime", new JSValue(new JSValue[](new JSValue(1))));
+			awesomium.WebView.SetObjectProperty("performanceMonitor", "updateTime", new JSValue(updateTime));
 
 			awesomium.WebView.JSConsoleMessageAdded += WebView_JSConsoleMessageAdded;
 		}
@@ -246,8 +253,10 @@ namespace AsteroidOutpost
 				Console.WriteLine("Loaded in " + stopwatch.ElapsedMilliseconds + "ms");
 			}
 
+			frameRateCounter.StartOfUpdate(gameTime);
+
 			base.Update(gameTime);
-			Window.Title = String.Format("{0, 0} FPS {1, 30} ms / frame", frameRateCounter.FPS, Math.Round(frameRateCounter.MillisecondsPerFrame, 3));
+			//Window.Title = String.Format("{0, 0} FPS {1, 30} ms / frame", frameRateCounter.FPS, Math.Round(frameRateCounter.MillisecondsPerFrame, 3));
 
 			if (!musicStarted)
 			{
@@ -257,6 +266,17 @@ namespace AsteroidOutpost
 					MediaPlayer.Play(menuMusic);
 				}
 				musicStarted = true;
+			}
+
+
+			frameRateCounter.EndOfUpdate(gameTime);
+
+
+			if(awesomium.WebView.IsLive)
+			{
+				// Force this to be a syncrounous call otherwise we could hammer this with update calls, and it can't keep up
+				String js = String.Format("if(typeof RefreshPerformanceGraph != 'undefined'){{ RefreshPerformanceGraph({0}, {1}); }}", frameRateCounter.LastUpdateTime(), frameRateCounter.LastDrawTime());
+				awesomium.WebView.ExecuteJavascriptWithResult(js, 50);
 			}
 
 			// Allows the game to exit if I ever load this on an XBox
@@ -273,6 +293,8 @@ namespace AsteroidOutpost
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
+			frameRateCounter.StartOfDraw(gameTime);
+
 			spriteBatch.Begin();
 			starField.Draw(spriteBatch, Color.White);
 			spriteBatch.End();
@@ -285,6 +307,8 @@ namespace AsteroidOutpost
 			spriteBatch.Draw(awesomium.WebViewTexture, GraphicsDevice.Viewport.Bounds, Color.White);
 			spriteBatch.Draw(cursorTexture, new Vector2(Mouse.GetState().X - 20, Mouse.GetState().Y - 20), Color.White);
 			spriteBatch.End();
+
+			frameRateCounter.EndOfDraw();
 		}
 
 
