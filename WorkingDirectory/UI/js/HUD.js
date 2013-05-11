@@ -19,7 +19,7 @@ function SelectionInfoController($scope)
 			$.each($scope.progressBars, function(index, progressBar){
 				progressBar.progressbar = null;
 			});
-			console.log("selectedUnitsUpdated!");
+			//console.log("selectedUnitsUpdated!");
 		}
 		
 		if(ready)
@@ -164,20 +164,6 @@ function UpdateTimerPanel(value)
 }
 
 
-var missions;
-function AddMission(key, description)
-{
-	//if (typeof missions === 'undefined')
-	if (missions == undefined)
-	{
-		missions = new Array();
-		$("body").append('<div id="missions" class="panel"></div>');
-	}
-	missions[key] = description;
-	$("#missions").append('<div id="mission' + key + '" class="mission">' + description + '</div>');
-}
-
-
 
 
 
@@ -303,8 +289,8 @@ $(document).ready(function()
 		$("#btnMainMenu").click( function (event){ window.location = "MainMenu.html"; });
 		
 		// Add some missions
-		AddMission("buildMiners", "Build 3 miners near asteroids");
-		AddMission("buildLaserTowers", "Build 2 laser towers");
+		scopeOf("MissionController").AddMission("buildMiners", "Build 3 miners near asteroids", "0/3", false);
+		scopeOf("MissionController").AddMission("buildLaserTowers", "Build 2 laser towers", "", false);
 	}
 	
 	
@@ -346,34 +332,6 @@ $(document).ready(function()
 
 
 
-
-
-/// #########################################################
-/// #### Console
-/// #########################################################
-
-$username = "me";
-
-function ConsoleController($scope)
-{
-	$scope.consoleLines = [ {username:'System', message:'Welcome', timestamp:new Date()} ];
-	
-	$scope.addConsoleMessage = function()
-	{
-		// Execute javascript on request
-		if($scope.consoleInput.toLowerCase().indexOf("/js ") == 0)
-		{
-			eval($scope.consoleInput.substr(4));
-		}
-		
-		$scope.consoleLines.push({username:$username, message:$scope.consoleInput, timestamp:new Date() });
-		$scope.consoleInput = "";
-		
-		setTimeout(function(){
-			$("#history").scrollTop($("#history").prop("scrollHeight"))
-		}, 0);
-	}
-}
 
 
 

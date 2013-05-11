@@ -25,6 +25,8 @@
 	<script type="text/javascript" src="js/Common.js"></script>
 	<script type="text/javascript" src="js/EntityEditor.js"></script>
 	<script type="text/javascript" src="js/HUD.js"></script>
+	<script type="text/javascript" src="js/Console.js"></script>
+	<script type="text/javascript" src="js/Missions.js"></script>
 	<script type="text/javascript" src="js/PerformanceMonitor.js"></script>
 
 </head>
@@ -111,6 +113,12 @@
 		<div id="radarContainer">
 		</div>
 	</div-->
+	
+	<div id="missions" class="panel" ng-controller="MissionController">
+		<div ng-repeat="mission in missions">
+			<div class="mission">{{mission.description}}</div>
+		</div>
+	</div>
 	
 	<div id="performanceGraph" class="panel"></div>
 	
