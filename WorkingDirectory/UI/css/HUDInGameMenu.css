@@ -14,6 +14,8 @@
 	padding: 0px;
 	border-radius: 15px;
 	border-style: solid solid solid solid;
+	
+	z-index: 9999;
 }
 
 #pauseDisplay
@@ -34,6 +36,8 @@
 	padding: 0px;
 	border-radius: 0px 0px 15px 15px;
 	border-style: none solid solid solid;
+	
+	z-index: 9999;
 }
 
 #pauseDisplay.paused

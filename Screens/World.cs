@@ -73,7 +73,8 @@ namespace AsteroidOutpost.Screens
 
 		private readonly List<Controller> controllers = new List<Controller>();
 		private readonly List<Force> forces = new List<Force>();
-
+		
+		public event Action<bool> PauseToggledEvent;
 		public event Action<EntityEventArgs> StructureStartedEventPreAuth;
 		public event Action<EntityEventArgs> StructureStartedEventPostAuth;
 
@@ -162,7 +163,17 @@ namespace AsteroidOutpost.Screens
 			{
 				// TODO: Handle this over the network. Should clients be allowed to pause the server?
 				paused = value;
-				awesomium.WebView.CallJavascriptFunction("", "SetPaused", new JSValue(paused));
+				OnPauseToggle();
+				//awesomium.WebView.CallJavascriptFunction("", "SetPaused", new JSValue(paused));
+			}
+		}
+
+
+		public void OnPauseToggle()
+		{
+			if (PauseToggledEvent != null)
+			{
+				PauseToggledEvent(paused);
 			}
 		}
 

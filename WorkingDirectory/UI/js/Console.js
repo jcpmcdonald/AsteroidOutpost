@@ -3,7 +3,7 @@ $username = "me";
 
 function ConsoleController($scope)
 {
-	$scope.consoleLines = [ {username:'System', message:'Welcome', timestamp:new Date()} ];
+	$scope.consoleLines = [ {username:'System', message:'Welcome to Asteroid Outpost!', timestamp:new Date()} ];
 	
 	$scope.addConsoleMessage = function()
 	{

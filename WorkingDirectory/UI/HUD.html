@@ -39,10 +39,11 @@
 		<span id="MissileTower" class="button constructionButton"></span>
 	</div>
 	
+	<div id="modalOverlay"></div>
 	
 	<div id="selectonInfo" class="panel" ng-controller="SelectionInfoController">
 		<div ng-switch="selectedUnitsView()">
-		
+			
 			<div ng-switch-when="none">
 				<div id="selectionTitle"></div>
 			</div>
@@ -98,7 +99,7 @@
 	
 	
 	<div id="gameMenu" class="panel">
-		<span id="btnResume" class="button menuButton" onClick="HideGameMenu();">Resume Game</span>
+		<span id="btnResume" class="button menuButton" onClick="SetPaused(false); XNACall('hud.ResumeGame()');">Resume Game</span>
 		<span id="btnMainMenu" class="button menuButton" call="hud.QuitGame()">Main Menu</span>
 		<span id="btnExit" class="button menuButton" call="xna.Exit()">Exit Game</span>
 	</div>

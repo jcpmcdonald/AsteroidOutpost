@@ -125,19 +125,6 @@ function SetResources(newResources)
 	$("#minerals").text(FormatNumber(newResources.minerals));
 }
 
-function ShowGameMenu()
-{
-	$("#gameMenu").show();
-}
-
-//
-// This will hide the in-game menu, but *not* unpause the game, because that could have been initiated by another player
-//
-function HideGameMenu()
-{
-	$("#gameMenu").hide();
-	XNACall("hud.ResumeGame()");
-}
 
 
 function SetPaused(paused)
@@ -145,10 +132,14 @@ function SetPaused(paused)
 	if(paused)
 	{
 		$("#pauseDisplay").addClass("paused");
+		$("#gameMenu").show();
+		$("#modalOverlay").fadeIn(200);
 	}
 	else
 	{
 		$("#pauseDisplay").removeClass("paused");
+		$("#gameMenu").hide();
+		$("#modalOverlay").fadeOut(200);
 	}
 }
 
@@ -276,13 +267,13 @@ $(document).ready(function()
 			{
 				if(event.keyCode === KEY_ESC)
 				{
-					$("#gameMenu").toggle();
-					SetPaused($("#gameMenu").is(":visible"));
+					var paused = $("#gameMenu").is(":visible");
+					SetPaused(!paused);
 				}
 			}
 		);
 		
-		// And don't forget to hide the "paused" notifier when we resume
+		
 		$("#btnResume").click( function (event){ SetPaused(false); });
 		
 		// Make the Main Menu button work (fakely)

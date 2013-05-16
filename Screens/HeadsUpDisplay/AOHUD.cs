@@ -91,6 +91,14 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			awesomium.WebView.SetObjectCallback("hud", "BuildLaserMiner", btnLaserMiner_Clicked);
 			awesomium.WebView.SetObjectCallback("hud", "BuildLaserTower", btnLaserTower_Clicked);
 			awesomium.WebView.SetObjectCallback("hud", "BuildMissileTower", btnMissileTower_Clicked);
+
+			world.PauseToggledEvent += WorldOnPauseToggledEvent;
+		}
+
+
+		private void WorldOnPauseToggledEvent(bool paused)
+		{
+			awesomium.WebView.CallJavascriptFunction("","SetPaused", new JSValue(paused));
 		}
 
 
@@ -177,7 +185,6 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 				{
 					// Make the world stop
 					world.Paused = !world.Paused;
-					awesomium.WebView.CallJavascriptFunction("", world.Paused ? "ShowGameMenu" : "HideGameMenu", new JSValue());
 				}
 			}
 

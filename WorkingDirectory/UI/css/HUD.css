@@ -152,4 +152,17 @@
 {
 }
 
+#modalOverlay
+{
+	display: none; /* start off hidden */
+	
+	top:0;
+	left:0;
+	height:100%;
+	width:100%;
+	position:fixed;
+	z-index: 9999;
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.7);
+}
+
 

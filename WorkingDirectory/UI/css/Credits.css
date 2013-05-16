@@ -45,8 +45,10 @@ h2.credit
 
 .scroll
 {
-	-moz-transition: top 30s linear;
+	transition: top 30s linear;
 	-webkit-transition: top 30s linear;
+	-moz-transition: top 30s linear;
+	-o-transition: top 30s linear;
 }
 
 
