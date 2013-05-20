@@ -33,20 +33,20 @@ namespace AsteroidOutpost.Screens
 	public class World : DrawableGameComponent, IReflectionTarget
 	{
 		public const UInt32 Version = 2;
-		public const UInt32 StreamIdent = 0x607A0BAD;  // Get it?
+		public const UInt32 StreamIdent = 0x607A0BAD;  // Have you got it?
 
 		private SpriteBatch spriteBatch;
 
 		private LayeredStarField layeredStarField;
-		private readonly QuadTree<Position> quadTree;
-		private readonly AwesomiumComponent awesomium;
+		private QuadTree<Position> quadTree;
+		private AwesomiumComponent awesomium;
 		private readonly Dictionary<int, List<Component>> entityDictionary = new Dictionary<int, List<Component>>(2000);		// Note: This variable must be kept thread-safe
 		private readonly Dictionary<Type, List<Component>> componentDictionary = new Dictionary<Type, List<Component>>(10);		// Note: This variable must be kept thread-safe
 		private readonly List<Component> deadComponents = new List<Component>();
 		//private Dictionary<int, Entity> entityDictionary = new Dictionary<int, Entity>(2000);		// Note: This variable must be kept thread-safe
 		private readonly Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
 		private readonly Dictionary<int, Force> owningForces = new Dictionary<int, Force>();
-		private readonly AOHUD hud;
+		private AOHUD hud;		// TODO: Why is this part of the world? Shouldn't it be part of the game?
 		private Scenario scenario;
 
 		private readonly AnimationSystem animationSystem;
@@ -117,6 +117,27 @@ namespace AsteroidOutpost.Screens
 			game.Components.Add(missileWeaponSystem);
 			game.Components.Add(movementSystem);
 			game.Components.Add(hitPointSystem);
+		}
+
+
+		protected override void Dispose(bool disposing)
+		{
+			network = null;
+			hud = null;
+			awesomium = null;
+			quadTree = null;
+
+			// Remove all the systems from the component list
+			var systems = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+			foreach(var system in systems)
+			{
+				if(system.GetValue(this) is GameComponent)
+				{
+					Game.Components.Remove((GameComponent)system.GetValue(this));
+				}
+			}
+
+ 			base.Dispose(disposing);
 		}
 
 

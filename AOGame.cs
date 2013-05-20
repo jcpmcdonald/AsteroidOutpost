@@ -56,6 +56,7 @@ namespace AsteroidOutpost
 		private Texture2D cursorTexture;
 
 		private Stopwatch stopwatch = new Stopwatch();
+		private bool destroyWorld = false;
 
 		#endregion
 
@@ -140,11 +141,10 @@ namespace AsteroidOutpost
 			awesomium.WebView.SetObjectCallback("console", "dir", JSConsoleLog);
 
 			awesomium.WebView.CreateObject("performanceMonitor");
-			JSValue[] updateTime = new JSValue[2];
-			updateTime[0] = new JSValue(5);
-			updateTime[1] = new JSValue(6);
-			//awesomium.WebView.SetObjectProperty("performanceMonitor", "drawTime", new JSValue(new JSValue[](new JSValue(1))));
-			awesomium.WebView.SetObjectProperty("performanceMonitor", "updateTime", new JSValue(updateTime));
+			//JSValue[] updateTime = new JSValue[2];
+			//updateTime[0] = new JSValue(5);
+			//updateTime[1] = new JSValue(6);
+			//awesomium.WebView.SetObjectProperty("performanceMonitor", "updateTime", new JSValue(updateTime));
 
 			awesomium.WebView.JSConsoleMessageAdded += WebView_JSConsoleMessageAdded;
 		}
@@ -222,8 +222,14 @@ namespace AsteroidOutpost
 			EntityFactory.LoadContent(GraphicsDevice);
 			EllipseEx.LoadContent(GraphicsDevice);
 
-			menuMusic = Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 04 Inner Battles (Bignic Remix)");
+			//menuMusic = Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 04 Inner Battles (Bignic Remix)");
 			MediaPlayer.IsRepeating = true;
+
+			if(stopwatch.IsRunning)
+			{
+				stopwatch.Stop();
+				Console.WriteLine("Loaded in " + stopwatch.ElapsedMilliseconds + "ms");
+			}
 		}
 
 		/// <summary>
@@ -247,12 +253,6 @@ namespace AsteroidOutpost
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			if(stopwatch.IsRunning)
-			{
-				stopwatch.Stop();
-				Console.WriteLine("Loaded in " + stopwatch.ElapsedMilliseconds + "ms");
-			}
-
 			frameRateCounter.StartOfUpdate(gameTime);
 
 			base.Update(gameTime);
@@ -274,9 +274,9 @@ namespace AsteroidOutpost
 
 			if(awesomium.WebView.IsLive)
 			{
-				// Force this to be a syncrounous call otherwise we could hammer this with update calls, and it can't keep up
+				// Force this to be a synchronous call otherwise we could hammer this with update calls, and it can't keep up
 				String js = String.Format("if(typeof RefreshPerformanceGraph != 'undefined'){{ RefreshPerformanceGraph({0}, {1}); }}", frameRateCounter.LastUpdateTime(), frameRateCounter.LastDrawTime());
-				awesomium.WebView.ExecuteJavascriptWithResult(js, 50);
+				awesomium.WebView.ExecuteJavascriptWithResult(js, 100);
 			}
 
 			// Allows the game to exit if I ever load this on an XBox
@@ -309,6 +309,25 @@ namespace AsteroidOutpost
 			spriteBatch.End();
 
 			frameRateCounter.EndOfDraw();
+
+
+			if(destroyWorld)
+			{
+				destroyWorld = false;
+				Components.Remove(world);
+				world.Dispose();
+				world = null;
+			}
+		}
+
+
+		/// <summary>
+		/// Wipe the world so that we can start fresh
+		/// </summary>
+		public void DestroyWorld()
+		{
+			awesomium.WebView.LoadFile("MainMenu.html");
+			destroyWorld = true;
 		}
 
 
@@ -374,13 +393,13 @@ namespace AsteroidOutpost
 		/// <param name="e"></param>
 		private void JSConsoleLog(object sender, JSCallbackEventArgs e)
 		{
-			System.Console.WriteLine(e.Arguments[0].ToString());
+			Console.WriteLine(e.Arguments[0].ToString());
 		}
 
 
 		private void WebView_JSConsoleMessageAdded(object sender, JSConsoleMessageEventArgs e)
 		{
-			// JavaScript Error!
+			// JavaScript Error! Fail
 			Console.WriteLine("{0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);
 #if DEBUG
 			Debugger.Break();

@@ -11,29 +11,24 @@ function SelectionInfoController($scope)
 	$scope.progressBars = [];
 	
 	
-	$scope.$watch('selectedUnits', function() {
-		
-		var onWatch = function(){
+	
+	$scope.$watch('selectedUnits', function()
+	{
+		setTimeout(function()
+		{
 			UpdateEditor($scope.selectedUnits);
 			//$scope.hitPointsProgressBar = null;
-			$.each($scope.progressBars, function(index, progressBar){
+			$.each($scope.progressBars, function(index, progressBar)
+			{
 				progressBar.progressbar = null;
 			});
 			//console.log("selectedUnitsUpdated!");
-		}
-		
-		if(ready)
-		{
-			onWatch();
-		}
-		else
-		{
-			setTimeout(function(){ onWatch() }, 0);
-		}
+		}, 0);
 	});
 	
 	
-	$scope.AddProgressBar = function($divID, $component, $value, $max, $invert) {
+	$scope.AddProgressBar = function($divID, $component, $value, $max, $invert)
+	{
 		$invert = typeof $invert !== 'undefined' ? $invert : false;
 		
 		// Grab the div
@@ -42,8 +37,10 @@ function SelectionInfoController($scope)
 		$scope.progressBars.push( newProgressBar );
 		
 		
-		$scope.$watch('selectedUnits[0].' + newProgressBar.component + "." + newProgressBar.value, function() {
-			setTimeout(function(){
+		$scope.$watch('selectedUnits[0].' + newProgressBar.component + "." + newProgressBar.value, function()
+		{
+			setTimeout(function()
+			{
 				if($scope.has(newProgressBar.component))
 				{
 					if(newProgressBar.progressbar == null || !$("#" + newProgressBar.divID).is(':data(progressbar)'))
@@ -61,22 +58,29 @@ function SelectionInfoController($scope)
 						newProgressBar.progressbar.progressbar( "option", "value", $scope.selectedUnits[0][newProgressBar.component][newProgressBar.max] - $scope.selectedUnits[0][newProgressBar.component][newProgressBar.value]);
 					}
 				}
-			}, 10);
+			}, 0);
 		});
 	}
 	
 	
-	$scope.selectedUnitsView = function(){
-		if ($scope.selectedUnits == null || $scope.selectedUnits.length == 0){
+	$scope.selectedUnitsView = function()
+	{
+		if ($scope.selectedUnits == null || $scope.selectedUnits.length == 0)
+		{
 			return 'none';
-		}else if ($scope.selectedUnits.length == 1){
+		}
+		else if ($scope.selectedUnits.length == 1)
+		{
 			return 'one';
-		}else if ($scope.selectedUnits.length > 1){
+		}
+		else if ($scope.selectedUnits.length > 1)
+		{
 			return 'many';
 		}
 	}
 	
-	$scope.isConstructing = function(){
+	$scope.isConstructing = function()
+	{
 		return ($scope.selectedUnits != null &&
 				$scope.selectedUnits.length == 1 &&
 				typeof $scope.selectedUnits[0].Constructable != 'undefined' &&
@@ -84,7 +88,8 @@ function SelectionInfoController($scope)
 				$scope.selectedUnits[0].Constructable.IsBeingPlaced == false);
 	}
 	
-	$scope.has = function($component){
+	$scope.has = function($component)
+	{
 		return ($scope.selectedUnits != null &&
 				$scope.selectedUnits.length == 1 &&
 				typeof $scope.selectedUnits[0][$component] != 'undefined');
@@ -181,7 +186,7 @@ function docMouseUp(event)
 
 $(document).ready(function()
 {
-	ready = true;
+	
 	
 	scopeOf("SelectionInfoController").AddProgressBar("hitPointsProgressBar", "HitPoints", "Armour", "TotalArmour");
 	scopeOf("SelectionInfoController").AddProgressBar("constructionProgressBar", "Constructable", "MineralsLeftToConstruct", "MineralsToConstruct", true);
@@ -264,14 +269,13 @@ $(document).ready(function()
 		
 		// Show the in-game menu when you press ESC
 		$(document).keydown(function(event)
+		{
+			if(event.keyCode === KEY_ESC)
 			{
-				if(event.keyCode === KEY_ESC)
-				{
-					var paused = $("#gameMenu").is(":visible");
-					SetPaused(!paused);
-				}
+				var paused = $("#gameMenu").is(":visible");
+				SetPaused(!paused);
 			}
-		);
+		});
 		
 		
 		$("#btnResume").click( function (event){ SetPaused(false); });
@@ -286,37 +290,49 @@ $(document).ready(function()
 	
 	
 	// Add a call attribute to all the construction buttons dynamically
-	$(".constructionButton").each( function(){
+	$(".constructionButton").each( function()
+	{
 		$(this).attr("call", "hud.Build" + this.id + "()");
 	});
 	
 	
 	// Make button presses look cool
-	$(".button").mousedown( function(event) {
+	$(".button").mousedown( function(event)
+	{
 		$(this).addClass("buttonPressed");
 	});
-	$(".button").mouseup( function(event) {
+	
+	$(".button").mouseup( function(event)
+	{
 		$(this).removeClass("buttonPressed");
 		XNACall($(this));
 	});
-	$(".button").mouseleave( function(event) {
+	
+	$(".button").mouseleave( function(event)
+	{
 		$(this).removeClass("buttonPressed");
 	});
 	
 	
 	
 	// Capture mouse up/down events so we can tell XNA if we've handled the action or not
-	$(document).mousedown( function(event) {
+	$(document).mousedown( function(event)
+	{
 		docMouseDown(event);
 	});
-	$("body").mousedown( function(event) {
+	
+	$("body").mousedown( function(event)
+	{
 		mouseDownOverHUD = true;
 	});
 	
-	$(document).mouseup( function(event) {
+	$(document).mouseup( function(event)
+	{
 		docMouseUp(event);
 	});
-	$("body").mouseup( function(event) {
+	
+	$("body").mouseup( function(event)
+	{
 		mouseUpOverHUD = true;
 	});
 });

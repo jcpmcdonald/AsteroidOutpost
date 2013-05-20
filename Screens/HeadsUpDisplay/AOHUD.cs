@@ -85,6 +85,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			awesomium.WebView.SetObjectCallback("hud", "OnMouseDown", OnMouseDown);
 
 			awesomium.WebView.SetObjectCallback("hud", "ResumeGame", ResumeGame);
+			awesomium.WebView.SetObjectCallback("hud", "ForfeitGame", ForfeitGame);
 
 			awesomium.WebView.SetObjectCallback("hud", "BuildSolarStation", btnPower_Clicked);
 			awesomium.WebView.SetObjectCallback("hud", "BuildPowerNode", btnPowerNode_Clicked);
@@ -939,6 +940,17 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 		private void ResumeGame(Object sender, EventArgs e)
 		{
 			world.Paused = false;
+		}
+
+
+		/// <summary>
+		/// Forfeit the Game and return to the main menu
+		/// </summary>
+		/// <param name="sender">Not relevant</param>
+		/// <param name="e">None</param>
+		private void ForfeitGame(Object sender, EventArgs e)
+		{
+			((AOGame)Game).DestroyWorld();
 		}
 
 
