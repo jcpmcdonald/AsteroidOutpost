@@ -78,7 +78,7 @@ namespace AsteroidOutpost.Screens
 		public event Action<EntityEventArgs> StructureStartedEventPreAuth;
 		public event Action<EntityEventArgs> StructureStartedEventPostAuth;
 
-		public event Action EntityDied;
+		public event Action<int> EntityDied;
 		
 		public World(AOGame game) : base(game)
 		{
@@ -123,9 +123,11 @@ namespace AsteroidOutpost.Screens
 		protected override void Dispose(bool disposing)
 		{
 			network = null;
-			hud = null;
 			awesomium = null;
 			quadTree = null;
+
+			Game.Components.Remove(hud);
+			hud = null;
 
 			// Remove all the systems from the component list
 			var systems = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
@@ -555,6 +557,12 @@ namespace AsteroidOutpost.Screens
 			}
 		}
 
+
+		public Force GetOwningForce(Component referenceComponent)
+		{
+			return GetOwningForce(referenceComponent.EntityID);
+		}
+
 		public Force GetOwningForce(int entityID)
 		{
 			return owningForces[entityID];
@@ -715,7 +723,7 @@ namespace AsteroidOutpost.Screens
 
 		internal PowerGrid GetPowerGrid(Component componentInForce)
 		{
-			return powerGrid[GetOwningForce(componentInForce.EntityID).ID];
+			return powerGrid[GetOwningForce(componentInForce).ID];
 		}
 
 
@@ -805,6 +813,16 @@ namespace AsteroidOutpost.Screens
 				}
 
 
+				// First tell people about dead entities
+				if (EntityDied != null && deadComponents.Count > 0)
+				{
+					foreach(var deadEntity in deadComponents.Select(x => x.EntityID).Distinct())
+					{
+						EntityDied(deadEntity);
+					}
+				}
+
+				// Then clean up the dead entities
 				foreach (Component deadComponent in deadComponents)
 				{
 					Position deadPosition = deadComponent as Position;
@@ -825,11 +843,6 @@ namespace AsteroidOutpost.Screens
 						{
 							entityDictionary.Remove(deadComponent.EntityID);
 							owningForces.Remove(deadComponent.EntityID);
-
-							if(EntityDied != null)
-							{
-								EntityDied();
-							}
 						}
 						else
 						{

@@ -140,6 +140,15 @@ namespace AsteroidOutpost.Components
 				powerNodes[connectedNode].Remove(node);
 			}
 
+			for(int i = recentlyActiveLinks.Count - 1; i >= 0; i--)
+			{
+				var recentlyActiveLink = recentlyActiveLinks[i];
+				if(recentlyActiveLink.Item1 == node || recentlyActiveLink.Item2 == node)
+				{
+					recentlyActiveLinks.RemoveAt(i);
+				}
+			}
+
 			powerNodes.Remove(node);
 		}
 

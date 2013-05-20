@@ -34,7 +34,7 @@ namespace AsteroidOutpost.Systems
 				foreach (var possibleTarget in possibleTargets)
 				{
 					if(possibleTarget == laser.EntityID ||
-						world.GetOwningForce(possibleTarget).Team == world.GetOwningForce(laser.EntityID).Team ||
+						world.GetOwningForce(possibleTarget).Team == world.GetOwningForce(laser).Team ||
 						world.GetOwningForce(possibleTarget).Team == Team.Neutral)
 					{
 						// Eliminate invalid targets

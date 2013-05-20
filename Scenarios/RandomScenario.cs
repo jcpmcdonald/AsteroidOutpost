@@ -14,12 +14,10 @@ namespace AsteroidOutpost.Scenarios
 {
 	public class RandomScenario : Scenario
 	{
-		private static readonly TimeSpan timeBetweenWaves = TimeSpan.FromMinutes(1);
+		private static readonly TimeSpan timeBetweenWaves = TimeSpan.FromSeconds(60);
 		private TimeSpan waveTimer = timeBetweenWaves;
 		private int sequence = 0;
 		private Force friendlyForce;
-
-		//private 
 
 
 		public RandomScenario(AOGame theGame, int playerCount)
@@ -64,13 +62,20 @@ namespace AsteroidOutpost.Scenarios
 
 
 
-		void World_EntityDied()
+		void World_EntityDied(int entityID)
 		{
 			// Check to see if the player has lost
-			if(!world.GetEntitiesOwnedBy(friendlyForce).Any())
+			//     The player loses if they have no more power producers
+
+			PowerProducer deadPowerProducer = world.GetNullableComponent<PowerProducer>(entityID);
+			if(deadPowerProducer != null)
 			{
-				// DEAD!
-				Console.WriteLine("DEAD!");
+				// A power producer has been eliminated, check to see if there is still power out there
+				if(!world.GetComponents<PowerProducer>().Any(p => p != deadPowerProducer && p.PowerStateActive && world.GetOwningForce(p) == friendlyForce))
+				{
+					// No power sources, it is impossible to recover. You are dead, or will be very soon
+					Console.WriteLine("DEAD!");
+				}
 			}
 		}
 

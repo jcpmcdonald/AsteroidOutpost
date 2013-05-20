@@ -48,7 +48,7 @@ namespace AsteroidOutpost.Systems
 						//{ "Sprite.RotateFrame", true },
 						{ "Transpose.Position", position.Center },
 						{ "Transpose.Radius", 10 },
-						{ "OwningForce", world.GetOwningForce(missileLauncher.EntityID) },
+						{ "OwningForce", world.GetOwningForce(missileLauncher) },
 						{ "TargetEntityID", missileLauncher.Target }
 					});
 
@@ -122,7 +122,7 @@ namespace AsteroidOutpost.Systems
 			foreach (var possibleTarget in possibleTargets)
 			{
 				if (possibleTarget == missileWeapon.EntityID ||
-					world.GetOwningForce(possibleTarget).Team == world.GetOwningForce(missileWeapon.EntityID).Team ||
+					world.GetOwningForce(possibleTarget).Team == world.GetOwningForce(missileWeapon).Team ||
 					world.GetOwningForce(possibleTarget).Team == Team.Neutral)
 				{
 					// Eliminate invalid targets

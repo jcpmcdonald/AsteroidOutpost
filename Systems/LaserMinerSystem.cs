@@ -145,7 +145,7 @@ namespace AsteroidOutpost.Systems
 
 			if (currentAsteroid != null)
 			{
-				Force owningForce = world.GetOwningForce(laserMiner.EntityID);
+				Force owningForce = world.GetOwningForce(laserMiner);
 				if (world.PowerGrid[owningForce.ID].GetPower(laserMiner.EntityID, powerToUse))
 				{
 					if (currentAsteroid.Minerals < mineralsToExtract)

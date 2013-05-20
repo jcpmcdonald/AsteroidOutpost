@@ -74,8 +74,8 @@ namespace AsteroidOutpost.Systems
 				float mineralsToUse = mineralUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
 				int delta;
 
-				// Check that we have enough power in the gridv
-				Force owningForce = world.GetOwningForce(constructable.EntityID);
+				// Check that we have enough power in the grid
+				Force owningForce = world.GetOwningForce(constructable);
 				if (world.PowerGrid[owningForce.ID].HasPower(constructable.EntityID, powerToUse))
 				{
 					// Check to see if the mineralsLeftToConstruct would pass an integer boundary
