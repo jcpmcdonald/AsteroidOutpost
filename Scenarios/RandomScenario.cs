@@ -17,7 +17,6 @@ namespace AsteroidOutpost.Scenarios
 		private static readonly TimeSpan timeBetweenWaves = TimeSpan.FromSeconds(60);
 		private TimeSpan waveTimer = timeBetweenWaves;
 		private int sequence = 0;
-		private Force friendlyForce;
 
 
 		public RandomScenario(AOGame theGame, int playerCount)
@@ -55,28 +54,9 @@ namespace AsteroidOutpost.Scenarios
 			world.AddForce(aiForce);
 			world.AddController(aiController);
 
-			theGame.World.EntityDied += World_EntityDied;
-
 			theGame.Awesomium.WebView.CallJavascriptFunction("", "MakeTimerPanel", new JSValue());
-		}
 
-
-
-		void World_EntityDied(int entityID)
-		{
-			// Check to see if the player has lost
-			//     The player loses if they have no more power producers
-
-			PowerProducer deadPowerProducer = world.GetNullableComponent<PowerProducer>(entityID);
-			if(deadPowerProducer != null)
-			{
-				// A power producer has been eliminated, check to see if there is still power out there
-				if(!world.GetComponents<PowerProducer>().Any(p => p != deadPowerProducer && p.PowerStateActive && world.GetOwningForce(p) == friendlyForce))
-				{
-					// No power sources, it is impossible to recover. You are dead, or will be very soon
-					Console.WriteLine("DEAD!");
-				}
-			}
+			base.Start();
 		}
 
 

@@ -100,8 +100,15 @@
 	
 	<div id="gameMenu" class="panel">
 		<span id="btnResume" class="button menuButton" onClick="SetPaused(false); XNACall('hud.ResumeGame()');">Resume Game</span>
-		<span id="btnMainMenu" class="button menuButton" call="hud.ForfeitGame()">Main Menu</span>
-		<span id="btnExit" class="button menuButton" call="xna.Exit()">Exit Game</span>
+		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame()">Main Menu</span>
+		<span class="btnExit button menuButton" call="xna.Exit()">Exit Game</span>
+	</div>
+	
+	
+	<div id="gameLost" class="panel">
+		<div class="modalText">You Lose</div>
+		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame()">Main Menu</span>
+		<span class="btnExit button menuButton" call="xna.Exit()">Exit Game</span>
 	</div>
 	
 	

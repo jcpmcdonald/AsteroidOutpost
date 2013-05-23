@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ namespace AsteroidOutpost.Scenarios
 		protected World world;
 		protected int playerCount;
 
+		protected Force friendlyForce;
+
 
 		protected Scenario(AOGame theGame, int playerCount)
 		{
@@ -29,11 +32,42 @@ namespace AsteroidOutpost.Scenarios
 		}
 
 
-		public abstract void Start();
-		public void End() { }
+		public virtual void Start()
+		{
+			theGame.World.EntityDied += World_EntityDied;
+
+			if(friendlyForce == null)
+			{
+				// A friendly force is required
+				Debugger.Break();
+			}
+		}
+
+		public virtual void End()
+		{
+			theGame.World.EntityDied -= World_EntityDied;
+		}
+
 
 		public abstract void Update(TimeSpan deltaTime);
 
+
+		protected virtual void World_EntityDied(int entityID)
+		{
+			// Check to see if the player has lost
+			//     The player loses if they have no more power producers
+
+			PowerProducer deadPowerProducer = world.GetNullableComponent<PowerProducer>(entityID);
+			if(deadPowerProducer != null)
+			{
+				// A power producer has been eliminated, check to see if there is still power out there
+				if(!world.GetComponents<PowerProducer>().Any(p => p != deadPowerProducer && p.PowerStateActive && world.GetOwningForce(p) == friendlyForce))
+				{
+					// No power sources, it is impossible to recover. You are dead, or will be very soon
+					world.GameOver(false);
+				}
+			}
+		}
 
 
 		/// <summary>

@@ -52,9 +52,9 @@ namespace AsteroidOutpost.Scenarios
 
 
 			// Set up some forces and actors
-			Force localForce = new Force(world, world.GetNextForceID(), 1000, Team.Team1);
-			Controller localController = new Controller(world, ControllerRole.Local, localForce);
-			world.AddForce(localForce);
+			friendlyForce = new Force(world, world.GetNextForceID(), 1000, Team.Team1);
+			Controller localController = new Controller(world, ControllerRole.Local, friendlyForce);
+			world.AddForce(friendlyForce);
 			world.AddController(localController);
 
 			Force aiForce = new Force(world, world.GetNextForceID(), 1000, Team.AI);
@@ -62,9 +62,9 @@ namespace AsteroidOutpost.Scenarios
 			world.AddForce(aiForce);
 			world.AddController(aiController);
 
-			world.PowerGrid.Add(localForce.ID, new PowerGrid(world));
+			world.PowerGrid.Add(friendlyForce.ID, new PowerGrid(world));
 
-			world.HUD.FocusWorldPoint = CreateStartingBase(localForce);
+			world.HUD.FocusWorldPoint = CreateStartingBase(friendlyForce);
 
 			//// Create your starting solar station
 			//SolarStation startingStation = new SolarStation(world, world, localController.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f));
@@ -132,6 +132,7 @@ namespace AsteroidOutpost.Scenarios
 
 
 			GenerateAsteroidField(1000);
+			base.Start();
 		}
 
 		void ConstructableEntity_UpgradeFinishedEvent(EntityUpgradeEventArgs e)

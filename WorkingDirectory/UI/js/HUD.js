@@ -1,8 +1,6 @@
 //"use strict";
 
 
-var ready = false;
-
 
 function SelectionInfoController($scope)
 {
@@ -125,6 +123,16 @@ function UpdateSelection(newSelection)
 }
 
 
+$(document).ready(function()
+{
+	scopeOf("SelectionInfoController").AddProgressBar("hitPointsProgressBar", "HitPoints", "Armour", "TotalArmour");
+	scopeOf("SelectionInfoController").AddProgressBar("constructionProgressBar", "Constructable", "MineralsLeftToConstruct", "MineralsToConstruct", true);
+	scopeOf("SelectionInfoController").AddProgressBar("powerLevelProgressBar", "PowerProducer", "AvailablePower", "MaxPower");
+	scopeOf("SelectionInfoController").AddProgressBar("mineralsProgressBar", "Minable", "Minerals", "StartingMinerals");
+});
+
+
+
 function SetResources(newResources)
 {
 	$("#minerals").text(FormatNumber(newResources.minerals));
@@ -147,6 +155,15 @@ function SetPaused(paused)
 		$("#modalOverlay").fadeOut(200);
 	}
 }
+
+
+function GameOver(win)
+{
+	$("#modalOverlay").fadeIn(200);
+	$("#gameLost").show();
+}
+
+
 
 
 function MakeTimerPanel()
@@ -186,13 +203,6 @@ function docMouseUp(event)
 
 $(document).ready(function()
 {
-	
-	
-	scopeOf("SelectionInfoController").AddProgressBar("hitPointsProgressBar", "HitPoints", "Armour", "TotalArmour");
-	scopeOf("SelectionInfoController").AddProgressBar("constructionProgressBar", "Constructable", "MineralsLeftToConstruct", "MineralsToConstruct", true);
-	scopeOf("SelectionInfoController").AddProgressBar("powerLevelProgressBar", "PowerProducer", "AvailablePower", "MaxPower");
-	scopeOf("SelectionInfoController").AddProgressBar("mineralsProgressBar", "Minable", "Minerals", "StartingMinerals");
-	
 	
 	///
 	/// This section attempts to immatate what XNA will be doing in-game. It makes it easier to debug
@@ -281,14 +291,18 @@ $(document).ready(function()
 		$("#btnResume").click( function (event){ SetPaused(false); });
 		
 		// Make the Main Menu button work (fakely)
-		$("#btnMainMenu").click( function (event){ window.location = "MainMenu.html"; });
+		$(".btnMainMenu").click( function (event){ window.location = "MainMenu.html"; });
 		
 		// Add some missions
 		scopeOf("MissionController").AddMission("buildMiners", "Build 3 miners near asteroids", "0/3", false);
 		scopeOf("MissionController").AddMission("buildLaserTowers", "Build 2 laser towers", "", false);
 	}
-	
-	
+
+});
+
+
+$(document).ready(function()
+{
 	// Add a call attribute to all the construction buttons dynamically
 	$(".constructionButton").each( function()
 	{

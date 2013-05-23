@@ -73,7 +73,8 @@ namespace AsteroidOutpost.Screens
 
 		private readonly List<Controller> controllers = new List<Controller>();
 		private readonly List<Force> forces = new List<Force>();
-		
+		private bool gameOver = false;
+
 		public event Action<bool> PauseToggledEvent;
 		public event Action<EntityEventArgs> StructureStartedEventPreAuth;
 		public event Action<EntityEventArgs> StructureStartedEventPostAuth;
@@ -184,10 +185,13 @@ namespace AsteroidOutpost.Screens
 			get { return paused; }
 			set
 			{
-				// TODO: Handle this over the network. Should clients be allowed to pause the server?
-				paused = value;
-				OnPauseToggle();
-				//awesomium.WebView.CallJavascriptFunction("", "SetPaused", new JSValue(paused));
+				if(!gameOver)
+				{
+					// TODO: Handle this over the network. Should clients be allowed to pause the server?
+					paused = value;
+					OnPauseToggle();
+					//awesomium.WebView.CallJavascriptFunction("", "SetPaused", new JSValue(paused));
+				}
 			}
 		}
 
@@ -1161,6 +1165,13 @@ namespace AsteroidOutpost.Screens
 		public void DeleteComponent(Component component)
 		{
 			deadComponents.Add(component);
+		}
+
+
+		public void GameOver(bool win)
+		{
+			gameOver = true;
+			awesomium.WebView.CallJavascriptFunction("", "GameOver", new JSValue(win));
 		}
 	}
 }
