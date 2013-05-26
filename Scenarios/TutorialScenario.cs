@@ -224,6 +224,7 @@ namespace AsteroidOutpost.Scenarios
 			{
 			case 0:
 			{
+				theGame.ExecuteAwesomiumJS("ShowModalDialog('Welcome to training soldier! We need to get a base up and running asap. Build us two miners to get us started. Remember that they will need power if they are going to do anything.')");
 				//frmInstructions.AddControl(new Label("Welcome to training soldier! We need to get a base up and running asap. Build us two miners to get us started. Remember that they will need power if they are going to do anything.", 5, 5, frmInstructions.Width - 10, true));
 				missions.Add(buildMiners);
 				break;
@@ -231,6 +232,7 @@ namespace AsteroidOutpost.Scenarios
 
 			case 1:
 			{
+				theGame.ExecuteAwesomiumJS("ShowModalDialog('Now that we have a good income stream, we should build some defences. I heard rumours that ')");
 				//frmInstructions.AddControl(new Label("Well done! Now we will need some more power before we can fight off the alien ships. I would recommend upgrading your existing solar station to provide the additional power.", 5, 5, frmInstructions.Width - 10, true));
 				missions.Add(buildLasers);
 				break;

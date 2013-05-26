@@ -744,7 +744,7 @@ namespace AsteroidOutpost
 			}
 			this.scenario = scenario;
 
-			missionSystem = new MissionSystem((AOGame)Game, awesomium, this.scenario);
+			missionSystem = new MissionSystem((AOGame)Game, this.scenario);
 			Game.Components.Add(missionSystem);
 
 			isServer = true;

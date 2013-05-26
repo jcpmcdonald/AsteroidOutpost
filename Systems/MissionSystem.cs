@@ -11,12 +11,12 @@ namespace AsteroidOutpost.Systems
 {
 	public class MissionSystem : GameComponent
 	{
-		private AwesomiumComponent awesomium;
+		private AOGame theGame;
 		private Scenario scenario;
 
-		public MissionSystem(AOGame game, AwesomiumComponent awesomium, Scenario scenario) : base(game)
+		public MissionSystem(AOGame game, Scenario scenario) : base(game)
 		{
-			this.awesomium = awesomium;
+			this.theGame = game;
 			this.scenario = scenario;
 		}
 
@@ -24,13 +24,9 @@ namespace AsteroidOutpost.Systems
 		{
 			foreach (var mission in scenario.Missions.Where(m => m.Dirty))
 			{
-				bool loaded = !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'").ToBoolean();
-				if(loaded)
-				{
-					awesomium.WebView.ExecuteJavascript(String.Format("window.scopeOf('MissionController').AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
-					//awesomium.WebView.ExecuteJavascript(String.Format("AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
-					mission.Dirty = false;
-				}
+				theGame.ExecuteAwesomiumJS(String.Format("window.scopeOf('MissionController').AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
+				//awesomium.WebView.ExecuteJavascript(String.Format("AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
+				mission.Dirty = false;
 			}
 
 			base.Update(gameTime);

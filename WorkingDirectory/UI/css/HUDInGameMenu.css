@@ -1,30 +1,22 @@
 
 #gameMenu
 {
-	display: none;
 	
-	left: 50%;
-	top: 50%;
-	/*height: 250px;*/
-	width: 250px;
-	
-	/* margin values are half the height and width respectively */
-	margin: -125px 0 0 -125px;
-	
-	padding: 0px;
-	border-radius: 15px;
-	border-style: solid solid solid solid;
-	
-	z-index: 9999;
 }
 
 
 #gameLost
 {
+	
+}
+
+.modalPanel
+{
 	display: none;
 	
 	left: 50%;
 	top: 50%;
+	
 	/*height: 250px;*/
 	width: 250px;
 	
@@ -39,11 +31,18 @@
 }
 
 
-.modalText
+.modalTitle
 {
 	font-size: x-large;
 	text-align: center;
 	width: 100%;
+}
+
+
+.modalText
+{
+	margin: 10px;
+	font-size: medium;
 }
 
 

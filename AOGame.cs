@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -24,7 +25,8 @@ namespace AsteroidOutpost
 		#region user32 SetWindowPos
 
 		[DllImport("user32.dll", EntryPoint = "SetWindowPos")]
-        public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
+		public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
+
 
 		private const short SWP_NOMOVE = 0X2;
 		private const short SWP_NOSIZE = 1;
@@ -35,7 +37,7 @@ namespace AsteroidOutpost
 
 
 		#region Fields
-		
+
 		private bool moveWindow = false;
 		private int moveWindowX;
 		private int moveWindowY;
@@ -59,6 +61,7 @@ namespace AsteroidOutpost
 
 		private Stopwatch stopwatch = new Stopwatch();
 		private bool destroyWorld = false;
+		private List<String> executeAwesomiumJSNextCycle = new List<string>();
 
 		#endregion
 
@@ -91,6 +94,7 @@ namespace AsteroidOutpost
 			Init(width, height, fullScreen);
 		}
 
+
 		public AOGame(int moveToX, int moveToY, int width, int height)
 		{
 			moveWindow = true;
@@ -118,7 +122,7 @@ namespace AsteroidOutpost
 
 			initGraphicsMode(width, height, fullScreen);
 
-//#if UNLIMITED_FPS
+			//#if UNLIMITED_FPS
 #if false
 			graphics.SynchronizeWithVerticalRetrace = false;
 			IsFixedTimeStep = false;
@@ -150,8 +154,8 @@ namespace AsteroidOutpost
 
 			awesomium.WebView.JSConsoleMessageAdded += WebView_JSConsoleMessageAdded;
 		}
-		
-		
+
+
 		/// <summary>
 		/// Attempt to set the display mode to the desired resolution.  Iterates through the display
 		/// capabilities of the default graphics adapter to determine if the graphics adapter supports the
@@ -227,12 +231,13 @@ namespace AsteroidOutpost
 			//menuMusic = Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 04 Inner Battles (Bignic Remix)");
 			MediaPlayer.IsRepeating = true;
 
-			if(stopwatch.IsRunning)
+			if (stopwatch.IsRunning)
 			{
 				stopwatch.Stop();
 				Console.WriteLine("Loaded in " + stopwatch.ElapsedMilliseconds + "ms");
 			}
 		}
+
 
 		/// <summary>
 		/// UnloadContent will be called once per game and is the place to unload
@@ -242,7 +247,7 @@ namespace AsteroidOutpost
 		{
 			// Note: Is this abuse?
 			MediaPlayer.Stop();
-			if(menuMusic != null)
+			if (menuMusic != null)
 			{
 				menuMusic.Dispose();
 			}
@@ -259,6 +264,13 @@ namespace AsteroidOutpost
 			{
 				accumulatedTime += fixedDeltaTime;
 				frameRateCounter.StartOfUpdate(gameTime);
+
+				for (int i = executeAwesomiumJSNextCycle.Count - 1; i >= 0; i--)
+				{
+					var js = executeAwesomiumJSNextCycle[i];
+					executeAwesomiumJSNextCycle.RemoveAt(i);
+					ExecuteAwesomiumJS(js);
+				}
 
 				base.Update(new GameTime(accumulatedTime, fixedDeltaTime));
 
@@ -290,8 +302,8 @@ namespace AsteroidOutpost
 				}
 			}
 		}
-		
-		
+
+
 		/// <summary>
 		/// Draw the game
 		/// </summary>
@@ -316,12 +328,26 @@ namespace AsteroidOutpost
 			frameRateCounter.EndOfDraw();
 
 
-			if(destroyWorld)
+			if (destroyWorld)
 			{
 				destroyWorld = false;
 				Components.Remove(world);
 				world.Dispose();
 				world = null;
+			}
+		}
+
+
+		public void ExecuteAwesomiumJS(String js)
+		{
+			bool loaded = !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'").ToBoolean();
+			if (loaded)
+			{
+				awesomium.WebView.ExecuteJavascriptWithResult(js);
+			}
+			else
+			{
+				executeAwesomiumJSNextCycle.Add(js);
 			}
 		}
 

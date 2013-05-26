@@ -151,7 +151,7 @@ function SetPaused(paused)
 	else
 	{
 		$("#pauseDisplay").removeClass("paused");
-		$("#gameMenu").hide();
+		$(".modalPanel").hide();
 		$("#modalOverlay").fadeOut(200);
 	}
 }
@@ -177,6 +177,13 @@ function UpdateTimerPanel(value)
 }
 
 
+
+function ShowModalDialog(text)
+{
+	$("#modalOverlay").fadeIn(200);
+	$("#dialog .modalText").html(text);
+	$("#dialog").show();
+}
 
 
 
@@ -288,7 +295,7 @@ $(document).ready(function()
 		});
 		
 		
-		$("#btnResume").click( function (event){ SetPaused(false); });
+		$(".btnResume").click( function (event){ SetPaused(false); });
 		
 		// Make the Main Menu button work (fakely)
 		$(".btnMainMenu").click( function (event){ window.location = "MainMenu.html"; });

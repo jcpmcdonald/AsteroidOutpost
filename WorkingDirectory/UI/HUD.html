@@ -98,17 +98,23 @@
 	</div>
 	
 	
-	<div id="gameMenu" class="panel">
-		<span id="btnResume" class="button menuButton" onClick="SetPaused(false); XNACall('hud.ResumeGame()');">Resume Game</span>
+	<div id="gameMenu" class="modalPanel panel">
+		<span class="btnResume button menuButton" onClick="SetPaused(false); XNACall('hud.ResumeGame()');">Resume Game</span>
 		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame()">Main Menu</span>
 		<span class="btnExit button menuButton" call="xna.Exit()">Exit Game</span>
 	</div>
 	
 	
-	<div id="gameLost" class="panel">
-		<div class="modalText">You Lose</div>
+	<div id="gameLost" class="modalPanel panel">
+		<div class="modalTitle">You Lose</div>
 		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame()">Main Menu</span>
 		<span class="btnExit button menuButton" call="xna.Exit()">Exit Game</span>
+	</div>
+	
+	
+	<div id="dialog" class="modalPanel panel">
+		<div class="modalText">Welcome to training soldier! We need to get a base up and running asap. Build us two miners to get us started. Remember that they will need power if they are going to do anything.</div>
+		<span class="btnResume button menuButton" call="SetPaused(false); XNACall('hud.ResumeGame()');">Ok</span>
 	</div>
 	
 	
