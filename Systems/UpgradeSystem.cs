@@ -13,11 +13,12 @@ namespace AsteroidOutpost.Systems
 	class UpgradeSystem : DrawableGameComponent
 	{
 		private readonly World world;
+		private SpriteBatch spriteBatch;
 
 		private const float powerUsageRate = 12.0f;
 		private const float mineralUsageRate = 30.0f;
 
-		private SpriteBatch spriteBatch;
+		public event Action<int> UpgradeCompletedEvent;
 
 		public UpgradeSystem(AOGame game, World world)
 			: base(game)
@@ -29,28 +30,56 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
-			List<Upgradable> upgradables = (List<Upgradable>)world.GetComponents<Upgradable>().Where(x => x.IsUpgrading && x.CurrentUpgrade != null);
+			var upgradables = world.GetComponents<Upgradable>().Where(x => x.IsUpgrading && x.CurrentUpgrade != null);
 
 			foreach (var upgradable in upgradables)
 			{
-				if(upgradable.IsUpgrading && upgradable.CurrentUpgrade != null)
+				float powerToUse = powerUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
+				float mineralsToUse = mineralUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
+				int deltaMinerals;
+					
+				Force owningForce = world.GetOwningForce(upgradable);
+				if (world.PowerGrid[owningForce.ID].HasPower(upgradable.EntityID, powerToUse))
 				{
-					float powerToUse = powerUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
-					float mineralsToUse = mineralUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-					// BUG: There is a disconnect between the check for minerals (below) and the actual consumption of minerals. Could cause weird behaviour
-					Force owningForce = world.GetOwningForce(upgradable);
-					if (owningForce.GetMinerals() > mineralsToUse && world.GetPowerGrid(owningForce).GetPower(upgradable.EntityID, powerToUse))
+					// Check to see if the mineralsLeftToConstruct would pass an integer boundary
+					deltaMinerals = (int)(upgradable.MineralsUpgraded + mineralsToUse) - (int)(upgradable.MineralsUpgraded);
+					if (deltaMinerals != 0)
 					{
-						// Use some minerals toward my upgrade
-						int temp = (int)upgradable.MineralsLeftToUpgrade;
-						upgradable.SetMineralsLeftToUpgrade(upgradable.MineralsLeftToUpgrade - mineralsToUse);
-
-						// If the minerals left to construct has increased by a whole number, subtract it from the force's minerals
-						if (temp > (int)upgradable.MineralsLeftToUpgrade)
+						// If the force doesn't have enough minerals, we will halt the construction here until it does 
+						if (owningForce.GetMinerals() >= deltaMinerals)
 						{
-							owningForce.SetMinerals(owningForce.GetMinerals() - (temp - (int)upgradable.MineralsLeftToUpgrade));
+							// Consume the resources
+							world.PowerGrid[owningForce.ID].GetPower(upgradable.EntityID, powerToUse);
+							upgradable.MineralsUpgraded += mineralsToUse;
+
+							// Set the force's minerals
+							owningForce.SetMinerals(owningForce.GetMinerals() - deltaMinerals);
+
+							if (upgradable.MineralsUpgraded >= upgradable.MineralsToUpgrade)
+							{
+								// This construction is complete
+								upgradable.MineralsUpgraded = upgradable.MineralsToUpgrade;
+								upgradable.IsUpgrading = false;
+
+								if (UpgradeCompletedEvent != null)
+								{
+									UpgradeCompletedEvent(upgradable.EntityID);
+								}
+							}
 						}
+						else
+						{
+							// Construction Halts, no progress, no consumption
+						}
+					}
+					else
+					{
+						// We have not passed an integer boundary, so just keep track of the change locally
+						// We'll get around to subtracting this from the force's minerals when we pass an integer boundary
+						upgradable.MineralsUpgraded += mineralsToUse;
+
+						// We should consume our little tidbit of power though:
+						world.PowerGrid[owningForce.ID].GetPower(upgradable.EntityID, powerToUse);
 					}
 				}
 			}
@@ -70,7 +99,7 @@ namespace AsteroidOutpost.Systems
 			{
 				if (upgradable.IsUpgrading)
 				{
-					float percentComplete = (float)((upgradable.CurrentUpgrade.MineralCost - upgradable.MineralsLeftToUpgrade) / upgradable.CurrentUpgrade.MineralCost);
+					float percentComplete = upgradable.MineralsUpgraded / upgradable.CurrentUpgrade.MineralCost;
 					Position position = world.GetComponent<Position>(upgradable.EntityID);
 
 					// Draw a progress bar

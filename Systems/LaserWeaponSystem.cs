@@ -71,7 +71,7 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var laser in world.GetComponents<LaserWeapon>())
 			{
-				Constructable constructable = world.GetNullableComponent<Constructable>(laser);
+				Constructible constructable = world.GetNullableComponent<Constructible>(laser);
 				if (constructable != null && constructable.IsBeingPlaced)
 				{
 					// Draw attack range

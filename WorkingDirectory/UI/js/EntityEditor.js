@@ -1,6 +1,6 @@
 
 
-var EditorMode = true;
+var EditorMode = false;
 var currentSelection = null;
 
 function UpdateEditor(newSelection)

@@ -12,14 +12,11 @@ namespace AsteroidOutpost.Components
 {
 	public class PowerGridNode : Component
 	{
-		private bool producesPower = false;
-		protected bool conductsPower;
-
-
 		public PowerGridNode(World world, int entityID, bool conductsPower)
 			: base(world, entityID)
 		{
-			this.conductsPower = conductsPower;
+			ProducesPower = false;
+			this.ConductsPower = conductsPower;
 		}
 
 
@@ -31,7 +28,7 @@ namespace AsteroidOutpost.Components
 		{
 			get
 			{
-				Constructable constructable = world.GetNullableComponent<Constructable>(EntityID);
+				Constructible constructable = world.GetNullableComponent<Constructible>(EntityID);
 				if(constructable != null)
 				{
 					return !constructable.IsBeingPlaced && !constructable.IsConstructing;
@@ -48,33 +45,13 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// True if this conducts power
 		/// </summary>
-		public bool ConductsPower
-		{
-			get
-			{
-				return conductsPower;
-			}
-			set
-			{
-				conductsPower = value;
-			}
-		}
+		public bool ConductsPower { get; set; }
 
 
 		/// <summary>
 		/// True if this produces power  (note that power producers should also conduct power)
 		/// </summary>
-		public bool ProducesPower
-		{
-			get
-			{
-				return producesPower;
-			}
-			set
-			{
-				producesPower = value;
-			}
-		}
+		public bool ProducesPower { get; set; }
 
 
 		/// <summary>

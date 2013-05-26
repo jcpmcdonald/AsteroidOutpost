@@ -109,7 +109,7 @@ namespace AsteroidOutpost.Systems
 
 
 			// Draw any entities being placed
-			IEnumerable<Constructable> placingEntities = world.GetComponents<Constructable>();
+			IEnumerable<Constructible> placingEntities = world.GetComponents<Constructible>();
 			placingEntities =  placingEntities.Where(x => x.IsBeingPlaced).ToList();
 			foreach(var placingEntity in placingEntities)
 			{

@@ -46,9 +46,21 @@ namespace AsteroidOutpost.Systems
 		{
 			foreach (var laserMiner in  world.GetComponents<LaserMiner>())
 			{
+				
+				if (laserMiner.RescanForAsteroids)
+				{
+					Constructible constructable = world.GetComponent<Constructible>(laserMiner);
+					if (!constructable.IsBeingPlaced)
+					{
+						laserMiner.RescanForAsteroids = false;
+						laserMiner.nearbyAsteroids.Clear();
+						laserMiner.nearbyAsteroids.AddRange(ScanForAsteroids(laserMiner));
+					}
+				}
+
 				if (laserMiner.FirstUpdate)
 				{
-					Constructable constructable = world.GetComponent<Constructable>(laserMiner);
+					Constructible constructable = world.GetComponent<Constructible>(laserMiner);
 					if (constructable.IsBeingPlaced || constructable.IsConstructing)
 					{
 						continue;
@@ -63,14 +75,6 @@ namespace AsteroidOutpost.Systems
 				else
 				{
 					laserMiner.TimeSinceLastStageChange += gameTime.ElapsedGameTime;
-				}
-
-
-				if (laserMiner.RescanForAsteroids)
-				{
-					laserMiner.RescanForAsteroids = false;
-					laserMiner.nearbyAsteroids.Clear();
-					laserMiner.nearbyAsteroids.AddRange(ScanForAsteroids(laserMiner));
 				}
 
 
@@ -259,7 +263,7 @@ namespace AsteroidOutpost.Systems
 			{
 				if (laserMiner.FirstUpdate)
 				{
-					Constructable constructable = world.GetComponent<Constructable>(laserMiner);
+					Constructible constructable = world.GetComponent<Constructible>(laserMiner);
 					if (constructable.IsBeingPlaced)
 					{
 						// Draw the links to nearby minables

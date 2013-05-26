@@ -18,7 +18,9 @@ namespace AsteroidOutpost.Scenarios
 		private int minersBuilt = 0;
 		private int lasersBuilt = 0;
 
-
+		private Mission buildMiners = new Mission("buildMiners", "(0/2) Build 2 Miners Near Asteroids", false);
+		private Mission buildLasers = new Mission("buildLasers", "(0/3) Build 3 Laser Towers", false);
+		private Mission defendYourself = new Mission("defendYourself", "Defend yourself!", false);
 		//private List<Beacon> beacons = new List<Beacon>(4);
 
 
@@ -46,6 +48,8 @@ namespace AsteroidOutpost.Scenarios
 			elapsedTime = new TimeSpan(0);
 
 
+			
+			//missions.Add(new Mission("buildLaserTowers", "Build 3 Laser Towers", false));
 			//lblBuild2Miners = new Label("- (0 / 2) Build 2 miners near asteroids", 5, 100, eAlignment.Left);
 			//lblUpgradeSolar = new Label("- Upgrade your solar station", 5, 120, eAlignment.Left);
 			//lblBuildLaserTowers = new Label("- (0 / 3) Build some laser towers", 5, 140, eAlignment.Left);
@@ -66,12 +70,6 @@ namespace AsteroidOutpost.Scenarios
 
 			world.HUD.FocusWorldPoint = CreateStartingBase(friendlyForce);
 
-			//// Create your starting solar station
-			//SolarStation startingStation = new SolarStation(world, world, localController.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f));
-			//world.Add(startingStation);
-			//startingStation.StartConstruction();
-			//startingStation.IsConstructing = false;
-
 
 			//lblBuild2Miners.Visible = false;
 			//lblUpgradeSolar.Visible = false;
@@ -79,7 +77,7 @@ namespace AsteroidOutpost.Scenarios
 
 
 			progress = 0;
-			StartSection(progress);
+			StartSection();
 			
 			
 			//btnNext = new Button("Next", (frmInstructions.Width / 2) - 50, frmInstructions.Height - 30, 100, 20);
@@ -88,6 +86,7 @@ namespace AsteroidOutpost.Scenarios
 
 			//ConstructableEntity.AnyConstructionCompletedEvent += ConstructableEntity_StructureFinishedEvent;
 			//ConstructableEntity.AnyUpgradeCompletedEvent += ConstructableEntity_UpgradeFinishedEvent;
+			world.constructionSystem.ConstructionCompletedEvent += ConstructionSystem_ConstructionCompletedEvent;
 
 			// Create a beacon
 			//EntityFactory.Create("Beacon", new Dictionary<String, object>(){
@@ -159,97 +158,88 @@ namespace AsteroidOutpost.Scenarios
 		}
 
 
-		void ConstructableEntity_StructureFinishedEvent(EntityEventArgs e)
+		void ConstructionSystem_ConstructionCompletedEvent(int entityID)
 		{
-			//switch(progress)
-			//{
-			//case 0:
-			//    LaserMiner miner = e.Entity as LaserMiner;
-			//    if (miner != null)
-			//    {
-			//        // miner.ConnectedPowerSources().Count > 0 &&
-			//        if(miner.NearbyAsteroids().Count > 0)
-			//        {
-			//            minersBuilt++;
-			//            if(minersBuilt == 2)
-			//            {
-			//                //lblBuild2Miners.Text = "+ (" + minersBuilt + " / 2) Build 2 miners near asteroids";
-			//                //lblBuild2Miners.Color = Color.LightGreen;
-			//                progress++;
-			//                StartSection(progress);
-			//            }
-			//            else
-			//            {
-			//                //lblBuild2Miners.Text = "- (" + minersBuilt + " / 2) Build 2 miners near asteroids";
-			//            }
-			//        }
-			//    }
-			//    break;
+			switch (progress)
+			{
+			case 0:
+				var miner = world.GetNullableComponent<LaserMiner>(entityID);
+				if (miner != null)
+				{
+					// miner.ConnectedPowerSources().Count > 0 &&
+					if (miner.nearbyAsteroids.Count > 0)
+					{
+						minersBuilt++;
+						if (minersBuilt < 2)
+						{
+							buildMiners.Description = "(1/2) Build 2 Miners Near Asteroids";
+						}
+						else
+						{
+							buildMiners.Description = "(2/2) Build 2 Miners Near Asteroids";
+							buildMiners.Done = true;
+							progress++;
+							StartSection();
+						}
+					}
+				}
+				break;
 
 
 
-			//case 2:
-			//    if (e.Entity is LaserTower)
-			//    {
-			//        lasersBuilt++;
-			//        if(lasersBuilt == 3)
-			//        {
-			//            //lblBuildLaserTowers.Text = "+ (" + lasersBuilt + " / 3) Build some laser towers";
-			//            //lblBuildLaserTowers.Color = Color.LightGreen;
-			//            progress++;
-			//            StartSection(progress);
-			//        }
-			//        else
-			//        {
-			//            //lblBuildLaserTowers.Text = "- (" + lasersBuilt + " / 3) Build some laser towers";
-			//        }
-			//    }
-			//    break;
+			case 1:
+				// This is a laser tower, right? It's got lasers!
+				var laserTower = world.GetNullableComponent<LaserWeapon>(entityID);
+				if (laserTower != null)
+				{
+					lasersBuilt++;
+					if (lasersBuilt < 3)
+					{
+						buildLasers.Description = String.Format("({0}/3) Build 3 Laser Towers", lasersBuilt);
+					}
+					else
+					{
+						buildLasers.Description = "(3/3) Build 3 Laser Towers";
+						buildLasers.Done = true;
+						progress++;
+						StartSection();
+					}
+				}
+				break;
 
 
 
-			//default:
-			//    break;
-			//}
+			default:
+				break;
+			}
 		}
 
 
-		void StartSection(int section)
+		void StartSection()
 		{
 			//frmInstructions.Clear();
 			//frmInstructions.Title = "Training (" + (section + 1) + " / 6)";
 
-			switch(section)
+			switch(progress)
 			{
 			case 0:
 			{
 				//frmInstructions.AddControl(new Label("Welcome to training soldier! We need to get a base up and running asap. Build us two miners to get us started. Remember that they will need power if they are going to do anything.", 5, 5, frmInstructions.Width - 10, true));
-
-				// Set up the mission text on the left
-				//lblBuild2Miners.Visible = true;
-				//lblBuild2Miners.Text = "- (" + minersBuilt + " / 2) Build 2 miners near asteroids";
-				//lblBuild2Miners.Color = Color.Tomato;
-				//world.HUD.AddControl(lblBuild2Miners);
+				missions.Add(buildMiners);
 				break;
 			}
 
 			case 1:
 			{
 				//frmInstructions.AddControl(new Label("Well done! Now we will need some more power before we can fight off the alien ships. I would recommend upgrading your existing solar station to provide the additional power.", 5, 5, frmInstructions.Width - 10, true));
-
-				//lblUpgradeSolar.Visible = true;
-				//lblUpgradeSolar.Color = Color.Tomato;
-				//world.HUD.AddControl(lblUpgradeSolar);
+				missions.Add(buildLasers);
 				break;
 			}
 
 			case 2:
 			{
 				//frmInstructions.AddControl(new Label("Now that we have some power, build a few laser towers where indicated to fend off the aliens.", 5, 5, frmInstructions.Width - 10, true));
-
-				//lblBuildLaserTowers.Visible = true;
-				//lblBuildLaserTowers.Color = Color.Tomato;
-				//world.HUD.AddControl(lblBuildLaserTowers);
+				missions.Add(defendYourself);
 				break;
 			}
 
@@ -271,7 +261,7 @@ namespace AsteroidOutpost.Scenarios
 			{
 			case 0:
 				progress++;
-				StartSection(progress);
+				StartSection();
 				break;
 			}
 

@@ -148,7 +148,7 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var missileWeapon in world.GetComponents<MissileWeapon>())
 			{
-				Constructable constructable = world.GetComponent<Constructable>(missileWeapon);
+				Constructible constructable = world.GetComponent<Constructible>(missileWeapon);
 				if (constructable.IsBeingPlaced)
 				{
 					// Draw attack range

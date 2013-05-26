@@ -81,9 +81,9 @@ function SelectionInfoController($scope)
 	{
 		return ($scope.selectedUnits != null &&
 				$scope.selectedUnits.length == 1 &&
-				typeof $scope.selectedUnits[0].Constructable != 'undefined' &&
-				$scope.selectedUnits[0].Constructable.IsConstructing == true &&
-				$scope.selectedUnits[0].Constructable.IsBeingPlaced == false);
+				typeof $scope.selectedUnits[0].Constructible != 'undefined' &&
+				$scope.selectedUnits[0].Constructible.IsConstructing == true &&
+				$scope.selectedUnits[0].Constructible.IsBeingPlaced == false);
 	}
 	
 	$scope.has = function($component)
@@ -126,7 +126,7 @@ function UpdateSelection(newSelection)
 $(document).ready(function()
 {
 	scopeOf("SelectionInfoController").AddProgressBar("hitPointsProgressBar", "HitPoints", "Armour", "TotalArmour");
-	scopeOf("SelectionInfoController").AddProgressBar("constructionProgressBar", "Constructable", "MineralsLeftToConstruct", "MineralsToConstruct", true);
+	scopeOf("SelectionInfoController").AddProgressBar("constructionProgressBar", "Constructible", "MineralsConstructed", "MineralsToConstruct");
 	scopeOf("SelectionInfoController").AddProgressBar("powerLevelProgressBar", "PowerProducer", "AvailablePower", "MaxPower");
 	scopeOf("SelectionInfoController").AddProgressBar("mineralsProgressBar", "Minable", "Minerals", "StartingMinerals");
 });
@@ -235,9 +235,9 @@ $(document).ready(function()
 						"TotalArmour" : 250,
 						"GUID" : "pHMJfGX6oUG6LcG1poDh+Q=="
 					},
-					"Constructable" : {
+					"Constructible" : {
 						"MineralsToConstruct" : 200,
-						"MineralsLeftToConstruct" : 200,
+						"MineralsConstructed" : 20,
 						"IsBeingPlaced" : false,
 						"IsConstructing" : true,
 						"GUID" : "dQz6/7Jjfk+6Slcu4NZLHQ=="
@@ -294,8 +294,8 @@ $(document).ready(function()
 		$(".btnMainMenu").click( function (event){ window.location = "MainMenu.html"; });
 		
 		// Add some missions
-		scopeOf("MissionController").AddMission("buildMiners", "Build 3 miners near asteroids", "0/3", false);
-		scopeOf("MissionController").AddMission("buildLaserTowers", "Build 2 laser towers", "", false);
+		scopeOf("MissionController").AddMission("buildMiners", "Build 3 miners near asteroids", false);
+		scopeOf("MissionController").AddMission("buildLaserTowers", "Build 2 laser towers", false);
 	}
 
 });

@@ -19,44 +19,14 @@ namespace AsteroidOutpost.Systems
 		private const float powerUsageRate = 12.0f;
 		private const float mineralUsageRate = 30.0f;
 
+		public event Action<int> ConstructionCompletedEvent;
+
 		public ConstructionSystem(AOGame game, World world)
 			: base(game)
 		{
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 			this.world = world;
 		}
-
-
-		//public override void Update(GameTime gameTime)
-		//{
-		//    List<Constructable> constructables = world.GetComponents<Constructable>();
-
-		//    foreach (var constructable in constructables)
-		//    {
-		//        if(constructable.IsConstructing)
-		//        {
-		//            float powerToUse = powerUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
-		//            float mineralsToUse = mineralUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-		//            // BUG: There is a disconnect between the check for minerals (below) and the actual consumption of minerals. Could cause weird behaviour
-		//            Force owningForce = world.GetOwningForce(constructable.EntityID);
-		//            if (owningForce.GetMinerals() > mineralsToUse && world.GetPowerGrid(owningForce).GetPower(constructable.EntityID, powerToUse))
-		//            {
-		//                // Use some minerals toward my construction
-		//                int temp = (int)constructable.MineralsLeftToConstruct;
-		//                constructable.MineralsLeftToConstruct -= mineralsToUse;
-
-		//                // If the minerals left to construct has increased by a whole number, subtract it from the force's minerals
-		//                if (temp > (int)constructable.MineralsLeftToConstruct)
-		//                {
-		//                    owningForce.SetMinerals(owningForce.GetMinerals() - (temp - (int)constructable.MineralsLeftToConstruct));
-		//                }
-		//            }
-		//        }
-		//    }
-
-		//    base.Update(gameTime);
-		//}
 
 		
 		
@@ -66,31 +36,43 @@ namespace AsteroidOutpost.Systems
 		/// </summary>
 		public override void Update(GameTime gameTime)
 		{
-			List<Constructable> constructables = world.GetComponents<Constructable>().Where(x => x.IsConstructing).ToList();
+			var constructables = world.GetComponents<Constructible>().Where(x => x.IsConstructing);
 
 			foreach (var constructable in constructables)
 			{
 				float powerToUse = powerUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
 				float mineralsToUse = mineralUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
-				int delta;
+				int deltaMinerals;
 
 				// Check that we have enough power in the grid
 				Force owningForce = world.GetOwningForce(constructable);
 				if (world.PowerGrid[owningForce.ID].HasPower(constructable.EntityID, powerToUse))
 				{
 					// Check to see if the mineralsLeftToConstruct would pass an integer boundary
-					delta = (int)Math.Ceiling(constructable.MineralsLeftToConstruct) - (int)Math.Ceiling(constructable.MineralsLeftToConstruct - mineralsToUse);
-					if (delta != 0)
+					deltaMinerals = (int)(constructable.MineralsConstructed + mineralsToUse) - (int)(constructable.MineralsConstructed);
+					if (deltaMinerals != 0)
 					{
 						// If the force doesn't have enough minerals, we will halt the construction here until it does 
-						if (owningForce.GetMinerals() >= delta)
+						if (owningForce.GetMinerals() >= deltaMinerals)
 						{
 							// Consume the resources
 							world.PowerGrid[owningForce.ID].GetPower(constructable.EntityID, powerToUse);
-							constructable.MineralsLeftToConstruct -= mineralsToUse;
+							constructable.MineralsConstructed += mineralsToUse;
 
 							// Set the force's minerals
-							owningForce.SetMinerals(owningForce.GetMinerals() - delta);
+							owningForce.SetMinerals(owningForce.GetMinerals() - deltaMinerals);
+
+							if (constructable.MineralsConstructed >= constructable.MineralsToConstruct)
+							{
+								// This construction is complete
+								constructable.MineralsConstructed = constructable.MineralsToConstruct;
+								constructable.IsConstructing = false;
+
+								if (ConstructionCompletedEvent != null)
+								{
+									ConstructionCompletedEvent(constructable.EntityID);
+								}
+							}
 						}
 						else
 						{
@@ -101,7 +83,7 @@ namespace AsteroidOutpost.Systems
 					{
 						// We have not passed an integer boundary, so just keep track of the change locally
 						// We'll get around to subtracting this from the force's minerals when we pass an integer boundary
-						constructable.MineralsLeftToConstruct -= mineralsToUse;
+						constructable.MineralsConstructed += mineralsToUse;
 
 						// We should consume our little tidbit of power though:
 						world.PowerGrid[owningForce.ID].GetPower(constructable.EntityID, powerToUse);
@@ -117,7 +99,7 @@ namespace AsteroidOutpost.Systems
 		/// </summary>
 		public override void Draw(GameTime gameTime)
 		{
-			List<Constructable> constructables = world.GetComponents<Constructable>().Where(x => x.IsConstructing || x.IsBeingPlaced).ToList();
+			List<Constructible> constructables = world.GetComponents<Constructible>().Where(x => x.IsConstructing || x.IsBeingPlaced).ToList();
 
 			spriteBatch.Begin();
 
@@ -130,7 +112,7 @@ namespace AsteroidOutpost.Systems
 				}
 				else if (constructable.IsConstructing)
 				{
-					float percentComplete = (float)(constructable.MineralsToConstruct - constructable.MineralsLeftToConstruct) / constructable.MineralsToConstruct;
+					float percentComplete = constructable.MineralsConstructed / constructable.MineralsToConstruct;
 
 					// Draw a progress bar
 					spriteBatch.FillRectangle(world.Scale(new Vector2(-position.Radius, position.Radius - 6)) + world.WorldToScreen(position.Center), world.Scale(new Vector2(position.Width, 6)), Color.Gray);

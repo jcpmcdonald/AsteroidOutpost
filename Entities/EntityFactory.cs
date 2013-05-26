@@ -89,8 +89,8 @@ namespace AsteroidOutpost.Entities
 				PowerProducer powerProducer = new PowerProducer(world, entityID, 10, 70);
 				powerProducer.PowerLinkPointRelative = new Vector2(-1, -13);
 				world.AddComponent(powerProducer);
-				world.AddComponent(new Constructable(world, entityID, 200));
-				world.AddComponent(new HitPoints(world, entityID, 250));
+				world.AddComponent(new Constructible(world, entityID, 200));
+				world.AddComponent(new HitPoints(world, entityID, 50));
 				break;
 
 			case "power node":
@@ -99,7 +99,7 @@ namespace AsteroidOutpost.Entities
 				PowerGridNode powerNode = new PowerGridNode(world, entityID, true);
 				powerNode.PowerLinkPointRelative = new Vector2(0, -16);
 				world.AddComponent(powerNode);
-				world.AddComponent(new Constructable(world, entityID, 50));
+				world.AddComponent(new Constructible(world, entityID, 50));
 				world.AddComponent(new HitPoints(world, entityID, 50));
 				break;
 
@@ -109,7 +109,7 @@ namespace AsteroidOutpost.Entities
 				LaserMiner laserMiner = new LaserMiner(world, entityID);
 				world.AddComponent(laserMiner);
 				world.AddComponent(new PowerGridNode(world, entityID, false));
-				world.AddComponent(new Constructable(world, entityID, 200));
+				world.AddComponent(new Constructible(world, entityID, 200));
 				Accumulator accumulator = new Accumulator(world, entityID, new Vector2(-5, -4), new Vector2(0, -26), Color.DarkGreen, 50);
 				laserMiner.AccumulationEvent += accumulator.Accumulate;
 				world.AddComponent(accumulator);
@@ -120,7 +120,7 @@ namespace AsteroidOutpost.Entities
 				sprite = sprites[entityName.ToLower()];
 				world.AddComponent(new EntityName(world, entityID, entityName));
 				world.AddComponent(new PowerGridNode(world, entityID, false));
-				world.AddComponent(new Constructable(world, entityID, 150));
+				world.AddComponent(new Constructible(world, entityID, 150));
 				world.AddComponent(new HitPoints(world, entityID, 150));
 				world.AddComponent(new LaserWeapon(world, entityID, 150, 15, Color.Red));
 				break;
@@ -129,7 +129,7 @@ namespace AsteroidOutpost.Entities
 				sprite = sprites[entityName.ToLower()];
 				world.AddComponent(new EntityName(world, entityID, entityName));
 				world.AddComponent(new PowerGridNode(world, entityID, false));
-				world.AddComponent(new Constructable(world, entityID, 200));
+				world.AddComponent(new Constructible(world, entityID, 200));
 				world.AddComponent(new HitPoints(world, entityID, 100));
 				world.AddComponent(new MissileWeapon(world, entityID, 300, 25, 1500, 50));
 				break;

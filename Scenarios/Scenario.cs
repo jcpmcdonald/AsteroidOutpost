@@ -23,12 +23,22 @@ namespace AsteroidOutpost.Scenarios
 
 		protected Force friendlyForce;
 
+		protected List<Mission> missions = new List<Mission>();
 
 		protected Scenario(AOGame theGame, int playerCount)
 		{
 			this.theGame = theGame;
 			this.world = theGame.World;
 			this.playerCount = playerCount;
+		}
+
+
+		public List<Mission> Missions
+		{
+			get
+			{
+				return missions;
+			}
 		}
 
 
@@ -192,7 +202,7 @@ namespace AsteroidOutpost.Scenarios
 			{
 				findNewHome = false;
 
-				// Expand the search as the number of attepts increase
+				// Expand the search as the number of attempts increase
 				int tryDistance = 200 + (attempts * attempts * 2);
 				delta = new Vector2(GlobalRandom.Next(tryDistance) + GlobalRandom.Next(tryDistance) - tryDistance,
 				                    GlobalRandom.Next(tryDistance) + GlobalRandom.Next(tryDistance) - tryDistance);
@@ -225,7 +235,7 @@ namespace AsteroidOutpost.Scenarios
 			});
 
 			// Set this building as done constructing
-			Constructable solarStation = world.GetComponent<Constructable>(creatingEntityID);
+			Constructible solarStation = world.GetComponent<Constructible>(creatingEntityID);
 			solarStation.IsBeingPlaced = false;
 			solarStation.IsConstructing = false;
 

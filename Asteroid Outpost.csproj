@@ -155,6 +155,7 @@
     <Compile Include="EnhancedKeyboardState.cs" />
     <Compile Include="EnhancedMouseState.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
+    <Compile Include="Scenarios\Mission.cs" />
     <Compile Include="Screens\Layer.cs" />
     <Compile Include="Systems\FrameRateCounter.cs" />
     <Compile Include="Interfaces\IIdentifiable.cs" />
@@ -177,8 +178,8 @@
     <Compile Include="Scenarios\RandomScenario.cs" />
     <Compile Include="Scenarios\Scenario.cs" />
     <Compile Include="Scenarios\TutorialScenario.cs" />
-    <Compile Include="Screens\World.cs" />
-    <Compile Include="Screens\HeadsUpDisplay\AOHUD.cs" />
+    <Compile Include="World.cs" />
+    <Compile Include="Systems\AOHUD.cs" />
     <Compile Include="Entities\Upgrade.cs" />
     <Compile Include="Force.cs" />
     <Compile Include="Networking\AOIncomingMessage.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Systems\LaserMinerSystem.cs" />
     <Compile Include="Systems\LaserWeaponSystem.cs" />
     <Compile Include="Systems\MissileWeaponSystem.cs" />
+    <Compile Include="Systems\MissionSystem.cs" />
     <Compile Include="Systems\MovementSystem.cs" />
     <Compile Include="Systems\PhysicsSystem.cs" />
     <Compile Include="Systems\PowerGridSystem.cs" />

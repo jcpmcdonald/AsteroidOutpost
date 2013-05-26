@@ -5,22 +5,19 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AsteroidOutpost.Components;
-using AsteroidOutpost.Entities;
-using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Scenarios;
+using AsteroidOutpost.Screens;
 using AsteroidOutpost.Screens.HeadsUpDisplay;
 using Awesomium.Core;
 using AwesomiumXNA;
 using C3.XNA;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Console = System.Console;
 using AsteroidOutpost.Systems;
 
-namespace AsteroidOutpost.Screens
+namespace AsteroidOutpost
 {
 
 	public enum StreamType
@@ -53,13 +50,15 @@ namespace AsteroidOutpost.Screens
 		private readonly PhysicsSystem physicsSystem;
 		private readonly RenderQuadTreeSystem renderQuadTreeSystem;
 		private readonly PowerGridSystem powerGridSystem;
-		private readonly ConstructionSystem constructionSystem;
+		internal readonly ConstructionSystem constructionSystem;
 		private readonly LaserMinerSystem laserMinerSystem;
 		private readonly AccumulationSystem accumulationSystem;
 		private readonly LaserWeaponSystem laserWeaponSystem;
 		private readonly MissileWeaponSystem missileWeaponSystem;
 		private readonly MovementSystem movementSystem;
 		private readonly HitPointSystem hitPointSystem;
+
+		private MissionSystem missionSystem;     // Created when world starts, instead of the world is created
 
 		private bool paused;
 
@@ -76,8 +75,8 @@ namespace AsteroidOutpost.Screens
 		private bool gameOver = false;
 
 		public event Action<bool> PauseToggledEvent;
-		public event Action<EntityEventArgs> StructureStartedEventPreAuth;
-		public event Action<EntityEventArgs> StructureStartedEventPostAuth;
+		//public event Action<EntityEventArgs> StructureStartedEventPreAuth;
+		//public event Action<EntityEventArgs> StructureStartedEventPostAuth;
 
 		public event Action<int> EntityDied;
 		
@@ -734,16 +733,22 @@ namespace AsteroidOutpost.Screens
 		/// <summary>
 		/// Starts this instance of the game as a server
 		/// </summary>
-		public void StartServer(Scenario theScenario)
+		public void StartServer(Scenario scenario)
 		{
-			if(scenario != null)
+			awesomium.WebView.LoadFile("HUD.html");
+			if(this.scenario != null)
 			{
-				scenario.End();
+				// Is this normal?
+				Debugger.Break();
+				this.scenario.End();
 			}
-			scenario = theScenario;
+			this.scenario = scenario;
+
+			missionSystem = new MissionSystem((AOGame)Game, awesomium, this.scenario);
+			Game.Components.Add(missionSystem);
 
 			isServer = true;
-			scenario.Start();
+			this.scenario.Start();
 			network.StartGame();
 		}
 

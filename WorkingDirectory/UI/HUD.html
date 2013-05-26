@@ -63,7 +63,7 @@
 					<span id="lblContructing" class="selectionLabel"></span>
 					<div id="constructionProgressBar" class="selectionProgressBar">
 						<span class="selectionProgressData">
-							{{selectedUnits[0].Constructable.MineralsLeftToConstruct | number:0}} / {{selectedUnits[0].Constructable.MineralsToConstruct | number:0}}
+							{{selectedUnits[0].Constructible.MineralsConstructed | number:0}} / {{selectedUnits[0].Constructible.MineralsToConstruct | number:0}}
 						</span>
 					</div>
 				</div></div>

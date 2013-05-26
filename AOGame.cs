@@ -35,11 +35,13 @@ namespace AsteroidOutpost
 
 
 		#region Fields
-
+		
 		private bool moveWindow = false;
 		private int moveWindowX;
 		private int moveWindowY;
 
+		private readonly TimeSpan fixedDeltaTime = new TimeSpan(166667);
+		private TimeSpan accumulatedTime = TimeSpan.Zero;
 
 		private GraphicsDeviceManager graphics;
 		private SpriteBatch spriteBatch;
@@ -116,8 +118,8 @@ namespace AsteroidOutpost
 
 			initGraphicsMode(width, height, fullScreen);
 
-
-#if UNLIMITED_FPS
+//#if UNLIMITED_FPS
+#if false
 			graphics.SynchronizeWithVerticalRetrace = false;
 			IsFixedTimeStep = false;
 #endif
@@ -253,36 +255,39 @@ namespace AsteroidOutpost
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			frameRateCounter.StartOfUpdate(gameTime);
-
-			base.Update(gameTime);
-			//Window.Title = String.Format("{0, 0} FPS {1, 30} ms / frame", frameRateCounter.FPS, Math.Round(frameRateCounter.MillisecondsPerFrame, 3));
-
-			if (!musicStarted)
+			while (gameTime.TotalGameTime > accumulatedTime + fixedDeltaTime)
 			{
-				if (settings.MusicVolume > 0)
+				accumulatedTime += fixedDeltaTime;
+				frameRateCounter.StartOfUpdate(gameTime);
+
+				base.Update(new GameTime(accumulatedTime, fixedDeltaTime));
+
+				if (!musicStarted)
 				{
-					MediaPlayer.Volume = settings.MusicVolume * 0.5f;
-					MediaPlayer.Play(menuMusic);
+					if (settings.MusicVolume > 0)
+					{
+						MediaPlayer.Volume = settings.MusicVolume * 0.5f;
+						MediaPlayer.Play(menuMusic);
+					}
+					musicStarted = true;
 				}
-				musicStarted = true;
-			}
 
 
-			frameRateCounter.EndOfUpdate(gameTime);
+				frameRateCounter.EndOfUpdate(gameTime);
 
 
-			if(awesomium.WebView.IsLive)
-			{
-				// Force this to be a synchronous call otherwise we could hammer this with update calls, and it can't keep up
-				String js = String.Format("if(typeof RefreshPerformanceGraph != 'undefined'){{ RefreshPerformanceGraph({0}, {1}); }}", frameRateCounter.LastUpdateTime(), frameRateCounter.LastDrawTime());
-				awesomium.WebView.ExecuteJavascriptWithResult(js, 100);
-			}
+				if (awesomium.WebView.IsLive)
+				{
+					// Force this to be a synchronous call otherwise we could hammer this with update calls, and it can't keep up
+					String js = String.Format("if(typeof RefreshPerformanceGraph != 'undefined'){{ RefreshPerformanceGraph({0}, {1}); }}", frameRateCounter.LastUpdateTime(), frameRateCounter.LastDrawTime());
+					awesomium.WebView.ExecuteJavascriptWithResult(js, 100);
+				}
 
-			// Allows the game to exit if I ever load this on an XBox
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-			{
-				Exit();
+				// Allows the game to exit if I ever load this on an XBox
+				if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+				{
+					Exit();
+				}
 			}
 		}
 		
@@ -400,7 +405,7 @@ namespace AsteroidOutpost
 		private void WebView_JSConsoleMessageAdded(object sender, JSConsoleMessageEventArgs e)
 		{
 			// JavaScript Error! Fail
-			Console.WriteLine("{0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);
+			Console.WriteLine("Awesomium JS Error: {0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);
 #if DEBUG
 			Debugger.Break();
 #endif

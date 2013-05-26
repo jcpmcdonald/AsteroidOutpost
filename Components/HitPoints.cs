@@ -44,23 +44,22 @@ namespace AsteroidOutpost.Components
 			{
 				int initialHitPoints = (int)armour;
 				armour = MathHelper.Clamp(value, 0, TotalArmour);
-				int delta = (int)(armour) - initialHitPoints;
-
-				// Tell everyone that's interested in hit point changes
-				if (delta != 0 && ArmourChangedEvent != null)
-				{
-					ArmourChangedEvent(new EntityArmourChangedEventArgs(this, delta));
-				}
+				OnArmourChange(initialHitPoints);
 			}
 		}
 
 
-		/// <summary>
-		/// Gets the total hit points
-		/// </summary>
-		/// <value> The total hit points </value>
 		public int TotalArmour { get; set; }
 
+
+		public void OnArmourChange(int initialHitPoints)
+		{
+			int delta = (int)(armour) - initialHitPoints;
+			if (delta != 0 && ArmourChangedEvent != null)
+			{
+				ArmourChangedEvent(new EntityArmourChangedEventArgs(this, delta));
+			}
+		}
 
 		public void OnDeath()
 		{

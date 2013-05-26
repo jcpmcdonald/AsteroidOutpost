@@ -55,7 +55,6 @@ namespace AsteroidOutpost.Components
 				offset = value;
 
 				// Since we moved, make sure to tell others
-				//hasMoved = true;		// For the QuadTree, TODO: Change this!!
 				if (MovedEvent != null)
 				{
 					MovedEvent(new EntityMovedEventArgs(this, delta));

@@ -1,26 +1,20 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Reflection;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Eventing;
-using AsteroidOutpost.Interfaces;
-using AsteroidOutpost.Systems;
 using Awesomium.Core;
 using AwesomiumXNA;
-using C3.XNA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Input;
 using fastJSON;
 
-
-namespace AsteroidOutpost.Screens.HeadsUpDisplay
+namespace AsteroidOutpost.Systems
 {
 	/// <summary>
 	/// The HUD is how the user interacts with the game
@@ -76,6 +70,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			hotkeys.Add(Keys.M, btnLaserMiner_Clicked);
 			hotkeys.Add(Keys.L, btnLaserTower_Clicked);
 			hotkeys.Add(Keys.I, btnMissileTower_Clicked);
+			hotkeys.Add(Keys.H, GoHome);
 
 
 			// Create callbacks for Awesomium content to communicate with the hud
@@ -94,6 +89,12 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 			awesomium.WebView.SetObjectCallback("hud", "BuildMissileTower", btnMissileTower_Clicked);
 
 			world.PauseToggledEvent += WorldOnPauseToggledEvent;
+		}
+
+
+		private void GoHome(object sender, EventArgs e)
+		{
+			
 		}
 
 
@@ -834,7 +835,7 @@ namespace AsteroidOutpost.Screens.HeadsUpDisplay
 
 			constructionSound.Play(Math.Min(1, world.Scale(1f)), 0, 0);
 
-			Constructable constructable = world.GetNullableComponent<Constructable>(creatingEntityID.Value);
+			Constructible constructable = world.GetNullableComponent<Constructible>(creatingEntityID.Value);
 			if(constructable != null)
 			{
 				constructable.IsBeingPlaced = false;

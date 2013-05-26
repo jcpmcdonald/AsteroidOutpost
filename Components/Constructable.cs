@@ -7,93 +7,38 @@ using System.Text;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
+using Microsoft.Xna.Framework;
 
 namespace AsteroidOutpost.Components
 {
-	internal class Constructable : Component
+	internal class Constructible : Component
 	{
-		private float mineralsLeftToConstruct;
+		private float mineralsConstructed;
 
-
-		// Events
-		//[EventReplication(EventReplication.ServerToClients)]
-		//public event Action<EntityConstructionProgressEventArgs> ConstructionProgressChangedEvent;
-
-		//[EventReplication(EventReplication.ClientToServer)]
-		//public event Action<EntityRequestConstructionCancelEventArgs> RequestConstructionCancelEvent;
-
-
-		//// Local event only
-		//public static event Action<EntityEventArgs> AnyConstructionCompletedEvent;
-		//public event Action<EntityEventArgs> ConstructionCompletedEvent;
-
-		public Constructable(World world, int entityID, int mineralsToConstruct)
+		public Constructible(World world, int entityID, int mineralsToConstruct)
 			: base(world, entityID)
 		{
 			IsConstructing = false;
 			IsBeingPlaced = true;
-			this.MineralsToConstruct = mineralsToConstruct;
-			this.mineralsLeftToConstruct = mineralsToConstruct;
+			MineralsToConstruct = mineralsToConstruct;
+			mineralsConstructed = 0;
 		}
 
 
-		/// <summary>
-		/// How many minerals does this constructable take to build?
-		/// </summary>
+		
+		public bool IsBeingPlaced { get; set; }
+		public bool IsConstructing { get; set; }
 		public int MineralsToConstruct { get; set; }
-
-
-		/// <summary>
-		/// How many minerals does this constructable take to build?
-		/// </summary>
-		public float MineralsLeftToConstruct
+		public float MineralsConstructed
 		{
 			get
 			{
-				return mineralsLeftToConstruct;
+				return mineralsConstructed;
 			}
 			set
 			{
-				//int delta = (int)Math.Ceiling(mineralsLeftToConstruct) - (int)Math.Max(Math.Ceiling(value), 0);
-				mineralsLeftToConstruct = Math.Max(value, 0);
-
-				// Tell all my friends
-				//if (ConstructionProgressChangedEvent != null)
-				//{
-				//    ConstructionProgressChangedEvent(new EntityConstructionProgressEventArgs(this, mineralsLeftToConstruct, delta));
-				//}
-
-
-				if (mineralsLeftToConstruct <= 0)
-				{
-					//mineralsToUpgrade = 0;
-					mineralsLeftToConstruct = 0;
-
-					// This construction is complete
-					IsConstructing = false;
-
-					//if (AnyConstructionCompletedEvent != null)
-					//{
-					//    AnyConstructionCompletedEvent(new EntityEventArgs(this));
-					//}
-					//if (ConstructionCompletedEvent != null)
-					//{
-					//    ConstructionCompletedEvent(new EntityEventArgs(this));
-					//}
-				}
+				mineralsConstructed = MathHelper.Clamp(value, 0, MineralsToConstruct);
 			}
 		}
-
-
-		/// <summary>
-		/// Is this being placed?
-		/// </summary>
-		public virtual bool IsBeingPlaced { get; set; }
-
-
-		/// <summary>
-		/// Is this under construction?
-		/// </summary>
-		public virtual bool IsConstructing { get; set; }
 	}
 }
