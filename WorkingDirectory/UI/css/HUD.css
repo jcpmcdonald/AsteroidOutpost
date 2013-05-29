@@ -61,6 +61,15 @@
 }
 
 
+.button.disabled,.buttonPressed.disabled
+{
+	border-style: outset;
+	background-position: 0px 0px;
+	background-color: rgba(10, 10, 10, 0.9);
+	-webkit-filter: grayscale;
+	-webkit-filter: brightness(30%);
+}
+
 
 #minerals
 {

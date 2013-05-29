@@ -61,7 +61,6 @@ namespace AsteroidOutpost
 
 		private Stopwatch stopwatch = new Stopwatch();
 		private bool destroyWorld = false;
-		private List<String> executeAwesomiumJSNextCycle = new List<string>();
 
 		#endregion
 
@@ -265,13 +264,6 @@ namespace AsteroidOutpost
 				accumulatedTime += fixedDeltaTime;
 				frameRateCounter.StartOfUpdate(gameTime);
 
-				for (int i = executeAwesomiumJSNextCycle.Count - 1; i >= 0; i--)
-				{
-					var js = executeAwesomiumJSNextCycle[i];
-					executeAwesomiumJSNextCycle.RemoveAt(i);
-					ExecuteAwesomiumJS(js);
-				}
-
 				base.Update(new GameTime(accumulatedTime, fixedDeltaTime));
 
 				if (!musicStarted)
@@ -334,20 +326,6 @@ namespace AsteroidOutpost
 				Components.Remove(world);
 				world.Dispose();
 				world = null;
-			}
-		}
-
-
-		public void ExecuteAwesomiumJS(String js)
-		{
-			bool loaded = !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'").ToBoolean();
-			if (loaded)
-			{
-				awesomium.WebView.ExecuteJavascriptWithResult(js);
-			}
-			else
-			{
-				executeAwesomiumJSNextCycle.Add(js);
 			}
 		}
 

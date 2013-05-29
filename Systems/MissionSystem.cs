@@ -11,12 +11,12 @@ namespace AsteroidOutpost.Systems
 {
 	public class MissionSystem : GameComponent
 	{
-		private AOGame theGame;
+		private World world;
 		private Scenario scenario;
 
-		public MissionSystem(AOGame game, Scenario scenario) : base(game)
+		public MissionSystem(AOGame game, World world, Scenario scenario) : base(game)
 		{
-			this.theGame = game;
+			this.world = world;
 			this.scenario = scenario;
 		}
 
@@ -24,7 +24,7 @@ namespace AsteroidOutpost.Systems
 		{
 			foreach (var mission in scenario.Missions.Where(m => m.Dirty))
 			{
-				theGame.ExecuteAwesomiumJS(String.Format("window.scopeOf('MissionController').AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
+				world.ExecuteAwesomiumJS(String.Format("window.scopeOf('MissionController').AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
 				//awesomium.WebView.ExecuteJavascript(String.Format("AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
 				mission.Dirty = false;
 			}

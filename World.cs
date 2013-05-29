@@ -74,6 +74,8 @@ namespace AsteroidOutpost
 		private readonly List<Force> forces = new List<Force>();
 		private bool gameOver = false;
 
+		private List<String> executeAwesomiumJSNextCycle = new List<string>();
+
 		public event Action<bool> PauseToggledEvent;
 		//public event Action<EntityEventArgs> StructureStartedEventPreAuth;
 		//public event Action<EntityEventArgs> StructureStartedEventPostAuth;
@@ -744,7 +746,7 @@ namespace AsteroidOutpost
 			}
 			this.scenario = scenario;
 
-			missionSystem = new MissionSystem((AOGame)Game, this.scenario);
+			missionSystem = new MissionSystem((AOGame)Game, this, this.scenario);
 			Game.Components.Add(missionSystem);
 
 			isServer = true;
@@ -805,6 +807,13 @@ namespace AsteroidOutpost
 		{
 			TimeSpan deltaTime = gameTime.ElapsedGameTime;
 			network.ProcessIncomingQueue(deltaTime);
+
+			for (int i = executeAwesomiumJSNextCycle.Count - 1; i >= 0; i--)
+			{
+				var js = executeAwesomiumJSNextCycle[i];
+				executeAwesomiumJSNextCycle.RemoveAt(i);
+				ExecuteAwesomiumJS(js);
+			}
 			
 			if (!paused)
 			{
@@ -1177,6 +1186,21 @@ namespace AsteroidOutpost
 		{
 			gameOver = true;
 			awesomium.WebView.CallJavascriptFunction("", "GameOver", new JSValue(win));
+		}
+
+
+		public void ExecuteAwesomiumJS(String js)
+		{
+			bool loaded = !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'").ToBoolean();
+			if (loaded)
+			{
+				//awesomium.WebView.ExecuteJavascriptWithResult(js, 50);
+				awesomium.WebView.ExecuteJavascript(js);
+			}
+			else
+			{
+				executeAwesomiumJSNextCycle.Add(js);
+			}
 		}
 	}
 }

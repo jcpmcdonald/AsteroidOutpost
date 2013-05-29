@@ -145,7 +145,6 @@ function SetPaused(paused)
 	if(paused)
 	{
 		$("#pauseDisplay").addClass("paused");
-		$("#gameMenu").show();
 		$("#modalOverlay").fadeIn(200);
 	}
 	else
@@ -157,10 +156,23 @@ function SetPaused(paused)
 }
 
 
+function ShowModalGameMenu()
+{
+	$("#modalOverlay").fadeIn(200);
+	$("#gameMenu").show();
+}
+
 function GameOver(win)
 {
 	$("#modalOverlay").fadeIn(200);
 	$("#gameLost").show();
+}
+
+function ShowModalDialog(text)
+{
+	$("#modalOverlay").fadeIn(200);
+	$("#dialog .modalText").html(text);
+	$("#dialog").show();
 }
 
 
@@ -174,15 +186,6 @@ function MakeTimerPanel()
 function UpdateTimerPanel(value)
 {
 	$("#timer").text(value);
-}
-
-
-
-function ShowModalDialog(text)
-{
-	$("#modalOverlay").fadeIn(200);
-	$("#dialog .modalText").html(text);
-	$("#dialog").show();
 }
 
 
@@ -291,6 +294,10 @@ $(document).ready(function()
 			{
 				var paused = $("#gameMenu").is(":visible");
 				SetPaused(!paused);
+				if(!paused)
+				{
+					$("#gameMenu").show();
+				}
 			}
 		});
 		
@@ -326,7 +333,10 @@ $(document).ready(function()
 	$(".button").mouseup( function(event)
 	{
 		$(this).removeClass("buttonPressed");
-		XNACall($(this));
+		if(!$(this).hasClass("disabled"))
+		{
+			XNACall($(this));
+		}
 	});
 	
 	$(".button").mouseleave( function(event)
@@ -357,7 +367,6 @@ $(document).ready(function()
 		mouseUpOverHUD = true;
 	});
 });
-
 
 
 
