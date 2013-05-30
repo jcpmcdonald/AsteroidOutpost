@@ -14,23 +14,16 @@ namespace AsteroidOutpost.Scenarios
 	class TutorialScenario : Scenario
 	{
 		private TimeSpan elapsedTime;
-		//private int progress = 0;
 		private int minersBuilt = 0;
 		private int lasersBuilt = 0;
+
+		private Vector2 startingPoint;
 		
 		private Mission currentMission;
 		private Mission buildMiners = new Mission("buildMiners", "(0/2) Build 2 Miners Near Asteroids", false);
 		private Mission buildLasers = new Mission("buildLasers", "(0/3) Build 3 Laser Towers", false);
 		private Mission buildMorePower = new Mission("buildMorePower", "Build an other Solar Station", false);
 		private Mission defendYourself = new Mission("defendYourself", "Defend yourself!", false);
-		//private List<Beacon> beacons = new List<Beacon>(4);
-
-
-		//private Button btnNext;
-		//private Form frmInstructions;
-		//private Label lblBuild2Miners;
-		//private Label lblUpgradeSolar;
-		//private Label lblBuildLaserTowers;
 
 
 		public TutorialScenario(AOGame theGame, int playerCount)
@@ -49,14 +42,6 @@ namespace AsteroidOutpost.Scenarios
 
 			elapsedTime = new TimeSpan(0);
 
-
-			
-			//missions.Add(new Mission("buildLaserTowers", "Build 3 Laser Towers", false));
-			//lblBuild2Miners = new Label("- (0 / 2) Build 2 miners near asteroids", 5, 100, eAlignment.Left);
-			//lblUpgradeSolar = new Label("- Upgrade your solar station", 5, 120, eAlignment.Left);
-			//lblBuildLaserTowers = new Label("- (0 / 3) Build some laser towers", 5, 140, eAlignment.Left);
-
-
 			// Set up some forces and actors
 			friendlyForce = new Force(world, world.GetNextForceID(), 1000, Team.Team1);
 			Controller localController = new Controller(world, ControllerRole.Local, friendlyForce);
@@ -70,7 +55,8 @@ namespace AsteroidOutpost.Scenarios
 
 			world.PowerGrid.Add(friendlyForce.ID, new PowerGrid(world));
 
-			world.HUD.FocusWorldPoint = CreateStartingBase(friendlyForce);
+			startingPoint = CreateStartingBase(friendlyForce);
+			world.HUD.FocusWorldPoint = startingPoint;
 
 
 			world.HUD.DisablePowerButton();
@@ -79,14 +65,8 @@ namespace AsteroidOutpost.Scenarios
 
 			currentMission = buildMiners;
 			StartMission();
-			
-			
-			//btnNext = new Button("Next", (frmInstructions.Width / 2) - 50, frmInstructions.Height - 30, 100, 20);
-			//btnNext.Click += btnNext_Click;
-			//frmInstructions.AddControl(btnNext);
 
-			//ConstructableEntity.AnyConstructionCompletedEvent += ConstructableEntity_StructureFinishedEvent;
-			//ConstructableEntity.AnyUpgradeCompletedEvent += ConstructableEntity_UpgradeFinishedEvent;
+
 			world.constructionSystem.ConstructionCompletedEvent += ConstructionSystem_ConstructionCompletedEvent;
 
 			// Create a beacon
@@ -159,6 +139,19 @@ namespace AsteroidOutpost.Scenarios
 		//}
 
 
+		protected override void World_EntityDied(int entityID)
+		{
+			FleetMovementBehaviour fleetMovement = world.GetNullableComponent<FleetMovementBehaviour>(entityID);
+			if(fleetMovement != null)
+			{
+				// Yay! The enemy has died
+				world.GameOver(true);
+			}
+
+			base.World_EntityDied(entityID);
+		}
+
+
 		void ConstructionSystem_ConstructionCompletedEvent(int entityID)
 		{
 			if(currentMission == buildMiners)
@@ -212,7 +205,13 @@ namespace AsteroidOutpost.Scenarios
 			}
 			else if(currentMission == buildMorePower)
 			{
-				
+				var solarStation = world.GetNullableComponent<PowerProducer>(entityID);
+				if (solarStation != null)
+				{
+					buildMorePower.Done = true;
+					currentMission = defendYourself;
+					StartMission();
+				}
 			}
 		}
 
@@ -224,43 +223,34 @@ namespace AsteroidOutpost.Scenarios
 
 			if(currentMission == buildMiners)
 			{
-				world.Paused = true;
-				world.ExecuteAwesomiumJS("ShowModalDialog('Welcome to training soldier! We need to get a base up and running asap. Build us two miners to get us started. Remember that they will need power if they are going to do anything.')");
-				//frmInstructions.AddControl(new Label("Welcome to training soldier! We need to get a base up and running asap. Build us two miners to get us started. Remember that they will need power if they are going to do anything.", 5, 5, frmInstructions.Width - 10, true));
+				world.HUD.ShowModalDialog("Welcome to training soldier! We need to get a base up and running asap. Build us two miners to get us started. Remember that they'll need power if they are going to do anything.");
 				missions.Add(buildMiners);
 
 
 			}
 			else if(currentMission == buildLasers)
 			{
-				world.Paused = true;
-				world.ExecuteAwesomiumJS("ShowModalDialog('Now that we have a good income stream, we should build some defences. Enemies can come from anywhere, so build 3 laser towers, each guarding a separate part of the base.')");
+				world.HUD.ShowModalDialog("Now that we have a good income stream, we should build some defences. Enemies can come from anywhere, so build 3 laser towers, each guarding a separate part of the base.");
 				world.HUD.EnableLaserTowerButton();
-				//frmInstructions.AddControl(new Label("Well done! Now we will need some more power before we can fight off the alien ships. I would recommend upgrading your existing solar station to provide the additional power.", 5, 5, frmInstructions.Width - 10, true));
-
-				int existingLasers = world.GetComponents<LaserWeapon>().Count();
-				if (existingLasers > 0)
-				{
-					// TODO: Display a message. Something to the effect of: Oh wow, you've already got some?! Great job!
-					buildLasers.Description = String.Format("({0}/3) Build 3 Laser Towers", Math.Min(lasersBuilt, 3));
-				}
-
 				missions.Add(buildLasers);
 
 
 			}
 			else if(currentMission == buildMorePower)
 			{
-				world.ExecuteAwesomiumJS("ShowModalDialog('Good Job! Let's build an other solar station so that our lasers will always have power. Power consumers can only be connected to a single power source, so you will need to build this next to home.')");
+				world.HUD.ShowModalDialog("Good Job! Let's build an other solar station so that our lasers will always have power. Power consumers can only be connected to a single power source, so you will need to build this next to home.");
 				world.HUD.EnablePowerButton();
-				//frmInstructions.AddControl(new Label("Now that we have some power, build a few laser towers where indicated to fend off the aliens.", 5, 5, frmInstructions.Width - 10, true));
 				missions.Add(buildMorePower);
 
 
 			}
 			else if(currentMission == defendYourself)
 			{
+				world.HUD.ShowModalDialog("An enemy ship has been detected! Time to test your defences. Now is a good time to fill any gaps.");
 				missions.Add(defendYourself);
+				Vector2 enemyLocation = (Vector2.Normalize(new Vector2((float)GlobalRandom.NextDouble() - 0.5f, (float)GlobalRandom.NextDouble() - 0.5f)) * 1200) + startingPoint;
+				WaveFactory.CreateWave(world, 100, enemyLocation);
+
 			}
 		}
 
