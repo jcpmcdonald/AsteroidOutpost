@@ -30,6 +30,8 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			if (world.Paused) { return; }
+
 			var upgradables = world.GetComponents<Upgradable>().Where(x => x.IsUpgrading && x.CurrentUpgrade != null);
 
 			foreach (var upgradable in upgradables)

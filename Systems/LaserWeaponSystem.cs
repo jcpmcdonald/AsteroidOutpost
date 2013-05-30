@@ -24,6 +24,8 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			if (world.Paused) { return; }
+
 			foreach (var laser in world.GetComponents<LaserWeapon>())
 			{
 				Position position = world.GetComponent<Position>(laser);

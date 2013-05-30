@@ -23,6 +23,8 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			if(world.Paused) { return; }
+
 			foreach (Animator animator in world.GetComponents<Animator>())
 			{
 				animator.SpriteAnimator.Update(gameTime);

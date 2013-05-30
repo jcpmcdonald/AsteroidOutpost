@@ -43,6 +43,8 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			if(world.Paused) { return; }
+
 			// Update the floating text objects
 			List<FloatingText> deadFloatingTexts = new List<FloatingText>();
 			foreach (var floatingText in floatingTexts)

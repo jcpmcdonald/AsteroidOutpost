@@ -20,6 +20,8 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			if (world.Paused) { return; }
+
 			TimeSpan deltaTime = gameTime.ElapsedGameTime;
 
 			foreach (Velocity velocity in world.GetComponents<Velocity>())

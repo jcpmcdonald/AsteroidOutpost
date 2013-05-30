@@ -22,9 +22,11 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			if (world.Paused) { return; }
+
 			foreach (var mission in scenario.Missions.Where(m => m.Dirty))
 			{
-				world.ExecuteAwesomiumJS(String.Format("window.scopeOf('MissionController').AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
+				world.ExecuteAwesomiumJS(String.Format("window.scopeOf('MissionController').AddMission('{0}', '{1}', {2});", mission.Key, mission.Description, mission.Done.ToString().ToLower()));
 				//awesomium.WebView.ExecuteJavascript(String.Format("AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
 				mission.Dirty = false;
 			}

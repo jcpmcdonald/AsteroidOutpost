@@ -165,7 +165,14 @@ function ShowModalGameMenu()
 function GameOver(win)
 {
 	$("#modalOverlay").fadeIn(200);
-	$("#gameLost").show();
+	if(win)
+	{
+		$("#gameWin").show();
+	}
+	else
+	{
+		$("#gameLost").show();
+	}
 }
 
 function ShowModalDialog(text)
@@ -308,7 +315,7 @@ $(document).ready(function()
 		$(".btnMainMenu").click( function (event){ window.location = "MainMenu.html"; });
 		
 		// Add some missions
-		scopeOf("MissionController").AddMission("buildMiners", "Build 3 miners near asteroids", false);
+		scopeOf("MissionController").AddMission("buildMiners", "Build 3 miners near asteroids", true);
 		scopeOf("MissionController").AddMission("buildLaserTowers", "Build 2 laser towers", false);
 	}
 

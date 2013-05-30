@@ -133,6 +133,12 @@
 	content: "- ";
 }
 
+.missionCompletetrue
+{
+	text-decoration: line-through;
+	font-style: italic;
+}
+
 
 
 #editorPanel

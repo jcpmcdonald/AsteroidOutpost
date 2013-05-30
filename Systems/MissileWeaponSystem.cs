@@ -27,6 +27,8 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			if (world.Paused) { return; }
+
 			foreach (var missileLauncher in world.GetComponents<MissileWeapon>())
 			{
 				missileLauncher.TimeSinceLastShot += gameTime.ElapsedGameTime;

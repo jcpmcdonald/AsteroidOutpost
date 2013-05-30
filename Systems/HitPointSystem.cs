@@ -23,6 +23,8 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			if (world.Paused) { return; }
+
 			// TODO: This code will need to be changed to allow a client to delete entities
 			bool authoratative = world.IsServer;
 			foreach (var hitPoints in world.GetComponents<HitPoints>())

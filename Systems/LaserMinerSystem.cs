@@ -44,6 +44,8 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			if (world.Paused) { return; }
+
 			foreach (var laserMiner in  world.GetComponents<LaserMiner>())
 			{
 				

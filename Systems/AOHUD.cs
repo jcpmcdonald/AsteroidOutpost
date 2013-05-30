@@ -158,6 +158,13 @@ namespace AsteroidOutpost.Systems
 		}
 
 
+		public void ShowModalDialog(String text)
+		{
+			world.Paused = true;
+			world.ExecuteAwesomiumJS(String.Format("ShowModalDialog('{0}')", text.Replace("'", "\\'")));
+		}
+
+
 
 		private void WorldOnPauseToggledEvent(bool paused)
 		{
@@ -196,6 +203,28 @@ namespace AsteroidOutpost.Systems
 
 			theMouse.UpdateState();
 			theKeyboard.UpdateState();
+
+
+			if (theKeyboard[Keys.Escape] == EnhancedKeyState.JUST_PRESSED)
+			{
+				if (creatingEntityID != null)
+				{
+					OnCancelCreation();
+				}
+				else
+				{
+					// Make the world stop
+					world.Paused = !world.Paused;
+					if (world.Paused)
+					{
+						world.ExecuteAwesomiumJS("ShowModalGameMenu()");
+					}
+				}
+			}
+
+
+			if (world.Paused) { return; }
+
 
 			if (theMouse.ScrollWheelDelta != 0)
 			{
@@ -236,24 +265,6 @@ namespace AsteroidOutpost.Systems
 			//{
 			//    ScreenMan.TakeScreenshot();
 			//}
-
-
-			if (theKeyboard[Keys.Escape] == EnhancedKeyState.JUST_PRESSED)
-			{
-				if (creatingEntityID != null)
-				{
-					OnCancelCreation();
-				}
-				else
-				{
-					// Make the world stop
-					world.Paused = !world.Paused;
-					if(world.Paused)
-					{
-						world.ExecuteAwesomiumJS("ShowModalGameMenu()");
-					}
-				}
-			}
 
 
 			// Handle the hotkeys

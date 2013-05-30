@@ -35,6 +35,8 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			if (world.Paused) { return; }
+
 			foreach(var producer in world.GetComponents<PowerProducer>())
 			{
 				if(producer.ProducesPower)

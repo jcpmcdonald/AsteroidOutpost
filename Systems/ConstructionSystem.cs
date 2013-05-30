@@ -36,6 +36,8 @@ namespace AsteroidOutpost.Systems
 		/// </summary>
 		public override void Update(GameTime gameTime)
 		{
+			if (world.Paused) { return; }
+
 			var constructables = world.GetComponents<Constructible>().Where(x => x.IsConstructing);
 
 			foreach (var constructable in constructables)

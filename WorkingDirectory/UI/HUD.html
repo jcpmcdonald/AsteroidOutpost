@@ -105,6 +105,12 @@
 	</div>
 	
 	
+	<div id="gameWin" class="modalPanel panel">
+		<div class="modalTitle">You Win!</div>
+		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame()">Main Menu</span>
+		<span class="btnExit button menuButton" call="xna.Exit()">Exit Game</span>
+	</div>
+	
 	<div id="gameLost" class="modalPanel panel">
 		<div class="modalTitle">You Lose</div>
 		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame()">Main Menu</span>
@@ -113,7 +119,7 @@
 	
 	
 	<div id="dialog" class="modalPanel panel">
-		<div class="modalText">Welcome to training soldier! We need to get a base up and running asap. Build us two miners to get us started. Remember that they will need power if they are going to do anything.</div>
+		<div class="modalText"></div>
 		<span class="btnResume button menuButton" onClick="SetPaused(false); XNACall('hud.ResumeGame()');">Ok</span>
 	</div>
 	
@@ -130,7 +136,7 @@
 	
 	<div id="missions" class="panel" ng-controller="MissionController">
 		<div ng-repeat="mission in missions">
-			<div class="mission">{{mission.description}}</div>
+			<div class="mission missionComplete{{mission.done}} ">{{mission.description}}</div>
 		</div>
 	</div>
 	
