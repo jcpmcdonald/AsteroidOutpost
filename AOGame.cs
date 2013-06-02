@@ -360,6 +360,10 @@ namespace AsteroidOutpost
 			Scenario scenario;
 			switch(mapName.ToLower())
 			{
+			case "world1":
+				scenario = new MinerealCollectionScenario(this, 1);
+				break;
+
 			case "tutorial":
 				scenario = new TutorialScenario(this, 1);
 				break;

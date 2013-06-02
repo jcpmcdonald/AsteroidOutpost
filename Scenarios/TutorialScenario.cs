@@ -106,7 +106,6 @@ namespace AsteroidOutpost.Scenarios
 
 			//Beacon minerBeacon = new Beacon(world, world, localForce, new Vector2((world.MapWidth / 2.0f) + 200, world.MapHeight / 2.0f), 40);
 			//beacons.Add(minerBeacon);
-			//world.Add(minerBeacon);
 
 			//world.HUD.AddControl(frmInstructions);
 
@@ -248,26 +247,11 @@ namespace AsteroidOutpost.Scenarios
 			{
 				world.HUD.ShowModalDialog("An enemy ship has been detected! Time to test your defences. Now is a good time to fill any gaps.");
 				missions.Add(defendYourself);
-				Vector2 enemyLocation = (Vector2.Normalize(new Vector2((float)GlobalRandom.NextDouble() - 0.5f, (float)GlobalRandom.NextDouble() - 0.5f)) * 1200) + startingPoint;
+				Vector2 enemyLocation = (Vector2.Normalize(new Vector2((float)GlobalRandom.NextDouble() - 0.5f, (float)GlobalRandom.NextDouble() - 0.5f)) * 2000) + startingPoint;
 				WaveFactory.CreateWave(world, 100, enemyLocation);
 
 			}
 		}
-
-
-		//private void btnNext_Click(object sender, EventArgs e)
-		//{
-		//    switch(progress)
-		//    {
-		//    case 0:
-		//        progress++;
-		//        StartMission();
-		//        break;
-		//    }
-
-		//    //btnNext.Location = btnNext.Location - new Vector2(0, 20);
-		//    //frmInstructions.AddControl(btnNext);
-		//}
 
 
 		public override void Update(TimeSpan deltaTime)

@@ -155,6 +155,7 @@
     <Compile Include="EnhancedKeyboardState.cs" />
     <Compile Include="EnhancedMouseState.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
+    <Compile Include="Scenarios\MinerealCollectionScenario.cs" />
     <Compile Include="Scenarios\Mission.cs" />
     <Compile Include="Screens\Layer.cs" />
     <Compile Include="Systems\FrameRateCounter.cs" />
