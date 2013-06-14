@@ -14,7 +14,8 @@ function SelectionInfoController($scope)
 	{
 		setTimeout(function()
 		{
-			UpdateEditor($scope.selectedUnits);
+			//console.log("Updating Editor!");
+			//UpdateEditor($scope.selectedUnits);
 			//$scope.hitPointsProgressBar = null;
 			$.each($scope.progressBars, function(index, progressBar)
 			{
@@ -106,6 +107,8 @@ function SetSelection(newSelection)
 	
 	scopeOf('SelectionInfoController').selectedUnits = newSelection;
 	scopeOf('SelectionInfoController').$apply();
+	
+	return true;
 }
 
 function UpdateSelection(newSelection)
@@ -119,7 +122,12 @@ function UpdateSelection(newSelection)
 	}
 	
 	var difference = $.extend(scopeOf('SelectionInfoController').selectedUnits, newSelection);
+	
 	scopeOf('SelectionInfoController').$apply();
+	
+	UpdateEditor(newSelection);		// TODO: Update only the changed pieces
+	
+	return true;
 }
 
 

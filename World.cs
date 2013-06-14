@@ -61,6 +61,7 @@ namespace AsteroidOutpost
 		private MissionSystem missionSystem;     // Created when world starts, instead of the world is created
 
 		private bool paused;
+		private float timeMultiplier = 1.0f;
 
 		private bool isServer = true;
 		private AONetwork network;
@@ -202,6 +203,19 @@ namespace AsteroidOutpost
 			if (PauseToggledEvent != null)
 			{
 				PauseToggledEvent(paused);
+			}
+		}
+		
+
+		public float TimeMultiplier
+		{
+			get
+			{
+				return timeMultiplier;
+			}
+			set
+			{
+				timeMultiplier = MathHelper.Clamp(value, 0.1f, 10);
 			}
 		}
 

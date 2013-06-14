@@ -264,7 +264,14 @@ namespace AsteroidOutpost
 				accumulatedTime += fixedDeltaTime;
 				frameRateCounter.StartOfUpdate(gameTime);
 
-				base.Update(new GameTime(accumulatedTime, fixedDeltaTime));
+				if(world != null)
+				{
+					base.Update(new GameTime(accumulatedTime, new TimeSpan((long)(fixedDeltaTime.Ticks * world.TimeMultiplier))));
+				}
+				else
+				{
+					base.Update(new GameTime(accumulatedTime, fixedDeltaTime));
+				}
 
 				if (!musicStarted)
 				{
@@ -283,8 +290,9 @@ namespace AsteroidOutpost
 				if (awesomium.WebView.IsLive)
 				{
 					// Force this to be a synchronous call otherwise we could hammer this with update calls, and it can't keep up
-					String js = String.Format("if(typeof RefreshPerformanceGraph != 'undefined'){{ RefreshPerformanceGraph({0}, {1}); }}", frameRateCounter.LastUpdateTime(), frameRateCounter.LastDrawTime());
-					awesomium.WebView.ExecuteJavascriptWithResult(js, 100);
+					String js = String.Format("if(typeof RefreshPerformanceGraph != 'undefined'){{ RefreshPerformanceGraph({0}, {1}, {2}); }}", frameRateCounter.LastUpdateTime(), frameRateCounter.LastDrawTime(), frameRateCounter.LastDrawDelay);
+					//awesomium.WebView.ExecuteJavascriptWithResult(js, 100);
+					awesomium.WebView.ExecuteJavascript(js);
 				}
 
 				// Allows the game to exit if I ever load this on an XBox
@@ -302,6 +310,9 @@ namespace AsteroidOutpost
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
+			// If this is a positive number, it means that we've skipped a frame, and that's bad
+			frameRateCounter.LastDrawDelay = (float)(gameTime.ElapsedGameTime.TotalMilliseconds - fixedDeltaTime.TotalMilliseconds);
+
 			frameRateCounter.StartOfDraw(gameTime);
 
 			spriteBatch.Begin();

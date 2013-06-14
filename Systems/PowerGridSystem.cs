@@ -37,12 +37,15 @@ namespace AsteroidOutpost.Systems
 		{
 			if (world.Paused) { return; }
 
-			foreach(var producer in world.GetComponents<PowerProducer>())
+			foreach(var producer in world.GetComponents<PowerProducer>().Where(p => p.ProducesPower))
 			{
-				if(producer.ProducesPower)
+				var constructible = world.GetNullableComponent<Constructible>(producer);
+				if(constructible != null && (constructible.IsBeingPlaced || constructible.IsConstructing))
 				{
-					producer.AvailablePower += producer.PowerProductionRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
+					// Ignore placing and constructing producers
+					continue;
 				}
+				producer.AvailablePower += producer.PowerProductionRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
 			}
 		}
 

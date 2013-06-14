@@ -22,6 +22,7 @@ namespace AsteroidOutpost.Components
 		public float Damage { get; set; }
 		public int? Target { get; set; }
 		public Color Color { get; set; }
+		public bool Firing { get; set; }
 
 
 		public LaserWeapon(World world, int entityID, int range, float damage, Color color)

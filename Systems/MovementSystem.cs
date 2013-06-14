@@ -86,8 +86,9 @@ namespace AsteroidOutpost.Systems
 						Position targetPosition = world.GetComponent<Position>(vehicle.Target.Value);
 						List<IWeapon> weapons = world.GetWeapons(vehicle);
 						IWeapon primaryWeapon = weapons.First(x => x.Range == weapons.Min(y => y.Range));
+						const int weaponGive = 10;		// Just some number to help ships & towers get closer to each other and prevent float errors
 
-						if (position.Distance(targetPosition) - primaryWeapon.Range > MinDistanceToStop(velocity, vehicle))
+						if (position.Distance(targetPosition) - (primaryWeapon.Range - weaponGive) > MinDistanceToStop(velocity, vehicle))
 						{
 							// Move toward the target and flock with my flock-mates
 							vehicle.AccelerationVector = targetPosition.Center - position.Center - velocity.CurrentVelocity;

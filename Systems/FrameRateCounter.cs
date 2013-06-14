@@ -40,6 +40,9 @@ namespace AsteroidOutpost
 			}
 		}
 
+		public float LastDrawDelay { get; set; }
+
+
 		public double LastUpdateTime()
 		{
 			if(updateTimes.Count > 0)

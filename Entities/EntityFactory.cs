@@ -122,7 +122,7 @@ namespace AsteroidOutpost.Entities
 				world.AddComponent(new PowerGridNode(world, entityID, false));
 				world.AddComponent(new Constructible(world, entityID, 150));
 				world.AddComponent(new HitPoints(world, entityID, 150));
-				world.AddComponent(new LaserWeapon(world, entityID, 150, 15, Color.Red));
+				world.AddComponent(new LaserWeapon(world, entityID, 150, 15, Color.Green));
 				break;
 
 			case "missile tower":

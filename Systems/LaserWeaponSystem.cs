@@ -28,6 +28,8 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var laser in world.GetComponents<LaserWeapon>())
 			{
+				laser.Firing = false;
+
 				Position position = world.GetComponent<Position>(laser);
 				List<int> possibleTargets = world.EntitiesInArea(position.Center, laser.Range);
 
@@ -60,7 +62,8 @@ namespace AsteroidOutpost.Systems
 				{
 					laser.Target = closestTargetPosition.EntityID;
 
-					HitPoints targetHitPoints = world.GetComponent<HitPoints>(laser.Target.Value);
+					laser.Firing = true;
+					HitPoints targetHitPoints = world.GetComponent<HitPoints>(closestTargetPosition.EntityID);
 					targetHitPoints.Armour -= (laser.Damage * (float)gameTime.ElapsedGameTime.TotalSeconds);
 				}
 			}

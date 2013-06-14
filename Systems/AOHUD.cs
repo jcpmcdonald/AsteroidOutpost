@@ -71,6 +71,9 @@ namespace AsteroidOutpost.Systems
 			hotkeys.Add(Keys.L, btnLaserTower_Clicked);
 			hotkeys.Add(Keys.I, btnMissileTower_Clicked);
 			hotkeys.Add(Keys.H, GoHome);
+			hotkeys.Add(Keys.OemPlus, TimeSpeedUp);
+			hotkeys.Add(Keys.OemMinus, TimeSlowDown);
+			hotkeys.Add(Keys.D0, TimeReset);
 
 
 			// Create callbacks for Awesomium content to communicate with the hud
@@ -89,6 +92,24 @@ namespace AsteroidOutpost.Systems
 			awesomium.WebView.SetObjectCallback("hud", "BuildMissileTower", btnMissileTower_Clicked);
 
 			world.PauseToggledEvent += WorldOnPauseToggledEvent;
+		}
+
+
+		private void TimeSpeedUp(object sender, EventArgs e)
+		{
+			world.TimeMultiplier += 0.2f;
+		}
+
+
+		private void TimeSlowDown(object sender, EventArgs e)
+		{
+			world.TimeMultiplier -= 0.2f;
+		}
+
+
+		private void TimeReset(object sender, EventArgs e)
+		{
+			world.TimeMultiplier = 1.0f;
 		}
 
 
@@ -959,7 +980,12 @@ namespace AsteroidOutpost.Systems
 		/// </summary>
 		private void SetSelection()
 		{
-			awesomium.WebView.CallJavascriptFunction("", "SetSelection", GetSelectionJSValue());
+			//awesomium.WebView.CallJavascriptFunction("", "SetSelection", GetSelectionJSON());
+			bool loaded = !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'").ToBoolean();
+			if(loaded)
+			{
+				awesomium.WebView.ExecuteJavascript("SetSelection(" + GetSelectionJSON() + ");");
+			}
 		}
 
 		/// <summary>
@@ -967,11 +993,16 @@ namespace AsteroidOutpost.Systems
 		/// </summary>
 		private void UpdateSelection()
 		{
-			awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", GetSelectionJSValue());
+			//bool loaded = !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'").ToBoolean();
+			//if(loaded)
+			{
+				//awesomium.WebView.ExecuteJavascript("UpdateSelection(" + GetSelectionJSON() + ");");
+				awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue(GetSelectionJSON()));
+			}
 		}
 
 
-		private JSValue GetSelectionJSValue()
+		private String GetSelectionJSON()
 		{
 			if(selectedEntities.Count >= 1)
 			{
@@ -990,11 +1021,11 @@ namespace AsteroidOutpost.Systems
 #if DEBUG
 				json = JSON.Instance.Beautify(json);
 #endif
-				return new JSValue(json);
+				return json;
 			}
 			else
 			{
-				return new JSValue();
+				return "[]";
 			}
 		}
 

@@ -1,15 +1,18 @@
 
 
-var EditorMode = false;
-var currentSelection = null;
+var EditorMode = true;
+var $currentSelection = null;
 
 function UpdateEditor(newSelection)
 {
 	if(EditorMode)
 	{
+		
 		if(newSelection == null || newSelection.length == 0)
 		{
-			currentSelection = newSelection;
+			$currentSelection = newSelection;
+			
+			// Remove the editor panel if we have nothing selected
 			if($("#editorPanel").is('*'))
 			{
 				$("#editorPanel").remove();
@@ -21,10 +24,18 @@ function UpdateEditor(newSelection)
 			var entityID = newSelection[0].EntityID;
 			var editorPanel;
 			var selection;
-			if(currentSelection != null && currentSelection.length == 1 && entityID == currentSelection[0].EntityID)
+			if($currentSelection != null && $currentSelection.length == 1 && entityID == $currentSelection[0].EntityID)
 			{
 				// We are looking at the same entity, process the differences
-				selection = Diff(newSelection, currentSelection);
+				selection = Diff(newSelection, $currentSelection);
+				if(selection == null)
+				{
+					return;
+				}
+				else
+				{
+					selection = selection[0];
+				}
 			}
 			else
 			{
@@ -34,7 +45,7 @@ function UpdateEditor(newSelection)
 			}
 			
 			editorPanel = GetOrCreate('editorPanel', $('body'), '<div id="editorPanel" class="panel"></div>');
-			currentSelection = newSelection;
+			$currentSelection = newSelection;
 			
 			for(component in selection)
 			{
