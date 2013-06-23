@@ -8,8 +8,9 @@ namespace AsteroidOutpost.Components
 {
 	class Spin : Component
 	{
-		public Spin(World world, int entityID, float rotationSpeed, bool rotateFrame = false)
-			: base(world, entityID)
+		public Spin(int entityID) : base(entityID) {}
+		public Spin(int entityID, float rotationSpeed, bool rotateFrame = false)
+			: base(entityID)
 		{
 			RotationSpeed = rotationSpeed;
 			RotateFrame = rotateFrame;

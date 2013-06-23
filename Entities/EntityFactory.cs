@@ -8,7 +8,9 @@ using AsteroidOutpost.Components;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using XNASpriteLib;
+using fastJSON;
 
 namespace AsteroidOutpost.Entities
 {
@@ -19,8 +21,40 @@ namespace AsteroidOutpost.Entities
 		private static object loadSync = new object();
 
 
+		private static EntityTemplate asteroidTemplate;
+
+
 		public static void LoadContent(GraphicsDevice graphicsDevice)
 		{
+			String entityJson = File.ReadAllText(@"..\entities\entity.json");
+			EntityTemplate baseEntity = JsonConvert.DeserializeObject<EntityTemplate>(entityJson);
+
+			asteroidTemplate = (EntityTemplate)baseEntity.Clone();
+			String asteroidJson = File.ReadAllText(@"..\entities\asteroid.json");
+			asteroidTemplate.ExtendRecursivelyWith(asteroidJson);
+
+			//Console.WriteLine(JsonConvert.SerializeObject(baseEntity, Formatting.Indented));
+			Console.WriteLine(JsonConvert.SerializeObject(asteroidTemplate, Formatting.Indented));
+
+			//List<Component> astComponents = asteroidTemplate.Instantiate(-5, );
+
+
+			//JSON.Instance.Parameters.EnableAnonymousTypes = true;
+
+			//EntityTemplate baseEntity = new EntityTemplate();
+			//String json = File.ReadAllText(@"..\entities\entity.json");
+			//JSON.Instance.FillObject(baseEntity, json);
+			//Console.WriteLine(JSON.Instance.Beautify(JSON.Instance.ToJSON(baseEntity)));
+
+
+			//EntityTemplate asteroidTemplate = new EntityTemplate();
+			//asteroidTemplate.SpriteName = "asteroid";
+			//asteroidTemplate.componentDefaults.Add("Minable", new Dictionary<string, object>());
+			//asteroidTemplate.componentDefaults["Minable"].Add("Minerals", 130);
+			//asteroidTemplate.componentDefaults["Minable"].Add("StartingMinerals", 130);
+			//String json = JSON.Instance.Beautify(JSON.Instance.ToJSON(asteroidTemplate));
+			//Console.WriteLine(json);
+
 			// Note: The world doesn't exist yet, so don't use it here
 			sprites.Add("asteroid", new Sprite(File.OpenRead(@"..\Sprites\Asteroids.sprx"), graphicsDevice));
 			sprites.Add("solar station", new Sprite(File.OpenRead(@"..\Sprites\SolarStation.sprx"), graphicsDevice));
@@ -57,6 +91,19 @@ namespace AsteroidOutpost.Entities
 			world = theWorld;
 		}
 
+		public static int Create(String entityName, Force owningForce, String jsonValues)
+		{
+			int entityID = world.GetNextEntityID();
+			world.SetOwningForce(entityID, owningForce);
+
+			var components = asteroidTemplate.Instantiate(entityID, jsonValues, sprites);
+			foreach(var component in components)
+			{
+				world.AddComponent(component);
+			}
+
+			return entityID;
+		}
 
 		public static int Create(String entityName, Dictionary<String, object> values)
 		{
@@ -71,95 +118,106 @@ namespace AsteroidOutpost.Entities
 			bool spriteRotateFrame = values.ContainsKey("Sprite.RotateFrame");
 
 
-			Position position = new Position(world, entityID,
+			Position position = new Position(entityID,
 			                                 (Vector2)values["Transpose.Position"],
 			                                 (int)values["Transpose.Radius"]);
 
 			switch(entityName.ToLower())
 			{
 			case "asteroid":
-				sprite = sprites[entityName.ToLower()];
-				world.AddComponent(new EntityName(world, entityID, entityName));
-				world.AddComponent(new Minable(world, entityID, (int)values["Minerals"]));
+				var components = asteroidTemplate.Instantiate(entityID, values, sprites);
+				foreach(var component in components)
+				{
+					world.AddComponent(component);
+				}
+
+//                sprite = sprites[entityName.ToLower()];
+//                world.AddComponent(new EntityName(entityID, entityName));
+//                //world.AddComponent(new Minable(world, entityID, (int)values["Minerals"]));
+//                Minable minable = new Minable(entityID);
+//                JSON.Instance.FillObject(minable, String.Format( @"{{
+//						""Minerals"" : {0},
+//						""StartingMinerals"" : {0},
+//					}}", (int)values["Minerals"]));
+//                world.AddComponent(minable);
 				break;
 
 			case "solar station":
 				sprite = sprites[entityName.ToLower()];
-				world.AddComponent(new EntityName(world, entityID, entityName));
+				world.AddComponent(new EntityName(entityID, entityName));
 				PowerProducer powerProducer = new PowerProducer(world, entityID, 10, 70);
 				powerProducer.PowerLinkPointRelative = new Vector2(-1, -13);
 				world.AddComponent(powerProducer);
-				world.AddComponent(new Constructible(world, entityID, 200));
-				world.AddComponent(new HitPoints(world, entityID, 50));
+				world.AddComponent(new Constructible(entityID, 200));
+				world.AddComponent(new HitPoints(entityID, 50));
 				break;
 
 			case "power node":
 				sprite = sprites[entityName.ToLower()];
-				world.AddComponent(new EntityName(world, entityID, entityName));
+				world.AddComponent(new EntityName(entityID, entityName));
 				PowerGridNode powerNode = new PowerGridNode(world, entityID, true);
 				powerNode.PowerLinkPointRelative = new Vector2(0, -16);
 				world.AddComponent(powerNode);
-				world.AddComponent(new Constructible(world, entityID, 50));
-				world.AddComponent(new HitPoints(world, entityID, 50));
+				world.AddComponent(new Constructible(entityID, 50));
+				world.AddComponent(new HitPoints(entityID, 50));
 				break;
 
 			case "laser miner":
 				sprite = sprites[entityName.ToLower()];
-				world.AddComponent(new EntityName(world, entityID, entityName));
-				LaserMiner laserMiner = new LaserMiner(world, entityID);
+				world.AddComponent(new EntityName(entityID, entityName));
+				LaserMiner laserMiner = new LaserMiner(entityID);
 				world.AddComponent(laserMiner);
 				world.AddComponent(new PowerGridNode(world, entityID, false));
-				world.AddComponent(new Constructible(world, entityID, 200));
-				Accumulator accumulator = new Accumulator(world, entityID, new Vector2(-5, -4), new Vector2(0, -26), Color.DarkGreen, 50);
+				world.AddComponent(new Constructible(entityID, 200));
+				Accumulator accumulator = new Accumulator(entityID, new Vector2(-5, -4), new Vector2(0, -26), Color.DarkGreen, 50);
 				laserMiner.AccumulationEvent += accumulator.Accumulate;
 				world.AddComponent(accumulator);
-				world.AddComponent(new HitPoints(world, entityID, 150));
+				world.AddComponent(new HitPoints(entityID, 150));
 				break;
 
 			case "laser tower":
 				sprite = sprites[entityName.ToLower()];
-				world.AddComponent(new EntityName(world, entityID, entityName));
+				world.AddComponent(new EntityName(entityID, entityName));
 				world.AddComponent(new PowerGridNode(world, entityID, false));
-				world.AddComponent(new Constructible(world, entityID, 150));
-				world.AddComponent(new HitPoints(world, entityID, 150));
-				world.AddComponent(new LaserWeapon(world, entityID, 150, 15, Color.Green));
+				world.AddComponent(new Constructible(entityID, 150));
+				world.AddComponent(new HitPoints(entityID, 150));
+				world.AddComponent(new LaserWeapon(entityID, 150, 15, Color.Green));
 				break;
 
 			case "missile tower":
 				sprite = sprites[entityName.ToLower()];
-				world.AddComponent(new EntityName(world, entityID, entityName));
+				world.AddComponent(new EntityName(entityID, entityName));
 				world.AddComponent(new PowerGridNode(world, entityID, false));
-				world.AddComponent(new Constructible(world, entityID, 200));
-				world.AddComponent(new HitPoints(world, entityID, 100));
-				world.AddComponent(new MissileWeapon(world, entityID, 300, 25, 1500, 50));
+				world.AddComponent(new Constructible(entityID, 200));
+				world.AddComponent(new HitPoints(entityID, 100));
+				world.AddComponent(new MissileWeapon(entityID, 300, 25, 1500, 50));
 				break;
 
 			case "missile":
 				sprite = sprites[entityName.ToLower()];
-				world.AddComponent(new EntityName(world, entityID, entityName));
-				world.AddComponent(new HitPoints(world, entityID, 100));
-				world.AddComponent(new MissileProjectile(world,
-				                                         entityID,
+				world.AddComponent(new EntityName(entityID, entityName));
+				world.AddComponent(new HitPoints(entityID, 100));
+				world.AddComponent(new MissileProjectile(entityID,
 				                                         25,
 				                                         50,
 				                                         100,
 				                                         values.ContainsKey("TargetEntityID") ? (int?)values["TargetEntityID"] : null));
-				world.AddComponent(new Velocity(world, entityID, Vector2.Zero));
+				world.AddComponent(new Velocity(entityID, Vector2.Zero));
 				break;
 
 			case "space ship":
 				sprite = sprites[entityName.ToLower()];
-				world.AddComponent(new EntityName(world, entityID, entityName));
-				world.AddComponent(new HitPoints(world, entityID, 150));
-				world.AddComponent(new LaserWeapon(world, entityID, 150, 10, Color.DarkRed));
-				world.AddComponent(new FleetMovementBehaviour(world, entityID));
-				world.AddComponent(new Velocity(world, entityID, Vector2.Zero));
+				world.AddComponent(new EntityName(entityID, entityName));
+				world.AddComponent(new HitPoints(entityID, 150));
+				world.AddComponent(new LaserWeapon(entityID, 150, 10, Color.DarkRed));
+				world.AddComponent(new FleetMovementBehaviour(entityID));
+				world.AddComponent(new Velocity(entityID, Vector2.Zero));
 				break;
 
 			case "beacon":
 				sprite = sprites[entityName.ToLower()];
-				world.AddComponent(new EntityName(world, entityID, entityName));
-				world.AddComponent(new Spin(world, entityID, 90f));
+				world.AddComponent(new EntityName(entityID, entityName));
+				world.AddComponent(new Spin(entityID, 90f));
 				position.Solid = false;
 				break;
 
@@ -168,16 +226,16 @@ namespace AsteroidOutpost.Entities
 
 			case "(rotate frame)":
 				sprite = sprites["missile"];
-				world.AddComponent(new EntityName(world, entityID, entityName));
-				world.AddComponent(new Spin(world, entityID, 15f, true));
-				world.AddComponent(new Velocity(world, entityID, Vector2.Zero));
+				world.AddComponent(new EntityName(entityID, entityName));
+				world.AddComponent(new Spin(entityID, 15f, true));
+				world.AddComponent(new Velocity(entityID, Vector2.Zero));
 				break;
 
 			case "(use frames only)":
 				sprite = sprites["missile"];
-				world.AddComponent(new EntityName(world, entityID, entityName));
-				world.AddComponent(new Spin(world, entityID, 15f, false));
-				world.AddComponent(new Velocity(world, entityID, Vector2.Zero));
+				world.AddComponent(new EntityName(entityID, entityName));
+				world.AddComponent(new Spin(entityID, 15f, false));
+				world.AddComponent(new Velocity(entityID, Vector2.Zero));
 				break;
 
 			default:
@@ -193,8 +251,7 @@ namespace AsteroidOutpost.Entities
 			if(sprite != null)
 			{
 				float angleStep = 360.0f / sprite.OrientationLookup.Count;
-				Animator animator = new Animator(world,
-				                                 entityID,
+				Animator animator = new Animator(entityID,
 				                                 sprite,
 				                                 spriteScale,
 				                                 spriteSet,

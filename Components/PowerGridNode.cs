@@ -12,9 +12,12 @@ namespace AsteroidOutpost.Components
 {
 	public class PowerGridNode : Component
 	{
+		protected World world;
+
 		public PowerGridNode(World world, int entityID, bool conductsPower)
-			: base(world, entityID)
+			: base(entityID)
 		{
+			this.world = world;
 			ProducesPower = false;
 			this.ConductsPower = conductsPower;
 		}

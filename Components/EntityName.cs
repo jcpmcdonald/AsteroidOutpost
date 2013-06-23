@@ -10,7 +10,8 @@ namespace AsteroidOutpost.Components
 	{
 		public string Name { get; set; }
 		
-		public EntityName(World world, int entityID, String name) : base(world, entityID)
+		public EntityName(int entityID) : base(entityID){}
+		public EntityName(int entityID, String name) : base(entityID)
 		{
 			Name = name;
 		}

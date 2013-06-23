@@ -13,8 +13,9 @@ namespace AsteroidOutpost.Components
 	public class Animator : Component
 	{
 
-		public Animator(World world, int entityID, Sprite sprite, float scale, String set, String animation, float orientation, bool rotateFrame = false)
-			: base(world, entityID)
+		public Animator(int entityID) : base(entityID) {}
+		public Animator(int entityID, Sprite sprite, float scale, String set, String animation, float orientation, bool rotateFrame = false)
+			: base(entityID)
 		{
 			Init(scale, sprite, set, animation, orientation, rotateFrame);
 		}
@@ -43,6 +44,55 @@ namespace AsteroidOutpost.Components
 
 		[XmlIgnore]
 		public SpriteAnimator SpriteAnimator { get; set; }
+
+
+		/// <summary>
+		/// Gets or Sets the current Set. Note that changing this will cause neither the frame index nor the animation to change.
+		/// </summary>
+		public String CurrentSet
+		{
+			get
+			{
+				return SpriteAnimator.CurrentSet;
+			}
+			set
+			{
+				SpriteAnimator.CurrentSet = value;
+			}
+		}
+
+
+		/// <summary>
+		/// Gets or Sets the current Animation. Note that changing this will cause the frame index to be reset.
+		/// </summary>
+		public String CurrentAnimation
+		{
+			get
+			{
+				return SpriteAnimator.CurrentAnimation;
+			}
+			set
+			{
+				SpriteAnimator.CurrentAnimation = value;
+			}
+		}
+
+
+		/// <summary>
+		/// Gets or Sets the current Orientation. Note that changing this will cause neither the frame index nor the animation to change.
+		/// </summary>
+		public String CurrentOrientation
+		{
+			get
+			{
+				return SpriteAnimator.CurrentOrientation;
+			}
+			set
+			{
+				SpriteAnimator.CurrentOrientation = value;
+			}
+		}
+
 
 		/// <summary>
 		/// The angle difference between the exact angle this was set to, and the orientation of the frame being displayed

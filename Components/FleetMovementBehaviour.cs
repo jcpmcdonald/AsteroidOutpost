@@ -10,9 +10,8 @@ namespace AsteroidOutpost.Components
 {
 	class FleetMovementBehaviour : Component
 	{
-
-		public FleetMovementBehaviour(World world, int entityID)
-			: base(world, entityID)
+		public FleetMovementBehaviour(int entityID)
+			: base(entityID)
 		{
 			AccelerationMagnitude = 10f;
 		}

@@ -13,15 +13,13 @@ namespace AsteroidOutpost.Components
 {
 	public class Component : IIdentifiable
 	{
-		protected World world;
 		private String componentClassName;
 
 
-		public Component(World world, int entityID)
+		public Component(int entityID)
 		{
 			GUID = Guid.NewGuid();
 			this.EntityID = entityID;
-			this.world = world;
 
 			// Reflectively look up the class name of this component
 			componentClassName = GetType().ToString();

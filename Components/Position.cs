@@ -21,17 +21,9 @@ namespace AsteroidOutpost.Components
 		public event Action<EntityMovedEventArgs> MovedEvent;
 
 
-		public Position(World world, int entityID, Vector2 center, int radius = 0)
-			: base(world, entityID)
-		{
-			Solid = true;
-			offset = center;
-			this.Radius = radius;
-		}
-
-
-		public Position(World world, int entityID, Vector2 center, Vector2 velocity, int radius = 0)
-			: base(world, entityID)
+		public Position(int entityID) : base(entityID) {}
+		public Position(int entityID, Vector2 center, int radius = 0)
+			: base(entityID)
 		{
 			Solid = true;
 			offset = center;

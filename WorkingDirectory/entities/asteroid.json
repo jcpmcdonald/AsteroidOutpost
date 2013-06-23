@@ -1,0 +1,16 @@
+{
+    "SpriteName" : "asteroid",
+    "componentDefaults" : {
+		"EntityName" : {
+			"Name" : "Asteroid",
+		},
+        "Minable" : {
+			"Minerals" : "**",
+			"StartingMinerals" : "**",
+		},
+		"Animator" : {
+			"Scale" : 1.2,
+		}
+    }
+}
+

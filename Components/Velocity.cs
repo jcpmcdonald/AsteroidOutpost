@@ -9,8 +9,9 @@ namespace AsteroidOutpost.Components
 {
 	class Velocity : Component
 	{
-		public Velocity(World world, int entityID, Vector2 velocity)
-			: base(world, entityID)
+		public Velocity(int entityID) : base(entityID) {}
+		public Velocity(int entityID, Vector2 velocity)
+			: base(entityID)
 		{
 			this.CurrentVelocity = velocity;
 		}

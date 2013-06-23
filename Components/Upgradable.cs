@@ -39,9 +39,9 @@ namespace AsteroidOutpost.Components
 		//public static event Action<EntityUpgradeEventArgs> AnyUpgradeCompletedEvent;
 		//public event Action<EntityUpgradeEventArgs> UpgradeCompletedEvent;
 
-
-		public Upgradable(World world, int entityID, params Upgrade[] upgrades)
-			: base(world, entityID)
+		public Upgradable(int entityID) : base(entityID) {}
+		public Upgradable(int entityID, params Upgrade[] upgrades)
+			: base(entityID)
 		{
 			CurrentUpgrade = null;
 			allUpgrades.AddRange(upgrades);

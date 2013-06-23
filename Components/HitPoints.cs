@@ -22,8 +22,9 @@ namespace AsteroidOutpost.Components
 		public event Action<EntityDyingEventArgs> DyingEvent;
 
 
-		public HitPoints(World world, int entityID, int totalArmour)
-			: base(world, entityID)
+		public HitPoints(int entityID) : base(entityID) {}
+		public HitPoints(int entityID, int totalArmour)
+			: base(entityID)
 		{
 			TotalArmour = totalArmour;
 			armour = totalArmour;

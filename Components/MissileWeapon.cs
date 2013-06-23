@@ -9,8 +9,9 @@ namespace AsteroidOutpost.Components
 {
 	class MissileWeapon : Component, IWeapon
 	{
-		public MissileWeapon(World world, int entityID, int range, float damage, float fireRate, float acceleration)
-			: base(world, entityID)
+		public MissileWeapon(int entityID) : base(entityID) {}
+		public MissileWeapon(int entityID, int range, float damage, float fireRate, float acceleration)
+			: base(entityID)
 		{
 			Range = range;
 			Damage = damage;

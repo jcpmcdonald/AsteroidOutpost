@@ -13,8 +13,9 @@ namespace AsteroidOutpost.Components
 		private int minerals;
 		private int startingMinerals;
 
-		public Minable(World world, int entityID, int minerals)
-			: base(world, entityID)
+		public Minable(int entityID) : base(entityID) { }
+		public Minable(int entityID, int minerals)
+			: base(entityID)
 		{
 			this.minerals = minerals;
 			this.startingMinerals = minerals;
@@ -39,6 +40,10 @@ namespace AsteroidOutpost.Components
 			get
 			{
 				return startingMinerals;
+			}
+			set
+			{
+				startingMinerals = Math.Max(0, value);
 			}
 		}
 	}

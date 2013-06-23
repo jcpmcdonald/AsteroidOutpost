@@ -10,13 +10,14 @@ namespace AsteroidOutpost.Components
 {
 	public class Accumulator : Component
 	{
-		public Accumulator(World world,
-		                   int entityID,
+
+		public Accumulator(int entityID) : base(entityID) {}
+		public Accumulator(int entityID,
 		                   Vector2 offset,
 		                   Vector2 velocity,
 		                   Color color,
 		                   float fadeRate = 120)
-			: base(world, entityID)
+			: base(entityID)
 		{
 			this.Offset = offset;
 			this.Velocity = velocity;

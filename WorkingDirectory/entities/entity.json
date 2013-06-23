@@ -1,0 +1,24 @@
+{
+    "SpriteName" : "**",
+    "componentDefaults" : {
+		"EntityName" : {
+			"Name" : "**",
+		},
+		"Position" : {
+			"Center" : "**",
+			"Solid" : true,
+			"Radius" : "**",
+		},
+		"Animator" : {
+			"Scale" : 1,
+			"Tint" : "255, 255, 255, 255",
+			"FrameAngle" : 0,
+			"Angle" : 0,
+			"CurrentSet" : null,
+			"CurrentAnimation" : null,
+			"CurrentOrientation" : null,
+		}
+    }
+}
+
+

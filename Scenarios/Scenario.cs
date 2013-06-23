@@ -14,8 +14,8 @@ namespace AsteroidOutpost.Scenarios
 {
 	public abstract class Scenario
 	{
-		private String name;
-		private String author;
+		//private String name;
+		//private String author;
 
 		protected AOGame theGame;
 		protected World world;
@@ -122,9 +122,9 @@ namespace AsteroidOutpost.Scenarios
 
 				// Select an appropriate size for the mineral count
 				int radius = 1;
-				foreach(int indexedValue in asteroidSizeValueIndex)
+				foreach (int indexedValue in asteroidSizeValueIndex)
 				{
-					if(minerals > indexedValue)
+					if (minerals > indexedValue)
 					{
 						radius++;
 					}
@@ -173,16 +173,38 @@ namespace AsteroidOutpost.Scenarios
 						}
 					}
 				}
-				EntityFactory.Create("Asteroid", new Dictionary<String, object>(){
-					{ "Sprite.Scale", scale },
-					{ "Sprite.Set", "Asteroid " + GlobalRandom.Next(1, 4) },
-					{ "Sprite.Animation", null },
-					{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
-					{ "Transpose.Position", new Vector2(x, y) },
-					{ "Transpose.Radius", radius },
-					{ "Minerals", minerals },
-					{ "OwningForce", asteroidForce }
-				});
+
+				EntityFactory.Create("Asteroid", asteroidForce,
+					String.Format(
+					@"{{
+						'Animator' :
+						{{
+							'Scale' : {0},
+							'CurrentSet' : '{1}',
+							'CurrentAnimation' : '{2}',
+							'CurrentOrientation' : '{3}'
+						}},
+						'Position' :
+						{{
+							'Center' : '{4}, {5}',
+							'Radius' : {6}
+						}},
+						'Minable' :
+						{{
+							'Minerals' : {7},
+							'StartingMinerals' : {7}
+						}},
+					}}",
+					scale,
+					GlobalRandom.Next(1, 4),
+					null,
+					(float)GlobalRandom.Next(0, 359),
+					x,
+					y,
+					radius,
+					minerals
+					));
+
 			}
 		}
 

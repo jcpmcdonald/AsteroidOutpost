@@ -25,8 +25,9 @@ namespace AsteroidOutpost.Components
 		public bool Firing { get; set; }
 
 
-		public LaserWeapon(World world, int entityID, int range, float damage, Color color)
-			: base(world, entityID)
+		public LaserWeapon(int entityID) : base(entityID) {}
+		public LaserWeapon(int entityID, int range, float damage, Color color)
+			: base(entityID)
 		{
 			//State = LaserState.Idle;
 			Range = range;

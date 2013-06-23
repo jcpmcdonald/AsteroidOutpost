@@ -25,8 +25,8 @@ namespace AsteroidOutpost.Components
 		public event Action<AccumulationEventArgs> AccumulationEvent;
 
 
-		public LaserMiner(World world, int entityID)
-			: base(world, entityID)
+		public LaserMiner(int entityID)
+			: base(entityID)
 		{
 			State = MiningState.Idle;
 			RescanForAsteroids = true;

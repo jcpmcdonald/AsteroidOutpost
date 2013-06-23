@@ -14,8 +14,9 @@ namespace AsteroidOutpost.Components
 		public int DetonationDistance { get; set; }
 
 
-		public MissileProjectile(World world, int entityID, int damage, float acceleration, int detonationDistance, int? target)
-			: base(world, entityID)
+		public MissileProjectile(int entityID) : base(entityID) {}
+		public MissileProjectile(int entityID, int damage, float acceleration, int detonationDistance, int? target)
+			: base(entityID)
 		{
 			Target = target;
 			Damage = damage;
