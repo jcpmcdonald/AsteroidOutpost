@@ -8,6 +8,7 @@ using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 
 namespace AsteroidOutpost.Components
 {
@@ -31,6 +32,7 @@ namespace AsteroidOutpost.Components
 		/// Gets the Entity's ID
 		/// </summary>
 		[XmlIgnore]
+		[JsonIgnore]
 		public int EntityID { get; set; }
 		
 

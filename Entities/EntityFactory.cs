@@ -9,8 +9,8 @@ using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using XNASpriteLib;
-using fastJSON;
 
 namespace AsteroidOutpost.Entities
 {
@@ -27,14 +27,14 @@ namespace AsteroidOutpost.Entities
 		public static void LoadContent(GraphicsDevice graphicsDevice)
 		{
 			String entityJson = File.ReadAllText(@"..\entities\entity.json");
-			EntityTemplate baseEntity = JsonConvert.DeserializeObject<EntityTemplate>(entityJson);
+			EntityTemplate baseEntity = new EntityTemplate(entityJson); // JsonConvert.DeserializeObject<EntityTemplate>(entityJson);
 
 			asteroidTemplate = (EntityTemplate)baseEntity.Clone();
 			String asteroidJson = File.ReadAllText(@"..\entities\asteroid.json");
-			asteroidTemplate.ExtendRecursivelyWith(asteroidJson);
+			asteroidTemplate.ExtendWith(JObject.Parse(asteroidJson));
 
 			//Console.WriteLine(JsonConvert.SerializeObject(baseEntity, Formatting.Indented));
-			Console.WriteLine(JsonConvert.SerializeObject(asteroidTemplate, Formatting.Indented));
+			Console.WriteLine(asteroidTemplate.jsonTemplate);
 
 			//List<Component> astComponents = asteroidTemplate.Instantiate(-5, );
 
@@ -72,7 +72,9 @@ namespace AsteroidOutpost.Entities
 			}
 		}
 
+
 		public static int LoadProgress { get; private set; }
+
 		public static object LoadSync
 		{
 			get
@@ -91,19 +93,21 @@ namespace AsteroidOutpost.Entities
 			world = theWorld;
 		}
 
-		public static int Create(String entityName, Force owningForce, String jsonValues)
+
+		public static int Create(String entityName, Force owningForce, JObject jsonValues)
 		{
 			int entityID = world.GetNextEntityID();
 			world.SetOwningForce(entityID, owningForce);
 
 			var components = asteroidTemplate.Instantiate(entityID, jsonValues, sprites);
-			foreach(var component in components)
+			foreach (var component in components)
 			{
 				world.AddComponent(component);
 			}
 
 			return entityID;
 		}
+
 
 		public static int Create(String entityName, Dictionary<String, object> values)
 		{
@@ -122,24 +126,24 @@ namespace AsteroidOutpost.Entities
 			                                 (Vector2)values["Transpose.Position"],
 			                                 (int)values["Transpose.Radius"]);
 
-			switch(entityName.ToLower())
+			switch (entityName.ToLower())
 			{
 			case "asteroid":
-				var components = asteroidTemplate.Instantiate(entityID, values, sprites);
-				foreach(var component in components)
-				{
-					world.AddComponent(component);
-				}
+				//var components = asteroidTemplate.Instantiate(entityID, values, sprites);
+				//foreach (var component in components)
+				//{
+				//    world.AddComponent(component);
+				//}
 
-//                sprite = sprites[entityName.ToLower()];
-//                world.AddComponent(new EntityName(entityID, entityName));
-//                //world.AddComponent(new Minable(world, entityID, (int)values["Minerals"]));
-//                Minable minable = new Minable(entityID);
-//                JSON.Instance.FillObject(minable, String.Format( @"{{
-//						""Minerals"" : {0},
-//						""StartingMinerals"" : {0},
-//					}}", (int)values["Minerals"]));
-//                world.AddComponent(minable);
+				//                sprite = sprites[entityName.ToLower()];
+				//                world.AddComponent(new EntityName(entityID, entityName));
+				//                //world.AddComponent(new Minable(world, entityID, (int)values["Minerals"]));
+				//                Minable minable = new Minable(entityID);
+				//                JSON.Instance.FillObject(minable, String.Format( @"{{
+				//						""Minerals"" : {0},
+				//						""StartingMinerals"" : {0},
+				//					}}", (int)values["Minerals"]));
+				//                world.AddComponent(minable);
 				break;
 
 			case "solar station":
@@ -248,7 +252,7 @@ namespace AsteroidOutpost.Entities
 
 			world.AddComponent(position);
 
-			if(sprite != null)
+			if (sprite != null)
 			{
 				float angleStep = 360.0f / sprite.OrientationLookup.Count;
 				Animator animator = new Animator(entityID,

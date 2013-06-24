@@ -1,6 +1,6 @@
 {
     "SpriteName" : "**",
-    "componentDefaults" : {
+    "components" : {
 		"EntityName" : {
 			"Name" : "**",
 		},

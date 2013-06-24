@@ -8,6 +8,7 @@ using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Linq;
 using XNASpriteLib;
 
 namespace AsteroidOutpost.Scenarios
@@ -174,36 +175,26 @@ namespace AsteroidOutpost.Scenarios
 					}
 				}
 
-				EntityFactory.Create("Asteroid", asteroidForce,
-					String.Format(
-					@"{{
-						'Animator' :
-						{{
-							'Scale' : {0},
-							'CurrentSet' : '{1}',
-							'CurrentAnimation' : '{2}',
-							'CurrentOrientation' : '{3}'
-						}},
-						'Position' :
-						{{
-							'Center' : '{4}, {5}',
-							'Radius' : {6}
-						}},
-						'Minable' :
-						{{
-							'Minerals' : {7},
-							'StartingMinerals' : {7}
-						}},
-					}}",
-					scale,
-					GlobalRandom.Next(1, 4),
-					null,
-					(float)GlobalRandom.Next(0, 359),
-					x,
-					y,
-					radius,
-					minerals
-					));
+				JObject json = new JObject{
+					{ "Animator", new JObject
+					{
+						{ "Scale", scale },
+						{ "CurrentSet", "Asteroid " + GlobalRandom.Next(1, 4) },
+						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
+					}},
+					{ "Position", new JObject
+					{
+						{ "Center", String.Format("{0}, {1}", x, y) },
+						{ "Radius", radius }
+					}},
+					{ "Minable", new JObject
+					{
+						{ "Minerals", minerals },
+						{ "StartingMinerals", minerals }
+					}}
+				};
+
+				EntityFactory.Create("Asteroid", asteroidForce, json);
 
 			}
 		}

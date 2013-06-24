@@ -6,75 +6,75 @@ using System.Reflection;
 using System.Text;
 using AsteroidOutpost.Components;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using XNASpriteLib;
 
 namespace AsteroidOutpost.Entities
 {
-	class EntityTemplate : ICloneable
+	internal class EntityTemplate : ICloneable
 	{
-		public String SpriteName;
-		public Dictionary<String, Dictionary<String, Object>> componentDefaults = new Dictionary<String, Dictionary<String, Object>>();
-		//public Dictionary<String, String> componentDefaults = new Dictionary<String, String>();
-		//public List<object[]> componentDefaults = new List<object[]>();
-		//public Dictionary<String, List<String[]>> componentDefaults = new Dictionary<String, List<String[]>>();
-		//public List<String[]> componentDefaults = new List<String[]>();
+		public JObject jsonTemplate;
 
-		//public EntityTemplate(){}
-		//public EntityTemplate(EntityTemplate template)
-		//{
-		//    SpriteName = template.SpriteName;
-		//    componentDefaults = template.componentDefaults.
-		//}
+		//public String SpriteName;
+		//public Dictionary<String, Dictionary<String, Object>> componentDefaults = new Dictionary<String, Dictionary<String, Object>>();
 
-		//public EntityTemplate Extend(EntityTemplate extension)
-		//{
-		//    EntityTemplate rv = new EntityTemplate(this);
-		//}
+		private EntityTemplate()
+		{
+		}
+
+
+		public EntityTemplate(String json)
+		{
+			jsonTemplate = JObject.Parse(json);
+		}
+
 
 		public object Clone()
 		{
 			EntityTemplate clone = new EntityTemplate();
-			clone.SpriteName = SpriteName;
-			clone.componentDefaults = new Dictionary<string, Dictionary<string, object>>(componentDefaults);
+			clone.jsonTemplate = (JObject)jsonTemplate.DeepClone();
 			return clone;
 		}
 
 
-		public List<Component> Instantiate(int entityID, Dictionary<String, object> values, Dictionary<String, Sprite> sprites)
-		{
-			return Instantiate(entityID, JsonConvert.SerializeObject(values), sprites);
-		}
+		//public List<Component> Instantiate(int entityID, Dictionary<String, object> values, Dictionary<String, Sprite> sprites)
+		//{
+		//    return Instantiate(entityID, JsonConvert.SerializeObject(values), sprites);
+		//}
 
-		public List<Component> Instantiate(int entityID, String valuesJson, Dictionary<String, Sprite> sprites)
+		public List<Component> Instantiate(int entityID, JObject jsonValues, Dictionary<String, Sprite> sprites)
 		{
 			List<Component> components = new List<Component>();
 
 			// Duplicate the current template so that we can apply the object's values (this could be optimized out if it's a problem)
 			EntityTemplate template = (EntityTemplate)Clone();
-			//JsonConvert.PopulateObject("{\"componentDefaults\":" + valuesJson + "}", template);
-			template.ExtendRecursivelyWith("{\"componentDefaults\":" + valuesJson + "}");
+			template.ExtendWith(new JObject{ {"components", jsonValues } });
+			//Console.WriteLine(template.jsonTemplate);
 
-			foreach(var componentName in componentDefaults.Keys)
+			JObject componentsJson = jsonTemplate["components"] as JObject;
+			foreach (var componentJson in componentsJson)
 			{
+				String componentName = componentJson.Key;
 				Type componentType = Type.GetType("AsteroidOutpost.Components." + componentName);
-				if(componentType != null)
+				if (componentType != null)
 				{
 					Component component = Activator.CreateInstance(componentType, entityID) as Component;
-					if(component != null)
+					if (component != null)
 					{
 						// Great, let's fill it up!
-						Animator animator = component as Animator;
-						if(animator != null)
+						if (componentType == typeof(Animator))
 						{
-							animator.SpriteAnimator = new SpriteAnimator(sprites[SpriteName]);
-							if(template.componentDefaults[componentName].ContainsKey("CurrentOrientation"))
+							Animator animator = (Animator)component;
+							Sprite sprite = sprites[jsonTemplate["SpriteName"].ToString()];
+							animator.SpriteAnimator = new SpriteAnimator(sprite);
+							if (template.jsonTemplate["components"][componentName]["CurrentOrientation"] != null)
 							{
-								float angleStep = 360.0f / sprites[SpriteName].OrientationLookup.Count;
-								float spriteOrientation = float.Parse((String)template.componentDefaults[componentName]["CurrentOrientation"]);
-								template.componentDefaults[componentName]["CurrentOrientation"] = (angleStep * (int)((spriteOrientation / angleStep) + 0.5f)) % 360;
+								float angleStep = 360.0f / sprite.OrientationLookup.Count;
+								float spriteOrientation = float.Parse((String)template.jsonTemplate["components"][componentName]["CurrentOrientation"]);
+								template.jsonTemplate["components"][componentName]["CurrentOrientation"] = (angleStep * (int)((spriteOrientation / angleStep) + 0.5f)) % 360;
 							}
 						}
-						Populate(component, template.componentDefaults[componentName]);
+						Populate(component, (JObject)template.jsonTemplate["components"][componentName]);
 						components.Add(component);
 					}
 					else
@@ -94,11 +94,11 @@ namespace AsteroidOutpost.Entities
 		}
 
 
-		private void Populate(Component component, Dictionary<String, Object> componentValues)
+		private void Populate(Component component, JObject jsonObject)
 		{
 			// hahah, so wasteful, but so easy
-			String json = JsonConvert.SerializeObject(componentValues);
-			if(json.Contains("\"**\""))
+			String json = jsonObject.ToString();
+			if (json.Contains("\"**\""))
 			{
 				Console.WriteLine("There are required values that have not been filled in while populating {0}", GetType());
 				Debugger.Break();
@@ -107,40 +107,25 @@ namespace AsteroidOutpost.Entities
 		}
 
 
-		public void ExtendRecursivelyWith(String json)
+		public void ExtendWith(JObject donor)
 		{
-			EntityTemplate tmp = JsonConvert.DeserializeObject<EntityTemplate>(json);
+			Extend(jsonTemplate, donor);
+		}
 
 
-			if(tmp.SpriteName != null)
+		private static void Extend(JObject receiver, JObject donor)
+		{
+			foreach (var property in donor)
 			{
-				SpriteName = tmp.SpriteName;
-			}
-
-
-			// Go through the componentDefaults of the temporary object, and merge/add values from there to here
-			foreach(var componentName in tmp.componentDefaults.Keys)
-			{
-				if(componentDefaults.ContainsKey(componentName))
+				JObject receiverValue = receiver[property.Key] as JObject;
+				JObject donorValue = property.Value as JObject;
+				if (receiverValue != null && donorValue != null)
 				{
-					// Dig deeper
-					foreach (var varName in tmp.componentDefaults[componentName].Keys)
-					{
-						if(componentDefaults[componentName].ContainsKey(varName))
-						{
-							// Dig deeper?
-							componentDefaults[componentName][varName] = tmp.componentDefaults[componentName][varName];
-						}
-						else
-						{
-							componentDefaults[componentName].Add(varName, tmp.componentDefaults[componentName][varName]);
-						}
-					}
+					Extend(receiverValue, donorValue);
 				}
 				else
 				{
-					// Add
-					componentDefaults.Add(componentName, tmp.componentDefaults[componentName]);
+					receiver[property.Key] = property.Value;
 				}
 			}
 		}

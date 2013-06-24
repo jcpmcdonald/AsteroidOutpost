@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml.Serialization;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using XNASpriteLib;
 
 namespace AsteroidOutpost.Components
@@ -43,6 +44,7 @@ namespace AsteroidOutpost.Components
 		public Color Tint { get; set; }
 
 		[XmlIgnore]
+		[JsonIgnore]
 		public SpriteAnimator SpriteAnimator { get; set; }
 
 

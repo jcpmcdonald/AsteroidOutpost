@@ -9,6 +9,7 @@ using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 
 namespace AsteroidOutpost.Components
 {
@@ -79,6 +80,7 @@ namespace AsteroidOutpost.Components
 		/// Gets the width
 		/// </summary>
 		[XmlIgnore]
+		[JsonIgnore]
 		public int Width
 		{
 			get { return Radius * 2; }
@@ -89,6 +91,7 @@ namespace AsteroidOutpost.Components
 		/// Gets the height
 		/// </summary>
 		[XmlIgnore]
+		[JsonIgnore]
 		public int Height
 		{
 			get { return Radius * 2; }
@@ -99,6 +102,7 @@ namespace AsteroidOutpost.Components
 		/// Gets the Top
 		/// </summary>
 		[XmlIgnore]
+		[JsonIgnore]
 		public int Top
 		{
 			get { return (int)(Center.Y + 0.5) - Radius; }
@@ -109,6 +113,7 @@ namespace AsteroidOutpost.Components
 		/// Gets the Left
 		/// </summary>
 		[XmlIgnore]
+		[JsonIgnore]
 		public int Left
 		{
 			get { return (int)(Center.X + 0.5) - Radius; }
@@ -119,6 +124,7 @@ namespace AsteroidOutpost.Components
 		/// Gets the Right
 		/// </summary>
 		[XmlIgnore]
+		[JsonIgnore]
 		public int Right
 		{
 			get { return (int)(Center.X + 0.5) + Radius; }
@@ -129,6 +135,7 @@ namespace AsteroidOutpost.Components
 		/// Gets the bottom
 		/// </summary>
 		[XmlIgnore]
+		[JsonIgnore]
 		public int Bottom
 		{
 			get { return (int)(Center.Y + 0.5) + Radius; }
@@ -139,6 +146,7 @@ namespace AsteroidOutpost.Components
 		/// The rectangle that defines the object's boundaries.
 		/// </summary>
 		[XmlIgnore]
+		[JsonIgnore]
 		public Rectangle Rect
 		{
 			get

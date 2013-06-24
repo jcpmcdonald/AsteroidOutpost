@@ -1,6 +1,6 @@
 {
     "SpriteName" : "asteroid",
-    "componentDefaults" : {
+    "components" : {
 		"EntityName" : {
 			"Name" : "Asteroid",
 		},
@@ -10,6 +10,7 @@
 		},
 		"Animator" : {
 			"Scale" : 1.2,
+			"CurrentAnimation": "Idle",
 		}
     }
 }
