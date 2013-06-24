@@ -1,0 +1,26 @@
+{
+    "Components" : {
+		"EntityName" : {
+			"Name" : "Missile",
+		},
+		"Position" : {
+			"Radius" : 10,
+		},
+		"Velocity" : {
+			"CurrentVelocity" : "0, 0",
+		},
+		"Animator" : {
+			"SpriteName" : "Missile",
+			"Scale" : 0.7,
+			"CurrentAnimation" : "Idle",
+			"CurrentOrientation" : 0,
+		},
+		"MissileProjectile" : {
+			"Damage" : "**",
+			"Acceleration" : "**",
+			"DetonationDistance" : 100,
+			"Target" : "**",
+		}
+    }
+}
+

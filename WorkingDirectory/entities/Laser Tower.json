@@ -1,0 +1,31 @@
+{
+    "Components" : {
+		"EntityName" : {
+			"Name" : "Laser Tower",
+		},
+		"Position" : {
+			"Radius" : 30,
+		},
+		"Animator" : {
+			"SpriteName" : "Laser Tower",
+			"Scale" : 0.6,
+			"CurrentAnimation" : "Idle",
+		},
+		"PowerGridNode" : {
+			"PowerLinkPointRelative" : "0, 0",
+		},
+		"Constructible" : {
+			"MineralsToConstruct" : 150,
+		},
+		"HitPoints" : {
+			"Armour" : 150,
+			"TotalArmour" : 150,
+		},
+		"LaserWeapon" : {
+			"Range" : 150,
+			"Damage" : 15,
+			"Color" : "0, 128, 0, 255",
+		}
+    }
+}
+

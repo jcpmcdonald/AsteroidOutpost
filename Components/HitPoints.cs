@@ -44,7 +44,7 @@ namespace AsteroidOutpost.Components
 			set
 			{
 				int initialHitPoints = (int)armour;
-				armour = MathHelper.Clamp(value, 0, TotalArmour);
+				armour = (TotalArmour > 0) ? MathHelper.Clamp(value, 0, TotalArmour) : MathHelper.Max(0, value);
 				OnArmourChange(initialHitPoints);
 			}
 		}

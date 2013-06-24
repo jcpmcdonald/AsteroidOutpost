@@ -9,6 +9,7 @@ using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json.Linq;
 
 namespace AsteroidOutpost.Systems
 {
@@ -42,17 +43,27 @@ namespace AsteroidOutpost.Systems
 					Position targetPosition = world.GetComponent<Position>(missileLauncher.Target.Value);
 					Vector2 accelerationVector = Vector2.Normalize(targetPosition.Center - position.Center);
 
-					int missileID = EntityFactory.Create("Missile", new Dictionary<String, object>(){
-						{ "Sprite.Scale", 0.7f },
-						{ "Sprite.Set", null },
-						{ "Sprite.Animation", null },
-						{ "Sprite.Orientation", 0f },
-						//{ "Sprite.RotateFrame", true },
-						{ "Transpose.Position", position.Center },
-						{ "Transpose.Radius", 10 },
-						{ "OwningForce", world.GetOwningForce(missileLauncher) },
-						{ "TargetEntityID", missileLauncher.Target }
+					int missileID = EntityFactory.Create("Missile", world.GetOwningForce(missileLauncher), new JObject{
+						{ "Position", new JObject{
+							{ "Center", String.Format("{0}, {1}", position.Center.X, position.Center.Y) },
+						}},
+						{ "MissileProjectile", new JObject{
+							{ "Damage", missileLauncher.Damage },
+							{ "Acceleration", missileLauncher.Acceleration },
+							{ "Target", missileLauncher.Target }
+						}},
 					});
+					//new Dictionary<String, object>(){
+					//    { "Sprite.Scale", 0.7f },
+					//    { "Sprite.Set", null },
+					//    { "Sprite.Animation", null },
+					//    { "Sprite.Orientation", 0f },
+					//    //{ "Sprite.RotateFrame", true },
+					//    { "Transpose.Position", position.Center },
+					//    { "Transpose.Radius", 10 },
+					//    { "OwningForce", world.GetOwningForce(missileLauncher) },
+					//    { "TargetEntityID", missileLauncher.Target }
+					//});
 
 					Animator missileAnimator = world.GetComponent<Animator>(missileID);
 					missileAnimator.SetOrientation(MathHelper.ToDegrees((float)Math.Atan2(accelerationVector.X, -accelerationVector.Y)), true);

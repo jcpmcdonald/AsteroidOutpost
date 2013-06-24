@@ -1,0 +1,27 @@
+{
+    "Components" : {
+		"EntityName" : {
+			"Name" : "Power Node",
+		},
+		"Position" : {
+			"Radius" : 20,
+		},
+		"Animator" : {
+			"SpriteName" : "Power Node",
+			"Scale" : 0.4,
+			"CurrentAnimation" : "Idle",
+		},
+		"PowerGridNode" : {
+			"PowerLinkPointRelative" : "0, -16",
+			"ConductsPower" : true,
+		},
+		"Constructible" : {
+			"MineralsToConstruct" : 50,
+		},
+		"HitPoints" : {
+			"Armour" : 50,
+			"TotalArmour" : 50,
+		},
+    }
+}
+

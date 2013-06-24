@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="Windows-1252"?>
-<sprite name="My" fps="10">
+<sprite name="Solar Station" fps="10">
 	<set name="Level 1" fpsMultiplier="1" />
 	<set name="Level 2" fpsMultiplier="1" />
 	<set name="Level 3" fpsMultiplier="1" />

@@ -32,14 +32,16 @@ namespace AsteroidOutpost.Components
 			RescanForAsteroids = true;
 			FirstUpdate = true;
 			PartialMineralsToExtract = 0;
-			MiningSourceOffset = Vector2.Zero;
 			MiningDestinationOffset = Vector2.Zero;
 			MiningAsteroid = -1;
-			MiningRate = 25;
-			EnergyUsageRate = 5;
-			ChargeTime = 3000;
-			MineTime = 900;
-			MiningRange = 90;
+
+			// Now set in JSON
+			//MiningSourceOffset = Vector2.Zero;
+			//MiningRate = 25;
+			//EnergyUsageRate = 5;
+			//ChargeTime = 3000;
+			//MineTime = 900;
+			//MiningRange = 90;
 		}
 
 

@@ -1,0 +1,32 @@
+{
+    "Components" : {
+		"EntityName" : {
+			"Name" : "Spaceship",
+		},
+		"Position" : {
+			"Radius" : 40,
+		},
+		"Velocity" : {
+			"CurrentVelocity" : "0, 0",
+		},
+		"Animator" : {
+			"SpriteName" : "Spaceship",
+			"Scale" : 0.7,
+			"CurrentAnimation" : "Idle",
+			"CurrentOrientation" : 0,
+		},
+		"HitPoints" : {
+			"Armour" : 150,
+			"TotalArmour" : 150,
+		},
+		"LaserWeapon" : {
+			"Range" : 150,
+			"Damage" : 10,
+			"Color" : "139, 0, 0, 255",
+		},
+		"FleetMovementBehaviour" : {
+			
+		},
+    }
+}
+

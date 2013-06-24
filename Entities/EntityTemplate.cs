@@ -15,9 +15,6 @@ namespace AsteroidOutpost.Entities
 	{
 		public JObject jsonTemplate;
 
-		//public String SpriteName;
-		//public Dictionary<String, Dictionary<String, Object>> componentDefaults = new Dictionary<String, Dictionary<String, Object>>();
-
 		private EntityTemplate()
 		{
 		}
@@ -37,25 +34,19 @@ namespace AsteroidOutpost.Entities
 		}
 
 
-		//public List<Component> Instantiate(int entityID, Dictionary<String, object> values, Dictionary<String, Sprite> sprites)
-		//{
-		//    return Instantiate(entityID, JsonConvert.SerializeObject(values), sprites);
-		//}
-
 		public List<Component> Instantiate(int entityID, JObject jsonValues, Dictionary<String, Sprite> sprites)
 		{
 			List<Component> components = new List<Component>();
 
 			// Duplicate the current template so that we can apply the object's values (this could be optimized out if it's a problem)
 			EntityTemplate template = (EntityTemplate)Clone();
-			template.ExtendWith(new JObject{ {"components", jsonValues } });
-			//Console.WriteLine(template.jsonTemplate);
+			template.ExtendWith(new JObject{ {"Components", jsonValues } });
 
-			JObject componentsJson = jsonTemplate["components"] as JObject;
+			JObject componentsJson = template.jsonTemplate["Components"] as JObject;
 			foreach (var componentJson in componentsJson)
 			{
 				String componentName = componentJson.Key;
-				Type componentType = Type.GetType("AsteroidOutpost.Components." + componentName);
+				Type componentType = Type.GetType("AsteroidOutpost.Components." + componentName, false, true);
 				if (componentType != null)
 				{
 					Component component = Activator.CreateInstance(componentType, entityID) as Component;
@@ -65,16 +56,16 @@ namespace AsteroidOutpost.Entities
 						if (componentType == typeof(Animator))
 						{
 							Animator animator = (Animator)component;
-							Sprite sprite = sprites[jsonTemplate["SpriteName"].ToString()];
+							Sprite sprite = sprites[jsonTemplate["Components"][componentName]["SpriteName"].ToString().ToLower()];
 							animator.SpriteAnimator = new SpriteAnimator(sprite);
-							if (template.jsonTemplate["components"][componentName]["CurrentOrientation"] != null)
+							if (template.jsonTemplate["Components"][componentName]["CurrentOrientation"] != null)
 							{
 								float angleStep = 360.0f / sprite.OrientationLookup.Count;
-								float spriteOrientation = float.Parse((String)template.jsonTemplate["components"][componentName]["CurrentOrientation"]);
-								template.jsonTemplate["components"][componentName]["CurrentOrientation"] = (angleStep * (int)((spriteOrientation / angleStep) + 0.5f)) % 360;
+								float spriteOrientation = float.Parse((String)template.jsonTemplate["Components"][componentName]["CurrentOrientation"]);
+								template.jsonTemplate["Components"][componentName]["CurrentOrientation"] = (angleStep * (int)((spriteOrientation / angleStep) + 0.5f)) % 360;
 							}
 						}
-						Populate(component, (JObject)template.jsonTemplate["components"][componentName]);
+						Populate(component, (JObject)template.jsonTemplate["Components"][componentName]);
 						components.Add(component);
 					}
 					else
@@ -96,7 +87,6 @@ namespace AsteroidOutpost.Entities
 
 		private void Populate(Component component, JObject jsonObject)
 		{
-			// hahah, so wasteful, but so easy
 			String json = jsonObject.ToString();
 			if (json.Contains("\"**\""))
 			{

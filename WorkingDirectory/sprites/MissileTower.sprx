@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="Windows-1252"?>
-<sprite name="My" fps="10">
+<sprite name="Missile Tower" fps="10">
 	<set name="Default" fpsMultiplier="1" />
 	<animation name="default">
 		<nextAnimations />

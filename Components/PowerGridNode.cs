@@ -13,12 +13,10 @@ namespace AsteroidOutpost.Components
 {
 	public class PowerGridNode : Component
 	{
-		protected World world;
-
-		public PowerGridNode(World world, int entityID, bool conductsPower)
+		public PowerGridNode(int entityID) : base(entityID) {}
+		public PowerGridNode(int entityID, bool conductsPower)
 			: base(entityID)
 		{
-			this.world = world;
 			ProducesPower = false;
 			this.ConductsPower = conductsPower;
 		}
@@ -27,22 +25,17 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// True if this node is active and ready to either conduct or produce power (not used for consumers)
 		/// </summary>
-		[XmlIgnore]
-		[JsonIgnore]
-		public bool PowerStateActive
+		public bool IsPowerStateActive(World world)
 		{
-			get
+			Constructible constructable = world.GetNullableComponent<Constructible>(EntityID);
+			if(constructable != null)
 			{
-				Constructible constructable = world.GetNullableComponent<Constructible>(EntityID);
-				if(constructable != null)
-				{
-					return !constructable.IsBeingPlaced && !constructable.IsConstructing;
-				}
-				else
-				{
-					// I suppose I'm active?
-					return true;
-				}
+				return !constructable.IsBeingPlaced && !constructable.IsConstructing;
+			}
+			else
+			{
+				// I suppose I'm active?
+				return true;
 			}
 		}
 
@@ -70,15 +63,10 @@ namespace AsteroidOutpost.Components
 		/// Returns the absolute location showing where the power link should be displayed
 		/// </summary>
 		/// <returns>Returns the absolute location showing where the power link should be displayed</returns>
-		[XmlIgnore]
-		[JsonIgnore]
-		public Vector2 PowerLinkPointAbsolute
+		public Vector2 PowerLinkPointAbsolute(World world)
 		{
-			get
-			{
-				Position entityPosition = world.GetComponent<Position>(EntityID);
-				return entityPosition.Center + PowerLinkPointRelative;
-			}
+			Position entityPosition = world.GetComponent<Position>(EntityID);
+			return entityPosition.Center + PowerLinkPointRelative;
 		}
 	}
 }

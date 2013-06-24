@@ -1,0 +1,40 @@
+{
+    "Components" : {
+		"EntityName" : {
+			"Name" : "Laser Miner",
+		},
+		"Position" : {
+			"Radius" : 30,
+		},
+		"Animator" : {
+			"SpriteName" : "Laser Miner",
+			"Scale" : 0.6,
+			"CurrentAnimation" : "Idle",
+		},
+		"PowerGridNode" : {
+			"PowerLinkPointRelative" : "0, -16",
+		},
+		"Constructible" : {
+			"MineralsToConstruct" : 50,
+		},
+		"HitPoints" : {
+			"Armour" : 150,
+			"TotalArmour" : 150,
+		},
+		"LaserMiner" : {
+			"MiningSourceOffset" : "0, 0",
+			"MiningRate" : 25,
+			"EnergyUsageRate" : 5,
+			"ChargeTime" : 3000,
+			"MineTime" : 900,
+			"MiningRange" : 90,
+		},
+		"Accumulator" : {
+			"Offset" : "-5, -4",
+			"Velocity" : "0, -26",
+			"FadeRate" : 50,
+			"Color" : "0, 100, 0, 255",
+		}
+    }
+}
+

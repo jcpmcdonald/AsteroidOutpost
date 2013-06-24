@@ -1,6 +1,5 @@
 {
-    "SpriteName" : "asteroid",
-    "components" : {
+    "Components" : {
 		"EntityName" : {
 			"Name" : "Asteroid",
 		},
@@ -9,7 +8,8 @@
 			"StartingMinerals" : "**",
 		},
 		"Animator" : {
-			"Scale" : 1.2,
+			"SpriteName" : "Asteroid",
+			"Scale" : "**",
 			"CurrentAnimation": "Idle",
 		}
     }

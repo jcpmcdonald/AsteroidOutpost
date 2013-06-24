@@ -35,7 +35,7 @@ namespace AsteroidOutpost.Components
 				if (powerNode != node)
 				{
 					// Note: Should I actually be basing power-distance on the power link location considering that the power link location is just to represent a 3D location in a 2D world?
-					float distance = Vector2.Distance(powerNode.PowerLinkPointAbsolute, node.PowerLinkPointAbsolute);
+					float distance = Vector2.Distance(powerNode.PowerLinkPointAbsolute(world), node.PowerLinkPointAbsolute(world));
 					if (distance <= PowerConductingDistance)
 					{
 						allPowerLinks.Add(new KeyValuePair<float, PowerGridNode>(distance, powerNode));
@@ -159,10 +159,10 @@ namespace AsteroidOutpost.Components
 		internal bool IsPowerRoutableBetween(PowerGridNode powerNodeA, PowerGridNode powerNodeB)
 		{
 			// Check for obstacles in the way
-			List<int> nearbyEntities = world.EntitiesInArea((int)(Math.Min(powerNodeA.PowerLinkPointAbsolute.X, powerNodeB.PowerLinkPointAbsolute.X) - 0.5),
-			                                                (int)(Math.Min(powerNodeA.PowerLinkPointAbsolute.Y, powerNodeB.PowerLinkPointAbsolute.Y - 0.5)),
-			                                                (int)(Math.Abs(powerNodeA.PowerLinkPointAbsolute.X - powerNodeB.PowerLinkPointAbsolute.X) + 0.5),
-			                                                (int)(Math.Abs(powerNodeA.PowerLinkPointAbsolute.Y - powerNodeB.PowerLinkPointAbsolute.Y) + 0.5),
+			List<int> nearbyEntities = world.EntitiesInArea((int)(Math.Min(powerNodeA.PowerLinkPointAbsolute(world).X, powerNodeB.PowerLinkPointAbsolute(world).X) - 0.5),
+			                                                (int)(Math.Min(powerNodeA.PowerLinkPointAbsolute(world).Y, powerNodeB.PowerLinkPointAbsolute(world).Y - 0.5)),
+			                                                (int)(Math.Abs(powerNodeA.PowerLinkPointAbsolute(world).X - powerNodeB.PowerLinkPointAbsolute(world).X) + 0.5),
+			                                                (int)(Math.Abs(powerNodeA.PowerLinkPointAbsolute(world).Y - powerNodeB.PowerLinkPointAbsolute(world).Y) + 0.5),
 			                                                true);
 
 			foreach (int obstructingEntityID in nearbyEntities)
@@ -170,7 +170,7 @@ namespace AsteroidOutpost.Components
 				if (obstructingEntityID != powerNodeA.EntityID && obstructingEntityID != powerNodeB.EntityID)
 				{
 					Position obstructingPosition = world.GetComponent<Position>(obstructingEntityID);
-					if (obstructingPosition.ShortestDistanceToLine(powerNodeA.PowerLinkPointAbsolute, powerNodeB.PowerLinkPointAbsolute) < obstructingPosition.Radius)
+					if (obstructingPosition.ShortestDistanceToLine(powerNodeA.PowerLinkPointAbsolute(world), powerNodeB.PowerLinkPointAbsolute(world)) < obstructingPosition.Radius)
 					{
 						// It's obstructed
 						return false;
@@ -280,10 +280,10 @@ namespace AsteroidOutpost.Components
 				// Add of my unvisited neighbours to the list, sorted by distance
 				foreach (var linkedNode in powerNodes[cursor])
 				{
-					if (visited.All(v => v.Item1 != linkedNode) && linkedNode.PowerStateActive)
+					if (visited.All(v => v.Item1 != linkedNode) && linkedNode.IsPowerStateActive(world))
 					{
 						// Get the distance from the starting location to the linked node
-						float nodeDistance = cursorDistance + Vector2.Distance(cursor.PowerLinkPointAbsolute, linkedNode.PowerLinkPointAbsolute);
+						float nodeDistance = cursorDistance + Vector2.Distance(cursor.PowerLinkPointAbsolute(world), linkedNode.PowerLinkPointAbsolute(world));
 
 						// Find out if the linked node already exists in the toVisit list
 						int indexOfNode = toVisit.ToList().FindIndex(v => v.Value.Item1 == linkedNode);

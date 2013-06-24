@@ -12,7 +12,8 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
 using Microsoft.Xna.Framework.Input;
-using fastJSON;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AsteroidOutpost.Systems
 {
@@ -337,15 +338,21 @@ namespace AsteroidOutpost.Systems
 				{
 					//world.Add(new Ship1(world, world, aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(600, -600)));
 
-					EntityFactory.Create("Space Ship", new Dictionary<String, object>(){
-						{ "Sprite.Scale", 0.7f },
-						{ "Sprite.Set", null },
-						{ "Sprite.Animation", null },
-						{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
-						{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
-						{ "Transpose.Radius", 40 },
-						{ "OwningForce", aiActor.PrimaryForce }
+					Vector2 worldPosition = world.ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
+					EntityFactory.Create("Spaceship", aiActor.PrimaryForce, new JObject{
+						{ "Position", new JObject{
+							{ "Center", String.Format("{0}, {1}", worldPosition.X, worldPosition.Y) },
+						}}
 					});
+					//new Dictionary<String, object>(){
+					//    { "Sprite.Scale", 0.7f },
+					//    { "Sprite.Set", null },
+					//    { "Sprite.Animation", null },
+					//    { "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
+					//    { "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
+					//    { "Transpose.Radius", 40 },
+					//    { "OwningForce", aiActor.PrimaryForce }
+					//})};
 				}
 			}
 
@@ -639,14 +646,14 @@ namespace AsteroidOutpost.Systems
 				}
 
 				// Create a new power station
-				creatingEntityID = EntityFactory.Create("Solar Station", new Dictionary<String, object>(){
-					{ "Sprite.Scale", 0.7f },
-					{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
-					{ "Sprite.Animation", null },
-					{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
-					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
-					{ "Transpose.Radius", 40 },
-					{ "OwningForce", localActor.PrimaryForce }
+				Vector2 worldPosition = ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
+				creatingEntityID = EntityFactory.Create("Solar Station", localActor.PrimaryForce, new JObject{
+					{ "Animator", new JObject{
+						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
+					}},
+					{ "Position", new JObject{
+						{ "Center", String.Format("{0}, {1}", worldPosition.X, worldPosition.Y) },
+					}}
 				});
 			}
 		}
@@ -662,14 +669,14 @@ namespace AsteroidOutpost.Systems
 				}
 
 				// Create a new power station
-				creatingEntityID = EntityFactory.Create("Power Node", new Dictionary<String, object>(){
-					{ "Sprite.Scale", 0.4f },
-					{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
-					{ "Sprite.Animation", null },
-					{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
-					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
-					{ "Transpose.Radius", 20 },
-					{ "OwningForce", localActor.PrimaryForce }
+				Vector2 worldPosition = ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
+				creatingEntityID = EntityFactory.Create("Power Node", localActor.PrimaryForce, new JObject{
+					{ "Animator", new JObject{
+						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
+					}},
+					{ "Position", new JObject{
+						{ "Center", String.Format("{0}, {1}", worldPosition.X, worldPosition.Y) },
+					}}
 				});
 			}
 		}
@@ -685,14 +692,14 @@ namespace AsteroidOutpost.Systems
 				}
 
 				// Create a new laser miner
-				creatingEntityID = EntityFactory.Create("Laser Miner", new Dictionary<String, object>(){
-					{ "Sprite.Scale", 0.6f },
-					{ "Sprite.Set", null },
-					{ "Sprite.Animation", null },
-					{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
-					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
-					{ "Transpose.Radius", 30 },
-					{ "OwningForce", localActor.PrimaryForce }
+				Vector2 worldPosition = ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
+				creatingEntityID = EntityFactory.Create("Laser Miner", localActor.PrimaryForce, new JObject{
+					{ "Animator", new JObject{
+						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
+					}},
+					{ "Position", new JObject{
+						{ "Center", String.Format("{0}, {1}", worldPosition.X, worldPosition.Y) },
+					}}
 				});
 			}
 		}
@@ -709,14 +716,14 @@ namespace AsteroidOutpost.Systems
 				}
 
 				// Create a new laser tower
-				creatingEntityID = EntityFactory.Create("Laser Tower", new Dictionary<String, object>(){
-					{ "Sprite.Scale", 0.6f },
-					{ "Sprite.Set", null },
-					{ "Sprite.Animation", null },
-					{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
-					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
-					{ "Transpose.Radius", 30 },
-					{ "OwningForce", localActor.PrimaryForce }
+				Vector2 worldPosition = ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
+				creatingEntityID = EntityFactory.Create("Laser Tower", localActor.PrimaryForce, new JObject{
+					{ "Animator", new JObject{
+						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
+					}},
+					{ "Position", new JObject{
+						{ "Center", String.Format("{0}, {1}", worldPosition.X, worldPosition.Y) },
+					}}
 				});
 			}
 		}
@@ -733,14 +740,14 @@ namespace AsteroidOutpost.Systems
 				}
 
 				// Create a new missile tower
-				creatingEntityID = EntityFactory.Create("Missile Tower", new Dictionary<String, object>(){
-					{ "Sprite.Scale", 0.6f },
-					{ "Sprite.Set", null },
-					{ "Sprite.Animation", null },
-					{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
-					{ "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
-					{ "Transpose.Radius", 30 },
-					{ "OwningForce", localActor.PrimaryForce }
+				Vector2 worldPosition = ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
+				creatingEntityID = EntityFactory.Create("Missile Tower", localActor.PrimaryForce, new JObject{
+					{ "Animator", new JObject{
+						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
+					}},
+					{ "Position", new JObject{
+						{ "Center", String.Format("{0}, {1}", worldPosition.X, worldPosition.Y) },
+					}}
 				});
 			}
 		}
@@ -1016,10 +1023,12 @@ namespace AsteroidOutpost.Systems
 				}
 
 
-				JSON.Instance.Parameters.EnableAnonymousTypes = true;
-				String json = JSON.Instance.ToJSON(entities);
+				//JSON.Instance.Parameters.EnableAnonymousTypes = true;
+				//String json = JSON.Instance.ToJSON(entities);
+				String json = JsonConvert.SerializeObject(entities);
 #if DEBUG
-				json = JSON.Instance.Beautify(json);
+				//json = JSON.Instance.Beautify(json);
+				//Console.WriteLine(json);
 #endif
 				return json;
 			}

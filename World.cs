@@ -194,6 +194,10 @@ namespace AsteroidOutpost
 					OnPauseToggle();
 					//awesomium.WebView.CallJavascriptFunction("", "SetPaused", new JSValue(paused));
 				}
+				else
+				{
+					Console.WriteLine("The game is over and can not be paused/unpaused");
+				}
 			}
 		}
 

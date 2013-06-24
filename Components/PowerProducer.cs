@@ -12,9 +12,12 @@ namespace AsteroidOutpost.Components
 	{
 		private float availablePower;
 
-
-		public PowerProducer(World world, int entityID, int powerProductionRate, int maxPower)
-			: base(world, entityID, true)
+		public PowerProducer(int entityID) : base(entityID, true)
+		{
+			ProducesPower = true;
+		}
+		public PowerProducer(int entityID, int powerProductionRate, int maxPower)
+			: base(entityID, true)
 		{
 			ProducesPower = true;
 			PowerProductionRate = powerProductionRate;

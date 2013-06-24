@@ -1,6 +1,5 @@
 {
-    "SpriteName" : "**",
-    "components" : {
+    "Components" : {
 		"EntityName" : {
 			"Name" : "**",
 		},
@@ -10,14 +9,15 @@
 			"Radius" : "**",
 		},
 		"Animator" : {
+			"SpriteName" : "**",
 			"Scale" : 1,
 			"Tint" : "255, 255, 255, 255",
 			"FrameAngle" : 0,
 			"Angle" : 0,
-			"CurrentSet" : null,
+			"CurrentSet" : "Idle",
 			"CurrentAnimation" : null,
 			"CurrentOrientation" : null,
-		}
+		},
     }
 }
 

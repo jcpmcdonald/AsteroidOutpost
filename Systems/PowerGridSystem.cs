@@ -132,8 +132,8 @@ namespace AsteroidOutpost.Systems
 						linkColor = Color.Red;
 					}
 
-					spriteBatch.DrawLine(world.WorldToScreen(relatedPowerNode.PowerLinkPointAbsolute),
-					                     world.WorldToScreen(powerLink.Value.PowerLinkPointAbsolute),
+					spriteBatch.DrawLine(world.WorldToScreen(relatedPowerNode.PowerLinkPointAbsolute(world)),
+					                     world.WorldToScreen(powerLink.Value.PowerLinkPointAbsolute(world)),
 					                     linkColor);
 				}
 			}
@@ -153,8 +153,8 @@ namespace AsteroidOutpost.Systems
 					{
 						color = new Color((int)(150 + world.Scale(50)), (int)(150 + world.Scale(50)), 0, (int)(150 + world.Scale(50)));
 
-						spriteBatch.DrawLine(world.WorldToScreen(linkToDraw.Item1.PowerLinkPointAbsolute),
-						                     world.WorldToScreen(linkToDraw.Item2.PowerLinkPointAbsolute),
+						spriteBatch.DrawLine(world.WorldToScreen(linkToDraw.Item1.PowerLinkPointAbsolute(world)),
+						                     world.WorldToScreen(linkToDraw.Item2.PowerLinkPointAbsolute(world)),
 						                     color);
 
 						linksAlreadyDrawn.Add(linkToDraw);
@@ -173,7 +173,7 @@ namespace AsteroidOutpost.Systems
 						var linkToDraw = new Tuple<PowerGridNode, PowerGridNode>(nodeA, nodeB);
 						if (!linksAlreadyDrawn.Contains(linkToDraw))
 						{
-							if (nodeA.PowerStateActive && nodeB.PowerStateActive)
+							if (nodeA.IsPowerStateActive(world) && nodeB.IsPowerStateActive(world))
 							{
 								color = new Color((int)(70 + world.Scale(50)), (int)(70 + world.Scale(50)), 0, (int)(70 + world.Scale(50)));
 							}
@@ -182,8 +182,8 @@ namespace AsteroidOutpost.Systems
 								color = new Color((int)(80 + world.Scale(50)), (int)(0 + world.Scale(50)), 0, (int)(0 + world.Scale(50)));
 							}
 
-							spriteBatch.DrawLine(world.WorldToScreen(nodeA.PowerLinkPointAbsolute),
-							                     world.WorldToScreen(nodeB.PowerLinkPointAbsolute),
+							spriteBatch.DrawLine(world.WorldToScreen(nodeA.PowerLinkPointAbsolute(world)),
+							                     world.WorldToScreen(nodeB.PowerLinkPointAbsolute(world)),
 							                     color);
 
 							linksAlreadyDrawn.Add(linkToDraw);

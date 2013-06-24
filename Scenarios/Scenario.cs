@@ -72,7 +72,7 @@ namespace AsteroidOutpost.Scenarios
 			if(deadPowerProducer != null)
 			{
 				// A power producer has been eliminated, check to see if there is still power out there
-				if(!world.GetComponents<PowerProducer>().Any(p => p != deadPowerProducer && p.PowerStateActive && world.GetOwningForce(p) == friendlyForce))
+				if(!world.GetComponents<PowerProducer>().Any(p => p != deadPowerProducer && p.IsPowerStateActive(world) && world.GetOwningForce(p) == friendlyForce))
 				{
 					// No power sources, it is impossible to recover. You are dead, or will be very soon
 					world.GameOver(false);
@@ -175,26 +175,22 @@ namespace AsteroidOutpost.Scenarios
 					}
 				}
 
-				JObject json = new JObject{
-					{ "Animator", new JObject
-					{
+
+				EntityFactory.Create("Asteroid", asteroidForce, new JObject{
+					{ "Animator", new JObject{
 						{ "Scale", scale },
 						{ "CurrentSet", "Asteroid " + GlobalRandom.Next(1, 4) },
 						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
 					}},
-					{ "Position", new JObject
-					{
+					{ "Position", new JObject{
 						{ "Center", String.Format("{0}, {1}", x, y) },
 						{ "Radius", radius }
 					}},
-					{ "Minable", new JObject
-					{
+					{ "Minable", new JObject{
 						{ "Minerals", minerals },
 						{ "StartingMinerals", minerals }
 					}}
-				};
-
-				EntityFactory.Create("Asteroid", asteroidForce, json);
+				});
 
 			}
 		}
@@ -237,20 +233,23 @@ namespace AsteroidOutpost.Scenarios
 			}
 
 			// Create the solar station
-			int creatingEntityID = EntityFactory.Create("Solar Station", new Dictionary<String, object>(){
-				{ "Sprite.Scale", 0.7f },
-				{ "Sprite.Set", " " + GlobalRandom.Next(1, 4) },
-				{ "Sprite.Animation", null },
-				{ "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
-				{ "Transpose.Position", origin + delta },
-				{ "Transpose.Radius", 40 },
-				{ "OwningForce", force }
+			int creatingEntityID = EntityFactory.Create("Solar Station", force, new JObject{
+				{ "Animator", new JObject{
+					{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
+				}},
+				{ "Position", new JObject{
+					{ "Center", String.Format("{0}, {1}", origin.X + delta.X, origin.Y + delta.Y) },
+				}},
+				{ "Constructible", new JObject{
+					{ "IsBeingPlaced", false },
+					{ "IsConstructing", false },
+				}}
 			});
 
 			// Set this building as done constructing
-			Constructible solarStation = world.GetComponent<Constructible>(creatingEntityID);
-			solarStation.IsBeingPlaced = false;
-			solarStation.IsConstructing = false;
+			//Constructible solarStation = world.GetComponent<Constructible>(creatingEntityID);
+			//solarStation.IsBeingPlaced = false;
+			//solarStation.IsConstructing = false;
 
 			// Hook it up to the grid
 			PowerGridNode powerNode = world.GetComponent<PowerGridNode>(creatingEntityID);

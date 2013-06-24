@@ -1,0 +1,31 @@
+{
+    "Components" : {
+		"EntityName" : {
+			"Name" : "Solar Station",
+		},
+		"Position" : {
+			"Radius" : 40,
+		},
+		"Animator" : {
+			"SpriteName" : "Solar Station",
+			"Scale" : 0.7,
+			"CurrentSet" : "Level 1",
+			"CurrentAnimation" : "Idle",
+		},
+		"PowerProducer" : {
+			"PowerProductionRate" : 10,
+			"MaxPower" : 70,
+			"PowerLinkPointRelative" : "-1, -13",
+			"ConductsPower" : true,
+			"ProducesPower" : true,
+		},
+		"Constructible" : {
+			"MineralsToConstruct" : 200,
+		},
+		"HitPoints" : {
+			"Armour" : 50,
+			"TotalArmour" : 50,
+		}
+    }
+}
+

@@ -9,7 +9,7 @@ namespace AsteroidOutpost.Components
 	class MissileProjectile : Component
 	{
 		public int? Target { get; set; }
-		public int Damage { get; set; }
+		public float Damage { get; set; }
 		public float Acceleration { get; set; }
 		public int DetonationDistance { get; set; }
 

@@ -15,7 +15,12 @@ namespace AsteroidOutpost.Components
 	{
 		private float mineralsConstructed;
 
-		public Constructible(int entityID) : base(entityID) {}
+		public Constructible(int entityID) : base(entityID)
+		{
+			IsConstructing = false;
+			IsBeingPlaced = true;
+			mineralsConstructed = 0;
+		}
 		public Constructible(int entityID, int mineralsToConstruct)
 			: base(entityID)
 		{

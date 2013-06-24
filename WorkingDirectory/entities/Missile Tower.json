@@ -1,0 +1,32 @@
+{
+    "Components" : {
+		"EntityName" : {
+			"Name" : "Missile Tower",
+		},
+		"Position" : {
+			"Radius" : 30,
+		},
+		"Animator" : {
+			"SpriteName" : "Missile Tower",
+			"Scale" : 0.6,
+			"CurrentAnimation" : "Idle",
+		},
+		"PowerGridNode" : {
+			"PowerLinkPointRelative" : "0, 0",
+		},
+		"Constructible" : {
+			"MineralsToConstruct" : 200,
+		},
+		"HitPoints" : {
+			"Armour" : 100,
+			"TotalArmour" : 100,
+		},
+		"MissileWeapon" : {
+			"Range" : 300,
+			"Damage" : 25,
+			"FireRate" : 1500,
+			"Acceleration" : 50,
+		}
+    }
+}
+

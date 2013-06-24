@@ -73,6 +73,13 @@ namespace AsteroidOutpost.Systems
 					// Start off in the charging state
 					laserMiner.State = MiningState.Charging;
 					laserMiner.TimeSinceLastStageChange = TimeSpan.FromMilliseconds(0);
+
+					// Attach to the accumulator
+					Accumulator relatedAccumulator = world.GetNullableComponent<Accumulator>(laserMiner);
+					if(relatedAccumulator != null)
+					{
+						laserMiner.AccumulationEvent += relatedAccumulator.Accumulate;
+					}
 				}
 				else
 				{
