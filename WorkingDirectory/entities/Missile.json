@@ -1,4 +1,5 @@
 {
+	"Name" : "Missile",
     "Components" : {
 		"EntityName" : {
 			"Name" : "Missile",

@@ -1,4 +1,5 @@
 {
+	"Name" : "Power Node",
     "Components" : {
 		"EntityName" : {
 			"Name" : "Power Node",

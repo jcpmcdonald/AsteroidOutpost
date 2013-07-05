@@ -26,6 +26,16 @@ namespace AsteroidOutpost.Entities
 		}
 
 
+		public String Name
+		{
+			get
+			{
+				// All entities require a name, fail fast without one
+				return jsonTemplate["Name"].ToString();
+			}
+		}
+
+
 		public object Clone()
 		{
 			EntityTemplate clone = new EntityTemplate();

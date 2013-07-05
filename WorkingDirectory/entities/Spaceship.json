@@ -1,4 +1,5 @@
 {
+	"Name" : "Spaceship",
     "Components" : {
 		"EntityName" : {
 			"Name" : "Spaceship",
