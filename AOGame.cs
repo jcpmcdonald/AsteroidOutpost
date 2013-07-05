@@ -129,29 +129,43 @@ namespace AsteroidOutpost
 
 			// Create our web front end
 			//WebCoreConfig.Default.ForceSingleProcess = true;
-			awesomium = new AwesomiumComponent(this);
-			WebCore.BaseDirectory = @"..\UI\";
-			awesomium.WebView.LoadFile("MainMenu.html");
-			awesomium.WebView.Focus();
+			awesomium = new AwesomiumComponent(this, GraphicsDevice.Viewport.Bounds);
+			awesomium.WebView.ParentWindow = Window.Handle;
+
+
+			// A document must be loaded in order for me to make a global JS object, but the presence of
+			// the global JS object affects the first page to be loaded, so give it an egg:
+			awesomium.WebView.DocumentReady += WebView_DocumentReady;
+			awesomium.WebView.LoadHTML("<html><head><title>Loading...</title></head><body></body></html>");
+
 			Components.Add(awesomium);
 
-			// Create callbacks for Awesomium content to communicate with the game
-			awesomium.WebView.CreateObject("xna");
-			awesomium.WebView.SetObjectCallback("xna", "StartWorld", StartWorld);
-			awesomium.WebView.SetObjectCallback("xna", "Exit", Exit);
-
-			// Create somewhere to log messages to
-			awesomium.WebView.CreateObject("console");
-			awesomium.WebView.SetObjectCallback("console", "log", JSConsoleLog);
-			awesomium.WebView.SetObjectCallback("console", "dir", JSConsoleLog);
-
-			awesomium.WebView.CreateObject("performanceMonitor");
+			//awesomium.WebView.CreateObject("performanceMonitor");
 			//JSValue[] updateTime = new JSValue[2];
 			//updateTime[0] = new JSValue(5);
 			//updateTime[1] = new JSValue(6);
 			//awesomium.WebView.SetObjectProperty("performanceMonitor", "updateTime", new JSValue(updateTime));
 
-			awesomium.WebView.JSConsoleMessageAdded += WebView_JSConsoleMessageAdded;
+			awesomium.WebView.ConsoleMessage += WebView_JSConsoleMessageAdded;
+		}
+
+		void WebView_DocumentReady(object sender, UrlEventArgs e)
+		{
+			// Call this only once
+			awesomium.WebView.DocumentReady -= WebView_DocumentReady;
+
+			// Create callbacks for Awesomium content to communicate with the game
+			JSObject jsXNA = awesomium.WebView.CreateGlobalJavascriptObject("xna");
+			jsXNA.Bind("StartWorld", false, StartWorld);
+			jsXNA.Bind("Exit", false, Exit);
+
+			// Create somewhere to log messages to
+			JSObject jsConsole = awesomium.WebView.CreateGlobalJavascriptObject("console");
+			jsConsole.Bind("log", false, JSConsoleLog);
+			jsConsole.Bind("dir", false, JSConsoleLog);
+
+			//awesomium.WebView.Source = @"..\UI\MainMenu.html".ToUri();
+			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\UI\MainMenu.html").ToUri();
 		}
 
 
@@ -284,16 +298,22 @@ namespace AsteroidOutpost
 				}
 
 
-				frameRateCounter.EndOfUpdate(gameTime);
-
-
-				if (awesomium.WebView.IsLive)
+				if (awesomium.WebView.IsDocumentReady && !awesomium.WebView.IsLoading)
 				{
-					// Force this to be a synchronous call otherwise we could hammer this with update calls, and it can't keep up
-					String js = String.Format("if(typeof RefreshPerformanceGraph != 'undefined'){{ RefreshPerformanceGraph({0}, {1}, {2}); }}", frameRateCounter.LastUpdateTime(), frameRateCounter.LastDrawTime(), frameRateCounter.LastDrawDelay);
-					//awesomium.WebView.ExecuteJavascriptWithResult(js, 100);
-					awesomium.WebView.ExecuteJavascript(js);
+					if(frameRateCounter.LastUpdateTime() <= 0.00001 &&
+						frameRateCounter.LastDrawTime() <= 0.00001 &&
+						frameRateCounter.LastDrawDelay <= 0.00001)
+					{
+						//Console.WriteLine("ZERO");
+					}
+					else
+					{
+						String js = String.Format("if(typeof RefreshPerformanceGraph != 'undefined'){{ RefreshPerformanceGraph({0}, [{1}, {2}, {3}]); }}", gameTime.TotalGameTime.TotalSeconds, frameRateCounter.LastUpdateTime(), frameRateCounter.LastDrawTime(), frameRateCounter.LastDrawDelay);
+						awesomium.WebView.ExecuteJavascript(js);
+					}
 				}
+
+				frameRateCounter.EndOfUpdate(gameTime);
 
 				// Allows the game to exit if I ever load this on an XBox
 				if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
@@ -346,14 +366,14 @@ namespace AsteroidOutpost
 		/// </summary>
 		public void DestroyWorld()
 		{
-			awesomium.WebView.LoadFile("MainMenu.html");
+			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\UI\MainMenu.html").ToUri();
 			destroyWorld = true;
 		}
 
 
 		#region JavaScript Callbacks
 
-		private void StartWorld(object sender, JSCallbackEventArgs e)
+		private void StartWorld(object sender, JavascriptMethodEventArgs e)
 		{
 			//awesomium.WebView.LoadCompleted += HUD_LoadCompleted;
 
@@ -404,7 +424,7 @@ namespace AsteroidOutpost
 		/// <summary>
 		/// Exit callback so that JavaScript can exit the game
 		/// </summary>
-		private void Exit(object sender, JSCallbackEventArgs e)
+		private void Exit(object sender, JavascriptMethodEventArgs e)
 		{
 			Exit();
 		}
@@ -415,13 +435,13 @@ namespace AsteroidOutpost
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void JSConsoleLog(object sender, JSCallbackEventArgs e)
+		private void JSConsoleLog(object sender, JavascriptMethodEventArgs e)
 		{
 			Console.WriteLine(e.Arguments[0].ToString());
 		}
 
 
-		private void WebView_JSConsoleMessageAdded(object sender, JSConsoleMessageEventArgs e)
+		private void WebView_JSConsoleMessageAdded(object sender, ConsoleMessageEventArgs e)
 		{
 			// JavaScript Error! Fail
 			Console.WriteLine("Awesomium JS Error: {0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);

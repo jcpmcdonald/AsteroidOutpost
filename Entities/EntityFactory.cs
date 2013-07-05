@@ -50,7 +50,16 @@ namespace AsteroidOutpost.Entities
 					EntityTemplate template = (EntityTemplate)baseEntity.Clone();
 					String json = templateFile.OpenText().ReadToEnd();
 					template.ExtendWith(JObject.Parse(json));
-					templates.Add(fileName, template);
+					if(template.Name != "**")
+					{
+						templates.Add(template.Name.ToLower(), template);
+					}
+					else
+					{
+						Console.WriteLine("An entity name must be provided in the entity JSON");
+						Debugger.Break();
+					}
+
 				}
 			}
 

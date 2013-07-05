@@ -100,42 +100,6 @@ namespace AsteroidOutpost
 		public void StartOfDraw(GameTime gameTime)
 		{
 			startOfDrawTime = DateTime.Now;
-
-
-			//int x = 10;
-			//int y = 50;
-			//int w = updateTimesCircularSize;
-			//int h = 50;
-			//spriteBatch.FillRectangle(new Rectangle(x, y, w, h), new Color(0, 0, 0, 150));
-			//spriteBatch.DrawRectangle(new Rectangle(x, y, w, h), Color.Gray);
-
-			//double maxUpdateTime = updateTimes.Max();
-			//for(int i = 0; i < updateTimes.Count; i++)
-			//{
-			//    int circularArrayIndex = (updateTimesCircularIndex + i) % updateTimesCircularSize;
-			//    spriteBatch.DrawLine(x + i,
-			//                         y + h,
-			//                         x + i,
-			//                         y + h - (int)((updateTimes[circularArrayIndex] / maxUpdateTime) * h),
-			//                         Color.Red);
-			//}
-
-
-
-			//drawCount += 1;
-
-			//if (lastFrameTimestamp > gameTime.TotalGameTime)
-			//{
-			//    Debugger.Break();
-			//}
-
-			//frameTime.Add(gameTime.TotalGameTime - lastFrameTimestamp);
-			//while (frameTimeSum > averageOverPeriod)
-			//{
-			//    frameTime.RemoveAt(0);
-			//}
-
-			//lastFrameTimestamp = gameTime.TotalGameTime;
 		}
 
 

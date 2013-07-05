@@ -143,7 +143,7 @@ $(document).ready(function()
 
 function SetResources(newResources)
 {
-	$("#minerals").text(FormatNumber(newResources.minerals));
+	$("#minerals").text(FormatNumber(newResources));
 }
 
 
@@ -299,7 +299,7 @@ $(document).ready(function()
 		
 		
 		// With some dummy minerals
-		SetResources({"minerals": 1000});
+		SetResources(1000);
 		
 		
 		// Show the in-game menu when you press ESC

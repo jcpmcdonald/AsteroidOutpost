@@ -79,18 +79,24 @@ namespace AsteroidOutpost.Systems
 
 			// Create callbacks for Awesomium content to communicate with the hud
 			awesomium = game.Awesomium;
-			awesomium.WebView.CreateObject("hud");
-			awesomium.WebView.SetObjectCallback("hud", "OnMouseUp", OnMouseUp);
-			awesomium.WebView.SetObjectCallback("hud", "OnMouseDown", OnMouseDown);
 
-			awesomium.WebView.SetObjectCallback("hud", "ResumeGame", ResumeGame);
-			awesomium.WebView.SetObjectCallback("hud", "ForfeitGame", ForfeitGame);
+			//while(!awesomium.WebView.IsDocumentReady)
+			//{
+			//    WebCore.Update();
+			//}
 
-			awesomium.WebView.SetObjectCallback("hud", "BuildSolarStation", btnPower_Clicked);
-			awesomium.WebView.SetObjectCallback("hud", "BuildPowerNode", btnPowerNode_Clicked);
-			awesomium.WebView.SetObjectCallback("hud", "BuildLaserMiner", btnLaserMiner_Clicked);
-			awesomium.WebView.SetObjectCallback("hud", "BuildLaserTower", btnLaserTower_Clicked);
-			awesomium.WebView.SetObjectCallback("hud", "BuildMissileTower", btnMissileTower_Clicked);
+			JSObject jsHud = awesomium.WebView.CreateGlobalJavascriptObject("hud");
+			jsHud.Bind("OnMouseUp", false, OnMouseUp);
+			jsHud.Bind("OnMouseDown", false, OnMouseDown);
+
+			jsHud.Bind("ResumeGame", false, ResumeGame);
+			jsHud.Bind("ForfeitGame", false, ForfeitGame);
+
+			jsHud.Bind("BuildSolarStation", false, btnPower_Clicked);
+			jsHud.Bind("BuildPowerNode", false, btnPowerNode_Clicked);
+			jsHud.Bind("BuildLaserMiner", false, btnLaserMiner_Clicked);
+			jsHud.Bind("BuildLaserTower", false, btnLaserTower_Clicked);
+			jsHud.Bind("BuildMissileTower", false, btnMissileTower_Clicked);
 
 			world.PauseToggledEvent += WorldOnPauseToggledEvent;
 		}
@@ -190,7 +196,7 @@ namespace AsteroidOutpost.Systems
 
 		private void WorldOnPauseToggledEvent(bool paused)
 		{
-			awesomium.WebView.CallJavascriptFunction("","SetPaused", new JSValue(paused));
+			awesomium.WebView.ExecuteJavascript(String.Format("SetPaused({0})", paused.ToString().ToLower()));
 		}
 
 
@@ -399,9 +405,7 @@ namespace AsteroidOutpost.Systems
 
 			if (LocalActor != null)
 			{
-				JSObject resources = new JSObject();
-				resources["minerals"] = new JSValue((int)(LocalActor.PrimaryForce.GetMinerals() + 0.5));
-				awesomium.WebView.CallJavascriptFunction("", "SetResources", new JSValue(resources));
+				awesomium.WebView.ExecuteJavascript(String.Format("SetResources({0})", (int)(LocalActor.PrimaryForce.GetMinerals() + 0.5)));
 			}
 
 			UpdateSelection();
@@ -815,9 +819,9 @@ namespace AsteroidOutpost.Systems
 
 
 
-		protected void OnMouseDown(object sender, JSCallbackEventArgs e)
+		protected void OnMouseDown(object sender, JavascriptMethodEventArgs e)
 		{
-			MouseButton mouseButton = (MouseButton)e.Arguments[1].ToInteger();
+			MouseButton mouseButton = (MouseButton)(int)e.Arguments[1];
 			// TODO: Start a multi-select, BUT only actually do something about it after they move... lets say 10px away from this location
 			if (mouseButton == MouseButton.MIDDLE)
 			{
@@ -830,10 +834,10 @@ namespace AsteroidOutpost.Systems
 		/// <summary>
 		/// Handle mouse up everywhere except the controls
 		/// </summary>
-		protected void OnMouseUp(object sender, JSCallbackEventArgs e)
+		protected void OnMouseUp(object sender, JavascriptMethodEventArgs e)
 		{
-			bool mouseUpOverHUD = e.Arguments[0].ToBoolean();
-			MouseButton mouseButton = (MouseButton)e.Arguments[1].ToInteger();
+			bool mouseUpOverHUD = e.Arguments[0];
+			MouseButton mouseButton = (MouseButton)(int)e.Arguments[1];
 			bool clickHandled = mouseUpOverHUD;
 
 			if (mouseButton == MouseButton.MIDDLE)
@@ -988,11 +992,11 @@ namespace AsteroidOutpost.Systems
 		private void SetSelection()
 		{
 			//awesomium.WebView.CallJavascriptFunction("", "SetSelection", GetSelectionJSON());
-			bool loaded = !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'").ToBoolean();
-			if(loaded)
-			{
-				awesomium.WebView.ExecuteJavascript("SetSelection(" + GetSelectionJSON() + ");");
-			}
+			//bool loaded = !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'").ToBoolean();
+			//if(loaded)
+			//{
+				awesomium.WebView.ExecuteJavascript("if(typeof SetSelection != 'undefined'){ SetSelection(" + GetSelectionJSON() + "); }");
+			//}
 		}
 
 		/// <summary>
@@ -1004,7 +1008,7 @@ namespace AsteroidOutpost.Systems
 			//if(loaded)
 			{
 				//awesomium.WebView.ExecuteJavascript("UpdateSelection(" + GetSelectionJSON() + ");");
-				awesomium.WebView.CallJavascriptFunction("", "UpdateSelection", new JSValue(GetSelectionJSON()));
+				awesomium.WebView.ExecuteJavascript(String.Format("UpdateSelection({0})", GetSelectionJSON()));
 			}
 		}
 

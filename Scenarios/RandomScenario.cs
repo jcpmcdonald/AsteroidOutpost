@@ -54,7 +54,7 @@ namespace AsteroidOutpost.Scenarios
 			world.AddForce(aiForce);
 			world.AddController(aiController);
 
-			theGame.Awesomium.WebView.CallJavascriptFunction("", "MakeTimerPanel", new JSValue());
+			theGame.Awesomium.WebView.ExecuteJavascript("MakeTimerPanel()");
 
 			base.Start();
 		}
@@ -73,7 +73,7 @@ namespace AsteroidOutpost.Scenarios
 				WaveFactory.CreateWave(world, 100 * sequence, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(3000, -3000));
 			}
 
-			theGame.Awesomium.WebView.CallJavascriptFunction("", "UpdateTimerPanel", new JSValue(waveTimer.ToString(@"m\:ss")));
+			theGame.Awesomium.WebView.ExecuteJavascript(String.Format("UpdateTimerPanel({0})", waveTimer.ToString(@"m\:ss")));
 		}
 	}
 }

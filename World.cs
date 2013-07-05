@@ -755,7 +755,7 @@ namespace AsteroidOutpost
 		/// </summary>
 		public void StartServer(Scenario scenario)
 		{
-			awesomium.WebView.LoadFile("HUD.html");
+			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\UI\HUD.html").ToUri();
 			if(this.scenario != null)
 			{
 				// Is this normal?
@@ -1203,13 +1203,13 @@ namespace AsteroidOutpost
 		public void GameOver(bool win)
 		{
 			gameOver = true;
-			awesomium.WebView.CallJavascriptFunction("", "GameOver", new JSValue(win));
+			awesomium.WebView.ExecuteJavascript(String.Format("GameOver({0})", win.ToString().ToLower()));
 		}
 
 
 		public void ExecuteAwesomiumJS(String js)
 		{
-			bool loaded = !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'").ToBoolean();
+			bool loaded = awesomium.WebView.IsDocumentReady && !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'");
 			if (loaded)
 			{
 				//awesomium.WebView.ExecuteJavascriptWithResult(js, 50);
@@ -1218,6 +1218,7 @@ namespace AsteroidOutpost
 			else
 			{
 				executeAwesomiumJSNextCycle.Add(js);
+				Console.WriteLine("JS Executed Next Cycle");
 			}
 		}
 	}

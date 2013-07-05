@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
-using Awesomium.Core;
 using Microsoft.Xna.Framework;
 
 namespace AsteroidOutpost.Scenarios
@@ -17,6 +16,10 @@ namespace AsteroidOutpost.Scenarios
 		private static readonly TimeSpan timeBetweenWaves = TimeSpan.FromSeconds(60);
 		private TimeSpan waveTimer = timeBetweenWaves;
 		private int sequence = 0;
+
+		
+		private Mission currentMission;
+		private Mission collectMinerals = new Mission("collectMinerals", "(0/2000) Collect 2000 minerals", false);
 
 
 		public MinerealCollectionScenario(AOGame theGame, int playerCount)
@@ -34,12 +37,12 @@ namespace AsteroidOutpost.Scenarios
 			}
 
 			// Set up some forces and actors
-			friendlyForce = new Force(world, world.GetNextForceID(), 1000, Team.Team1);
+			friendlyForce = new Force(world, world.GetNextForceID(), 250, Team.Team1);
 			Controller localController = new Controller(world, ControllerRole.Local, friendlyForce);
 			world.AddForce(friendlyForce);
 			world.AddController(localController);
 
-			Force aiForce = new Force(world, world.GetNextForceID(), 1000, Team.AI);
+			Force aiForce = new Force(world, world.GetNextForceID(), 250, Team.AI);
 			Controller aiController = new AIController(world, aiForce);
 			world.AddForce(aiForce);
 			world.AddController(aiController);
@@ -49,14 +52,40 @@ namespace AsteroidOutpost.Scenarios
 			startingPoint = CreateStartingBase(friendlyForce);
 			world.HUD.FocusWorldPoint = startingPoint;
 
+			currentMission = collectMinerals;
+			StartMission();
+
+			theGame.World.ExecuteAwesomiumJS("MakeTimerPanel()");
+			//theGame.Awesomium.WebView.ExecuteJavascript("MakeTimerPanel()");
+
 			GenerateAsteroidField(1000);
 			base.Start();
+		}
+
+
+		void StartMission()
+		{
+			//frmInstructions.Clear();
+			//frmInstructions.Title = "Training (" + (section + 1) + " / 6)";
+
+			if (currentMission == collectMinerals)
+			{
+				missions.Add(collectMinerals);
+			}
 		}
 
 
 		public override void Update(TimeSpan deltaTime)
 		{
 			waveTimer = waveTimer.Subtract(deltaTime);
+
+			collectMinerals.Description = String.Format("({0}/2000) Collect 2000 minerals", friendlyForce.GetMinerals());
+
+			if(friendlyForce.GetMinerals() >= 2000)
+			{
+				collectMinerals.Done = true;
+				world.GameOver(true); // Win!
+			}
 
 			if (waveTimer <= TimeSpan.Zero)
 			{
@@ -67,7 +96,7 @@ namespace AsteroidOutpost.Scenarios
 				WaveFactory.CreateWave(world, 100 * sequence, enemyLocation);
 			}
 
-			theGame.Awesomium.WebView.CallJavascriptFunction("", "UpdateTimerPanel", new JSValue(waveTimer.ToString(@"m\:ss")));
+			theGame.Awesomium.WebView.ExecuteJavascript(String.Format("UpdateTimerPanel('{0}')", waveTimer.ToString(@"m\:ss")));
 		}
 	}
 }
