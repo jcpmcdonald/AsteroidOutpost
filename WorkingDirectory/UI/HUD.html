@@ -12,6 +12,7 @@
 	<script type="text/javascript" src="js/jquery-latest.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-latest.js"></script>
 	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/flotr2.min.js"></script>
 	<script type="text/javascript" src="js/jquery.jqplot.min.js"></script>
 	<script type="text/javascript" src="js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
 	<script type="text/javascript" src="js/plugins/jqplot.highlighter.min.js"></script>
@@ -140,7 +141,10 @@
 		</div>
 	</div>
 	
-	<div id="performanceGraph" class="panel"></div>
+	<div id="performanceGraphPanel" class="panel">
+		<div id="performanceGraph"></div>
+		<div id="performanceLegend"></div>
+	</div>
 	
 	
 	<div id="console" class="panel" ng-controller="ConsoleController">
