@@ -91,14 +91,14 @@ namespace AsteroidOutpost.Systems
 						if (position.Distance(targetPosition) - (primaryWeapon.Range - weaponGive) > MinDistanceToStop(velocity, vehicle))
 						{
 							// Move toward the target and flock with my flock-mates
-							vehicle.AccelerationVector = targetPosition.Center - position.Center - velocity.CurrentVelocity;
-							vehicle.AccelerationVector.Normalize();
+							vehicle.AccelerationVector = Vector2.Normalize(targetPosition.Center - position.Center - velocity.CurrentVelocity);
+							//vehicle.AccelerationVector.Normalize();
 
 							Vector2 cohesion = Cohere(position, fleetPositions) * cohesionFactor;
 							Vector2 separation = Separate(position, fleetPositions) * separationFactor;
 							Vector2 alignment = Vector2.Zero; // align(fleetPositionDictionary) * alignmentFactor;
 
-							vehicle.AccelerationVector = (vehicle.AccelerationVector * 5) + cohesion + separation + alignment;
+							vehicle.AccelerationVector = (vehicle.AccelerationVector * 3) + cohesion + separation + alignment;
 							vehicle.AccelerationVector.Normalize();
 
 							Animator animator = world.GetComponent<Animator>(vehicle);

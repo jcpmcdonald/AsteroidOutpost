@@ -39,7 +39,7 @@ namespace AsteroidOutpost
 				// Make something
 				EntityFactory.Create("Spaceship", aiActor.PrimaryForce, new JObject{
 					{ "Position", new JObject{
-						{ "Center", String.Format("{0}, {1}", roughPosition.X, roughPosition.Y) },
+						{ "Center", String.Format("{0}, {1}", roughPosition.X + GlobalRandom.Next(-10, 10), roughPosition.Y + GlobalRandom.Next(-10, 10)) },
 					}}
 				});
 				//new Dictionary<String, object>(){

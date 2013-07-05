@@ -43,8 +43,11 @@ namespace AsteroidOutpost.Scenarios
 			}
 			set
 			{
-				description = value;
-				dirty = true;
+				if(value != description)
+				{
+					description = value;
+					dirty = true;
+				}
 			}
 		}
 
