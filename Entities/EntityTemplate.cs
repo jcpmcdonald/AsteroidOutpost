@@ -95,12 +95,32 @@ namespace AsteroidOutpost.Entities
 		}
 
 
-		private void Populate(Component component, JObject jsonObject)
+		public static void Update(World world, int entityID, JObject componentsJson)
+		{
+			foreach (var componentJson in componentsJson)
+			{
+				String componentName = componentJson.Key;
+				Type componentType = Type.GetType("AsteroidOutpost.Components." + componentName, false, true);
+				if (componentType != null)
+				{
+					Component component = world.GetComponent(entityID, componentType);
+					Populate(component, (JObject)componentsJson[componentName]);
+				}
+				else
+				{
+					Console.WriteLine("Unrecognized component type '{0}' while Updating an object", componentName);
+					Debugger.Break();
+				}
+			}
+		}
+
+
+		private static void Populate(Component component, JObject jsonObject)
 		{
 			String json = jsonObject.ToString();
 			if (json.Contains("\"**\""))
 			{
-				Console.WriteLine("There are required values that have not been filled in while populating {0}", GetType());
+				Console.WriteLine("There are required values that have not been filled in while populating");
 				Debugger.Break();
 			}
 			JsonConvert.PopulateObject(json, component);

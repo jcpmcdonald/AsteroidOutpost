@@ -6,6 +6,14 @@
 @import "HUDConsole.css";
 @import "PerformanmceMonitor.css";
 
+
+body
+{
+	margin: 0px;
+	overflow: hidden;
+}
+
+
 .panel
 {
 	position: absolute;
@@ -143,15 +151,19 @@
 
 #editorPanel
 {
-	top: 10px;
+	position: absolute;
+    display: block;
+	
+	top: 0px;
 	right: 0px;
+	bottom: 0px;
 	
 	width: 450px;
 	
 	padding: 5px;
 	
-	border-radius: 15px 0px 0px 15px;
-	border-style: solid none solid solid;
+	border-radius: 0px 0px 0px 0px;
+	border-style: none none none solid;
 	
 	
 	-moz-user-select: text;
@@ -163,8 +175,24 @@
 	/*font-size: small;*/
 }
 
-#editorPanel input
+#editorPanel
 {
+}
+
+#editorToggleButton
+{
+	position: absolute;
+    display: block;
+    
+    width: 10px;
+    height: 100px;
+    
+    background-color: rgba(100, 100, 100, 0.7);
+	border-color: #bbbbbb;
+	border-width: 1px;
+	
+	border-radius: 5px 0px 0px 5px;
+	border-style: solid none solid solid;
 }
 
 #modalOverlay

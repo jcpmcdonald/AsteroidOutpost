@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 
 namespace AsteroidOutpost.Components
 {
@@ -20,6 +22,7 @@ namespace AsteroidOutpost.Components
 	class LaserMiner : Component
 	{
 		public readonly List<Minable> nearbyAsteroids = new List<Minable>();
+		private int miningRange;
 
 		// Local event only
 		public event Action<AccumulationEventArgs> AccumulationEvent;
@@ -65,11 +68,25 @@ namespace AsteroidOutpost.Components
 		/// </summary>
 		public int MineTime { get; set; }
 
-		public int MiningRange { get; set; }
+
+		public int MiningRange
+		{
+			get
+			{
+				return miningRange;
+			}
+			set
+			{
+				miningRange = value;
+				RescanForAsteroids = true;
+			}
+		}
 
 		/// <summary>
 		/// The asteroid we are minning
 		/// </summary>
+		[XmlIgnore]
+		[JsonIgnore]
 		public int MiningAsteroid { get; set; }
 
 		public Vector2 MiningDestinationOffset { get; set; }
@@ -80,6 +97,8 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// Collect minerals here, and only extract a whole number of minerals from asteroids
 		/// </summary>
+		[XmlIgnore]
+		[JsonIgnore]
 		public double PartialMineralsToExtract { get; set; }
 
 		public bool FirstUpdate { get; set; }

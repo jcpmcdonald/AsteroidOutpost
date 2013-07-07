@@ -1,8 +1,8 @@
 
 #console
 {
-	bottom: 0px;
-	right: 10px;
+	position: absolute;
+    display: block;
 	
 	font-size: small;
 	text-shadow:0 1px 0 rgba(255,255,255,0.3);

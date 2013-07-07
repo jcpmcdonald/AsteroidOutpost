@@ -98,7 +98,19 @@ namespace AsteroidOutpost.Systems
 			jsHud.Bind("BuildLaserTower", false, btnLaserTower_Clicked);
 			jsHud.Bind("BuildMissileTower", false, btnMissileTower_Clicked);
 
+			jsHud.Bind("EditEntity", false, awesomium_EditEntity);
+
 			world.PauseToggledEvent += WorldOnPauseToggledEvent;
+		}
+
+
+		private void awesomium_EditEntity(object sender, JavascriptMethodEventArgs javascriptMethodEventArgs)
+		{
+			String json = javascriptMethodEventArgs.Arguments[0].ToString();
+			JObject change = JObject.Parse(json);
+			int entityID = (int)change["EntityID"];
+			change.Remove("EntityID");
+			EntityTemplate.Update(world, entityID, change);
 		}
 
 
@@ -443,19 +455,6 @@ namespace AsteroidOutpost.Systems
 				spriteBatch.DrawEllipseBack(world.WorldToScreen(selectedEntityPosition.Center),
 				                            world.Scale(selectedEntityPosition.Radius),
 				                            Color.Green);
-
-				//if(DrawEllipseGuides)
-				//{
-				//    // Draw a bunch of elliptical guides for debugging purposes
-				//    for(float theta = 0; theta < Math.PI * 2; theta += (float)Math.PI / 6f)
-				//    {
-				//        spriteBatch.DrawLine(world.WorldToScreen(selectedEntityPosition.Center),
-				//                             world.WorldToScreen(selectedEntityPosition.Center +
-				//                                                 new Vector2((float)Math.Sin(theta),
-				//                                                             (float)Math.Cos(theta)) * selectedEntityPosition.Radius),
-				//                             Color.White);
-				//    }
-				//}
 			}
 		}
 
@@ -474,6 +473,23 @@ namespace AsteroidOutpost.Systems
 				                             world.Scale(selectedEntityPosition.Radius),
 				                             Color.Green,
 				                             DrawEllipseGuides);
+
+				// Draw range circles for various components
+				LaserMiner laserMiner = world.GetNullableComponent<LaserMiner>(selectedEntity);
+				if(laserMiner != null)
+				{
+					spriteBatch.DrawEllipse(world.WorldToScreen(selectedEntityPosition.Center),
+					                        world.Scale(laserMiner.MiningRange),
+					                        Color.Red);
+				}
+
+				LaserWeapon laserWeapon = world.GetNullableComponent<LaserWeapon>(selectedEntity);
+				if(laserWeapon != null)
+				{
+					spriteBatch.DrawEllipse(world.WorldToScreen(selectedEntityPosition.Center),
+					                        world.Scale(laserWeapon.Range),
+					                        Color.Red);
+				}
 			}
 		}
 
@@ -504,7 +520,8 @@ namespace AsteroidOutpost.Systems
 			if(creatingEntityID != null)
 			{
 				// Draw with a red tint if it's an invalid spot to build
-				if (IsValidToBuildHere())
+				List<Position> blockers = GetBuildBlockers();
+				if (!blockers.Any())
 				{
 					foreach(var animator in world.GetComponents<Animator>(creatingEntityID.Value))
 					{
@@ -516,6 +533,19 @@ namespace AsteroidOutpost.Systems
 					foreach(var animator in world.GetComponents<Animator>(creatingEntityID.Value))
 					{
 						animator.Tint = new Color(255, 50, 50, 255);
+					}
+
+					// Draw the radius of the creating entity, and the radius of all the blocking entities
+					Position creatingPosition = world.GetComponent<Position>(creatingEntityID.Value);
+					spriteBatch.DrawEllipse(world.WorldToScreen(creatingPosition.Center),
+						                        world.Scale(creatingPosition.Radius),
+						                        Color.Red);
+
+					foreach (var position in blockers)
+					{
+						spriteBatch.DrawEllipse(world.WorldToScreen(position.Center),
+						                        world.Scale(position.Radius),
+						                        Color.Red);
 					}
 				}
 			}
@@ -1081,7 +1111,17 @@ namespace AsteroidOutpost.Systems
 		/// <returns>True if it's legal to build here, false otherwise</returns>
 		public virtual bool IsValidToBuildHere()
 		{
-			bool valid = true;
+			return GetBuildBlockers().Any();
+		}
+
+
+		/// <summary>
+		/// Is this a valid place to build? This returns who is blocking you
+		/// </summary>
+		/// <returns>Returns a list of all entities blocking this location for construction</returns>
+		public virtual List<Position> GetBuildBlockers()
+		{
+			List<Position> blockers = new List<Position>();
 
 			// This will grab all objects who's bounding square intersects with us
 			Position buildingPosition = world.GetComponent<Position>(creatingEntityID.Value);
@@ -1093,23 +1133,12 @@ namespace AsteroidOutpost.Systems
 					Position position = world.GetComponent<Position>(nearbyEntity);
 					if (position.IsIntersecting(buildingPosition))
 					{
-						valid = false;
-						break;
+						blockers.Add(position);
 					}
 				}
 			}
 
-			//List<Entity> nearbyEntities = world.EntitiesInArea(Rect);
-			//foreach (Entity entity in nearbyEntities)
-			//{
-			//    // Now determine if they are really intersecting
-			//    if(entity.Solid && Position.IsIntersecting(entity.Position))
-			//    {
-			//        valid = false;
-			//        break;
-			//    }
-			//}
-			return valid;
+			return blockers;
 		}
 	}
 }

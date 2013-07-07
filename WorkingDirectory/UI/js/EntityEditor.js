@@ -13,11 +13,17 @@ function UpdateEditor(newSelection)
 			$currentSelection = newSelection;
 			
 			// Remove the editor panel if we have nothing selected
-			if($("#editorPanel").is('*'))
+			// if($("#editorPanel").is('*'))
+			// {
+				// $("#editorPanel").remove();
+				// $("#editorToggleButton").remove();
+				// return;
+			// }
+			if($("#editorPanel").attr("role") == "tablist")
 			{
-				$("#editorPanel").remove();
-				return;
+				$("#editorPanel").accordion("destroy");
 			}
+			$("#editorPanel").empty();
 		}
 		else
 		{
@@ -40,11 +46,17 @@ function UpdateEditor(newSelection)
 			else
 			{
 				// This is a new selection, clear out the old data then re-populate
-				$("#editorPanel").remove();
+				// $("#editorPanel").remove();
+				// $("#editorToggleButton").remove();
+				if($("#editorPanel").attr("role") == "tablist")
+				{
+					$("#editorPanel").accordion("destroy");
+				}
+				$("#editorPanel").empty();
 				selection = newSelection[0];
 			}
 			
-			editorPanel = GetOrCreate('editorPanel', $('body'), '<div id="editorPanel" class="panel"></div>');
+			editorPanel = GetOrCreate('editorPanel', $('body'), '<div id="editorPanel" class="panel"></div><div id="editorToggleButton"></div>');
 			$currentSelection = newSelection;
 			
 			for(component in selection)
@@ -74,20 +86,15 @@ function UpdateEditor(newSelection)
 					{
 					case "string":
 						var textField = GetOrCreate(baseID + '-text', componentBody, '<input type="text" id="' + baseID + '-text">');
-						textField.val(selection[component][dataPoint]);
-						//value="' + selection[entityID][component][dataPoint] + '"
-						//componentBody.append('<div><input type="text" id="' + baseID + '-text" value="' + selection[entityID][component][dataPoint] + '"></div>');
+						CreateTextEditor(textField, selection[component][dataPoint], entityID, component, dataPoint);
 						break;
 						
 					case "number":
-						CreateNumberEditor(componentBody, dataLabel, baseID, selection[component][dataPoint]);
+						CreateNumberEditor(componentBody, dataLabel, baseID, selection[component][dataPoint], entityID, component, dataPoint);
 						break;
 						
 					case "boolean":
-						var checkbox = GetOrCreate(baseID + '-checkbox', dataLabel, ': <input type="checkbox" id="' + baseID + '-checkbox">');
-						checkbox.prop('checked', selection[component][dataPoint]);
-						//$("#" + baseID + "-label").append(': <input type="checkbox">');
-						
+						CreateCheckboxEditor(componentBody, dataLabel, baseID, selection[component][dataPoint], entityID, component, dataPoint);
 						break;
 					}
 				}
@@ -116,11 +123,27 @@ function GetOrCreate(name, appendTo, value)
 }
 
 
+function CreateTextEditor(textField, value, entityID, component, dataPoint)
+{
+	textField.val(value);
+	textField.on("input", function(e)
+	{
+		var updatedData = { "EntityID": entityID };
+		updatedData[component] = {};
+		updatedData[component][dataPoint] = $(this).val();
+		console.log(JSON.stringify(updatedData));
+		if(InXNA())
+		{
+			hud.EditEntity(JSON.stringify(updatedData));
+		}
+	});
+}
 
-function CreateNumberEditor(componentBody, dataLabel, baseID, value)
+
+function CreateNumberEditor(componentBody, dataLabel, baseID, value, entityID, component, dataPoint)
 {
 	var sliderText = GetOrCreate(baseID + '-slider-text', dataLabel, ': <input type="text" id="' + baseID + '-slider-text" style="border:0; color:#f6931f; font-weight:bold; background-color:transparent; width: 150px;">');
-	sliderText.val(value);
+	CreateTextEditor(sliderText, value, entityID, component, dataPoint)
 	
 	var newSlider = false;
 	var slider = $('#' + baseID + '-slider');
@@ -130,7 +153,7 @@ function CreateNumberEditor(componentBody, dataLabel, baseID, value)
 		newSlider = true;
 	}
 	
-	var max = value * 2;
+	var max = Math.max(2, value * 2);
 	var step = max / 100;
 	
 	if(step < 0.15){
@@ -145,22 +168,82 @@ function CreateNumberEditor(componentBody, dataLabel, baseID, value)
 	
 	if(newSlider)
 	{
+		sliderText.val(value);
+		
 		$("#" +  baseID + "-slider").slider({
 			range: "min",
 			value: value,
 			min: 0,
 			max: max,
 			step: step,
-			slide: function( event, ui ) {
+			slide: function(event, ui) {
 				$("#" + event.target.id + "-text").val(ui.value);
-			}
+				var updatedData = { "EntityID": entityID };
+				updatedData[component] = {};
+				updatedData[component][dataPoint] = ui.value;
+				//console.log(JSON.stringify(updatedData));
+				if(InXNA())
+				{
+					hud.EditEntity(JSON.stringify(updatedData));
+				}
+			},
+			stop: resizeSlider
 		});
+		
+		//event.target
+		// ui.value
+		//$("#" +  baseID + "-slider").on("slide", function(event, ui){ console.log(ui); });
 	}
 	else
 	{
-		$("#" +  baseID + "-slider").slider("option", { value: value, max: max, step: step });
+		// Don't update the slider if the user is dragging it
+		if(!$("#" +  baseID + "-slider > .ui-slider-handle").hasClass("ui-state-focus"))
+		{
+			sliderText.val(value);
+			$("#" +  baseID + "-slider").slider("option", { value: value, max: max, step: step });
+		}
 	}
 }
+
+function resizeSlider(event, ui)
+{
+	var max = Math.max(10, ui.value * 2);
+	var step = max / 100;
+	
+	if(step < 0.15){
+		step = 0.1;
+	}else if(step < 0.25){
+		step = 0.2;
+	}else if(step < 0.8){
+		step = 0.5;
+	}else{
+		step = 1;
+	}
+	
+	console.log($(this));
+	$(this).slider( "option", "max", max );
+	$(this).slider( "option", "step", step );
+}
+
+
+
+function CreateCheckboxEditor(componentBody, dataLabel, baseID, value, entityID, component, dataPoint)
+{
+	var checkbox = GetOrCreate(baseID + '-checkbox', dataLabel, ': <input type="checkbox" id="' + baseID + '-checkbox">');
+	checkbox.prop('checked', value);
+	checkbox.change(function()
+	{
+		var updatedData = { "EntityID": entityID };
+		updatedData[component] = {};
+		updatedData[component][dataPoint] = $(this).prop('checked');
+		//console.log(JSON.stringify(updatedData));
+		if(InXNA())
+		{
+			hud.EditEntity(JSON.stringify(updatedData));
+		}
+	});
+}
+
 
 
 function FirstProperty(obj)

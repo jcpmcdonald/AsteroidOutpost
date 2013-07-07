@@ -445,6 +445,40 @@ namespace AsteroidOutpost
 		/// </summary>
 		/// <param name="entityID">The entityID to look up</param>
 		/// <returns>A single T:Component for the given entityID and type, or null if the entity is not found</returns>
+		public Component GetComponent(int entityID, Type type)
+		{
+			lock (entityDictionary)
+			{
+				List<Component> entity;
+				if (entityDictionary.TryGetValue(entityID, out entity))
+				{
+					IEnumerator<Component> matches = entity.Where(x => x.GetType() == type).GetEnumerator();
+					Component firstMatch = null;
+					if(matches.MoveNext())
+					{
+						firstMatch = matches.Current;
+
+						if(matches.MoveNext())
+						{
+							// There were two or more records, error
+							Debugger.Break();
+						}
+					}
+					return firstMatch;
+				}
+
+				//Debugger.Break();
+				return null;
+			}
+		}
+
+
+		/// <summary>
+		/// Looks up a component by entityID
+		/// This method is thread safe
+		/// </summary>
+		/// <param name="entityID">The entityID to look up</param>
+		/// <returns>A single T:Component for the given entityID and type, or null if the entity is not found</returns>
 		public T GetComponent<T>(int entityID) where T : Component
 		{
 			T nullableComponent = GetNullableComponent<T>(entityID);

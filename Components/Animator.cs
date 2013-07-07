@@ -37,9 +37,11 @@ namespace AsteroidOutpost.Components
 				SpriteAnimator.CurrentAnimation = animation;
 			}
 			SetOrientation(orientation, rotateFrame);
+			RotateFrame = rotateFrame;
 		}
 
 
+		protected bool RotateFrame { get; set; }
 		public float Scale { get; set; }
 		public Color Tint { get; set; }
 
@@ -83,15 +85,15 @@ namespace AsteroidOutpost.Components
 		/// <summary>
 		/// Gets or Sets the current Orientation. Note that changing this will cause neither the frame index nor the animation to change.
 		/// </summary>
-		public String CurrentOrientation
+		public float CurrentOrientation
 		{
 			get
 			{
-				return SpriteAnimator.CurrentOrientation;
+				return float.Parse(SpriteAnimator.CurrentOrientation);
 			}
 			set
 			{
-				SpriteAnimator.CurrentOrientation = value;
+				SetOrientation(value, RotateFrame);
 			}
 		}
 
