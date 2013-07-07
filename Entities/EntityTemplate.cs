@@ -25,6 +25,11 @@ namespace AsteroidOutpost.Entities
 			jsonTemplate = JObject.Parse(json);
 		}
 
+		public EntityTemplate(JObject jObject)
+		{
+			jsonTemplate = jObject;
+		}
+
 
 		public String Name
 		{
@@ -92,6 +97,38 @@ namespace AsteroidOutpost.Entities
 			}
 
 			return components;
+		}
+
+
+		/// <summary>
+		/// Used to clean out the variables from a template
+		/// </summary>
+		/// <returns></returns>
+		public JObject RemoveVariables()
+		{
+			return RemoveVariables(jsonTemplate);
+		}
+
+
+		private JObject RemoveVariables(JObject template)
+		{
+			JObject cleanTemplate = new JObject();
+			foreach (var property in template)
+			{
+				JObject value = property.Value as JObject;
+				if(value != null)
+				{
+					cleanTemplate[property.Key] = RemoveVariables(value);
+				}
+				else
+				{
+					if(property.Value.ToString() != "**")
+					{
+						cleanTemplate[property.Key] = property.Value;
+					}
+				}
+			}
+			return cleanTemplate;
 		}
 
 

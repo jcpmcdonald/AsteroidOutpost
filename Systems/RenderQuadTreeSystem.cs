@@ -16,16 +16,16 @@ namespace AsteroidOutpost.Systems
 		private World world;
 		private SpriteBatch spriteBatch;
 
-		private Color[] colorPalette = {
-		                               	Color.White,
-		                               	Color.Red,
-		                               	Color.Green,
-		                               	Color.Blue,
-		                               	Color.Gray,
-		                               	Color.DarkRed,
-		                               	Color.DarkGreen,
-		                               	Color.DarkBlue
-		                               };
+		private Color[] colorPalette ={
+			Color.White,
+			Color.Red,
+			Color.Green,
+			Color.Blue,
+			Color.Gray,
+			Color.DarkRed,
+			Color.DarkGreen,
+			Color.DarkBlue
+		};
 
 		protected internal bool DrawQuadTree { get; set; }
 

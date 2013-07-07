@@ -26,7 +26,12 @@
 			"Color" : "139, 0, 0, 255",
 		},
 		"FleetMovementBehaviour" : {
-			
+			"TargetVectorFactor" : 2,
+			"CohesionFactor" : 1,
+			"SeparationFactor" : 5,
+			"AlignmentFactor" : 0,
+			"CohereNeighbourDistance" : 600,
+			"SeparationDistance" : 100,
 		},
     }
 }

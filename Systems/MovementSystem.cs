@@ -5,24 +5,28 @@ using System.Text;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
+using C3.XNA;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace AsteroidOutpost.Systems
 {
-	class MovementSystem : GameComponent
+	class MovementSystem : DrawableGameComponent
 	{
 		private World world;
+		private SpriteBatch spriteBatch;
 
 
-		private const int flockRadius = 800;
-		private const float cohesionFactor = 0.5f;
-		private const float separationFactor = 1f;
-		private const float alignmentFactor = 0.5f;
+		//private const int flockRadius = 800;
+		//private const float cohesionFactor = 0.5f;
+		//private const float separationFactor = 1f;
+		//private const float alignmentFactor = 0.5f;
 
 		public MovementSystem(Game game, World world)
 			: base(game)
 		{
 			this.world = world;
+			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 		}
 
 
@@ -91,20 +95,22 @@ namespace AsteroidOutpost.Systems
 						if (position.Distance(targetPosition) - (primaryWeapon.Range - weaponGive) > MinDistanceToStop(velocity, vehicle))
 						{
 							// Move toward the target and flock with my flock-mates
-							vehicle.AccelerationVector = Vector2.Normalize(targetPosition.Center - position.Center - velocity.CurrentVelocity);
-							//vehicle.AccelerationVector.Normalize();
+							vehicle.TargetVector = Vector2.Normalize(targetPosition.Center - position.Center - velocity.CurrentVelocity) * vehicle.TargetVectorFactor;
+							vehicle.Cohesion = Cohere(position, fleetPositions, vehicle.CohereNeighbourDistance) * vehicle.CohesionFactor;
+							vehicle.Separation = Separate(position, fleetPositions, vehicle.SeparationDistance) * vehicle.SeparationFactor;
+							vehicle.Alignment = Align(position, fleetPositions) * vehicle.AlignmentFactor;
 
-							Vector2 cohesion = Cohere(position, fleetPositions) * cohesionFactor;
-							Vector2 separation = Separate(position, fleetPositions) * separationFactor;
-							Vector2 alignment = Vector2.Zero; // align(fleetPositionDictionary) * alignmentFactor;
+							vehicle.AccelerationVector = vehicle.TargetVector + vehicle.Cohesion + vehicle.Separation + vehicle.Alignment;
 
-							vehicle.AccelerationVector = (vehicle.AccelerationVector * 3) + cohesion + separation + alignment;
-							vehicle.AccelerationVector.Normalize();
+							if(vehicle.AccelerationVector.Length() > 0)
+							{
+								vehicle.AccelerationVector.Normalize();
 
-							Animator animator = world.GetComponent<Animator>(vehicle);
-							animator.SetOrientation(MathHelper.ToDegrees((float)Math.Atan2(vehicle.AccelerationVector.X, -vehicle.AccelerationVector.Y)), true);
+								Animator animator = world.GetComponent<Animator>(vehicle);
+								animator.SetOrientation(MathHelper.ToDegrees((float)Math.Atan2(vehicle.AccelerationVector.X, -vehicle.AccelerationVector.Y)), true);
 
-							AccelerateAlong(velocity, vehicle, gameTime);
+								AccelerateAlong(velocity, vehicle, gameTime);
+							}
 						}
 						else
 						{
@@ -140,24 +146,27 @@ namespace AsteroidOutpost.Systems
 		/// </summary>
 		/// <param name="flockMates">A list of flock-mates to keep together with</param>
 		/// <returns>A vector that determines the direction and magnitude to move in</returns>
-		private Vector2 Cohere(Position position, List<Position> flockMates)
+		private Vector2 Cohere(Position myPosition, List<Position> flockMates, float neighbourDistance)
 		{
-			const int neighbourDistance = 200;
 			Vector2 sum = Vector2.Zero;
 			int count = 0;
 
-			foreach (var mate in flockMates)
+			foreach (var matePosition in flockMates)
 			{
-				if(mate != position && position.Distance(mate) > 0 && position.Distance(mate) < neighbourDistance)
+				if (matePosition != myPosition &&
+					myPosition.Distance(matePosition) >= 0 &&
+					myPosition.Distance(matePosition) < neighbourDistance)
 				{
-					sum += mate.Center;
+					sum += matePosition.Center;
 					count++;
 				}
 			}
 
 			if(count > 0)
 			{
-				sum = Vector2.Normalize(sum / count);
+				sum = sum / (float)count;
+				sum = sum - myPosition.Center;
+				sum = Vector2.Normalize(sum);
 			}
 
 			return sum;
@@ -169,26 +178,28 @@ namespace AsteroidOutpost.Systems
 		/// </summary>
 		/// <param name="flockMates">A list of flock-mates to keep your distance from</param>
 		/// <returns>A vector that determines the direction and magnitude to move in</returns>
-		private Vector2 Separate(Position position, List<Position> flockMates)
+		private Vector2 Separate(Position myPosition, List<Position> flockMates, float separationDistance)
 		{
-			const int separationDistance = 50;
 			Vector2 mean = Vector2.Zero;
 			int count = 0;
 
-
-			foreach(var mate in flockMates)
+			foreach(var matePosotion in flockMates)
 			{
-				float distance = position.Distance(mate);
-				if(distance > 0 && distance < separationDistance)
+				if(myPosition != matePosotion)
 				{
-					mean += Vector2.Normalize(position.Center - mate.Center) / distance * 10;
-					count++;
+					float distance = myPosition.Distance(matePosotion);
+					if (distance >= 0 && distance < separationDistance)
+					{
+						mean += (Vector2.Normalize(myPosition.Center - matePosotion.Center) / distance) * 50;
+						count++;
+					}
 				}
 			}
 
-			if(count > 1)
+			if(count > 0)
 			{
-				mean /= count;
+				mean = mean / count;
+				//mean = Vector2.Normalize(mean);
 			}
 			return mean;
 		}
@@ -250,6 +261,38 @@ namespace AsteroidOutpost.Systems
 					velocity.CurrentVelocity -= Vector2.Normalize(velocity.CurrentVelocity) * vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds;
 				}
 			}
+		}
+
+
+		public override void Draw(GameTime gameTime)
+		{
+			spriteBatch.Begin();
+			foreach (var fleetBehaviour in world.GetComponents<FleetMovementBehaviour>())
+			{
+				float scale = 20f;
+				Position position = world.GetComponent<Position>(fleetBehaviour);
+				spriteBatch.DrawLine(world.WorldToScreen(position.Center),
+				                     world.WorldToScreen(position.Center + (fleetBehaviour.TargetVector) * scale),
+				                     Color.Yellow,
+				                     2);
+
+				spriteBatch.DrawLine(world.WorldToScreen(position.Center),
+				                     world.WorldToScreen(position.Center + (fleetBehaviour.Cohesion) * scale),
+				                     Color.Red,
+				                     2);
+
+				spriteBatch.DrawLine(world.WorldToScreen(position.Center),
+				                     world.WorldToScreen(position.Center + (fleetBehaviour.Separation) * scale),
+				                     Color.Green,
+				                     2);
+
+				spriteBatch.DrawLine(world.WorldToScreen(position.Center),
+				                     world.WorldToScreen(position.Center + (fleetBehaviour.Alignment) * scale),
+				                     Color.Blue,
+				                     2);
+			}
+			spriteBatch.End();
+			base.Draw(gameTime);
 		}
 	}
 }

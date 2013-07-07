@@ -36,8 +36,16 @@ namespace AsteroidOutpost.Entities
 				sprites.Add(sprite.Name.ToLower(), sprite);
 			}
 
+			LoadEntityTemplates();
 
-			// Set up the entity templates
+			lock (LoadSync)
+			{
+				LoadProgress = 100;
+			}
+		}
+
+		public static void LoadEntityTemplates()
+		{
 			String entityJson = File.ReadAllText(@"..\entities\Entity.json");
 			EntityTemplate baseEntity = new EntityTemplate(entityJson); // JsonConvert.DeserializeObject<EntityTemplate>(entityJson);
 
@@ -62,12 +70,36 @@ namespace AsteroidOutpost.Entities
 
 				}
 			}
+		}
 
-			lock (LoadSync)
+
+		public static void Refresh(World world)
+		{
+			templates.Clear();
+			LoadEntityTemplates();
+
+			Dictionary<String, JObject> cleanedTemplates = new Dictionary<string, JObject>(templates.Count);
+			foreach (var entityTemplate in templates)
 			{
-				LoadProgress = 100;
+				cleanedTemplates.Add(entityTemplate.Key, entityTemplate.Value.RemoveVariables());
+			}
+
+			foreach (var entityName in world.GetComponents<EntityName>())
+			{
+				if(cleanedTemplates.ContainsKey(entityName.Name.ToLower()))
+				{
+					JObject cleanTemplate = cleanedTemplates[entityName.Name.ToLower()];
+					EntityTemplate.Update(world, entityName.EntityID, (JObject)cleanTemplate["Components"]);
+				}
+				else
+				{
+					Console.WriteLine("Did not update entity because it has a non-standard name: " + entityName.Name);
+				}
 			}
 		}
+
+
+		
 
 
 		public static int LoadProgress { get; private set; }

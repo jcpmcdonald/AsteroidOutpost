@@ -153,18 +153,9 @@ function CreateNumberEditor(componentBody, dataLabel, baseID, value, entityID, c
 		newSlider = true;
 	}
 	
-	var max = Math.max(2, value * 2);
-	var step = max / 100;
+	var max = goodSliderMax(value);
+	var step = goodSliderStep(max);
 	
-	if(step < 0.15){
-		step = 0.1;
-	}else if(step < 0.25){
-		step = 0.2;
-	}else if(step < 0.8){
-		step = 0.5;
-	}else{
-		step = 1;
-	}
 	
 	if(newSlider)
 	{
@@ -205,9 +196,13 @@ function CreateNumberEditor(componentBody, dataLabel, baseID, value, entityID, c
 	}
 }
 
-function resizeSlider(event, ui)
+function goodSliderMax(currentValue)
 {
-	var max = Math.max(10, ui.value * 2);
+	return Math.max(2, currentValue * 2);
+}
+
+function goodSliderStep(max)
+{
 	var step = max / 100;
 	
 	if(step < 0.15){
@@ -219,10 +214,15 @@ function resizeSlider(event, ui)
 	}else{
 		step = 1;
 	}
+	return step;
+}
+
+function resizeSlider(event, ui)
+{
+	var max = goodSliderMax(ui.value);
 	
-	console.log($(this));
 	$(this).slider( "option", "max", max );
-	$(this).slider( "option", "step", step );
+	$(this).slider( "option", "step", goodSliderStep(max) );
 }
 
 

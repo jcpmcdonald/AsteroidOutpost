@@ -16,8 +16,6 @@
 			"FrameAngle" : 0,
 			"Angle" : 0,
 			"CurrentSet" : "Idle",
-			"CurrentAnimation" : null,
-			"CurrentOrientation" : null,
 		},
     }
 }

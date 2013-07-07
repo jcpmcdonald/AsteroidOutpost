@@ -72,6 +72,7 @@ namespace AsteroidOutpost.Systems
 			hotkeys.Add(Keys.L, btnLaserTower_Clicked);
 			hotkeys.Add(Keys.I, btnMissileTower_Clicked);
 			hotkeys.Add(Keys.H, GoHome);
+			hotkeys.Add(Keys.R, RefreshEntityTemplates);
 			hotkeys.Add(Keys.OemPlus, TimeSpeedUp);
 			hotkeys.Add(Keys.OemMinus, TimeSlowDown);
 			hotkeys.Add(Keys.D0, TimeReset);
@@ -101,6 +102,12 @@ namespace AsteroidOutpost.Systems
 			jsHud.Bind("EditEntity", false, awesomium_EditEntity);
 
 			world.PauseToggledEvent += WorldOnPauseToggledEvent;
+		}
+
+
+		private void RefreshEntityTemplates(object sender, EventArgs e)
+		{
+			EntityFactory.Refresh(world);
 		}
 
 
