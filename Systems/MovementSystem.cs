@@ -90,26 +90,17 @@ namespace AsteroidOutpost.Systems
 						Position targetPosition = world.GetComponent<Position>(vehicle.Target.Value);
 						List<IWeapon> weapons = world.GetWeapons(vehicle);
 						IWeapon primaryWeapon = weapons.First(x => x.Range == weapons.Min(y => y.Range));
-						const int weaponGive = 10;		// Just some number to help ships & towers get closer to each other and prevent float errors
+						const int weaponGive = 10; // Just some number to help ships & towers get closer to each other and prevent float errors
+
+						vehicle.TargetVector = Vector2.Normalize(targetPosition.Center - position.Center - (velocity.CurrentVelocity * 5)); // * vehicle.TargetVectorFactor;
 
 						if (position.Distance(targetPosition) - (primaryWeapon.Range - weaponGive) > MinDistanceToStop(velocity, vehicle))
 						{
-							// Move toward the target and flock with my flock-mates
-							vehicle.TargetVector = Vector2.Normalize(targetPosition.Center - position.Center - velocity.CurrentVelocity) * vehicle.TargetVectorFactor;
-							vehicle.Cohesion = Cohere(position, fleetPositions, vehicle.CohereNeighbourDistance) * vehicle.CohesionFactor;
-							vehicle.Separation = Separate(position, fleetPositions, vehicle.SeparationDistance) * vehicle.SeparationFactor;
-							vehicle.Alignment = Align(position, fleetPositions) * vehicle.AlignmentFactor;
+							vehicle.AccelerationVector = vehicle.TargetVector; // + vehicle.Cohesion + vehicle.Separation + vehicle.Alignment;
 
-							vehicle.AccelerationVector = vehicle.TargetVector + vehicle.Cohesion + vehicle.Separation + vehicle.Alignment;
-
-							if(vehicle.AccelerationVector.Length() > 0)
+							if (vehicle.AccelerationVector.Length() > 0)
 							{
-								vehicle.AccelerationVector.Normalize();
-
-								Animator animator = world.GetComponent<Animator>(vehicle);
-								animator.SetOrientation(MathHelper.ToDegrees((float)Math.Atan2(vehicle.AccelerationVector.X, -vehicle.AccelerationVector.Y)), true);
-
-								AccelerateAlong(velocity, vehicle, gameTime);
+								velocity.CurrentVelocity += vehicle.AccelerationVector * vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds;
 							}
 						}
 						else
@@ -117,6 +108,22 @@ namespace AsteroidOutpost.Systems
 							Decelerate(velocity, vehicle, gameTime);
 						}
 
+						vehicle.Cohesion = Cohere(position, fleetPositions, vehicle.CohereNeighbourDistance, vehicle.SeparationDistance) * vehicle.CohesionFactor;
+						vehicle.Separation = Separate(position, fleetPositions, vehicle.SeparationDistance) * vehicle.SeparationFactor;
+						vehicle.Alignment = Align(position, fleetPositions) * vehicle.AlignmentFactor;
+
+						float boidsAcceleration = 4f;
+						vehicle.BoidsVelocity = vehicle.BoidsVelocity * 0.5f;
+						vehicle.BoidsVelocity += (vehicle.Cohesion + vehicle.Separation + vehicle.Alignment) * boidsAcceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+						velocity.CurrentVelocity += vehicle.BoidsVelocity;
+
+
+						if (vehicle.TargetVector != Vector2.Zero)
+						{
+							Animator animator = world.GetComponent<Animator>(vehicle);
+							var facing = Vector2.Normalize(targetPosition.Center - position.Center);
+							animator.SetOrientation(MathHelper.ToDegrees((float)Math.Atan2(facing.X, -facing.Y)), true);
+						}
 					}
 				}
 
@@ -146,15 +153,16 @@ namespace AsteroidOutpost.Systems
 		/// </summary>
 		/// <param name="flockMates">A list of flock-mates to keep together with</param>
 		/// <returns>A vector that determines the direction and magnitude to move in</returns>
-		private Vector2 Cohere(Position myPosition, List<Position> flockMates, float neighbourDistance)
+		private Vector2 Cohere(Position myPosition, List<Position> flockMates, float neighbourDistance, float separationDistance)
 		{
 			Vector2 sum = Vector2.Zero;
 			int count = 0;
+			float satisfiedDistance = (separationDistance * 2);
 
 			foreach (var matePosition in flockMates)
 			{
 				if (matePosition != myPosition &&
-					myPosition.Distance(matePosition) >= 0 &&
+					myPosition.Distance(matePosition) >= satisfiedDistance &&
 					myPosition.Distance(matePosition) < neighbourDistance)
 				{
 					sum += matePosition.Center;
@@ -165,8 +173,8 @@ namespace AsteroidOutpost.Systems
 			if(count > 0)
 			{
 				sum = sum / (float)count;
-				sum = sum - myPosition.Center;
-				sum = Vector2.Normalize(sum);
+				float distanceFromMean = myPosition.Distance(sum) - satisfiedDistance;
+				sum = Vector2.Normalize(sum - myPosition.Center) * (distanceFromMean / (neighbourDistance - satisfiedDistance));
 			}
 
 			return sum;
@@ -183,14 +191,15 @@ namespace AsteroidOutpost.Systems
 			Vector2 mean = Vector2.Zero;
 			int count = 0;
 
-			foreach(var matePosotion in flockMates)
+			foreach(var nearbyEntity in world.EntitiesInArea(myPosition.Center, (int)separationDistance, true))
 			{
-				if(myPosition != matePosotion)
+				var nearbyPosition = world.GetComponent<Position>(nearbyEntity);
+				if(myPosition != nearbyPosition)
 				{
-					float distance = myPosition.Distance(matePosotion);
-					if (distance >= 0 && distance < separationDistance)
+					float distance = myPosition.Distance(nearbyPosition);
+					if (distance > 0 && distance < (separationDistance + nearbyPosition.Radius))
 					{
-						mean += (Vector2.Normalize(myPosition.Center - matePosotion.Center) / distance) * 50;
+						mean += Vector2.Normalize(myPosition.Center - nearbyPosition.Center) * ((separationDistance + nearbyPosition.Radius) / distance);
 						count++;
 					}
 				}
@@ -244,8 +253,7 @@ namespace AsteroidOutpost.Systems
 		
 		internal void AccelerateAlong(Velocity velocity, FleetMovementBehaviour vehicle, GameTime gameTime)
 		{
-			vehicle.AccelerationVector = Vector2.Normalize(vehicle.AccelerationVector);
-			velocity.CurrentVelocity += vehicle.AccelerationVector * vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds;
+			
 		}
 
 		protected void Decelerate(Velocity velocity, FleetMovementBehaviour vehicle, GameTime gameTime)
@@ -254,7 +262,7 @@ namespace AsteroidOutpost.Systems
 			{
 				if ((vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds) >= velocity.CurrentVelocity.Length())
 				{
-					velocity.CurrentVelocity = Vector2.Zero;
+				//	velocity.CurrentVelocity = Vector2.Zero;
 				}
 				else
 				{

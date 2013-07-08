@@ -75,6 +75,7 @@ namespace AsteroidOutpost.Entities
 
 		public static void Refresh(World world)
 		{
+			Console.WriteLine("REFRESHING Entity Templates");
 			templates.Clear();
 			LoadEntityTemplates();
 

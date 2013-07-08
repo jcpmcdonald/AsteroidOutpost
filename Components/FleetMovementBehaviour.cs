@@ -50,5 +50,8 @@ namespace AsteroidOutpost.Components
 
 		public float CohereNeighbourDistance { get; set; }
 		public float SeparationDistance { get; set; }
+
+
+		public Vector2 BoidsVelocity { get; set; }
 	}
 }
