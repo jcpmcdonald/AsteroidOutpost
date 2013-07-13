@@ -140,7 +140,7 @@ namespace AsteroidOutpost.Scenarios
 
 		protected override void World_EntityDied(int entityID)
 		{
-			FleetMovementBehaviour fleetMovement = world.GetNullableComponent<FleetMovementBehaviour>(entityID);
+			Flocking fleetMovement = world.GetNullableComponent<Flocking>(entityID);
 			if(fleetMovement != null)
 			{
 				// Yay! The enemy has died

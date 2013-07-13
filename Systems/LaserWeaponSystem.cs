@@ -46,6 +46,14 @@ namespace AsteroidOutpost.Systems
 						continue;
 					}
 
+					Constructible constructible = world.GetNullableComponent<Constructible>(possibleTarget);
+					if(constructible != null && constructible.IsBeingPlaced)
+					{
+						// Eliminate targets being constructed
+						continue;
+					}
+
+
 
 					Position possibleTargetPosition = world.GetComponent<Position>(possibleTarget);
 					if (position.Distance(possibleTargetPosition) <= laser.Range &&

@@ -137,7 +137,7 @@
     <Compile Include="Components\LaserMiner.cs" />
     <Compile Include="Components\LaserWeapon.cs" />
     <Compile Include="Components\Minable.cs" />
-    <Compile Include="Components\FleetMovementBehaviour.cs" />
+    <Compile Include="Components\Flocking.cs" />
     <Compile Include="Components\MissileProjectile.cs" />
     <Compile Include="Components\MissileWeapon.cs" />
     <Compile Include="Components\EntityName.cs" />
@@ -199,7 +199,7 @@
     <Compile Include="Systems\LaserWeaponSystem.cs" />
     <Compile Include="Systems\MissileWeaponSystem.cs" />
     <Compile Include="Systems\MissionSystem.cs" />
-    <Compile Include="Systems\MovementSystem.cs" />
+    <Compile Include="Systems\FlockingSystem.cs" />
     <Compile Include="Systems\PhysicsSystem.cs" />
     <Compile Include="Systems\PowerGridSystem.cs" />
     <Compile Include="Systems\RenderQuadTreeSystem.cs" />

@@ -10,16 +10,16 @@ using Newtonsoft.Json;
 
 namespace AsteroidOutpost.Components
 {
-	class FleetMovementBehaviour : Component
+	class Flocking : Component
 	{
-		public FleetMovementBehaviour(int entityID)
+		public Flocking(int entityID)
 			: base(entityID)
 		{
 			AccelerationMagnitude = 10f;
 		}
 
 
-		public int FleetID { get; set; }
+		public int FlockID { get; set; }
 		public float AccelerationMagnitude { get; set; }
 		public Vector2 AccelerationVector { get; set; }
 		public int? Target { get; set; }
@@ -42,7 +42,8 @@ namespace AsteroidOutpost.Components
 		public Vector2 Alignment { get; set; }
 
 
-		public float TargetVectorFactor { get; set; }
+		public float AccelerationFactor { get; set; }
+		public float BoidVelocityTrim { get; set; }
 		public float CohesionFactor { get; set; }
 		public float SeparationFactor { get; set; }
 		public float AlignmentFactor { get; set; }
@@ -50,8 +51,13 @@ namespace AsteroidOutpost.Components
 
 		public float CohereNeighbourDistance { get; set; }
 		public float SeparationDistance { get; set; }
+		
 
-
+		[XmlIgnore]
+		[JsonIgnore]
 		public Vector2 BoidsVelocity { get; set; }
+
+
+		public bool DebugView { get; set; }
 	}
 }

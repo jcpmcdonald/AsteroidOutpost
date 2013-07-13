@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AsteroidOutpost.Systems
 {
-	class MovementSystem : DrawableGameComponent
+	class FlockingSystem : DrawableGameComponent
 	{
 		private World world;
 		private SpriteBatch spriteBatch;
@@ -22,7 +22,7 @@ namespace AsteroidOutpost.Systems
 		//private const float separationFactor = 1f;
 		//private const float alignmentFactor = 0.5f;
 
-		public MovementSystem(Game game, World world)
+		public FlockingSystem(Game game, World world)
 			: base(game)
 		{
 			this.world = world;
@@ -34,9 +34,9 @@ namespace AsteroidOutpost.Systems
 		{
 			if (world.Paused) { return; }
 
-			IEnumerable<FleetMovementBehaviour> fleetMovementBehaviours = world.GetComponents<FleetMovementBehaviour>();
+			IEnumerable<Flocking> flockers = world.GetComponents<Flocking>();
 			//List<IGrouping<int, FleetMovementBehaviour>> fleetDictionary = fleetMovementBehaviours.GroupBy(x => x.FleetID).ToList();
-			Dictionary<int, List<FleetMovementBehaviour>> fleetDictionary = fleetMovementBehaviours.GroupBy(x => x.FleetID).ToDictionary(group => group.Key, group => group.ToList());
+			Dictionary<int, List<Flocking>> fleetDictionary = flockers.GroupBy(x => x.FlockID).ToDictionary(group => group.Key, group => group.ToList());
 			
 
 			foreach (var fleet in fleetDictionary.Values)
@@ -112,10 +112,9 @@ namespace AsteroidOutpost.Systems
 						vehicle.Separation = Separate(position, fleetPositions, vehicle.SeparationDistance) * vehicle.SeparationFactor;
 						vehicle.Alignment = Align(position, fleetPositions) * vehicle.AlignmentFactor;
 
-						float boidsAcceleration = 4f;
-						vehicle.BoidsVelocity = vehicle.BoidsVelocity * 0.5f;
+						float boidsAcceleration =  vehicle.AccelerationMagnitude * vehicle.AccelerationFactor;
+						vehicle.BoidsVelocity = vehicle.BoidsVelocity * vehicle.BoidVelocityTrim;
 						vehicle.BoidsVelocity += (vehicle.Cohesion + vehicle.Separation + vehicle.Alignment) * boidsAcceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
-						velocity.CurrentVelocity += vehicle.BoidsVelocity;
 
 
 						if (vehicle.TargetVector != Vector2.Zero)
@@ -125,6 +124,14 @@ namespace AsteroidOutpost.Systems
 							animator.SetOrientation(MathHelper.ToDegrees((float)Math.Atan2(facing.X, -facing.Y)), true);
 						}
 					}
+				}
+
+
+				foreach (var vehicle in fleet)
+				{
+					Position position = world.GetComponent<Position>(vehicle);
+					//velocity.CurrentVelocity += vehicle.BoidsVelocity;
+					position.Center += vehicle.BoidsVelocity;
 				}
 
 				//// Find my flock-mates
@@ -157,7 +164,7 @@ namespace AsteroidOutpost.Systems
 		{
 			Vector2 sum = Vector2.Zero;
 			int count = 0;
-			float satisfiedDistance = (separationDistance * 2);
+			float satisfiedDistance = (separationDistance * 3);
 
 			foreach (var matePosition in flockMates)
 			{
@@ -245,18 +252,18 @@ namespace AsteroidOutpost.Systems
 		//}
 
 
-		private float MinDistanceToStop(Velocity velocity, FleetMovementBehaviour vehicle)
+		private float MinDistanceToStop(Velocity velocity, Flocking vehicle)
 		{
 			return (float)(0.5 * vehicle.AccelerationMagnitude * Math.Pow(velocity.CurrentVelocity.Length() / vehicle.AccelerationMagnitude, 2.0));
 		}
 		
 		
-		internal void AccelerateAlong(Velocity velocity, FleetMovementBehaviour vehicle, GameTime gameTime)
+		internal void AccelerateAlong(Velocity velocity, Flocking vehicle, GameTime gameTime)
 		{
 			
 		}
 
-		protected void Decelerate(Velocity velocity, FleetMovementBehaviour vehicle, GameTime gameTime)
+		protected void Decelerate(Velocity velocity, Flocking vehicle, GameTime gameTime)
 		{
 			if (velocity.CurrentVelocity != Vector2.Zero)
 			{
@@ -275,7 +282,7 @@ namespace AsteroidOutpost.Systems
 		public override void Draw(GameTime gameTime)
 		{
 			spriteBatch.Begin();
-			foreach (var fleetBehaviour in world.GetComponents<FleetMovementBehaviour>())
+			foreach (var fleetBehaviour in world.GetComponents<Flocking>().Where(x => x.DebugView))
 			{
 				float scale = 20f;
 				Position position = world.GetComponent<Position>(fleetBehaviour);

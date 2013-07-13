@@ -55,7 +55,7 @@ namespace AsteroidOutpost
 		private readonly AccumulationSystem accumulationSystem;
 		private readonly LaserWeaponSystem laserWeaponSystem;
 		private readonly MissileWeaponSystem missileWeaponSystem;
-		private readonly MovementSystem movementSystem;
+		private readonly FlockingSystem movementSystem;
 		private readonly HitPointSystem hitPointSystem;
 
 		private MissionSystem missionSystem;     // Created when world starts, instead of the world is created
@@ -97,7 +97,7 @@ namespace AsteroidOutpost
 			accumulationSystem = new AccumulationSystem(game, this, 500);
 			laserWeaponSystem = new LaserWeaponSystem(game, this);
 			missileWeaponSystem = new MissileWeaponSystem(game, this);
-			movementSystem = new MovementSystem(game, this);
+			movementSystem = new FlockingSystem(game, this);
 			hitPointSystem = new HitPointSystem(game, this);
 
 			awesomium = game.Awesomium;

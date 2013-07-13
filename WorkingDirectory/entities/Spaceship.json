@@ -5,14 +5,14 @@
 			"Name" : "Spaceship",
 		},
 		"Position" : {
-			"Radius" : 40,
+			"Radius" : 25,
 		},
 		"Velocity" : {
 			"CurrentVelocity" : "0, 0",
 		},
 		"Animator" : {
 			"SpriteName" : "Spaceship",
-			"Scale" : 0.7,
+			"Scale" : 0.5,
 			"CurrentAnimation" : "Idle",
 			"CurrentOrientation" : 0,
 		},
@@ -25,13 +25,14 @@
 			"Damage" : 0,
 			"Color" : "139, 0, 0, 255",
 		},
-		"FleetMovementBehaviour" : {
-			"TargetVectorFactor" : 2,
-			"CohesionFactor" : 1.5,
-			"SeparationFactor" : 1,
+		"Flocking" : {
+			"AccelerationFactor" : 0.2,
+			"BoidVelocityTrim" : 0.8,
+			"CohesionFactor" : 1,
+			"SeparationFactor" : 5,
 			"AlignmentFactor" : 0,
-			"CohereNeighbourDistance" : 300,
-			"SeparationDistance" : 80,
+			"CohereNeighbourDistance" : 400,
+			"SeparationDistance" : 25,
 		},
     }
 }
