@@ -251,7 +251,6 @@ namespace AsteroidOutpost.Systems
 			theMouse.UpdateState();
 			theKeyboard.UpdateState();
 
-
 			if (theKeyboard[Keys.Escape] == EnhancedKeyState.JUST_PRESSED)
 			{
 				if (creatingEntityID != null)
@@ -1118,7 +1117,7 @@ namespace AsteroidOutpost.Systems
 		/// <returns>True if it's legal to build here, false otherwise</returns>
 		public virtual bool IsValidToBuildHere()
 		{
-			return GetBuildBlockers().Any();
+			return !GetBuildBlockers().Any();
 		}
 
 
