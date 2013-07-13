@@ -136,7 +136,8 @@ namespace AsteroidOutpost
 			// A document must be loaded in order for me to make a global JS object, but the presence of
 			// the global JS object affects the first page to be loaded, so give it an egg:
 			awesomium.WebView.DocumentReady += WebView_DocumentReady;
-			awesomium.WebView.LoadHTML("<html><head><title>Loading...</title></head><body></body></html>");
+			awesomium.WebView.LoadHTML("<html><head><title>Loading...</title></head><body>Loading...</body></html>");
+			
 
 			Components.Add(awesomium);
 
