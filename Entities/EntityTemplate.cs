@@ -160,7 +160,15 @@ namespace AsteroidOutpost.Entities
 				Console.WriteLine("There are required values that have not been filled in while populating");
 				Debugger.Break();
 			}
-			JsonConvert.PopulateObject(json, component);
+
+			try
+			{
+				JsonConvert.PopulateObject(json, component);
+			}
+			catch (FormatException fe)
+			{
+				Console.WriteLine("Error parsing JSON: " + fe.StackTrace);
+			}
 		}
 
 
