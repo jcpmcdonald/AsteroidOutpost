@@ -27,8 +27,6 @@ namespace AsteroidOutpost.Scenarios
 
 		public override void Start()
 		{
-			GenerateAsteroidField(1000);
-
 			// Set up the player forces and local controller
 			int initialMinerals = 1000;
 			for (int iPlayer = 0; iPlayer < playerCount; iPlayer++)
@@ -54,8 +52,11 @@ namespace AsteroidOutpost.Scenarios
 			world.AddForce(aiForce);
 			world.AddController(aiController);
 
-			theGame.Awesomium.WebView.ExecuteJavascript("MakeTimerPanel()");
+			missions.Add(new Mission("Alive", "Stay Alive", false));
 
+			world.ExecuteAwesomiumJS("MakeTimerPanel();");
+
+			GenerateAsteroidField(1000);
 			base.Start();
 		}
 
@@ -73,7 +74,7 @@ namespace AsteroidOutpost.Scenarios
 				WaveFactory.CreateWave(world, 100 * sequence, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(3000, -3000));
 			}
 
-			theGame.Awesomium.WebView.ExecuteJavascript(String.Format("UpdateTimerPanel({0})", waveTimer.ToString(@"m\:ss")));
+			world.ExecuteAwesomiumJS(String.Format("UpdateTimerPanel('{0}')", waveTimer.ToString(@"m\:ss")));
 		}
 	}
 }

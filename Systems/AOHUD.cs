@@ -215,7 +215,7 @@ namespace AsteroidOutpost.Systems
 
 		private void WorldOnPauseToggledEvent(bool paused)
 		{
-			awesomium.WebView.ExecuteJavascript(String.Format("SetPaused({0})", paused.ToString().ToLower()));
+			world.ExecuteAwesomiumJS(String.Format("SetPaused({0})", paused.ToString().ToLower()));
 		}
 
 

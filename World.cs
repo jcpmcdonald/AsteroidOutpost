@@ -1241,6 +1241,9 @@ namespace AsteroidOutpost
 			awesomium.WebView.ExecuteJavascript(String.Format("GameOver({0})", win.ToString().ToLower()));
 		}
 
+		
+		public String LastJSExecuted { get; private set; }
+
 
 		public void ExecuteAwesomiumJS(String js)
 		{
@@ -1248,7 +1251,16 @@ namespace AsteroidOutpost
 			if (loaded)
 			{
 				//awesomium.WebView.ExecuteJavascriptWithResult(js, 50);
-				awesomium.WebView.ExecuteJavascript(js);
+				try
+				{
+					LastJSExecuted = js;
+					awesomium.WebView.ExecuteJavascript(js);
+				}
+				catch (InvalidOperationException ioe)
+				{
+					executeAwesomiumJSNextCycle.Add(js);
+					Console.WriteLine("JS Executed Next Cycle");
+				}
 			}
 			else
 			{

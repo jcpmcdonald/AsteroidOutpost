@@ -445,9 +445,9 @@ namespace AsteroidOutpost
 		private void WebView_JSConsoleMessageAdded(object sender, ConsoleMessageEventArgs e)
 		{
 			// JavaScript Error! Fail
-			Console.WriteLine("Awesomium JS Error: {0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);
+			Console.WriteLine("Awesomium JS Error: {0}, {1} on line {2}. \nLast JS = \"{3}\"", e.Message, e.Source, e.LineNumber, world.LastJSExecuted);
 #if DEBUG
-			Debugger.Break();
+			//Debugger.Break();
 #endif
 		}
 

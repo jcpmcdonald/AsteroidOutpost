@@ -55,8 +55,7 @@ namespace AsteroidOutpost.Scenarios
 			currentMission = collectMinerals;
 			StartMission();
 
-			theGame.World.ExecuteAwesomiumJS("MakeTimerPanel()");
-			//theGame.Awesomium.WebView.ExecuteJavascript("MakeTimerPanel()");
+			world.ExecuteAwesomiumJS("MakeTimerPanel()");
 
 			GenerateAsteroidField(1000);
 			base.Start();
@@ -81,7 +80,7 @@ namespace AsteroidOutpost.Scenarios
 
 			collectMinerals.Description = String.Format("({0}/2000) Collect 2000 minerals", friendlyForce.GetMinerals());
 
-			if(friendlyForce.GetMinerals() >= 2000)
+			if(friendlyForce.GetMinerals() >= 2000 && !collectMinerals.Done)
 			{
 				collectMinerals.Done = true;
 				world.GameOver(true); // Win!
@@ -96,7 +95,7 @@ namespace AsteroidOutpost.Scenarios
 				WaveFactory.CreateWave(world, 100 * sequence, enemyLocation);
 			}
 
-			theGame.Awesomium.WebView.ExecuteJavascript(String.Format("UpdateTimerPanel('{0}')", waveTimer.ToString(@"m\:ss")));
+			world.ExecuteAwesomiumJS(String.Format("UpdateTimerPanel('{0}')", waveTimer.ToString(@"m\:ss")));
 		}
 	}
 }
