@@ -16,7 +16,7 @@
 			"PowerLinkPointRelative" : "0, -16",
 		},
 		"Constructible" : {
-			"MineralsToConstruct" : 50,
+			"MineralsToConstruct" : 150,
 		},
 		"HitPoints" : {
 			"Armour" : 150,

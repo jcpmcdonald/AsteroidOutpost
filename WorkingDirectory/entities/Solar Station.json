@@ -14,8 +14,8 @@
 			"CurrentAnimation" : "Idle",
 		},
 		"PowerProducer" : {
-			"PowerProductionRate" : 10,
-			"MaxPower" : 70,
+			"PowerProductionRate" : 5,
+			"MaxPower" : 80,
 			"PowerLinkPointRelative" : "-1, -13",
 			"ConductsPower" : true,
 			"ProducesPower" : true,
