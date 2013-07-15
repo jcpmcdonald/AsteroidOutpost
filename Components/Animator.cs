@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -89,7 +90,7 @@ namespace AsteroidOutpost.Components
 		{
 			get
 			{
-				return float.Parse(SpriteAnimator.CurrentOrientation);
+				return float.Parse(SpriteAnimator.CurrentOrientation, CultureInfo.InvariantCulture);
 			}
 			set
 			{
@@ -130,7 +131,7 @@ namespace AsteroidOutpost.Components
 				roundedAngle -= 360f;
 			}
 
-			SpriteAnimator.CurrentOrientation = roundedAngle.ToString();
+			SpriteAnimator.CurrentOrientation = roundedAngle.ToString(CultureInfo.InvariantCulture);
 			if(rotateFrame)
 			{
 				FrameAngle = angle - roundedAngle;
