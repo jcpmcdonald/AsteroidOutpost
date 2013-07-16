@@ -1,40 +1,44 @@
 If this looks too complicated for you, I intend to release the occational source code zip that will contain everything you need in one place. It doesn't hurt to prod me.
 
 Prerequisites:
-Visual C# 2010 or greater (express works): http://www.microsoft.com/visualstudio/en-us/products/2010-editions/express
+Visual C# 2010 Express or greater (VS2012 probably won't work "from a box"): http://www.microsoft.com/visualstudio/eng/downloads#d-2010-express
 XNA Game Studio 4.0: http://www.microsoft.com/download/en/details.aspx?id=23714
-Awesomium SDK 1.6.6 or greater: http://awesomium.com/download/
+Awesomium SDK 1.7.1 or greater: http://awesomium.com/download/
 
 
 This project relies on four other projects, three Mercurial repositories on Bitbucket and one SVN project on Google Code. You will need to checkout all projects into the same root directory as Asteroid Outpost.
 
 The required sub-projects are:
-QuadTree: https://bitbucket.org/jcpmcdonald/quadtree
-2D XNA Primitives: https://bitbucket.org/jcpmcdonald/2d-xna-primitives
+QuadTree: https://bitbucket.org/C3/quadtree
+2D XNA Primitives: https://bitbucket.org/C3/2d-xna-primitives
 AwesomiumXNA: https://bitbucket.org/mindworx/awesomiumxna
 XNASpriteLib: http://code.google.com/p/xnaspritelib/
+
+Required libraries:
+Json.NET: http://json.codeplex.com/
 
 For the mercurial repositories, I would recommend using Tortoise Hg that can be downloaded for free here: http://tortoisehg.bitbucket.org/
 For SVN, I would recommend using Tortoise SVN that can be downloaded for free here: http://tortoisesvn.net/
 
 The respective repository paths are:
-Mercurial: https://bitbucket.org/jcpmcdonald/quadtree
-Mercurial: https://bitbucket.org/jcpmcdonald/2d-xna-primitives
-Mercurial: https://bitbucket.org/mindworx/awesomiumxna
+All Mercurial: same as links above
 SVN: http://xnaspritelib.googlecode.com/svn/trunk/
+For Json.NET we are using binary library.
 
 They will need to be placed in directories called "QuadTree", "Primitives2D", "AwesomiumXNA", and "XNASpriteLib" respectively.
+Json.NET should be placed into "3rd Party\JSON.Net\Net35" (unzip "Bin\Net35" dir from a distr ZIP).
 
-When you are all done, you should have a directory structure that looks like this (solution files are provided below only as a reference):
+When you are all done, you should have a directory structure that looks like this (files are provided below only as a reference):
 
 [Your Projects]/Asteroid Outpost/Asteroid Outpost.sln
 [Your Projects]/QuadTree/QuadTree.sln
 [Your Projects]/Primitives2D/Primitives2D.sln
 [Your Projects]/AwesomiumXNA/AwesomiumXNA.sln
 [Your Projects]/XNASpriteLib/XNASpriteLib.sln
+[Your Projects]/3rd Party/JSON.Net/Net35/Newtonsoft.Json.dll
 
 
-Opening the Asteroid Outpost solution will open the primary projects for the sub-projects. If you open either sub-project solutions, you will open the primary project, as well as any testing applications I/we have designed.
+Opening the "Asteroid Outpost.sln" solution will open the primary projects for the sub-projects. If you open either sub-project solutions, you will open the primary project, as well as any testing applications I/we have designed.
 
 If you have any questions, comments, or ideas, I would love to hear them at: jcpmcdonald@gmail.com
 
