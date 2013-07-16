@@ -24,8 +24,8 @@ namespace AsteroidOutpost
 
 #if DEBUG
 			move = true;
-			width = 1280;
-			height = 720;
+			width = 1920;
+			height = 1080;
 			fullScreen = false;
 #else
 			width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
