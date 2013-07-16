@@ -16,6 +16,8 @@ using Microsoft.Xna.Framework.Media;
 
 namespace AsteroidOutpost
 {
+	using System.Globalization;
+
 	/// <summary>
 	/// This is the entry point for the game and is responsible for creating the menu and the world
 	/// </summary>
@@ -309,7 +311,7 @@ namespace AsteroidOutpost
 					}
 					else
 					{
-						String js = String.Format("if(typeof RefreshPerformanceGraph != 'undefined'){{ RefreshPerformanceGraph({0}, [{1}, {2}, {3}]); }}", gameTime.TotalGameTime.TotalSeconds, frameRateCounter.LastUpdateTime(), frameRateCounter.LastDrawTime(), frameRateCounter.LastDrawDelay);
+						String js = String.Format(CultureInfo.InvariantCulture, "if(typeof RefreshPerformanceGraph != 'undefined'){{ RefreshPerformanceGraph({0}, [{1}, {2}, {3}]); }}", gameTime.TotalGameTime.TotalSeconds, frameRateCounter.LastUpdateTime(), frameRateCounter.LastDrawTime(), frameRateCounter.LastDrawDelay);
 						awesomium.WebView.ExecuteJavascript(js);
 					}
 				}

@@ -16,10 +16,10 @@ using C3.XNA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using AsteroidOutpost.Systems;
+using System.Globalization;
 
 namespace AsteroidOutpost
 {
-
 	public enum StreamType
 	{
 		RequestServerInfo = 0,
@@ -1238,7 +1238,7 @@ namespace AsteroidOutpost
 		public void GameOver(bool win)
 		{
 			gameOver = true;
-			awesomium.WebView.ExecuteJavascript(String.Format("GameOver({0})", win.ToString().ToLower()));
+			awesomium.WebView.ExecuteJavascript(String.Format(CultureInfo.InvariantCulture, "GameOver({0})", win.ToString().ToLower()));
 		}
 
 		

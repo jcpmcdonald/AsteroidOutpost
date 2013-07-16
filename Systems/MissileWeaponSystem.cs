@@ -10,6 +10,7 @@ using C3.XNA;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
 
 namespace AsteroidOutpost.Systems
 {
@@ -45,7 +46,7 @@ namespace AsteroidOutpost.Systems
 
 					int missileID = EntityFactory.Create("Missile", world.GetOwningForce(missileLauncher), new JObject{
 						{ "Position", new JObject{
-							{ "Center", String.Format("{0}, {1}", position.Center.X, position.Center.Y) },
+							{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", position.Center.X, position.Center.Y) },
 						}},
 						{ "MissileProjectile", new JObject{
 							{ "Damage", missileLauncher.Damage },

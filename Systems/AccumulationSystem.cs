@@ -60,7 +60,7 @@ namespace AsteroidOutpost.Systems
 				                                floatingText.Color.B - fadeAmount,
 				                                floatingText.Color.A - fadeAmount);
 
-				//Console.WriteLine(String.Format("{0} {1} {2} {3}", floatingText.Color.R, floatingText.Color.G, floatingText.Color.B, floatingText.Color.A));
+				//Console.WriteLine(String.Format(CultureInfo.InvariantCulture, "{0} {1} {2} {3}", floatingText.Color.R, floatingText.Color.G, floatingText.Color.B, floatingText.Color.A));
 
 				if (floatingText.Color.A <= 0 ||
 				    (floatingText.Color.R <= 0 &&
