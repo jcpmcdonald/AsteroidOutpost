@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Scenarios;
 using AsteroidOutpost.Screens;
@@ -13,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 
 namespace AsteroidOutpost
 {
@@ -119,7 +121,28 @@ namespace AsteroidOutpost
 			frameRateCounter = new FrameRateCounter(this);
 			//Components.Add(frameRateCounter);
 
-			initGraphicsMode(width, height, fullScreen);
+			try
+			{
+				initGraphicsMode(width, height, fullScreen);
+			}
+			catch(NoSuitableGraphicsDeviceException ex)
+			{
+				try
+				{
+					// Try again at a lower resolution
+					initGraphicsMode(800, 600, fullScreen);
+
+					// This will only get logged IF it succeeds, otherwise, nobody will ever know. Except you.
+					Console.WriteLine("Your resolution was reduced to 800x600 because {0}x{1} will not display on your machine. Use -w and -h to specify a resolution on the command line", width, height);
+				}
+				catch(NoSuitableGraphicsDeviceException)
+				{
+					// Don't throw the 800x600 exception, throw the original exception.
+					throw ex;
+				}
+			}
+
+
 
 			//#if UNLIMITED_FPS
 #if false
@@ -181,6 +204,7 @@ namespace AsteroidOutpost
 		/// <param name="bFullScreen">True if you wish to go to Full Screen, false for Windowed Mode.</param>
 		private bool initGraphicsMode(int iWidth, int iHeight, bool bFullScreen)
 		{
+			throw new NoSuitableGraphicsDeviceException();
 			// If we aren't using a full screen mode, the height and width of the window can
 			// be set to anything equal to or smaller than the actual screen size.
 			if (bFullScreen == false)

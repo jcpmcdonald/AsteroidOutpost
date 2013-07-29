@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AsteroidOutpost
@@ -48,10 +49,18 @@ namespace AsteroidOutpost
 				game = new AOGame(x, y, width, height);
 			}
 
-			// Auto-disposes when leaving the using statement
-			using (game)
+			try
 			{
-				game.Run();
+				// Auto-disposes when leaving the using statement
+				using (game)
+				{
+					game.Run();
+				}
+				
+			}
+			catch (NoSuitableGraphicsDeviceException)
+			{
+				System.Windows.Forms.MessageBox.Show("No suitable graphics device was found on this computer.", "NoSuitableGraphicsDeviceException", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
