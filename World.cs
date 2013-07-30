@@ -1256,7 +1256,7 @@ namespace AsteroidOutpost
 					LastJSExecuted = js;
 					awesomium.WebView.ExecuteJavascript(js);
 				}
-				catch (InvalidOperationException ioe)
+				catch (InvalidOperationException)
 				{
 					executeAwesomiumJSNextCycle.Add(js);
 					Console.WriteLine("JS Executed Next Cycle");

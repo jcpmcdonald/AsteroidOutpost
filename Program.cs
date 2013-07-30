@@ -22,35 +22,37 @@ namespace AsteroidOutpost
 			int width;
 			int height;
 			bool fullScreen;
+			bool performanceGraph = false;
 
 #if DEBUG
 			move = true;
 			width = 1920;
 			height = 1080;
 			fullScreen = false;
+			performanceGraph = false;
 #else
 			width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
 			height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 			fullScreen = true;
 #endif
 
-			if (processArgs(args, ref move, ref x, ref y, ref width, ref height, ref fullScreen) == false)
+			if (processArgs(args, ref move, ref x, ref y, ref width, ref height, ref fullScreen, ref performanceGraph) == false)
 			{
 				// Problem in command-line processing, so exit.
 				return;
 			}
 
-			if (!move)
-			{
-				game = new AOGame(width, height, fullScreen);
-			}
-			else
-			{
-				game = new AOGame(x, y, width, height);
-			}
-
 			try
 			{
+				if (!move)
+				{
+					game = new AOGame(width, height, fullScreen, performanceGraph);
+				}
+				else
+				{
+					game = new AOGame(x, y, width, height, performanceGraph);
+				}
+
 				// Auto-disposes when leaving the using statement
 				using (game)
 				{
@@ -64,7 +66,7 @@ namespace AsteroidOutpost
 			}
 		}
 
-		private static bool processArgs(string[] args, ref bool move, ref int x, ref int y, ref int width, ref int height, ref bool fullScreen)
+		private static bool processArgs(string[] args, ref bool move, ref int x, ref int y, ref int width, ref int height, ref bool fullScreen, ref bool performanceGraph)
 		{
 			try
 			{
@@ -73,6 +75,12 @@ namespace AsteroidOutpost
 					string lowered = args[i].ToLower();
 					switch (lowered)
 					{
+						// Performance Graph
+						case "-p":
+						case "\\p":
+						case "/p":
+							performanceGraph = true;
+							break;
 						// Fullscreen
 						case "-f":
 						case "\\f":

@@ -67,8 +67,7 @@ namespace AsteroidOutpost
 		#endregion
 
 
-		#region Properties
-
+		
 		public AwesomiumComponent Awesomium
 		{
 			get
@@ -85,19 +84,33 @@ namespace AsteroidOutpost
 			}
 		}
 
-		#endregion
+
+		private bool displayPerformanceGraph;
+		public bool DisplayPerformanceGraph
+		{
+			get
+			{
+				return displayPerformanceGraph;
+			}
+			set
+			{
+				displayPerformanceGraph = value;
+			}
+		}
 
 
 		#region Construct
 
-		public AOGame(int width, int height, bool fullScreen)
+		public AOGame(int width, int height, bool fullScreen, bool performanceGraph)
 		{
+			displayPerformanceGraph = performanceGraph;
 			Init(width, height, fullScreen);
 		}
 
 
-		public AOGame(int moveToX, int moveToY, int width, int height)
+		public AOGame(int moveToX, int moveToY, int width, int height, bool performanceGraph)
 		{
+			displayPerformanceGraph = performanceGraph;
 			moveWindow = true;
 			moveWindowX = moveToX;
 			moveWindowY = moveToY;
@@ -204,7 +217,6 @@ namespace AsteroidOutpost
 		/// <param name="bFullScreen">True if you wish to go to Full Screen, false for Windowed Mode.</param>
 		private bool initGraphicsMode(int iWidth, int iHeight, bool bFullScreen)
 		{
-			throw new NoSuitableGraphicsDeviceException();
 			// If we aren't using a full screen mode, the height and width of the window can
 			// be set to anything equal to or smaller than the actual screen size.
 			if (bFullScreen == false)
@@ -323,7 +335,11 @@ namespace AsteroidOutpost
 				}
 
 
-				if (awesomium.WebView.IsDocumentReady && !awesomium.WebView.IsLoading)
+				if (displayPerformanceGraph &&
+					awesomium.WebView.IsDocumentReady &&
+					!awesomium.WebView.IsLoading 
+					//&& !gameTime.IsRunningSlowly  // Removed because it hides the issue(s)
+					)
 				{
 					if(frameRateCounter.LastUpdateTime() <= 0.00001 &&
 						frameRateCounter.LastDrawTime() <= 0.00001 &&

@@ -48,8 +48,13 @@ $(document).ready(function()
 		
 		graph = Flotr.draw($('#performanceGraph').get(0), [times[0], times[1], times[2]], options);
 	}
+	else
+	{
+		$("#performanceGraphPanel").hide();
+	}
 	
 	DefinePerformancePlots(["update", "draw", "draw delay"]);
+	
 	
 	//style='background-color: #00A8F0; width: 10px; height: 10px'></div>");
 	
@@ -115,6 +120,13 @@ function DefinePerformancePlots(labels)
 
 function RefreshPerformanceGraph(timestamp, newTimes /*updateTime, drawTime, drawDelay*/)
 {
+	
+	if(!$("#performanceGraphPanel").is(":visible"))
+	{
+		$("#performanceGraphPanel").show("slide");
+	}
+	
+	
 	// updateTimes[timeIndex] = [timeIndex, updateTime];
 	// drawTimes[timeIndex] = [timeIndex, drawTime];
 	// drawDelayTimes[timeIndex] = [timeIndex, drawDelay];

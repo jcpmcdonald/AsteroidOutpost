@@ -13,6 +13,8 @@ namespace AsteroidOutpost.Systems
 	{
 		private World world;
 		private Scenario scenario;
+		private TimeSpan updateFrequency = TimeSpan.FromSeconds(0.25);
+		private TimeSpan updateAccumulator = TimeSpan.Zero;
 
 		public MissionSystem(AOGame game, World world, Scenario scenario) : base(game)
 		{
@@ -22,13 +24,19 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			updateAccumulator += gameTime.ElapsedGameTime;		// Accumulate regardless of paused state
 			if (world.Paused) { return; }
 
-			foreach (var mission in scenario.Missions.Where(m => m.Dirty))
+			if(updateAccumulator > updateFrequency)
 			{
-				world.ExecuteAwesomiumJS(String.Format("window.scopeOf('MissionController').AddMission('{0}', '{1}', {2});", mission.Key, mission.Description, mission.Done.ToString().ToLower()));
-				//awesomium.WebView.ExecuteJavascript(String.Format("AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
-				mission.Dirty = false;
+				foreach (var mission in scenario.Missions.Where(m => m.Dirty))
+				{
+					world.ExecuteAwesomiumJS(String.Format("window.scopeOf('MissionController').AddMission('{0}', '{1}', {2});", mission.Key, mission.Description, mission.Done.ToString().ToLower()));
+					//awesomium.WebView.ExecuteJavascript(String.Format("AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
+					mission.Dirty = false;
+				}
+
+				updateAccumulator = TimeSpan.Zero;
 			}
 
 			base.Update(gameTime);
