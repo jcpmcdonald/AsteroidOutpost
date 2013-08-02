@@ -29,7 +29,7 @@ namespace AsteroidOutpost.Systems
 			foreach (var laser in world.GetComponents<LaserWeapon>())
 			{
 				Constructible constructible = world.GetNullableComponent<Constructible>(laser);
-				if (constructible != null && constructible.IsConstructing || constructible.IsBeingPlaced) { return; }
+				if (constructible != null && (constructible.IsConstructing || constructible.IsBeingPlaced)) { return; }
 
 				laser.Firing = false;
 
