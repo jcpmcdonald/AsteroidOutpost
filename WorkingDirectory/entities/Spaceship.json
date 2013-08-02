@@ -22,7 +22,7 @@
 		},
 		"LaserWeapon" : {
 			"Range" : 150,
-			"Damage" : 0,
+			"Damage" : 3,
 			"Color" : "139, 0, 0, 255",
 		},
 		"Flocking" : {
