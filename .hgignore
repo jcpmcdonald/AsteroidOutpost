@@ -59,3 +59,4 @@ bin/
 *.suo
 _ReSharper.*
 *.resharper.user
+*.orig
