@@ -11,10 +11,10 @@ using System.Xml.Linq;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
+using System.Globalization;
 
 namespace AsteroidOutpost.Networking
 {
-
 	enum GameState
 	{
 		NONE,
@@ -669,7 +669,7 @@ namespace AsteroidOutpost.Networking
 			{
 				//try
 				{
-					HttpWebRequest getServersRequest = (HttpWebRequest)WebRequest.Create(String.Format("{0}postServer.php?game={1}&version={2}.{3}.{4}.{5}",
+					HttpWebRequest getServersRequest = (HttpWebRequest)WebRequest.Create(String.Format(CultureInfo.InvariantCulture, "{0}postServer.php?game={1}&version={2}.{3}.{4}.{5}",
 																									   matchmaker,
 																									   assemblyName,
 																									   version.Major,

@@ -9,6 +9,7 @@ using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using Awesomium.Core;
 using Microsoft.Xna.Framework;
+using System.Globalization;
 
 namespace AsteroidOutpost.Scenarios
 {
@@ -74,7 +75,7 @@ namespace AsteroidOutpost.Scenarios
 				WaveFactory.CreateWave(world, 100 * sequence, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(3000, -3000));
 			}
 
-			world.ExecuteAwesomiumJS(String.Format("UpdateTimerPanel('{0}')", waveTimer.ToString(@"m\:ss")));
+			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "UpdateTimerPanel('{0}')", waveTimer.ToString(@"m\:ss")));
 		}
 	}
 }

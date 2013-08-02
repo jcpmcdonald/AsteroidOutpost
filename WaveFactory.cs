@@ -7,6 +7,7 @@ using AsteroidOutpost.Entities;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
 
 namespace AsteroidOutpost
 {
@@ -39,7 +40,7 @@ namespace AsteroidOutpost
 				// Make something
 				EntityFactory.Create("Spaceship", aiActor.PrimaryForce, new JObject{
 					{ "Position", new JObject{
-						{ "Center", String.Format("{0}, {1}", roughPosition.X + GlobalRandom.Next(-10, 10), roughPosition.Y + GlobalRandom.Next(-10, 10)) },
+						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", roughPosition.X + GlobalRandom.Next(-10, 10), roughPosition.Y + GlobalRandom.Next(-10, 10)) },
 					}}
 				});
 				//new Dictionary<String, object>(){

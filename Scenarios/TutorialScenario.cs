@@ -8,6 +8,7 @@ using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
+using System.Globalization;
 
 namespace AsteroidOutpost.Scenarios
 {
@@ -188,7 +189,7 @@ namespace AsteroidOutpost.Scenarios
 					lasersBuilt++;
 					if (lasersBuilt < 3)
 					{
-						buildLasers.Description = String.Format("({0}/3) Build 3 Laser Towers", lasersBuilt);
+						buildLasers.Description = String.Format(CultureInfo.InvariantCulture, "({0}/3) Build 3 Laser Towers", lasersBuilt);
 					}
 					else
 					{

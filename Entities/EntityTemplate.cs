@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -76,7 +77,7 @@ namespace AsteroidOutpost.Entities
 							if (template.jsonTemplate["Components"][componentName]["CurrentOrientation"] != null)
 							{
 								float angleStep = 360.0f / sprite.OrientationLookup.Count;
-								float spriteOrientation = float.Parse((String)template.jsonTemplate["Components"][componentName]["CurrentOrientation"]);
+								float spriteOrientation = float.Parse((String)template.jsonTemplate["Components"][componentName]["CurrentOrientation"], CultureInfo.InvariantCulture);
 								template.jsonTemplate["Components"][componentName]["CurrentOrientation"] = (angleStep * (int)((spriteOrientation / angleStep) + 0.5f)) % 360;
 							}
 						}

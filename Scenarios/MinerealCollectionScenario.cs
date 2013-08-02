@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
 using Microsoft.Xna.Framework;
+using System.Globalization;
 
 namespace AsteroidOutpost.Scenarios
 {
@@ -78,7 +79,7 @@ namespace AsteroidOutpost.Scenarios
 		{
 			waveTimer = waveTimer.Subtract(deltaTime);
 
-			collectMinerals.Description = String.Format("({0}/2000) Collect 2000 minerals", friendlyForce.GetMinerals());
+			collectMinerals.Description = String.Format(CultureInfo.InvariantCulture, "({0}/2000) Collect 2000 minerals", friendlyForce.GetMinerals());
 
 			if(friendlyForce.GetMinerals() >= 2000 && !collectMinerals.Done)
 			{
@@ -95,7 +96,7 @@ namespace AsteroidOutpost.Scenarios
 				WaveFactory.CreateWave(world, 100 * sequence, enemyLocation);
 			}
 
-			world.ExecuteAwesomiumJS(String.Format("UpdateTimerPanel('{0}')", waveTimer.ToString(@"m\:ss")));
+			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "UpdateTimerPanel('{0}')", waveTimer.ToString(@"m\:ss")));
 		}
 	}
 }

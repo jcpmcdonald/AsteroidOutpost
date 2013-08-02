@@ -13,6 +13,8 @@ using XNASpriteLib;
 
 namespace AsteroidOutpost.Scenarios
 {
+	using System.Globalization;
+
 	public abstract class Scenario
 	{
 		//private String name;
@@ -183,7 +185,7 @@ namespace AsteroidOutpost.Scenarios
 						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
 					}},
 					{ "Position", new JObject{
-						{ "Center", String.Format("{0}, {1}", x, y) },
+						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", x, y) },
 						{ "Radius", radius }
 					}},
 					{ "Minable", new JObject{
@@ -238,7 +240,7 @@ namespace AsteroidOutpost.Scenarios
 					{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
 				}},
 				{ "Position", new JObject{
-					{ "Center", String.Format("{0}, {1}", origin.X + delta.X, origin.Y + delta.Y) },
+					{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", origin.X + delta.X, origin.Y + delta.Y) },
 				}},
 				{ "Constructible", new JObject{
 					{ "IsBeingPlaced", false },

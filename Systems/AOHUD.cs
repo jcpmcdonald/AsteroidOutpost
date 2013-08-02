@@ -17,6 +17,8 @@ using Newtonsoft.Json.Linq;
 
 namespace AsteroidOutpost.Systems
 {
+	using System.Globalization;
+
 	/// <summary>
 	/// The HUD is how the user interacts with the game
 	/// </summary>
@@ -208,14 +210,14 @@ namespace AsteroidOutpost.Systems
 		public void ShowModalDialog(String text)
 		{
 			world.Paused = true;
-			world.ExecuteAwesomiumJS(String.Format("ShowModalDialog('{0}')", text.Replace("'", "\\'")));
+			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "ShowModalDialog('{0}')", text.Replace("'", "\\'")));
 		}
 
 
 
 		private void WorldOnPauseToggledEvent(bool paused)
 		{
-			world.ExecuteAwesomiumJS(String.Format("SetPaused({0})", paused.ToString().ToLower()));
+			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetPaused({0})", paused.ToString().ToLower()));
 		}
 
 
@@ -365,7 +367,7 @@ namespace AsteroidOutpost.Systems
 					Vector2 worldPosition = world.ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
 					EntityFactory.Create("Spaceship", aiActor.PrimaryForce, new JObject{
 						{ "Position", new JObject{
-							{ "Center", String.Format("{0}, {1}", worldPosition.X, worldPosition.Y) },
+							{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
 						}}
 					});
 					//new Dictionary<String, object>(){
@@ -423,7 +425,7 @@ namespace AsteroidOutpost.Systems
 
 			if (LocalActor != null)
 			{
-				awesomium.WebView.ExecuteJavascript(String.Format("SetResources({0})", (int)(LocalActor.PrimaryForce.GetMinerals() + 0.5)));
+				awesomium.WebView.ExecuteJavascript(String.Format(CultureInfo.InvariantCulture, "SetResources({0})", (int)(LocalActor.PrimaryForce.GetMinerals() + 0.5)));
 			}
 
 			UpdateSelection();
@@ -692,7 +694,7 @@ namespace AsteroidOutpost.Systems
 						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
 					}},
 					{ "Position", new JObject{
-						{ "Center", String.Format("{0}, {1}", worldPosition.X, worldPosition.Y) },
+						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
 					}}
 				});
 			}
@@ -715,7 +717,7 @@ namespace AsteroidOutpost.Systems
 						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
 					}},
 					{ "Position", new JObject{
-						{ "Center", String.Format("{0}, {1}", worldPosition.X, worldPosition.Y) },
+						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
 					}}
 				});
 			}
@@ -738,7 +740,7 @@ namespace AsteroidOutpost.Systems
 						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
 					}},
 					{ "Position", new JObject{
-						{ "Center", String.Format("{0}, {1}", worldPosition.X, worldPosition.Y) },
+						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
 					}}
 				});
 			}
@@ -762,7 +764,7 @@ namespace AsteroidOutpost.Systems
 						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
 					}},
 					{ "Position", new JObject{
-						{ "Center", String.Format("{0}, {1}", worldPosition.X, worldPosition.Y) },
+						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
 					}}
 				});
 			}
@@ -786,7 +788,7 @@ namespace AsteroidOutpost.Systems
 						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
 					}},
 					{ "Position", new JObject{
-						{ "Center", String.Format("{0}, {1}", worldPosition.X, worldPosition.Y) },
+						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
 					}}
 				});
 			}
@@ -1044,7 +1046,7 @@ namespace AsteroidOutpost.Systems
 			//if(loaded)
 			{
 				//awesomium.WebView.ExecuteJavascript("UpdateSelection(" + GetSelectionJSON() + ");");
-				awesomium.WebView.ExecuteJavascript(String.Format("UpdateSelection({0})", GetSelectionJSON()));
+				awesomium.WebView.ExecuteJavascript(String.Format(CultureInfo.InvariantCulture, "UpdateSelection({0})", GetSelectionJSON()));
 			}
 		}
 
