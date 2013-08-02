@@ -28,6 +28,9 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var laser in world.GetComponents<LaserWeapon>())
 			{
+				Constructible constructible = world.GetNullableComponent<Constructible>(laser);
+				if (constructible != null && constructible.IsConstructing || constructible.IsBeingPlaced) { return; }
+
 				laser.Firing = false;
 
 				Position position = world.GetComponent<Position>(laser);
@@ -46,8 +49,8 @@ namespace AsteroidOutpost.Systems
 						continue;
 					}
 
-					Constructible constructible = world.GetNullableComponent<Constructible>(possibleTarget);
-					if(constructible != null && constructible.IsBeingPlaced)
+					Constructible constructibleTarget = world.GetNullableComponent<Constructible>(possibleTarget);
+					if(constructibleTarget != null && constructibleTarget.IsBeingPlaced)
 					{
 						// Eliminate targets being constructed
 						continue;
