@@ -20,6 +20,12 @@ h2.selected
 }
 
 
+h2.disabled
+{
+	color: #444;
+}
+
+
 
 #Menu
 {

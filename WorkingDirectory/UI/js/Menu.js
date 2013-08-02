@@ -40,14 +40,14 @@ $(document).ready(function()
 	$("#selectionMarker").addClass("followSelection");
 	
 	
-	$("h2").click(
+	$("h2:not(.disabled)").click(
 		function()
 		{
 			selectionMade($(this));
 		}
 	);
 	
-	$("h2").mouseenter(
+	$("h2:not(.disabled)").mouseenter(
 		function()
 		{
 			changeSelectionTo($(this));
@@ -65,7 +65,7 @@ $(document).ready(function()
 		{
 			if(event.keyCode === KEY_UP)
 			{
-				var prevItem = selectedItem.prevAll("h2:first");
+				var prevItem = selectedItem.prevAll("h2:not(.disabled):first");
 				if(prevItem.length > 0)
 				{
 					changeSelectionTo(prevItem);
@@ -73,7 +73,7 @@ $(document).ready(function()
 			}
 			else if(event.keyCode === KEY_DOWN)
 			{
-				var nextItem = selectedItem.nextAll("h2:first");
+				var nextItem = selectedItem.nextAll("h2:not(.disabled):first");
 				if(nextItem.length > 0)
 				{
 					changeSelectionTo(nextItem);
