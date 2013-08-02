@@ -343,7 +343,7 @@ namespace AsteroidOutpost.Networking
 			if (DateTime.Now.Subtract(lastPacketCountPrint).TotalSeconds >= 0.1)
 			{
 				lastPacketCountPrint = DateTime.Now;
-				File.AppendAllText("PacketCounter.txt", DateTime.Now.ToLongTimeString() + "\t" + packetsCounter + "\r\n");
+				//File.AppendAllText("PacketCounter.txt", DateTime.Now.ToLongTimeString() + "\t" + packetsCounter + "\r\n");
 				packetsCounter = 0;
 			}
 #endif
