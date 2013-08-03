@@ -147,6 +147,7 @@
     <Compile Include="Components\PowerGridNode.cs" />
     <Compile Include="Components\PowerProducer.cs" />
     <Compile Include="Components\Spin.cs" />
+    <Compile Include="Components\Targetable.cs" />
     <Compile Include="Components\Upgradable.cs" />
     <Compile Include="Components\Velocity.cs" />
     <Compile Include="Controller.cs" />
