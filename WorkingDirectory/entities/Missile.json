@@ -6,6 +6,7 @@
 		},
 		"Position" : {
 			"Radius" : 10,
+			"Solid" : false,
 		},
 		"Velocity" : {
 			"CurrentVelocity" : "0, 0",
