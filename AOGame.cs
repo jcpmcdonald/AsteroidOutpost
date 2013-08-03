@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
+using MediaState = Microsoft.Xna.Framework.Media.MediaState;
 
 namespace AsteroidOutpost
 {
@@ -56,7 +57,9 @@ namespace AsteroidOutpost
 		private AwesomiumComponent awesomium;
 		private FrameRateCounter frameRateCounter;
 
-		private Song menuMusic;
+		private List<Song> music = new List<Song>();
+		private int currentTrack;
+		private bool changingTrack = false;
 		private bool musicStarted = false;
 
 		private LayeredStarField starField;
@@ -280,8 +283,11 @@ namespace AsteroidOutpost
 			EntityFactory.LoadContent(GraphicsDevice);
 			EllipseEx.LoadContent(GraphicsDevice);
 
-			//menuMusic = Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 04 Inner Battles (Bignic Remix)");
-			MediaPlayer.IsRepeating = true;
+			music.Add(Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 04 Inner Battles (Bignic Remix)"));
+			music.Add(Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 01 The Plan"));
+			currentTrack = 0;
+
+			//MediaPlayer.IsRepeating = true;
 
 			if (stopwatch.IsRunning)
 			{
@@ -297,11 +303,14 @@ namespace AsteroidOutpost
 		/// </summary>
 		protected override void UnloadContent()
 		{
-			// Note: Is this abuse?
 			MediaPlayer.Stop();
-			if (menuMusic != null)
+			while(MediaPlayer.State != MediaState.Stopped){}
+			if (music != null)
 			{
-				menuMusic.Dispose();
+				foreach (var song in music)
+				{
+					song.Dispose();
+				}
 			}
 		}
 
@@ -330,8 +339,10 @@ namespace AsteroidOutpost
 				{
 					if (settings.MusicVolume > 0)
 					{
-						MediaPlayer.Volume = settings.MusicVolume * 0.5f;
-						MediaPlayer.Play(menuMusic);
+						MediaPlayer.Volume = settings.MusicVolume;
+						MediaPlayer.Play(music[currentTrack]);
+
+						MediaPlayer.MediaStateChanged += MediaPlayerOnMediaStateChanged;
 					}
 					musicStarted = true;
 				}
@@ -363,6 +374,19 @@ namespace AsteroidOutpost
 				{
 					Exit();
 				}
+			}
+		}
+
+
+		private void MediaPlayerOnMediaStateChanged(object sender, EventArgs eventArgs)
+		{
+			if(MediaPlayer.State == MediaState.Stopped)
+			{
+				if(changingTrack) { return; }
+				changingTrack = true;
+				currentTrack = ++currentTrack % music.Count;
+				MediaPlayer.Play(music[currentTrack]);
+				changingTrack = false;
 			}
 		}
 
