@@ -202,8 +202,11 @@ namespace AsteroidOutpost.Systems
 			foreach(var nearbyEntity in world.EntitiesInArea(myPosition.Center, (int)separationDistance, true))
 			{
 				var nearbyPosition = world.GetComponent<Position>(nearbyEntity);
-				if(myPosition != nearbyPosition)
+				if(myPosition != nearbyPosition && nearbyPosition.Solid)
 				{
+					Constructible constructible = world.GetNullableComponent<Constructible>(nearbyEntity);
+					if(constructible != null && constructible.IsBeingPlaced) { continue; }
+
 					float distance = myPosition.Distance(nearbyPosition);
 					if (distance > 0 && distance < (separationDistance + nearbyPosition.Radius))
 					{
