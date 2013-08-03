@@ -105,7 +105,7 @@ namespace AsteroidOutpost.Systems
 					// Draw attack range
 					Position position = world.GetComponent<Position>(laser);
 					spriteBatch.DrawEllipse(world.WorldToScreen(position.Center),
-					                        laser.Range,
+					                        world.Scale(laser.Range),
 					                        Color.Red,
 					                        world.HUD.DrawEllipseGuides);
 				}

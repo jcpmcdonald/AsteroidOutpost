@@ -334,7 +334,7 @@ namespace AsteroidOutpost.Systems
 		private void DrawLinkRadius(SpriteBatch spriteBatch, LaserMiner laserMiner, Position laserMinerPosition)
 		{
 			spriteBatch.DrawEllipse(world.WorldToScreen(laserMinerPosition.Center),
-			                        laserMiner.MiningRange,
+			                        world.Scale(laserMiner.MiningRange),
 			                        Color.Red,
 			                        world.HUD.DrawEllipseGuides);
 		}

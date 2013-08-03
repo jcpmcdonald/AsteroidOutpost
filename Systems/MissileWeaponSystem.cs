@@ -132,7 +132,7 @@ namespace AsteroidOutpost.Systems
 						if(missileHitPoints != null)
 						{
 							missileHitPoints.Armour = 0;
-							missileHitPoints.OnDeath(new EntityDyingEventArgs(missileHitPoints));
+							//missileHitPoints.OnDeath(new EntityDyingEventArgs(missileHitPoints));
 						}
 						else
 						{
@@ -140,6 +140,22 @@ namespace AsteroidOutpost.Systems
 							Debugger.Break();
 							world.DeleteComponents(missile.EntityID);
 						}
+					}
+				}
+				else
+				{
+					// Delete ourselves, otherwise we'll just float around forever
+					HitPoints missileHitPoints = world.GetNullableComponent<HitPoints>(missile);
+					if(missileHitPoints != null)
+					{
+						missileHitPoints.Armour = 0;
+						//missileHitPoints.OnDeath(new EntityDyingEventArgs(missileHitPoints));
+					}
+					else
+					{
+						Console.WriteLine("You should not be deleting components manually. It causes issues");
+						Debugger.Break();
+						world.DeleteComponents(missile.EntityID);
 					}
 				}
 			}
@@ -188,7 +204,7 @@ namespace AsteroidOutpost.Systems
 					// Draw attack range
 					Position position = world.GetComponent<Position>(missileWeapon);
 					spriteBatch.DrawEllipse(world.WorldToScreen(position.Center),
-					                        missileWeapon.Range,
+					                        world.Scale(missileWeapon.Range),
 					                        Color.Red,
 					                        world.HUD.DrawEllipseGuides);
 				}
