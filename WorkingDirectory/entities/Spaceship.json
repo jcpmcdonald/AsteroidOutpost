@@ -34,6 +34,7 @@
 			"CohereNeighbourDistance" : 400,
 			"SeparationDistance" : 25,
 		},
+		"Targetable" : {},
     }
 }
 

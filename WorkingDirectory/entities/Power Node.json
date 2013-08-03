@@ -23,6 +23,7 @@
 			"Armour" : 50,
 			"TotalArmour" : 50,
 		},
+		"Targetable" : {},
     }
 }
 

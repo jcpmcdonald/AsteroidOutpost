@@ -61,7 +61,7 @@ namespace AsteroidOutpost.Systems
 						// Find a suitable target
 						int vehicleEntityID = vehicle.EntityID;
 						var livingThings = world.GetComponents<HitPoints>().Where(x => x.EntityID != vehicleEntityID &&
-						                                                               x.Armour > 0 &&
+						                                                               x.IsAlive() &&
 						                                                               world.GetOwningForce(x).Team != Team.Neutral &&
 						                                                               world.GetOwningForce(x).Team != world.GetOwningForce(vehicleEntityID).Team);
 
@@ -69,7 +69,8 @@ namespace AsteroidOutpost.Systems
 						Position closestLivingThing = null;
 						foreach (var livingThingPosition in livingThingPositions)
 						{
-							if(closestLivingThing == null || position.Distance(livingThingPosition) < position.Distance(closestLivingThing))
+							var targetable = world.GetNullableComponent<Targetable>(livingThingPosition);
+							if(targetable != null && (closestLivingThing == null || position.Distance(livingThingPosition) < position.Distance(closestLivingThing)))
 							{
 								closestLivingThing = livingThingPosition;
 							}

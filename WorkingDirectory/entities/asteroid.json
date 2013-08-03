@@ -12,7 +12,7 @@
 			"SpriteName" : "Asteroid",
 			"Scale" : "**",
 			"CurrentAnimation": "Idle",
-		}
+		},
     }
 }
 

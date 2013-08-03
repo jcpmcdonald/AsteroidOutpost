@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
+using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
@@ -118,8 +119,27 @@ namespace AsteroidOutpost.Systems
 					// Boom?
 					if(position.Distance(targetPosition) <= missile.DetonationDistance)
 					{
-						world.DeleteComponents(missile.EntityID);
+						HitPoints missileHitPoints = world.GetNullableComponent<HitPoints>(missile);
+						if(missileHitPoints != null && !missileHitPoints.IsAlive())
+						{
+							Console.WriteLine("A dead missile is about to deal damage again");
+							Debugger.Break();
+						}
+
 						HitPointSystem.InflictDamageOn(world.GetComponent<HitPoints>(missile.Target.Value), missile.Damage);
+
+						
+						if(missileHitPoints != null)
+						{
+							missileHitPoints.Armour = 0;
+							missileHitPoints.OnDeath(new EntityDyingEventArgs(missileHitPoints));
+						}
+						else
+						{
+							Console.WriteLine("You should not be deleting components manually. It causes issues");
+							Debugger.Break();
+							world.DeleteComponents(missile.EntityID);
+						}
 					}
 				}
 			}

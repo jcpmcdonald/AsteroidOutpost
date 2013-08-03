@@ -27,7 +27,8 @@
 			"Damage" : 25,
 			"FireRate" : 1500,
 			"Acceleration" : 50,
-		}
+		},
+		"Targetable" : {},
     }
 }
 

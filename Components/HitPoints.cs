@@ -12,14 +12,12 @@ namespace AsteroidOutpost.Components
 {
 	public class HitPoints : Component
 	{
-		private float armour;
-
 		// Events
 		[EventReplication(EventReplication.ServerToClients)]
-		public event Action<EntityArmourChangedEventArgs> ArmourChangedEvent;
+		public event Action<EntityArmourChangedEventArgs> ArmourChanged;
 
 		[EventReplication(EventReplication.ServerToClients)]
-		public event Action<EntityDyingEventArgs> DyingEvent;
+		public event Action<EntityDyingEventArgs> Dying;
 
 
 		public HitPoints(int entityID) : base(entityID) {}
@@ -27,46 +25,33 @@ namespace AsteroidOutpost.Components
 			: base(entityID)
 		{
 			TotalArmour = totalArmour;
-			armour = totalArmour;
+			Armour = totalArmour;
 		}
 
 
-		/// <summary>
-		/// Gets the current hit points
-		/// </summary>
-		/// <value> The current hit points </value>
-		public float Armour
-		{
-			get
-			{
-				return armour;
-			}
-			set
-			{
-				int initialHitPoints = (int)armour;
-				armour = (TotalArmour > 0) ? MathHelper.Clamp(value, 0, TotalArmour) : MathHelper.Max(0, value);
-				OnArmourChange(initialHitPoints);
-			}
-		}
-
-
+		public float Armour { get; set; }
 		public int TotalArmour { get; set; }
 
 
-		public void OnArmourChange(int initialHitPoints)
+		public bool IsAlive()
 		{
-			int delta = (int)(armour) - initialHitPoints;
-			if (delta != 0 && ArmourChangedEvent != null)
+			return Armour > 0;
+		}
+
+
+		public void OnArmourChanged(EntityArmourChangedEventArgs e)
+		{
+			if (ArmourChanged != null)
 			{
-				ArmourChangedEvent(new EntityArmourChangedEventArgs(this, delta));
+				ArmourChanged(e);
 			}
 		}
 
-		public void OnDeath()
+		public void OnDeath(EntityDyingEventArgs e)
 		{
-			if(DyingEvent != null)
+			if(Dying != null)
 			{
-				DyingEvent(new EntityDyingEventArgs(this));
+				Dying(e);
 			}
 		}
 	}

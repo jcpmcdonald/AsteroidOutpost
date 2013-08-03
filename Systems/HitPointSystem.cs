@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
+using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -29,19 +30,25 @@ namespace AsteroidOutpost.Systems
 			bool authoratative = world.IsServer;
 			foreach (var hitPoints in world.GetComponents<HitPoints>())
 			{
-				if (authoratative && hitPoints.Armour <= 0.0f)
+				if (authoratative && !hitPoints.IsAlive())
 				{
 					// We have just died
-					hitPoints.OnDeath();
+					hitPoints.OnDeath(new EntityDyingEventArgs(hitPoints));
 					world.DeleteComponents(hitPoints.EntityID);
 				}
 			}
 		}
 
 
-		public static void InflictDamageOn(HitPoints victim, float amount)
+		public static void InflictDamageOn(HitPoints victim, float damage)
 		{
-			victim.Armour -= amount;
+			int initialArmour = (int)victim.Armour;
+			victim.Armour = MathHelper.Clamp(victim.Armour - damage, 0, victim.TotalArmour);
+			int delta = (int)(victim.Armour) - initialArmour;
+			if(delta != 0)
+			{
+				victim.OnArmourChanged(new EntityArmourChangedEventArgs(victim, delta));
+			}
 		}
 	}
 }

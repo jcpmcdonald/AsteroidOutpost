@@ -498,6 +498,14 @@ namespace AsteroidOutpost.Systems
 					                        world.Scale(laserWeapon.Range),
 					                        Color.Red);
 				}
+
+				MissileWeapon missileWeapon = world.GetNullableComponent<MissileWeapon>(selectedEntity);
+				if(missileWeapon != null)
+				{
+					spriteBatch.DrawEllipse(world.WorldToScreen(selectedEntityPosition.Center),
+					                        world.Scale(missileWeapon.Range),
+					                        Color.Red);
+				}
 			}
 		}
 
@@ -919,7 +927,7 @@ namespace AsteroidOutpost.Systems
 								HitPoints hitPoints = world.GetNullableComponent<HitPoints>(entity);
 								if(hitPoints != null)
 								{
-									hitPoints.DyingEvent += SelectedEntityDying;
+									hitPoints.Dying += SelectedEntityDying;
 								}
 							}
 							else
@@ -929,7 +937,7 @@ namespace AsteroidOutpost.Systems
 								// Disconnect from the death events
 								foreach (HitPoints selectedHitPoints in selectedEntities.Select(selectedEntity => world.GetNullableComponent<HitPoints>(selectedEntity)).Where(selectedHitPoints => selectedHitPoints != null))
 								{
-									selectedHitPoints.DyingEvent -= SelectedEntityDying;
+									selectedHitPoints.Dying -= SelectedEntityDying;
 								}
 
 								selectedEntities.Clear();
@@ -939,7 +947,7 @@ namespace AsteroidOutpost.Systems
 								HitPoints hitPoints = world.GetNullableComponent<HitPoints>(entity);
 								if(hitPoints != null)
 								{
-									hitPoints.DyingEvent += SelectedEntityDying;
+									hitPoints.Dying += SelectedEntityDying;
 								}
 							}
 
@@ -959,7 +967,7 @@ namespace AsteroidOutpost.Systems
 						// Disconnect from the death events
 						foreach (HitPoints selectedHitPoints in selectedEntities.Select(selectedEntity => world.GetNullableComponent<HitPoints>(selectedEntity)).Where(selectedHitPoints => selectedHitPoints != null))
 						{
-							selectedHitPoints.DyingEvent -= SelectedEntityDying;
+							selectedHitPoints.Dying -= SelectedEntityDying;
 						}
 
 						selectedEntities.Clear();
@@ -1088,7 +1096,7 @@ namespace AsteroidOutpost.Systems
 			if (dyingHitPoints != null)
 			{
 				selectedEntities.Remove(dyingHitPoints.EntityID);
-				dyingHitPoints.DyingEvent -= SelectedEntityDying;
+				dyingHitPoints.Dying -= SelectedEntityDying;
 
 				// Tell anyone who is interested in a selection change
 				OnSelectionChanged();

@@ -35,7 +35,8 @@
 			"Velocity" : "0, -26",
 			"FadeRate" : 50,
 			"Color" : "0, 100, 0, 255",
-		}
+		},
+		"Targetable" : {},
     }
 }
 

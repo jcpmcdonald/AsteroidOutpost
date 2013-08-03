@@ -21,7 +21,11 @@
 			"Acceleration" : "**",
 			"DetonationDistance" : 100,
 			"Target" : "**",
-		}
+		},
+		"HitPoints" : {
+			"Armour" : 20,
+			"TotalArmour" : 20,
+		},
     }
 }
 

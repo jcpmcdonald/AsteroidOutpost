@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
@@ -43,7 +44,7 @@ namespace AsteroidOutpost.Systems
 					if(possibleTarget == laser.EntityID ||
 						world.GetOwningForce(possibleTarget).Team == world.GetOwningForce(laser).Team ||
 						world.GetOwningForce(possibleTarget).Team == Team.Neutral ||
-						world.GetNullableComponent<HitPoints>(possibleTarget) == null)
+						world.GetNullableComponent<Targetable>(possibleTarget) == null)
 					{
 						// Eliminate invalid targets
 						continue;
@@ -75,8 +76,18 @@ namespace AsteroidOutpost.Systems
 					laser.Target = closestTargetPosition.EntityID;
 
 					laser.Firing = true;
-					HitPoints targetHitPoints = world.GetComponent<HitPoints>(closestTargetPosition.EntityID);
-					targetHitPoints.Armour -= (laser.Damage * (float)gameTime.ElapsedGameTime.TotalSeconds);
+					HitPoints targetHitPoints = world.GetNullableComponent<HitPoints>(closestTargetPosition.EntityID);
+					if(targetHitPoints != null)
+					{
+						float damage = (laser.Damage * (float)gameTime.ElapsedGameTime.TotalSeconds);
+						HitPointSystem.InflictDamageOn(targetHitPoints, damage);
+					}
+					else
+					{
+						Console.WriteLine("Trying to shoot an invulnerable target! Target is Targetable, but has no HitPoints! What do we do?");
+						Debugger.Break();
+					}
+					
 				}
 			}
 		}
