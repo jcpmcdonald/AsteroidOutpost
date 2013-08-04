@@ -1,3 +1,13 @@
-The album is available for free to download from
-http://music.soulfrost.com/album/you-should-have-never-trusted-hollywood-ep
-and I have written permission to distrubute the music.
+Artists are Sufista (aka Soulfrost), and Bignic
+
+Sufista can be found:
+http://sufista.com/
+https://twitter.com/cjsufista
+
+
+Bignic can be found:
+http://www.thebignic.com/
+https://twitter.com/tehbignic
+
+
+I have written permission to include this music in my game.
