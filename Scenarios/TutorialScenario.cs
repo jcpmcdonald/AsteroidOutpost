@@ -27,14 +27,17 @@ namespace AsteroidOutpost.Scenarios
 		private Mission defendYourself = new Mission("defendYourself", "Defend yourself!", false);
 
 
-		public TutorialScenario(AOGame theGame, int playerCount)
-			: base(theGame, playerCount)
+		public TutorialScenario()
 		{
+			Name = "Tutorial";
+			Author = "John McDonald";
 		}
 
 
-		public override void Start()
+		public override void Start(AOGame theGame, int playerCount)
 		{
+			base.Start(theGame, playerCount);
+
 			if(playerCount != 1)
 			{
 				// Umm... A multiplayer tutorial?
@@ -112,7 +115,6 @@ namespace AsteroidOutpost.Scenarios
 
 
 			GenerateAsteroidField(1000);
-			base.Start();
 		}
 
 		//void ConstructableEntity_UpgradeFinishedEvent(EntityUpgradeEventArgs e)

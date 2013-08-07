@@ -10,6 +10,12 @@ function MissionController($scope)
 		$scope.$apply();
 	}
 	
+	$scope.RemoveMission = function($key)
+	{
+		delete $scope.missions[$key];
+		//$scope.$apply();
+	}
+	
 	$scope.UpdateMission = function($key, $description, $done)
 	{
 		$scope.missions[$key] = {description:$description, done:$done};
@@ -21,4 +27,9 @@ function MissionController($scope)
 function AddMision($key, $description, $done)
 {
 	scopeOf("MissionController").AddMission($key, $description, $done);
+}
+
+function RemoveMission($key)
+{
+	scopeOf("MissionController").RemoveMission($key);
 }

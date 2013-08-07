@@ -320,7 +320,7 @@ $(document).ready(function()
 		$(".btnResume").click( function (event){ SetPaused(false); });
 		
 		// Make the Main Menu button work (fakely)
-		$(".btnMainMenu").click( function (event){ window.location = "MainMenu.html"; });
+		$(".btnMainMenu").click( function (event){ window.location = "Singleplayer.html"; });
 		
 		// Add some missions
 		scopeOf("MissionController").AddMission("buildMiners", "Build 3 miners near asteroids", true);

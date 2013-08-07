@@ -69,8 +69,11 @@ namespace AsteroidOutpost
 		private Stopwatch stopwatch = new Stopwatch();
 		private bool destroyWorld = false;
 
+		private List<String> executeAwesomiumJSNextCycle = new List<string>();
+
 		#endregion
 
+		public Profile ActiveProfile { get; private set; }
 
 		
 		public AwesomiumComponent Awesomium
@@ -199,6 +202,7 @@ namespace AsteroidOutpost
 			// Create callbacks for Awesomium content to communicate with the game
 			JSObject jsXNA = awesomium.WebView.CreateGlobalJavascriptObject("xna");
 			jsXNA.Bind("StartWorld", false, StartWorld);
+			jsXNA.Bind("PopulateScenarioList", false, PopulateScenarioList);
 			jsXNA.Bind("Exit", false, Exit);
 
 			// Create somewhere to log messages to
@@ -208,6 +212,15 @@ namespace AsteroidOutpost
 
 			//awesomium.WebView.Source = @"..\UI\MainMenu.html".ToUri();
 			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\UI\MainMenu.html").ToUri();
+		}
+
+
+		private void PopulateScenarioList(object sender, JavascriptMethodEventArgs javascriptMethodEventArgs)
+		{
+			foreach (var availableScenarioName in ActiveProfile.GetAvailableScenarios())
+			{
+				ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "AddScenario(\"{0}\")", availableScenarioName));
+			}
 		}
 
 
@@ -274,6 +287,8 @@ namespace AsteroidOutpost
 				SetWindowPos(Window.Handle, 0, moveWindowX, moveWindowY, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_SHOWWINDOW);
 			}
 
+			ActiveProfile = new Profile();
+
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			cursorTexture = Texture2DEx.FromStreamWithPremultAlphas(GraphicsDevice, File.OpenRead(@"..\Content\Cursor.png"));
@@ -325,6 +340,13 @@ namespace AsteroidOutpost
 			{
 				accumulatedTime += fixedDeltaTime;
 				frameRateCounter.StartOfUpdate(gameTime);
+
+				for (int i = executeAwesomiumJSNextCycle.Count - 1; i >= 0; i--)
+				{
+					var js = executeAwesomiumJSNextCycle[i];
+					executeAwesomiumJSNextCycle.RemoveAt(i);
+					ExecuteAwesomiumJS(js);
+				}
 
 				if(world != null)
 				{
@@ -433,7 +455,7 @@ namespace AsteroidOutpost
 		/// </summary>
 		public void DestroyWorld()
 		{
-			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\UI\MainMenu.html").ToUri();
+			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\UI\Singleplayer.html").ToUri();
 			destroyWorld = true;
 		}
 
@@ -459,15 +481,15 @@ namespace AsteroidOutpost
 			switch(mapName.ToLower())
 			{
 			case "world1":
-				scenario = new MinerealCollectionScenario(this, 1);
+				scenario = new MinerealCollectionScenario();
 				break;
 
 			case "tutorial":
-				scenario = new TutorialScenario(this, 1);
+				scenario = new TutorialScenario();
 				break;
 
 			case "random":
-				scenario = new RandomScenario(this, 1);
+				scenario = new RandomScenario();
 				break;
 
 			default:
@@ -511,7 +533,7 @@ namespace AsteroidOutpost
 		private void WebView_JSConsoleMessageAdded(object sender, ConsoleMessageEventArgs e)
 		{
 			// JavaScript Error! Fail
-			Console.WriteLine("Awesomium JS Error: {0}, {1} on line {2}. \nLast JS = \"{3}\"", e.Message, e.Source, e.LineNumber, world.LastJSExecuted);
+			Console.WriteLine("Awesomium JS Error: {0}, {1} on line {2}. \nLast JS = \"{3}\"", e.Message, e.Source, e.LineNumber, LastJSExecuted);
 #if DEBUG
 			//Debugger.Break();
 #endif
@@ -519,5 +541,33 @@ namespace AsteroidOutpost
 
 		#endregion
 
+
+
+		public String LastJSExecuted { get; private set; }
+
+
+		public void ExecuteAwesomiumJS(String js)
+		{
+			bool loaded = awesomium.WebView.IsDocumentReady && !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'");
+			if (loaded)
+			{
+				//awesomium.WebView.ExecuteJavascriptWithResult(js, 50);
+				try
+				{
+					LastJSExecuted = js;
+					awesomium.WebView.ExecuteJavascript(js);
+				}
+				catch (InvalidOperationException)
+				{
+					executeAwesomiumJSNextCycle.Add(js);
+					Console.WriteLine("JS Executed Next Cycle");
+				}
+			}
+			else
+			{
+				executeAwesomiumJSNextCycle.Add(js);
+				Console.WriteLine("JS Executed Next Cycle");
+			}
+		}
 	}
 }

@@ -250,7 +250,7 @@ namespace AsteroidOutpost.Systems
 			//bool loaded = !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'").ToBoolean();
 			//if(loaded)
 			//{
-				awesomium.WebView.ExecuteJavascript("if(typeof SetSelection != 'undefined'){ SetSelection(" + GetSelectionJSON() + "); }");
+				world.ExecuteAwesomiumJS("if(typeof SetSelection != 'undefined'){ SetSelection(" + GetSelectionJSON() + "); }");
 			//}
 		}
 
@@ -263,7 +263,7 @@ namespace AsteroidOutpost.Systems
 			//if(loaded)
 			{
 				//awesomium.WebView.ExecuteJavascript("UpdateSelection(" + GetSelectionJSON() + ");");
-				awesomium.WebView.ExecuteJavascript(String.Format(CultureInfo.InvariantCulture, "UpdateSelection({0})", GetSelectionJSON()));
+				world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "UpdateSelection({0})", GetSelectionJSON()));
 			}
 		}
 

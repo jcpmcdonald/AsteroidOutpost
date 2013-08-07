@@ -23,14 +23,17 @@ namespace AsteroidOutpost.Scenarios
 		private Mission collectMinerals = new Mission("collectMinerals", "(0/2000) Collect 2000 minerals", false);
 
 
-		public MinerealCollectionScenario(AOGame theGame, int playerCount)
-			: base(theGame, playerCount)
+		public MinerealCollectionScenario()
 		{
+			Name = "Mineral Grab";
+			Author = "John McDonald";
 		}
 
 
-		public override void Start()
+		public override void Start(AOGame theGame, int playerCount)
 		{
+			base.Start(theGame, playerCount);
+
 			if(playerCount != 1)
 			{
 				// This is single-player only
@@ -59,7 +62,6 @@ namespace AsteroidOutpost.Scenarios
 			world.ExecuteAwesomiumJS("MakeTimerPanel()");
 
 			GenerateAsteroidField(1000);
-			base.Start();
 		}
 
 

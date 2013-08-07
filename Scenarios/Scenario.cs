@@ -17,8 +17,8 @@ namespace AsteroidOutpost.Scenarios
 
 	public abstract class Scenario
 	{
-		//private String name;
-		//private String author;
+		public String Name { get; set; }
+		protected String Author { get; set; }
 
 		protected AOGame theGame;
 		protected World world;
@@ -27,13 +27,7 @@ namespace AsteroidOutpost.Scenarios
 		protected Force friendlyForce;
 
 		protected List<Mission> missions = new List<Mission>();
-
-		protected Scenario(AOGame theGame, int playerCount)
-		{
-			this.theGame = theGame;
-			this.world = theGame.World;
-			this.playerCount = playerCount;
-		}
+		protected List<Mission> deletedMissions = new List<Mission>();
 
 
 		public List<Mission> Missions
@@ -44,16 +38,28 @@ namespace AsteroidOutpost.Scenarios
 			}
 		}
 
-
-		public virtual void Start()
+		public List<Mission> DeletedMissions
 		{
+			get
+			{
+				return deletedMissions;
+			}
+		}
+
+
+		public virtual void Start(AOGame theGame, int playerCount)
+		{
+			this.theGame = theGame;
+			this.world = theGame.World;
+			this.playerCount = playerCount;
+
 			theGame.World.EntityDied += World_EntityDied;
 
-			if(friendlyForce == null)
-			{
-				// A friendly force is required
-				Debugger.Break();
-			}
+			//if(friendlyForce == null)
+			//{
+			//    // A friendly force is required
+			//    Debugger.Break();
+			//}
 		}
 
 		public virtual void End()

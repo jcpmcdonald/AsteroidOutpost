@@ -19,15 +19,23 @@ namespace AsteroidOutpost.Scenarios
 		private TimeSpan waveTimer = timeBetweenWaves;
 		private int sequence = 0;
 
+		private Mission previousMission = null;
+		private Mission currentMission;
+		private TimeSpan timeAlive = TimeSpan.Zero;
+		private int lifeGoal = 3;
 
-		public RandomScenario(AOGame theGame, int playerCount)
-			: base(theGame, playerCount)
+
+		public RandomScenario()
 		{
+			Name = "Endless";
+			Author = "John McDonald";
 		}
 
 
-		public override void Start()
+		public override void Start(AOGame theGame, int playerCount)
 		{
+			base.Start(theGame, playerCount);
+
 			// Set up the player forces and local controller
 			int initialMinerals = 1000;
 			for (int iPlayer = 0; iPlayer < playerCount; iPlayer++)
@@ -53,18 +61,19 @@ namespace AsteroidOutpost.Scenarios
 			world.AddForce(aiForce);
 			world.AddController(aiController);
 
-			missions.Add(new Mission("Alive", "Stay Alive", false));
+			currentMission = new Mission(lifeGoal + "mins", String.Format(CultureInfo.InvariantCulture, "(0 / {0}:00) Stay Alive for {0} minutes", lifeGoal), false);
+			missions.Add(currentMission);
 
 			world.ExecuteAwesomiumJS("MakeTimerPanel();");
 
 			GenerateAsteroidField(1000);
-			base.Start();
 		}
 
 
 
 		public override void Update(TimeSpan deltaTime)
 		{
+			timeAlive += deltaTime;
 			waveTimer = waveTimer.Subtract(deltaTime);
 
 			if (waveTimer <= TimeSpan.Zero)
@@ -74,6 +83,22 @@ namespace AsteroidOutpost.Scenarios
 
 				WaveFactory.CreateWave(world, 100 * sequence, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(3000, -3000));
 			}
+
+			if(timeAlive.TotalMinutes >= lifeGoal)
+			{
+				if(previousMission != null)
+				{
+					deletedMissions.Add(previousMission);
+				}
+				currentMission.Description = String.Format(CultureInfo.InvariantCulture, "({0}:00 / {0}:00) Stay Alive for {0} minutes", lifeGoal);
+				currentMission.Done = true;
+				previousMission = currentMission;
+				lifeGoal += 3;
+				currentMission = new Mission(lifeGoal + "mins", String.Format(CultureInfo.InvariantCulture, "(0 / {0}:00) Stay Alive for {0} minutes", lifeGoal), false);
+				missions.Add(currentMission);
+			}
+
+			currentMission.Description = String.Format(CultureInfo.InvariantCulture, "({1} / {0}:00) Stay Alive for {0} minutes", lifeGoal, timeAlive.ToString(@"m\:ss"));
 
 			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "UpdateTimerPanel('{0}')", waveTimer.ToString(@"m\:ss")));
 		}

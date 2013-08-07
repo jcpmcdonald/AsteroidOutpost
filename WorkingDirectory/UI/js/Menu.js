@@ -34,8 +34,6 @@ function selectionMade(menuItem)
 
 $(document).ready(function()
 {
-	// do stuff when DOM is ready
-	
 	changeSelectionTo($("h2:first"));
 	$("#selectionMarker").addClass("followSelection");
 	

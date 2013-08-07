@@ -101,20 +101,20 @@
 	
 	<div id="gameMenu" class="modalPanel panel">
 		<span class="btnResume button menuButton" onClick="SetPaused(false); XNACall('hud.ResumeGame()');">Resume Game</span>
-		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame()">Main Menu</span>
+		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame();  xna.PopulateScenarioList();">Main Menu</span>
 		<span class="btnExit button menuButton" call="xna.Exit()">Exit Game</span>
 	</div>
 	
 	
 	<div id="gameWin" class="modalPanel panel">
 		<div class="modalTitle">You Win!</div>
-		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame()">Main Menu</span>
+		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame(); xna.PopulateScenarioList();">Main Menu</span>
 		<span class="btnExit button menuButton" call="xna.Exit()">Exit Game</span>
 	</div>
 	
 	<div id="gameLost" class="modalPanel panel">
 		<div class="modalTitle">You Lose</div>
-		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame()">Main Menu</span>
+		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame(); xna.PopulateScenarioList();">Main Menu</span>
 		<span class="btnExit button menuButton" call="xna.Exit()">Exit Game</span>
 	</div>
 	

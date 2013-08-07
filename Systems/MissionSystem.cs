@@ -30,10 +30,19 @@ namespace AsteroidOutpost.Systems
 
 			if(updateAccumulator > updateFrequency)
 			{
+				foreach(var deletedMission in scenario.DeletedMissions)
+				{
+					world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "window.scopeOf('MissionController').RemoveMission('{0}');", deletedMission.Key));
+					if(scenario.Missions.Contains(deletedMission))
+					{
+						scenario.Missions.Remove(deletedMission);
+					}
+				}
+
 				foreach (var mission in scenario.Missions.Where(m => m.Dirty))
 				{
-				world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "window.scopeOf('MissionController').AddMission('{0}', '{1}', {2});", mission.Key, mission.Description, mission.Done.ToString().ToLower()));
-				//awesomium.WebView.ExecuteJavascript(String.Format(CultureInfo.InvariantCulture, "AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
+					world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "window.scopeOf('MissionController').AddMission('{0}', '{1}', {2});", mission.Key, mission.Description, mission.Done.ToString().ToLower()));
+					//awesomium.WebView.ExecuteJavascript(String.Format(CultureInfo.InvariantCulture, "AddMission('{0}', '{1}', '{2}');", mission.Key, mission.Description, mission.Done));
 					mission.Dirty = false;
 				}
 
