@@ -24,6 +24,8 @@
 			"TotalArmour" : 50,
 		},
 		"Targetable" : {},
+		"Perishable" : {},
+		"Selectable" : {},
     }
 }
 

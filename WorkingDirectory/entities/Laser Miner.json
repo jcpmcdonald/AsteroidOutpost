@@ -37,6 +37,8 @@
 			"Color" : "0, 100, 0, 255",
 		},
 		"Targetable" : {},
+		"Perishable" : {},
+		"Selectable" : {},
     }
 }
 

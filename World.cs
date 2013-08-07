@@ -31,7 +31,8 @@ namespace AsteroidOutpost
 	{
 		public const UInt32 Version = 2;
 		public const UInt32 StreamIdent = 0x607A0BAD;  // Have you got it?
-
+		
+		private AOGame theGame;
 		private SpriteBatch spriteBatch;
 
 		private LayeredStarField layeredStarField;
@@ -57,6 +58,7 @@ namespace AsteroidOutpost
 		private readonly MissileWeaponSystem missileWeaponSystem;
 		private readonly FlockingSystem movementSystem;
 		private readonly HitPointSystem hitPointSystem;
+		private readonly SelectionSystem selectionSystem;
 
 		private MissionSystem missionSystem;     // Created when world starts, instead of the world is created
 
@@ -75,8 +77,6 @@ namespace AsteroidOutpost
 		private readonly List<Force> forces = new List<Force>();
 		private bool gameOver = false;
 
-		private List<String> executeAwesomiumJSNextCycle = new List<string>();
-
 		public event Action<bool> PauseToggledEvent;
 		//public event Action<EntityEventArgs> StructureStartedEventPreAuth;
 		//public event Action<EntityEventArgs> StructureStartedEventPostAuth;
@@ -85,8 +85,11 @@ namespace AsteroidOutpost
 		
 		public World(AOGame game) : base(game)
 		{
+			theGame = game;
+
 			network = new AONetwork(this);
-			hud = new AOHUD(game, this);
+			selectionSystem = new SelectionSystem(game, this);
+			hud = new AOHUD(game, this, selectionSystem);
 
 			animationSystem = new AnimationSystem(game, this);
 			physicsSystem = new PhysicsSystem(game, this);
@@ -121,6 +124,7 @@ namespace AsteroidOutpost
 			game.Components.Add(missileWeaponSystem);
 			game.Components.Add(movementSystem);
 			game.Components.Add(hitPointSystem);
+			game.Components.Add(selectionSystem);
 		}
 
 
@@ -803,7 +807,7 @@ namespace AsteroidOutpost
 			Game.Components.Add(missionSystem);
 
 			isServer = true;
-			this.scenario.Start();
+			this.scenario.Start((AOGame)Game, 1);
 			network.StartGame();
 		}
 
@@ -860,13 +864,6 @@ namespace AsteroidOutpost
 		{
 			TimeSpan deltaTime = gameTime.ElapsedGameTime;
 			network.ProcessIncomingQueue(deltaTime);
-
-			for (int i = executeAwesomiumJSNextCycle.Count - 1; i >= 0; i--)
-			{
-				var js = executeAwesomiumJSNextCycle[i];
-				executeAwesomiumJSNextCycle.RemoveAt(i);
-				ExecuteAwesomiumJS(js);
-			}
 			
 			if (!paused)
 			{
@@ -945,7 +942,7 @@ namespace AsteroidOutpost
 		{
 			// Draw the back of the HUD before we draw most everything else
 			spriteBatch.Begin();
-			hud.DrawBack(spriteBatch, Color.White);
+			selectionSystem.DrawBack(spriteBatch, Color.White);
 			spriteBatch.End();
 
 			base.Draw(gameTime);
@@ -1237,36 +1234,21 @@ namespace AsteroidOutpost
 
 		public void GameOver(bool win)
 		{
+			if(win)
+			{
+				((AOGame)Game).ActiveProfile.ScenarioCompleted(scenario);
+			}
+
 			gameOver = true;
 			awesomium.WebView.ExecuteJavascript(String.Format(CultureInfo.InvariantCulture, "GameOver({0})", win.ToString().ToLower()));
 		}
 
 		
-		public String LastJSExecuted { get; private set; }
 
 
 		public void ExecuteAwesomiumJS(String js)
 		{
-			bool loaded = awesomium.WebView.IsDocumentReady && !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'");
-			if (loaded)
-			{
-				//awesomium.WebView.ExecuteJavascriptWithResult(js, 50);
-				try
-				{
-					LastJSExecuted = js;
-					awesomium.WebView.ExecuteJavascript(js);
-				}
-				catch (InvalidOperationException)
-				{
-					executeAwesomiumJSNextCycle.Add(js);
-					Console.WriteLine("JS Executed Next Cycle");
-				}
-			}
-			else
-			{
-				executeAwesomiumJSNextCycle.Add(js);
-				Console.WriteLine("JS Executed Next Cycle");
-			}
+			((AOGame)Game).ExecuteAwesomiumJS(js);
 		}
 	}
 }

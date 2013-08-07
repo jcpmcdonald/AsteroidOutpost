@@ -29,6 +29,8 @@
 			"Acceleration" : 50,
 		},
 		"Targetable" : {},
+		"Perishable" : {},
+		"Selectable" : {},
     }
 }
 

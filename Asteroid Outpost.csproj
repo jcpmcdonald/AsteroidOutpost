@@ -144,8 +144,10 @@
     <Compile Include="Components\MissileProjectile.cs" />
     <Compile Include="Components\MissileWeapon.cs" />
     <Compile Include="Components\EntityName.cs" />
+    <Compile Include="Components\Perishable.cs" />
     <Compile Include="Components\PowerGridNode.cs" />
     <Compile Include="Components\PowerProducer.cs" />
+    <Compile Include="Components\Selectable.cs" />
     <Compile Include="Components\Spin.cs" />
     <Compile Include="Components\Targetable.cs" />
     <Compile Include="Components\Upgradable.cs" />
@@ -160,6 +162,7 @@
     <Compile Include="EnhancedMouseState.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
     <Compile Include="Entities\EntityTemplate.cs" />
+    <Compile Include="Profile.cs" />
     <Compile Include="Scenarios\MinerealCollectionScenario.cs" />
     <Compile Include="Scenarios\Mission.cs" />
     <Compile Include="Screens\Layer.cs" />
@@ -184,6 +187,7 @@
     <Compile Include="Scenarios\RandomScenario.cs" />
     <Compile Include="Scenarios\Scenario.cs" />
     <Compile Include="Scenarios\TutorialScenario.cs" />
+    <Compile Include="Systems\SelectionSystem.cs" />
     <Compile Include="World.cs" />
     <Compile Include="Systems\AOHUD.cs" />
     <Compile Include="Entities\Upgrade.cs" />

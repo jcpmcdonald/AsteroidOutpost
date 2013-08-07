@@ -27,6 +27,7 @@
 			"Armour" : 20,
 			"TotalArmour" : 20,
 		},
+		"Perishable" : {},
     }
 }
 

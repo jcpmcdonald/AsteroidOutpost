@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
@@ -32,8 +33,21 @@ namespace AsteroidOutpost.Systems
 			{
 				if (authoratative && !hitPoints.IsAlive())
 				{
-					// We have just died
-					hitPoints.OnDeath(new EntityDyingEventArgs(hitPoints));
+					// We have just died.
+					Perishable perishable = world.GetNullableComponent<Perishable>(hitPoints);   // Only Nullable so I can create a custom error
+					if(perishable != null)
+					{
+						perishable.OnPerish(new EntityPerishingEventArgs(perishable));
+					}
+					else
+					{
+						EntityName nameComponent = world.GetNullableComponent<EntityName>(hitPoints);
+						String name = "NULL";
+						if(nameComponent != null) { name = nameComponent.Name; }
+						Console.WriteLine("Every entity that has HitPoints is by definition Perishable, but {0} has only HitPoints. Please add Perishable.", name);
+						Debugger.Break();
+					}
+					
 					world.DeleteComponents(hitPoints.EntityID);
 				}
 			}

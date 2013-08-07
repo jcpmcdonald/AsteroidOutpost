@@ -335,8 +335,7 @@ namespace AsteroidOutpost.Systems
 		{
 			spriteBatch.DrawEllipse(world.WorldToScreen(laserMinerPosition.Center),
 			                        world.Scale(laserMiner.MiningRange),
-			                        Color.Red,
-			                        world.HUD.DrawEllipseGuides);
+			                        Color.Red);
 		}
 	}
 }

@@ -111,11 +111,25 @@ namespace AsteroidOutpost.Eventing
 	}
 
 
-	public class EntityDyingEventArgs : ComponentReflectiveEventArgs
+	public class EntityPerishingEventArgs : ComponentReflectiveEventArgs
 	{
-		public EntityDyingEventArgs(HitPoints hitPoints)
-			: base(hitPoints, "SetDead", new object[] { true, true })
+		public EntityPerishingEventArgs(Perishable perishable)
+			: base(perishable, "SetDead", new object[] { true, true })
 		{
+		}
+
+		public Perishable Perishable {
+			get
+			{
+				return (Perishable)Component;
+			}
+		}
+
+		public int EntityID {
+			get
+			{
+				return Component.EntityID;
+			}
 		}
 	}
 

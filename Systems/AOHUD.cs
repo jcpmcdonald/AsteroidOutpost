@@ -34,12 +34,11 @@ namespace AsteroidOutpost.Systems
 		private EnhancedMouseState theMouse = new EnhancedMouseState();
 		private EnhancedKeyboardState theKeyboard = new EnhancedKeyboardState();
 
-		private readonly List<int> selectedEntities = new List<int>();
-		public event Action<MultiEntityEventArgs> SelectionChanged;
 
 
 		private readonly World world;
 		private readonly AwesomiumComponent awesomium;
+		private SelectionSystem selectionSystem;
 		private float scaleFactor = 1.0f; // 1.0 = no scaling, 0.5 = zoomed in, 2.0 = zoomed out
 		private float desiredScaleFactor = 1.0f;
 
@@ -62,10 +61,11 @@ namespace AsteroidOutpost.Systems
 		/// <summary>
 		/// Construct a HUD
 		/// </summary>
-		public AOHUD(AOGame game, World world)
+		public AOHUD(AOGame game, World world, SelectionSystem selectionSystem)
 			: base(game)
 		{
 			this.world = world;
+			this.selectionSystem = selectionSystem;
 
 			// Set up some hotkeys
 			hotkeys.Add(Keys.S, btnPower_Clicked);
@@ -311,7 +311,7 @@ namespace AsteroidOutpost.Systems
 			// Take a screenshot
 			//if (theKeyboard[Keys.F12] == EnhancedKeyState.JUST_RELEASED)
 			//{
-			//    ScreenMan.TakeScreenshot();
+			//    ((AOGame)Game).TakeScreenshot();
 			//}
 
 
@@ -339,7 +339,7 @@ namespace AsteroidOutpost.Systems
 			     theKeyboard[Keys.LeftAlt] == EnhancedKeyState.RELEASED && theKeyboard[Keys.RightAlt] == EnhancedKeyState.RELEASED)
 			    && theKeyboard[Keys.E] == EnhancedKeyState.JUST_PRESSED)
 			{
-				DrawEllipseGuides = !DrawEllipseGuides;
+				//DrawEllipseGuides = !DrawEllipseGuides;
 			}
 
 
@@ -370,15 +370,6 @@ namespace AsteroidOutpost.Systems
 							{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
 						}}
 					});
-					//new Dictionary<String, object>(){
-					//    { "Sprite.Scale", 0.7f },
-					//    { "Sprite.Set", null },
-					//    { "Sprite.Animation", null },
-					//    { "Sprite.Orientation", (float)GlobalRandom.Next(0, 359) },
-					//    { "Transpose.Position", ScreenToWorld(new Vector2(theMouse.X, theMouse.Y)) },
-					//    { "Transpose.Radius", 40 },
-					//    { "OwningForce", aiActor.PrimaryForce }
-					//})};
 				}
 			}
 
@@ -427,13 +418,7 @@ namespace AsteroidOutpost.Systems
 			{
 				awesomium.WebView.ExecuteJavascript(String.Format(CultureInfo.InvariantCulture, "SetResources({0})", (int)(LocalActor.PrimaryForce.GetMinerals() + 0.5)));
 			}
-
-			UpdateSelection();
 		}
-
-
-		// Used for debugging purposes
-		public bool DrawEllipseGuides { get; set; }
 
 
 		private void OnCancelCreation()
@@ -448,78 +433,7 @@ namespace AsteroidOutpost.Systems
 			world.DeleteComponents(creatingEntityID.Value);
 			creatingEntityID = null;
 		}
-
-
-		/// <summary>
-		/// Draw the back of the selection circle around each of the selected entities
-		/// </summary>
-		/// <param name="spriteBatch">The sprite batch to use</param>
-		/// <param name="tint">The color to tint this</param>
-		private void DrawSelectionCirclesBack(SpriteBatch spriteBatch, Color tint)
-		{
-			foreach (var selectedEntity in selectedEntities)
-			{
-				Position selectedEntityPosition = world.GetComponent<Position>(selectedEntity);
-				spriteBatch.DrawEllipseBack(world.WorldToScreen(selectedEntityPosition.Center),
-				                            world.Scale(selectedEntityPosition.Radius),
-				                            Color.Green);
-			}
-		}
-
-
-		/// <summary>
-		/// Draw the front of the selection circle around each of the selected entities
-		/// </summary>
-		/// <param name="spriteBatch">The sprite batch to use</param>
-		/// <param name="tint">The color to tint this</param>
-		private void DrawSelectionCirclesFront(SpriteBatch spriteBatch, Color tint)
-		{
-			foreach (var selectedEntity in selectedEntities)
-			{
-				Position selectedEntityPosition = world.GetComponent<Position>(selectedEntity);
-				spriteBatch.DrawEllipseFront(world.WorldToScreen(selectedEntityPosition.Center),
-				                             world.Scale(selectedEntityPosition.Radius),
-				                             Color.Green,
-				                             DrawEllipseGuides);
-
-				// Draw range circles for various components
-				LaserMiner laserMiner = world.GetNullableComponent<LaserMiner>(selectedEntity);
-				if(laserMiner != null)
-				{
-					spriteBatch.DrawEllipse(world.WorldToScreen(selectedEntityPosition.Center),
-					                        world.Scale(laserMiner.MiningRange),
-					                        Color.Red);
-				}
-
-				LaserWeapon laserWeapon = world.GetNullableComponent<LaserWeapon>(selectedEntity);
-				if(laserWeapon != null)
-				{
-					spriteBatch.DrawEllipse(world.WorldToScreen(selectedEntityPosition.Center),
-					                        world.Scale(laserWeapon.Range),
-					                        Color.Red);
-				}
-
-				MissileWeapon missileWeapon = world.GetNullableComponent<MissileWeapon>(selectedEntity);
-				if(missileWeapon != null)
-				{
-					spriteBatch.DrawEllipse(world.WorldToScreen(selectedEntityPosition.Center),
-					                        world.Scale(missileWeapon.Range),
-					                        Color.Red);
-				}
-			}
-		}
-
-
-
-		/// <summary>
-		/// Draw the back of the HUD
-		/// </summary>
-		/// <param name="spriteBatch">The sprite batch to use</param>
-		/// <param name="tint">The color to tint this</param>
-		public void DrawBack(SpriteBatch spriteBatch, Color tint)
-		{
-			DrawSelectionCirclesBack(spriteBatch, tint);
-		}
+		
 		
 		
 		/// <summary>
@@ -531,7 +445,6 @@ namespace AsteroidOutpost.Systems
 		{
 			spriteBatch.Begin();
 
-			DrawSelectionCirclesFront(spriteBatch, Color.White);
 
 			if(creatingEntityID != null)
 			{
@@ -639,13 +552,13 @@ namespace AsteroidOutpost.Systems
 				{
 					if(localActor == null)
 					{
-						// Show constuction panel?
+						// Show construction panel?
 					}
 					localActor = value;
 				}
 				else
 				{
-					// Hide constuction panel?
+					// Hide construction panel?
 				}
 			}
 		}
@@ -874,6 +787,8 @@ namespace AsteroidOutpost.Systems
 				isDraggingScreen = true;
 				middleMouseGrabPoint = ScreenToWorld(theMouse.X, theMouse.Y);
 			}
+
+
 		}
 
 
@@ -905,76 +820,15 @@ namespace AsteroidOutpost.Systems
 						clickHandled = true;
 					}
 				}
+			}
+			else if (mouseButton == MouseButton.RIGHT && creatingEntityID != null)
+			{
+				OnCancelCreation();
+			}
 
-				if (!clickHandled)
-				{
-					// Did we click on a unit?
-					Vector2 mouseMapCoords = ScreenToWorld(theMouse.X, theMouse.Y);
-
-					// Grab a possible list of clicked entities by using a square-area search
-					List<int> possiblyClickedEntities = world.EntitiesInArea(new Rectangle((int)(mouseMapCoords.X + 0.5), (int)(mouseMapCoords.Y + 0.5), 1, 1));
-					foreach (int entity in possiblyClickedEntities)
-					{
-						// Make sure the unit was clicked
-						if (world.GetComponent<Position>(entity).IsIntersecting(mouseMapCoords, 1))
-						{
-							if(theKeyboard.IsKeyDown(Keys.LeftShift) || theKeyboard.IsKeyDown(Keys.RightShift))
-							{
-								// Multi-select
-								selectedEntities.Add(entity);
-
-								// Connect to the death event
-								HitPoints hitPoints = world.GetNullableComponent<HitPoints>(entity);
-								if(hitPoints != null)
-								{
-									hitPoints.Dying += SelectedEntityDying;
-								}
-							}
-							else
-							{
-								// Single select
-
-								// Disconnect from the death events
-								foreach (HitPoints selectedHitPoints in selectedEntities.Select(selectedEntity => world.GetNullableComponent<HitPoints>(selectedEntity)).Where(selectedHitPoints => selectedHitPoints != null))
-								{
-									selectedHitPoints.Dying -= SelectedEntityDying;
-								}
-
-								selectedEntities.Clear();
-								selectedEntities.Add(entity);
-
-								// Connect to the death event
-								HitPoints hitPoints = world.GetNullableComponent<HitPoints>(entity);
-								if(hitPoints != null)
-								{
-									hitPoints.Dying += SelectedEntityDying;
-								}
-							}
-
-							OnSelectionChanged();
-
-							clickHandled = true;
-						}
-					}
-				}
-
-				if (!clickHandled)
-				{
-					if (selectedEntities.Count > 0)
-					{
-						// Deselect the selected unit(s)
-
-						// Disconnect from the death events
-						foreach (HitPoints selectedHitPoints in selectedEntities.Select(selectedEntity => world.GetNullableComponent<HitPoints>(selectedEntity)).Where(selectedHitPoints => selectedHitPoints != null))
-						{
-							selectedHitPoints.Dying -= SelectedEntityDying;
-						}
-
-						selectedEntities.Clear();
-
-						OnSelectionChanged();
-					}
-				}
+			if(!clickHandled)
+			{
+				selectionSystem.OnMouseUp(sender, mouseButton, theMouse);
 			}
 		}
 
@@ -1021,87 +875,6 @@ namespace AsteroidOutpost.Systems
 		}
 
 
-		protected void OnSelectionChanged()
-		{
-			if (SelectionChanged != null)
-			{
-				SelectionChanged(new MultiEntityEventArgs(selectedEntities));
-			}
-
-			SetSelection();
-		}
-
-
-		/// <summary>
-		/// Sets the UI's selection information
-		/// </summary>
-		private void SetSelection()
-		{
-			//awesomium.WebView.CallJavascriptFunction("", "SetSelection", GetSelectionJSON());
-			//bool loaded = !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'").ToBoolean();
-			//if(loaded)
-			//{
-				awesomium.WebView.ExecuteJavascript("if(typeof SetSelection != 'undefined'){ SetSelection(" + GetSelectionJSON() + "); }");
-			//}
-		}
-
-		/// <summary>
-		/// Updates the UI's selection information
-		/// </summary>
-		private void UpdateSelection()
-		{
-			//bool loaded = !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'").ToBoolean();
-			//if(loaded)
-			{
-				//awesomium.WebView.ExecuteJavascript("UpdateSelection(" + GetSelectionJSON() + ");");
-				awesomium.WebView.ExecuteJavascript(String.Format(CultureInfo.InvariantCulture, "UpdateSelection({0})", GetSelectionJSON()));
-			}
-		}
-
-
-		private String GetSelectionJSON()
-		{
-			if(selectedEntities.Count >= 1)
-			{
-				List<Dictionary<String, Object>> entities = new List<Dictionary<String, Object>>(selectedEntities.Count);
-				int index = 0;
-				foreach (var selectedEntity in selectedEntities)
-				{
-					entities.Add(world.GetComponents<Component>(selectedEntity).ToDictionary(component => component.GetComponentClassName(), component => (Object)component));
-					entities[index].Add("EntityID", selectedEntity);
-					index++;
-				}
-
-
-				//JSON.Instance.Parameters.EnableAnonymousTypes = true;
-				//String json = JSON.Instance.ToJSON(entities);
-				String json = JsonConvert.SerializeObject(entities);
-#if DEBUG
-				//json = JSON.Instance.Beautify(json);
-				//Console.WriteLine(json);
-#endif
-				return json;
-			}
-			else
-			{
-				return "[]";
-			}
-		}
-
-
-		private void SelectedEntityDying(EntityDyingEventArgs e)
-		{
-			// Remove any deleted entities from the selection list
-			HitPoints dyingHitPoints = e.Component as HitPoints;
-			if (dyingHitPoints != null)
-			{
-				selectedEntities.Remove(dyingHitPoints.EntityID);
-				dyingHitPoints.Dying -= SelectedEntityDying;
-
-				// Tell anyone who is interested in a selection change
-				OnSelectionChanged();
-			}
-		}
 
 
 		private void ResumeGame(Object sender, EventArgs e)

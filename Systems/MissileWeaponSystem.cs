@@ -34,6 +34,12 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var missileLauncher in world.GetComponents<MissileWeapon>())
 			{
+				Constructible constructible = world.GetComponent<Constructible>(missileLauncher);
+				if(constructible.IsBeingPlaced || constructible.IsConstructing)
+				{
+					continue;
+				}
+
 				missileLauncher.TimeSinceLastShot += gameTime.ElapsedGameTime;
 				Position closestTargetPosition = AcquireTarget(missileLauncher);
 				missileLauncher.Target = closestTargetPosition != null ? (int?)closestTargetPosition.EntityID : null;
@@ -205,8 +211,7 @@ namespace AsteroidOutpost.Systems
 					Position position = world.GetComponent<Position>(missileWeapon);
 					spriteBatch.DrawEllipse(world.WorldToScreen(position.Center),
 					                        world.Scale(missileWeapon.Range),
-					                        Color.Red,
-					                        world.HUD.DrawEllipseGuides);
+					                        Color.Red);
 				}
 			}
 

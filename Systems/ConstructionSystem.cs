@@ -110,7 +110,7 @@ namespace AsteroidOutpost.Systems
 				Position position = world.GetComponent<Position>(constructable.EntityID);
 				if (constructable.IsBeingPlaced)
 				{
-					spriteBatch.DrawEllipse(world.WorldToScreen(position.Center), world.Scale(PowerGrid.PowerConductingDistance), Color.White, world.HUD.DrawEllipseGuides);
+					spriteBatch.DrawEllipse(world.WorldToScreen(position.Center), world.Scale(PowerGrid.PowerConductingDistance), Color.White);
 				}
 				else if (constructable.IsConstructing)
 				{

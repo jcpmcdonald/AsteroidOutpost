@@ -16,9 +16,6 @@ namespace AsteroidOutpost.Components
 		[EventReplication(EventReplication.ServerToClients)]
 		public event Action<EntityArmourChangedEventArgs> ArmourChanged;
 
-		[EventReplication(EventReplication.ServerToClients)]
-		public event Action<EntityDyingEventArgs> Dying;
-
 
 		public HitPoints(int entityID) : base(entityID) {}
 		public HitPoints(int entityID, int totalArmour)
@@ -44,14 +41,6 @@ namespace AsteroidOutpost.Components
 			if (ArmourChanged != null)
 			{
 				ArmourChanged(e);
-			}
-		}
-
-		public void OnDeath(EntityDyingEventArgs e)
-		{
-			if(Dying != null)
-			{
-				Dying(e);
 			}
 		}
 	}

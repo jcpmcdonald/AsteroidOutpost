@@ -35,6 +35,8 @@
 			"SeparationDistance" : 25,
 		},
 		"Targetable" : {},
+		"Perishable" : {},
+		"Selectable" : {},
     }
 }
 

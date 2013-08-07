@@ -106,8 +106,7 @@ namespace AsteroidOutpost.Systems
 					Position position = world.GetComponent<Position>(laser);
 					spriteBatch.DrawEllipse(world.WorldToScreen(position.Center),
 					                        world.Scale(laser.Range),
-					                        Color.Red,
-					                        world.HUD.DrawEllipseGuides);
+					                        Color.Red);
 				}
 				else if (laser.Target != null)
 				{
