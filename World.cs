@@ -56,6 +56,7 @@ namespace AsteroidOutpost
 		private readonly AccumulationSystem accumulationSystem;
 		private readonly LaserWeaponSystem laserWeaponSystem;
 		private readonly MissileWeaponSystem missileWeaponSystem;
+		private readonly MissileSystem missileSystem;
 		private readonly FlockingSystem movementSystem;
 		private readonly HitPointSystem hitPointSystem;
 		private readonly SelectionSystem selectionSystem;
@@ -100,6 +101,7 @@ namespace AsteroidOutpost
 			accumulationSystem = new AccumulationSystem(game, this, 500);
 			laserWeaponSystem = new LaserWeaponSystem(game, this);
 			missileWeaponSystem = new MissileWeaponSystem(game, this);
+			missileSystem = new MissileSystem(game, this);
 			movementSystem = new FlockingSystem(game, this);
 			hitPointSystem = new HitPointSystem(game, this);
 
@@ -122,6 +124,7 @@ namespace AsteroidOutpost
 			game.Components.Add(accumulationSystem);
 			game.Components.Add(laserWeaponSystem);
 			game.Components.Add(missileWeaponSystem);
+			game.Components.Add(missileSystem);
 			game.Components.Add(movementSystem);
 			game.Components.Add(hitPointSystem);
 			game.Components.Add(selectionSystem);

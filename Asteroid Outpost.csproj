@@ -187,6 +187,7 @@
     <Compile Include="Scenarios\RandomScenario.cs" />
     <Compile Include="Scenarios\Scenario.cs" />
     <Compile Include="Scenarios\TutorialScenario.cs" />
+    <Compile Include="Systems\MissileSystem.cs" />
     <Compile Include="Systems\SelectionSystem.cs" />
     <Compile Include="World.cs" />
     <Compile Include="Systems\AOHUD.cs" />

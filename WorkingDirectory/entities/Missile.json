@@ -20,7 +20,7 @@
 		"MissileProjectile" : {
 			"Damage" : "**",
 			"Acceleration" : "**",
-			"DetonationDistance" : 100,
+			"DetonationDistance" : 0,
 			"Target" : "**",
 		},
 		"HitPoints" : {
