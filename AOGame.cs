@@ -548,7 +548,7 @@ namespace AsteroidOutpost
 
 		public void ExecuteAwesomiumJS(String js)
 		{
-			bool loaded = awesomium.WebView.IsDocumentReady && !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'");
+			bool loaded = awesomium.WebView.IsDocumentReady;// && !awesomium.WebView.ExecuteJavascriptWithResult("typeof scopeOf == 'undefined'");
 			if (loaded)
 			{
 				//awesomium.WebView.ExecuteJavascriptWithResult(js, 50);
