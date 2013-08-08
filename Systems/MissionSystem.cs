@@ -38,6 +38,7 @@ namespace AsteroidOutpost.Systems
 						scenario.Missions.Remove(deletedMission);
 					}
 				}
+				scenario.DeletedMissions.Clear();
 
 				foreach (var mission in scenario.Missions.Where(m => m.Dirty))
 				{
