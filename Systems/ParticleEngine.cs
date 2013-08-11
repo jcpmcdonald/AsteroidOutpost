@@ -39,8 +39,6 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var effect in particleEffectManager.ParticleEffects)
 			{
-				Console.WriteLine(effect.ActiveParticlesCount);
-
 				Matrix dummyMatrix = Matrix.Identity;
 				Vector3 dummyVector3 = Vector3.Zero;
 				particleEffectManager.Renderer.Transformation = world.WorldToScreenTransform;

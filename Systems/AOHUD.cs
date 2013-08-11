@@ -349,8 +349,7 @@ namespace AsteroidOutpost.Systems
 				//((AOGame)Game).ParticleEffectManager.Trigger(new Vector3(600, 0, 600));
 				//((AOGame)Game).ParticleEffectManager.Trigger(new Vector3(0, 600, 600));
 				Vector2 worldMouse = ScreenToWorld(theMouse.X, theMouse.Y);
-				((AOGame)Game).ParticleEffectManager.Trigger(new Vector3(worldMouse.X, worldMouse.Y, 0));
-				((AOGame)Game).ParticleEffectManager.Trigger(new Vector3(0, 0, 0));
+				((AOGame)Game).ParticleEffectManager.Trigger("Basic Explosion", worldMouse);
 			}
 
 

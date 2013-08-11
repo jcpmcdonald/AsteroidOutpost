@@ -29,7 +29,9 @@
 			"Acceleration" : 50,
 		},
 		"Targetable" : {},
-		"Perishable" : {},
+		"Perishable" : {
+			"ParticleEffectOnPerish" : "Basic Explosion",
+		},
 		"Selectable" : {},
     }
 }

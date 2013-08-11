@@ -12,10 +12,14 @@ namespace AsteroidOutpost.Components
 		[EventReplication(EventReplication.ServerToClients)]
 		public event Action<EntityPerishingEventArgs> Perishing;
 
+
 		public Perishable(int entityID)
 			: base(entityID)
 		{
 		}
+
+
+		public String ParticleEffectOnPerish { get; set; }
 
 
 		public void OnPerish(EntityPerishingEventArgs e)

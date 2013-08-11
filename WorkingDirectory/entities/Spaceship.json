@@ -35,7 +35,9 @@
 			"SeparationDistance" : 25,
 		},
 		"Targetable" : {},
-		"Perishable" : {},
+		"Perishable" : {
+			"ParticleEffectOnPerish" : "Basic Explosion",
+		},
 		"Selectable" : {},
     }
 }

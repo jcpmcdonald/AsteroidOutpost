@@ -15,7 +15,7 @@ namespace AsteroidOutpost
 	public class ParticleEffectManager
 	{
 		private SpriteBatchRenderer renderer;
-		private List<ParticleEffect> particleEffects = new List<ParticleEffect>();
+		private Dictionary<String, ParticleEffect> particleEffects = new Dictionary<String, ParticleEffect>();
 
 		public ParticleEffectManager()
 		{
@@ -42,26 +42,20 @@ namespace AsteroidOutpost
 
 				foreach(var emitter in effect.Emitters)
 				{
-					emitter.ParticleTexture = content.Load<Texture2D>(emitter.ParticleTextureAssetPath);
+					emitter.ParticleTexture = content.Load<Texture2D>("ParticleTextures\\" + emitter.ParticleTextureAssetPath);
 					emitter.Initialise();
 				}
-				particleEffects.Add(effect);
+				particleEffects.Add(effect.Name, effect);
 			}
 
 			renderer.LoadContent(content);
-		}
-
-
-		public void Add(ParticleEffect effect)
-		{
-			particleEffects.Add(effect);
 		}
 
 		public IEnumerable<ParticleEffect> ParticleEffects
 		{
 			get
 			{
-				return particleEffects;
+				return particleEffects.Values;
 			}
 		}
 
@@ -74,9 +68,10 @@ namespace AsteroidOutpost
 		}
 
 
-		public void Trigger(Vector3 location)
+		public void Trigger(String name, Vector2 location)
 		{
-			particleEffects[0].Trigger(ref location);
+			Vector3 v3 = new Vector3(location.X, location.Y, 0f);
+			particleEffects[name].Trigger(ref v3);
 		}
 	}
 }

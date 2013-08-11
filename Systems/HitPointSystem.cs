@@ -14,12 +14,14 @@ namespace AsteroidOutpost.Systems
 	class HitPointSystem : DrawableGameComponent
 	{
 		private readonly World world;
+		private ParticleEffectManager particleEffectManager;
 		//private SpriteBatch spriteBatch;
 
-		public HitPointSystem(Game game, World world)
+		public HitPointSystem(AOGame game, World world)
 			: base(game)
 		{
 			this.world = world;
+			particleEffectManager = game.ParticleEffectManager;
 			//spriteBatch = new SpriteBatch(game.GraphicsDevice);
 		}
 
@@ -38,6 +40,12 @@ namespace AsteroidOutpost.Systems
 					if(perishable != null)
 					{
 						perishable.OnPerish(new EntityPerishingEventArgs(perishable));
+
+						if(perishable.ParticleEffectOnPerish != null)
+						{
+							Position perishablePosition = world.GetComponent<Position>(perishable);
+							particleEffectManager.Trigger(perishable.ParticleEffectOnPerish, perishablePosition.Center);
+						}
 					}
 					else
 					{

@@ -112,8 +112,9 @@ namespace AsteroidOutpost
 			// TODO: Create this on the server, then send the size to the clients
 			quadTree = new QuadTree<Position>(0, 0, 20000, 20000);
 
-			movementSystem.DrawOrder = 1001;
 			animationSystem.DrawOrder = 1000;
+			movementSystem.DrawOrder = 1001;
+			particleEngine.DrawOrder = 1050;
 			accumulationSystem.DrawOrder = 1100;
 
 			game.Components.Add(animationSystem);

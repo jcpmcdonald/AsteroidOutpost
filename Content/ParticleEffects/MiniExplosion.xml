@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent>
   <Asset Type="ProjectMercury.ParticleEffect">
-    <Name>Basic Explosion</Name>
+    <Name>Mini Explosion</Name>
     <Author>Matt Davey</Author>
-    <Description>A simple explosion effect.</Description>
+    <Description>A simple explosion effect, scalled down</Description>
     <Emitters>
       <Item Type="ProjectMercury.Emitters.SphereEmitter">
         <Name>Smoke Trail</Name>
         <Budget>500</Budget>
         <Term>2.5</Term>
-        <ReleaseQuantity>16</ReleaseQuantity>
+        <ReleaseQuantity>4</ReleaseQuantity>
         <Enabled>true</Enabled>
-        <ReleaseSpeed>[-64,64]</ReleaseSpeed>
+        <ReleaseSpeed>[-16,16]</ReleaseSpeed>
         <ReleaseColour>
           <Red>[0.5019608,0.5019608]</Red>
           <Green>[0.5019608,0.5019608]</Green>
@@ -26,7 +26,7 @@
         </ReleaseRotation>
         <ParticleTextureAssetPath>Cloud001</ParticleTextureAssetPath>
         <BlendMode>Alpha</BlendMode>
-        <Radius>1</Radius>
+        <Radius>0.5</Radius>
         <Shell>true</Shell>
         <Radiate>true</Radiate>
         <Modifiers>
@@ -35,8 +35,8 @@
             <FinalOpacity>0</FinalOpacity>
           </Modifier>
           <Modifier Type="ProjectMercury.Modifiers.ScaleInterpolator2">
-            <InitialScale>48</InitialScale>
-            <FinalScale>255</FinalScale>
+            <InitialScale>16</InitialScale>
+            <FinalScale>64</FinalScale>
           </Modifier>
           <Modifier Type="ProjectMercury.Modifiers.DampingModifier">
             <DampingCoefficient>1</DampingCoefficient>
@@ -51,7 +51,7 @@
         </Modifiers>
         <Controllers>
           <Controller Type="ProjectMercury.Controllers.CooldownController">
-            <CooldownPeriod>0.0</CooldownPeriod>
+            <CooldownPeriod>0</CooldownPeriod>
           </Controller>
         </Controllers>
       </Item>
@@ -68,7 +68,7 @@
           <Blue>[0,0]</Blue>
         </ReleaseColour>
         <ReleaseOpacity>[1,1]</ReleaseOpacity>
-        <ReleaseScale>[32,64]</ReleaseScale>
+        <ReleaseScale>[4,8]</ReleaseScale>
         <ReleaseRotation>
           <Pitch>[0,0]</Pitch>
           <Yaw>[0,0]</Yaw>
@@ -93,7 +93,7 @@
         </Modifiers>
         <Controllers>
           <Controller Type="ProjectMercury.Controllers.CooldownController">
-            <CooldownPeriod>0.0</CooldownPeriod>
+            <CooldownPeriod>0</CooldownPeriod>
           </Controller>
         </Controllers>
       </Item>
@@ -101,7 +101,7 @@
         <Name>Sparks</Name>
         <Budget>250</Budget>
         <Term>0.75</Term>
-        <ReleaseQuantity>35</ReleaseQuantity>
+        <ReleaseQuantity>7</ReleaseQuantity>
         <Enabled>true</Enabled>
         <ReleaseSpeed>[-125,125]</ReleaseSpeed>
         <ReleaseColour>
@@ -129,7 +129,7 @@
         </Modifiers>
         <Controllers>
           <Controller Type="ProjectMercury.Controllers.CooldownController">
-            <CooldownPeriod>0.0</CooldownPeriod>
+            <CooldownPeriod>0</CooldownPeriod>
           </Controller>
         </Controllers>
       </Item>
@@ -146,7 +146,7 @@
           <Blue>[1,1]</Blue>
         </ReleaseColour>
         <ReleaseOpacity>[0.5,0.5]</ReleaseOpacity>
-        <ReleaseScale>[192,192]</ReleaseScale>
+        <ReleaseScale>[48,48]</ReleaseScale>
         <ReleaseRotation>
           <Pitch>[0,0]</Pitch>
           <Yaw>[0,0]</Yaw>
@@ -162,7 +162,7 @@
         </Modifiers>
         <Controllers>
           <Controller Type="ProjectMercury.Controllers.CooldownController">
-            <CooldownPeriod>0.0</CooldownPeriod>
+            <CooldownPeriod>0</CooldownPeriod>
           </Controller>
         </Controllers>
       </Item>
