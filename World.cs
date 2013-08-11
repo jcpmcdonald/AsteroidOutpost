@@ -60,6 +60,7 @@ namespace AsteroidOutpost
 		private readonly FlockingSystem movementSystem;
 		private readonly HitPointSystem hitPointSystem;
 		private readonly SelectionSystem selectionSystem;
+		private readonly ParticleEngine particleEngine;
 
 		private MissionSystem missionSystem;     // Created when world starts, instead of the world is created
 
@@ -104,6 +105,7 @@ namespace AsteroidOutpost
 			missileSystem = new MissileSystem(game, this);
 			movementSystem = new FlockingSystem(game, this);
 			hitPointSystem = new HitPointSystem(game, this);
+			particleEngine = new ParticleEngine(game, this);
 
 			awesomium = game.Awesomium;
 
@@ -128,6 +130,7 @@ namespace AsteroidOutpost
 			game.Components.Add(movementSystem);
 			game.Components.Add(hitPointSystem);
 			game.Components.Add(selectionSystem);
+			game.Components.Add(particleEngine);
 		}
 
 
@@ -577,7 +580,6 @@ namespace AsteroidOutpost
 			}
 		}
 		
-		
 		/// <summary>
 		/// Looks up weapons by entityID
 		/// This method is thread safe
@@ -700,6 +702,15 @@ namespace AsteroidOutpost
 		public Vector2 WorldToScreen(float x, float y)
 		{
 			return hud.WorldToScreen(x, y);
+		}
+
+
+		public Matrix WorldToScreenTransform
+		{
+			get
+			{
+				return hud.WorldToScreenTransform;
+			}
 		}
 
 

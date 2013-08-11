@@ -14,6 +14,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using ProjectMercury;
+using ProjectMercury.Renderers;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 using MediaState = Microsoft.Xna.Framework.Media.MediaState;
 
@@ -56,6 +58,7 @@ namespace AsteroidOutpost
 
 		private AwesomiumComponent awesomium;
 		private FrameRateCounter frameRateCounter;
+		private  ParticleEffectManager particleEffectManager;
 
 		private List<Song> music = new List<Song>();
 		private int currentTrack;
@@ -89,6 +92,14 @@ namespace AsteroidOutpost
 			get
 			{
 				return world;
+			}
+		}
+
+		public ParticleEffectManager ParticleEffectManager
+		{
+			get
+			{
+				return particleEffectManager;
 			}
 		}
 
@@ -297,6 +308,9 @@ namespace AsteroidOutpost
 			//ThreadPool.QueueUserWorkItem(delegate { EllipseEx.LoadContent(GraphicsDevice); });
 			EntityFactory.LoadContent(GraphicsDevice);
 			EllipseEx.LoadContent(GraphicsDevice);
+
+			particleEffectManager = new ParticleEffectManager();
+			particleEffectManager.LoadParticles(graphics, Content);
 
 			music.Add(Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 04 Inner Battles (Bignic Remix)"));
 			music.Add(Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 01 The Plan"));

@@ -62,7 +62,7 @@ namespace AsteroidOutpost
 			}
 			catch (NoSuitableGraphicsDeviceException)
 			{
-				System.Windows.Forms.MessageBox.Show("No suitable graphics device was found on this computer.", "NoSuitableGraphicsDeviceException", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				System.Windows.Forms.MessageBox.Show("No suitable graphics device was found on this computer. Sorry.", "NoSuitableGraphicsDeviceException", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 

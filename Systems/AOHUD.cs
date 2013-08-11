@@ -343,6 +343,17 @@ namespace AsteroidOutpost.Systems
 			}
 
 
+			if (theKeyboard[Keys.F2] == EnhancedKeyState.JUST_RELEASED)
+			{
+				//((AOGame)Game).ParticleEffectManager.Trigger(new Vector3(600, 600, 0));
+				//((AOGame)Game).ParticleEffectManager.Trigger(new Vector3(600, 0, 600));
+				//((AOGame)Game).ParticleEffectManager.Trigger(new Vector3(0, 600, 600));
+				Vector2 worldMouse = ScreenToWorld(theMouse.X, theMouse.Y);
+				((AOGame)Game).ParticleEffectManager.Trigger(new Vector3(worldMouse.X, worldMouse.Y, 0));
+				((AOGame)Game).ParticleEffectManager.Trigger(new Vector3(0, 0, 0));
+			}
+
+
 			// Make a new bad guy when a key is pressed for debugging
 			if (theKeyboard[Keys.F8] == EnhancedKeyState.JUST_RELEASED)
 			{
@@ -512,6 +523,28 @@ namespace AsteroidOutpost.Systems
 			deltaY = deltaY / scaleFactor;
 
 			return new Vector2(Game.GraphicsDevice.Viewport.Width / 2f + deltaX, Game.GraphicsDevice.Viewport.Height / 2f + deltaY);
+		}
+
+
+		public Matrix WorldToScreenTransform
+		{
+			get
+			{
+				//Vector2 topLeft = ScreenToWorld(0, 0);
+				//return Matrix.CreateTranslation(topLeft.X, topLeft.Y, 0f);
+				////return Matrix.CreateTranslation(focusWorldPoint.X - (Game.GraphicsDevice.Viewport.Width / 2f),
+				////                                focusWorldPoint.Y - (Game.GraphicsDevice.Viewport.Height / 2f), 0f)
+				////    //* Matrix.CreateScale(1f / ScaleFactor)
+				////    ;
+				
+				
+				Vector2 Origin = new Vector2(GraphicsDevice.Viewport.Width / 2f, GraphicsDevice.Viewport.Height / 2f);
+
+				return Matrix.CreateTranslation(-focusWorldPoint.X, -focusWorldPoint.Y, 0) *
+				       Matrix.CreateScale(new Vector3((float)Math.Sqrt(3), 1f, 1f)) *
+					   Matrix.CreateScale(1 / scaleFactor) *
+					   Matrix.CreateTranslation(Origin.X, Origin.Y, 0);
+			}
 		}
 		
 		
