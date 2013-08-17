@@ -32,8 +32,6 @@ namespace AsteroidOutpost.Systems
 				Constructible constructible = world.GetNullableComponent<Constructible>(laser);
 				if (constructible != null && (constructible.IsConstructing || constructible.IsBeingPlaced)) { return; }
 
-				laser.Firing = false;
-
 				Position position = world.GetComponent<Position>(laser);
 				List<int> possibleTargets = world.EntitiesInArea(position.Center, laser.Range);
 
@@ -75,19 +73,42 @@ namespace AsteroidOutpost.Systems
 				{
 					laser.Target = closestTargetPosition.EntityID;
 
-					laser.Firing = true;
-					HitPoints targetHitPoints = world.GetNullableComponent<HitPoints>(closestTargetPosition.EntityID);
-					if(targetHitPoints != null)
+					// Extract some power
+					if(laser.PowerUsageRate > 0)
 					{
-						float damage = (laser.Damage * (float)gameTime.ElapsedGameTime.TotalSeconds);
-						HitPointSystem.InflictDamageOn(targetHitPoints, damage);
+						float powerToUse = laser.PowerUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
+						Force owningForce = world.GetOwningForce(laser);
+						if (world.PowerGrid[owningForce.ID].GetPower(laser.EntityID, powerToUse))
+						{
+							laser.HasPower = true;
+						}
+						else
+						{
+							laser.HasPower = false;
+						}
 					}
 					else
 					{
-						Console.WriteLine("Trying to shoot an invulnerable target! Target is Targetable, but has no HitPoints! What do we do?");
-						Debugger.Break();
+						// No power required for this laser
+						laser.HasPower = true;
 					}
-					
+
+
+					if(laser.HasPower)
+					{
+						HitPoints targetHitPoints = world.GetNullableComponent<HitPoints>(closestTargetPosition.EntityID);
+						if (targetHitPoints != null)
+						{
+							float damage = (laser.Damage * (float)gameTime.ElapsedGameTime.TotalSeconds);
+							HitPointSystem.InflictDamageOn(targetHitPoints, damage);
+						}
+						else
+						{
+							Console.WriteLine("Trying to shoot an invulnerable target! Target is Targetable, but has no HitPoints! What do we do?");
+							Debugger.Break();
+						}
+					}
+
 				}
 			}
 		}
@@ -108,7 +129,7 @@ namespace AsteroidOutpost.Systems
 					                        world.Scale(laser.Range),
 					                        Color.Red);
 				}
-				else if (laser.Target != null)
+				else if (laser.Target != null && laser.HasPower)
 				{
 					Position position = world.GetComponent<Position>(laser);
 					Position targetPosition = world.GetNullableComponent<Position>(laser.Target.Value);

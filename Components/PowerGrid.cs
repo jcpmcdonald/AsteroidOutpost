@@ -207,6 +207,7 @@ namespace AsteroidOutpost.Components
 			PowerProducer powerProducer = GetProducerWithPower(startingLocation, amount, out path);
 			if(powerProducer != null)
 			{
+				// Light up the path to the power source
 				for (int iNode = 1; iNode < path.Count; iNode++)
 				{
 					var linkToAdd = new Tuple<PowerGridNode, PowerGridNode>(path[iNode - 1], path[iNode]);

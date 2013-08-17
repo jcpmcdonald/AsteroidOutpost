@@ -44,6 +44,11 @@ namespace AsteroidOutpost.Components
 		public float PowerProductionRate { get; set; }
 
 
+		/// <summary>
+		/// Gets the power from this producer if able. Returns true if power was consumed
+		/// </summary>
+		/// <param name="amount">The amount of power to consume</param>
+		/// <returns>Returns true if power was consumed, false otherwise</returns>
 		public bool GetPower(float amount)
 		{
 			if (AvailablePower >= amount)

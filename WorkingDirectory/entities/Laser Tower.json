@@ -26,6 +26,7 @@
 			"Range" : 150,
 			"Damage" : 15,
 			"Color" : "0, 128, 0, 255",
+			"PowerUsageRate" : 5,
 		},
 		"Targetable" : {},
 		"Perishable" : {
