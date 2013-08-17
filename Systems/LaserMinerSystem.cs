@@ -18,6 +18,7 @@ namespace AsteroidOutpost.Systems
 	class LaserMinerSystem : DrawableGameComponent
 	{
 		private SpriteBatch spriteBatch;
+		private ParticleEffectManager particleEffectManager;
 		private readonly World world;
 		
 		private static SoundEffect miningSound;
@@ -27,6 +28,7 @@ namespace AsteroidOutpost.Systems
 		{
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 			this.world = world;
+			this.particleEffectManager = game.ParticleEffectManager;
 		}
 
 
@@ -321,6 +323,8 @@ namespace AsteroidOutpost.Systems
 					spriteBatch.DrawLine(world.WorldToScreen(laserMinerPosition.Center + laserMiner.MiningSourceOffset),
 					                     world.WorldToScreen(minablePosition.Center + laserMiner.MiningDestinationOffset),
 					                     color);
+
+					particleEffectManager.Trigger("Mining", minablePosition.Center + laserMiner.MiningDestinationOffset);
 				}
 
 			}

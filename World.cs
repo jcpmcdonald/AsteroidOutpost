@@ -114,6 +114,7 @@ namespace AsteroidOutpost
 
 			animationSystem.DrawOrder = 1000;
 			movementSystem.DrawOrder = 1001;
+			laserMinerSystem.DrawOrder = 1025;
 			particleEngine.DrawOrder = 1050;
 			accumulationSystem.DrawOrder = 1100;
 

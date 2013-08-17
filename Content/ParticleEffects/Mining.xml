@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent>
+  <Asset Type="ProjectMercury.ParticleEffect">
+    <Name>Mining</Name>
+    <Author>John McDonald</Author>
+    <Description Null="true" />
+    <Emitters>
+      <Item Type="ProjectMercury.Emitters.PointEmitter">
+        <Name>Asteroid Chunks</Name>
+        <Budget>5000</Budget>
+        <Term>1</Term>
+        <ReleaseQuantity>50</ReleaseQuantity>
+        <Enabled>true</Enabled>
+        <ReleaseSpeed>[7,16]</ReleaseSpeed>
+        <ReleaseColour>
+          <Red>[0.45,0.65]</Red>
+          <Green>[0.2,0.3]</Green>
+          <Blue>[0,0]</Blue>
+        </ReleaseColour>
+        <ReleaseOpacity>[1,1]</ReleaseOpacity>
+        <ReleaseScale>[12,20]</ReleaseScale>
+        <ReleaseRotation>
+          <Pitch>[0,0]</Pitch>
+          <Yaw>[0,1]</Yaw>
+          <Roll>[0,0]</Roll>
+        </ReleaseRotation>
+        <ParticleTextureAssetPath>FlowerBurst</ParticleTextureAssetPath>
+        <BlendMode>Alpha</BlendMode>
+        <Modifiers>
+          <Modifier Type="ProjectMercury.Modifiers.OpacityInterpolator2">
+            <InitialOpacity>1</InitialOpacity>
+            <FinalOpacity>0</FinalOpacity>
+          </Modifier>
+        </Modifiers>
+        <Controllers>
+          <Controller Type="ProjectMercury.Controllers.TimedReleaseQuantityController" />
+        </Controllers>
+      </Item>
+      <Item Type="ProjectMercury.Emitters.PointEmitter">
+        <Name>Red Dot</Name>
+        <Budget>1000</Budget>
+        <Term>0.01</Term>
+        <ReleaseQuantity>10</ReleaseQuantity>
+        <Enabled>true</Enabled>
+        <ReleaseSpeed>[1,1]</ReleaseSpeed>
+        <ReleaseColour>
+          <Red>[1,1]</Red>
+          <Green>[0,0]</Green>
+          <Blue>[0,0]</Blue>
+        </ReleaseColour>
+        <ReleaseOpacity>[1,1]</ReleaseOpacity>
+        <ReleaseScale>[4,8]</ReleaseScale>
+        <ReleaseRotation>
+          <Pitch>[0,0]</Pitch>
+          <Yaw>[0,0]</Yaw>
+          <Roll>[-1,1]</Roll>
+        </ReleaseRotation>
+        <ParticleTextureAssetPath>Star</ParticleTextureAssetPath>
+        <BlendMode>Add</BlendMode>
+        <Modifiers />
+        <Controllers />
+      </Item>
+    </Emitters>
+  </Asset>
+</XnaContent>
