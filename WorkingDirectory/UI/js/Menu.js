@@ -58,6 +58,9 @@ $(document).ready(function()
 	};
 	
 	
+	$("#logo").on("load", null, null, function(){ changeSelectionTo(selectedItem); });
+	
+	
 	$(document).keydown(
 		function(event)
 		{
