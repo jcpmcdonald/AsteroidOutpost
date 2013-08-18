@@ -165,8 +165,10 @@
     <Compile Include="EllipseEx.cs" />
     <Compile Include="EnhancedKeyboardState.cs" />
     <Compile Include="EnhancedMouseState.cs" />
+    <Compile Include="Entities\ConstructionButton.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
     <Compile Include="Entities\EntityTemplate.cs" />
+    <Compile Include="JsonEx.cs" />
     <Compile Include="ParticleEffectManager.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Scenarios\MinerealCollectionScenario.cs" />

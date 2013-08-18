@@ -21,10 +21,10 @@ namespace AsteroidOutpost.Entities
 		}
 
 
-		public EntityTemplate(String json)
-		{
-			jsonTemplate = JObject.Parse(json);
-		}
+		//public EntityTemplate(String json)
+		//{
+		//    jsonTemplate = JObject.Parse(json);
+		//}
 
 		public EntityTemplate(JObject jObject)
 		{
@@ -36,8 +36,7 @@ namespace AsteroidOutpost.Entities
 		{
 			get
 			{
-				// All entities require a name, fail fast without one
-				return jsonTemplate["Name"].ToString();
+				return jsonTemplate["EntityName"]["Name"].ToString();
 			}
 		}
 
@@ -56,9 +55,9 @@ namespace AsteroidOutpost.Entities
 
 			// Duplicate the current template so that we can apply the object's values (this could be optimized out if it's a problem)
 			EntityTemplate template = (EntityTemplate)Clone();
-			template.ExtendWith(new JObject{ {"Components", jsonValues } });
+			template.ExtendWith(jsonValues);
 
-			JObject componentsJson = template.jsonTemplate["Components"] as JObject;
+			JObject componentsJson = template.jsonTemplate;
 			foreach (var componentJson in componentsJson)
 			{
 				String componentName = componentJson.Key;
@@ -72,16 +71,16 @@ namespace AsteroidOutpost.Entities
 						if (componentType == typeof(Animator))
 						{
 							Animator animator = (Animator)component;
-							Sprite sprite = sprites[jsonTemplate["Components"][componentName]["SpriteName"].ToString().ToLower()];
+							Sprite sprite = sprites[jsonTemplate[componentName]["SpriteName"].ToString().ToLower()];
 							animator.SpriteAnimator = new SpriteAnimator(sprite);
-							if (template.jsonTemplate["Components"][componentName]["CurrentOrientation"] != null)
+							if (template.jsonTemplate[componentName]["CurrentOrientation"] != null)
 							{
 								float angleStep = 360.0f / sprite.OrientationLookup.Count;
-								float spriteOrientation = float.Parse((String)template.jsonTemplate["Components"][componentName]["CurrentOrientation"], CultureInfo.InvariantCulture);
-								template.jsonTemplate["Components"][componentName]["CurrentOrientation"] = (angleStep * (int)((spriteOrientation / angleStep) + 0.5f)) % 360;
+								float spriteOrientation = float.Parse((String)template.jsonTemplate[componentName]["CurrentOrientation"], CultureInfo.InvariantCulture);
+								template.jsonTemplate[componentName]["CurrentOrientation"] = (angleStep * (int)((spriteOrientation / angleStep) + 0.5f)) % 360;
 							}
 						}
-						Populate(component, (JObject)template.jsonTemplate["Components"][componentName]);
+						Populate(component, (JObject)template.jsonTemplate[componentName]);
 						components.Add(component);
 					}
 					else
@@ -172,28 +171,9 @@ namespace AsteroidOutpost.Entities
 			}
 		}
 
-
 		public void ExtendWith(JObject donor)
 		{
-			Extend(jsonTemplate, donor);
-		}
-
-
-		private static void Extend(JObject receiver, JObject donor)
-		{
-			foreach (var property in donor)
-			{
-				JObject receiverValue = receiver[property.Key] as JObject;
-				JObject donorValue = property.Value as JObject;
-				if (receiverValue != null && donorValue != null)
-				{
-					Extend(receiverValue, donorValue);
-				}
-				else
-				{
-					receiver[property.Key] = property.Value;
-				}
-			}
+			jsonTemplate.Extend(donor);
 		}
 	}
 }

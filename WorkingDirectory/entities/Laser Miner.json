@@ -41,6 +41,17 @@
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
 		"Selectable" : {},
-    }
+    },
+    "ConstructionButton" :
+    {
+    	"Image" : "images/LaserMiner.png",
+		"Name" : "EntityName.Name",
+		"Order" : 3,
+		"ImportantValues" : {
+			"Cost" : "Constructible.MineralsToConstruct",
+			"HP" : "HitPoints.TotalArmour",
+			"Mining Rate" : "5.76",
+		}
+    },
 }
 

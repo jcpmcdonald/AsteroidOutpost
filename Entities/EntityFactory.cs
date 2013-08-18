@@ -23,6 +23,7 @@ namespace AsteroidOutpost.Entities
 
 		//private static EntityTemplate asteroidTemplate;
 		private static Dictionary<String, EntityTemplate> templates = new Dictionary<string, EntityTemplate>();
+		private static Dictionary<String, ConstructionButton> constructionButtons = new Dictionary<string, ConstructionButton>();
 
 
 		public static void LoadContent(GraphicsDevice graphicsDevice)
@@ -47,7 +48,8 @@ namespace AsteroidOutpost.Entities
 		public static void LoadEntityTemplates()
 		{
 			String entityJson = File.ReadAllText(@"..\entities\Entity.json");
-			EntityTemplate baseEntity = new EntityTemplate(entityJson); // JsonConvert.DeserializeObject<EntityTemplate>(entityJson);
+			JObject entityJObject = JObject.Parse(entityJson);
+			EntityTemplate baseEntity = new EntityTemplate((JObject)entityJObject["Components"]); // JsonConvert.DeserializeObject<EntityTemplate>(entityJson);
 
 			foreach(var templateFileName in Directory.EnumerateFiles(@"..\entities\", "*.json"))
 			{
@@ -57,7 +59,8 @@ namespace AsteroidOutpost.Entities
 				{
 					EntityTemplate template = (EntityTemplate)baseEntity.Clone();
 					String json = templateFile.OpenText().ReadToEnd();
-					template.ExtendWith(JObject.Parse(json));
+					JObject jObject = JObject.Parse(json);
+					template.ExtendWith((JObject)jObject["Components"]);
 					if(template.Name != "**")
 					{
 						templates.Add(template.Name.ToLower(), template);
@@ -68,6 +71,14 @@ namespace AsteroidOutpost.Entities
 						Debugger.Break();
 					}
 
+
+					if(jObject["ConstructionButton"] != null)
+					{
+						ConstructionButton button = new ConstructionButton();
+						JsonConvert.PopulateObject(jObject["ConstructionButton"].ToString(), button);
+						button.Initialize(template);
+						constructionButtons.Add(button.Name, button);
+					}
 				}
 			}
 		}
@@ -90,7 +101,7 @@ namespace AsteroidOutpost.Entities
 				if(cleanedTemplates.ContainsKey(entityName.Name.ToLower()))
 				{
 					JObject cleanTemplate = cleanedTemplates[entityName.Name.ToLower()];
-					EntityTemplate.Update(world, entityName.EntityID, (JObject)cleanTemplate["Components"]);
+					EntityTemplate.Update(world, entityName.EntityID, cleanTemplate);
 				}
 				else
 				{
@@ -138,5 +149,16 @@ namespace AsteroidOutpost.Entities
 			return entityID;
 		}
 
+
+		public static String GetConstructionButtonJSON()
+		{
+			String json = "[";
+			foreach (var button in constructionButtons.Values.OrderBy(b => b.Order))
+			{
+				json += button.GetButtonJSON() + ",";
+			}
+			json += "]";
+			return json;
+		}
 	}
 }

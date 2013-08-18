@@ -32,6 +32,18 @@
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
 		"Selectable" : {},
-    }
+    },
+    "ConstructionButton" :
+    {
+    	"Image" : "images/SolarStation.png",
+		"Name" : "EntityName.Name",
+		"Order" : 1,
+		"ImportantValues" : {
+			"Cost" : "Constructible.MineralsToConstruct",
+			"HP" : "HitPoints.TotalArmour",
+			"Production Rate" : "PowerProducer.PowerProductionRate",
+			"Max Power" : "PowerProducer.MaxPower",
+		}
+    },
 }
 

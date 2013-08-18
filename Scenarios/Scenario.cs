@@ -60,6 +60,8 @@ namespace AsteroidOutpost.Scenarios
 			//    // A friendly force is required
 			//    Debugger.Break();
 			//}
+
+			CreateConstructionButtons();
 		}
 
 		public virtual void End()
@@ -265,6 +267,13 @@ namespace AsteroidOutpost.Scenarios
 
 			// Return the starting location
 			return origin + delta;
+		}
+
+
+		protected void CreateConstructionButtons()
+		{
+			//SetButtons
+			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetConstructionButtons('{0}');", EntityFactory.GetConstructionButtonJSON()));
 		}
 
 	}

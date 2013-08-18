@@ -5,12 +5,16 @@ function ConstructionButtonController($scope)
 	$scope.buttons = [];
 	
 	
-	SetButtons = function(data)
+	$scope.SetButtons = function(data)
 	{
+		if (typeof data === 'string')
+		{
+			data = eval(data);
+		}
 		$scope.buttons = data;
 	};
 	
-	AddButton = function(buttonData)
+	$scope.AddButton = function(buttonData)
 	{
 		$scope.buttons.push(buttonData);
 	};
@@ -56,13 +60,19 @@ function ConstructionButtonController($scope)
 }
 
 
+function SetConstructionButtons($buttonList)
+{
+	scopeOf("ConstructionButtonController").SetButtons($buttonList);
+}
+
+
 
 
 $(document).ready(function()
 {
-	//if(!InXNA())
-	//{
-		SetButtons([
+	if(!InXNA())
+	{
+		SetConstructionButtons([
 			{
 				"$Name" : "Solar Station",
 				"$Image" : "images/SolarStation.png",
@@ -101,5 +111,5 @@ $(document).ready(function()
 				"Range" : 300,
 			},
 		]);
-	//}
+	}
 });

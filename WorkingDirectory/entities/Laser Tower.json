@@ -33,6 +33,18 @@
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
 		"Selectable" : {},
-    }
+    },
+    "ConstructionButton" :
+    {
+    	"Image" : "images/LaserTower.png",
+		"Name" : "EntityName.Name",
+		"Order" : 4,
+		"ImportantValues" : {
+			"Cost" : "Constructible.MineralsToConstruct",
+			"HP" : "HitPoints.TotalArmour",
+			"Damage" : "LaserWeapon.Damage",
+			"Range" : "LaserWeapon.Range",
+		}
+    },
 }
 
