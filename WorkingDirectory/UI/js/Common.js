@@ -24,13 +24,6 @@ window.scopeOf = function(selector){
 
 function XNACall(param)
 {
-	if (typeof xna === 'undefined')
-	{
-		// We're not in XNA, abort
-		return;
-	}
-	
-	
 	var callString;
 	if (typeof param === 'string')
 	{
@@ -38,13 +31,27 @@ function XNACall(param)
 	}
 	else if (typeof param !== 'undefined' && typeof param.attr("call") !== 'undefined')
 	{
-		callString = param.attr("call");
+		if(!param.hasClass("disabled"))
+		{
+			callString = param.attr("call");
+		}
+		else
+		{
+			return;
+		}
 	}
 	else
 	{
 		return;
 	}
 	
+	
+	if (typeof xna === 'undefined')
+	{
+		// We're not in XNA, abort
+		console.log(callString);
+		return;
+	}
 	eval(callString);
 }
 

@@ -94,12 +94,7 @@ namespace AsteroidOutpost.Systems
 
 			jsHud.Bind("ResumeGame", false, ResumeGame);
 			jsHud.Bind("ForfeitGame", false, ForfeitGame);
-
-			jsHud.Bind("BuildSolarStation", false, btnPower_Clicked);
-			jsHud.Bind("BuildPowerNode", false, btnPowerNode_Clicked);
-			jsHud.Bind("BuildLaserMiner", false, btnLaserMiner_Clicked);
-			jsHud.Bind("BuildLaserTower", false, btnLaserTower_Clicked);
-			jsHud.Bind("BuildMissileTower", false, btnMissileTower_Clicked);
+			jsHud.Bind("Build", false, ContructionButton_Clicked);
 
 			jsHud.Bind("EditEntity", false, awesomium_EditEntity);
 
@@ -529,14 +524,6 @@ namespace AsteroidOutpost.Systems
 		{
 			get
 			{
-				//Vector2 topLeft = ScreenToWorld(0, 0);
-				//return Matrix.CreateTranslation(topLeft.X, topLeft.Y, 0f);
-				////return Matrix.CreateTranslation(focusWorldPoint.X - (Game.GraphicsDevice.Viewport.Width / 2f),
-				////                                focusWorldPoint.Y - (Game.GraphicsDevice.Viewport.Height / 2f), 0f)
-				////    //* Matrix.CreateScale(1f / ScaleFactor)
-				////    ;
-				
-				
 				Vector2 Origin = new Vector2(GraphicsDevice.Viewport.Width / 2f, GraphicsDevice.Viewport.Height / 2f);
 
 				return Matrix.CreateTranslation(-focusWorldPoint.X, -focusWorldPoint.Y, 0) *
@@ -631,7 +618,13 @@ namespace AsteroidOutpost.Systems
 
 		#region Button Handlers
 
-		private void btnPower_Clicked(object sender, EventArgs e)
+
+		private void ContructionButton_Clicked(object sender, JavascriptMethodEventArgs e)
+		{
+			Build(e.Arguments[0].ToString());
+		}
+
+		private void Build(string name)
 		{
 			if (!world.Paused)
 			{
@@ -640,9 +633,8 @@ namespace AsteroidOutpost.Systems
 					OnCancelCreation();
 				}
 
-				// Create a new power station
 				Vector2 worldPosition = ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
-				creatingEntityID = EntityFactory.Create("Solar Station", localActor.PrimaryForce, new JObject{
+				creatingEntityID = EntityFactory.Create(name, localActor.PrimaryForce, new JObject{
 					{ "Animator", new JObject{
 						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
 					}},
@@ -651,160 +643,36 @@ namespace AsteroidOutpost.Systems
 					}}
 				});
 			}
+		}
+
+		private void btnPower_Clicked(object sender, EventArgs e)
+		{
+			Build("Solar Station");
 		}
 
 
 		private void btnPowerNode_Clicked(object sender, EventArgs e)
 		{
-			if (!world.Paused)
-			{
-				if (creatingEntityID != null)
-				{
-					OnCancelCreation();
-				}
-
-				// Create a new power station
-				Vector2 worldPosition = ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
-				creatingEntityID = EntityFactory.Create("Power Node", localActor.PrimaryForce, new JObject{
-					{ "Animator", new JObject{
-						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
-					}},
-					{ "Position", new JObject{
-						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
-					}}
-				});
-			}
+			Build("Power Node");
 		}
 
 
 		private void btnLaserMiner_Clicked(object sender, EventArgs e)
 		{
-			if (!world.Paused)
-			{
-				if (creatingEntityID != null)
-				{
-					OnCancelCreation();
-				}
-
-				// Create a new laser miner
-				Vector2 worldPosition = ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
-				creatingEntityID = EntityFactory.Create("Laser Miner", localActor.PrimaryForce, new JObject{
-					{ "Animator", new JObject{
-						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
-					}},
-					{ "Position", new JObject{
-						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
-					}}
-				});
-			}
+			Build("Laser Miner");
 		}
 
 
 		void btnLaserTower_Clicked(object sender, EventArgs e)
 		{
-			if (!world.Paused)
-			{
-
-				if (creatingEntityID != null)
-				{
-					OnCancelCreation();
-				}
-
-				// Create a new laser tower
-				Vector2 worldPosition = ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
-				creatingEntityID = EntityFactory.Create("Laser Tower", localActor.PrimaryForce, new JObject{
-					{ "Animator", new JObject{
-						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
-					}},
-					{ "Position", new JObject{
-						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
-					}}
-				});
-			}
+			Build("Laser Tower");
 		}
 
 
 		void btnMissileTower_Clicked(object sender, EventArgs e)
 		{
-			if (!world.Paused)
-			{
-
-				if (creatingEntityID != null)
-				{
-					OnCancelCreation();
-				}
-
-				// Create a new missile tower
-				Vector2 worldPosition = ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
-				creatingEntityID = EntityFactory.Create("Missile Tower", localActor.PrimaryForce, new JObject{
-					{ "Animator", new JObject{
-						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
-					}},
-					{ "Position", new JObject{
-						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
-					}}
-				});
-			}
+			Build("Missile Tower");
 		}
-
-
-		//private List<ICanKillSelf> CreateRangeRings(ConstructableEntity entity)
-		//{
-		//    var createdSuicidals = new List<ICanKillSelf>(6);
-		//    var rangeRingDefinitions = new List<Tuple<int, Color, string>>(10);
-		//    entity.GetRangeRings(ref rangeRingDefinitions);
-
-		//    foreach (var rangeRingDefinition in rangeRingDefinitions)
-		//    {
-		//        Ring ring = new Ring(world,
-		//                             entity.Position,
-		//                             rangeRingDefinition.Item1,
-		//                             rangeRingDefinition.Item2);
-		//        components.Add(ring);
-		//        createdSuicidals.Add(ring);
-
-		//        PositionOffset positionOffset = new PositionOffset(world, entity.Position, new Vector2(-25, -rangeRingDefinition.Item1 - 17));
-		//        FreeText text = new FreeText(world,
-		//                                     entity.Position.Center + new Vector2(-25, -rangeRingDefinition.Item1 - 17),
-		//                                     rangeRingDefinition.Item3,
-		//                                     rangeRingDefinition.Item2);
-		//        components.Add(positionOffset);
-		//        components.Add(text);
-		//        createdSuicidals.Add(text);
-		//    }
-
-		//    return createdSuicidals;
-		//}
-
-
-		//private void CreateRangeRingsForConstruction(ConstructableEntity entity)
-		//{
-		//    foreach (var suicidal in CreateRangeRings(entity))
-		//    {
-		//        // TODO: I think these events will continue to hold on to the dying entity long after its dead and it will prevent garbage collection
-		//        CancelledCreationEvent += suicidal.KillSelf;
-		//        //world.StructureStartedEventPreAuth += suicidal.KillSelf;
-		//    }
-		//}
-
-
-		//private void CreateRangeRingsForSelection(ConstructableEntity entity)
-		//{
-		//    foreach (var suicidal in CreateRangeRings(entity))
-		//    {
-		//        // TODO: I think these events will continue to hold on to the dying entity long after its dead and it will prevent garbage collection
-		//        SelectionChanged += suicidal.KillSelf;
-		//    }
-		//}
-
-
-		//private void CreatePowerLinker(ConstructableEntity entity)
-		//{
-		//    PowerLinker powerLinker = new PowerLinker(world, localActor.PrimaryForce, entity);
-		//    CancelledCreationEvent += powerLinker.KillSelf;
-		//    //world.StructureStartedEventPreAuth += powerLinker.KillSelf;
-		//    components.Add(powerLinker);
-		//}
 
 		#endregion
 

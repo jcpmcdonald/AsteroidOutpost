@@ -5,6 +5,8 @@
 	float: left;
 	width: 100px;
 	height: 80px;
+	
+	background-repeat: no-repeat;
 }
 
 #constructionMenu
@@ -20,6 +22,7 @@
 	border-style: solid solid none none;
 }
 
+/*
 #SolarStation
 {
 	background-image: url("../images/SolarStation.png");
@@ -45,3 +48,4 @@
 	background-image: url("../images/MissileTower.png");
 	background-repeat: no-repeat;
 }
+*/

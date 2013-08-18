@@ -62,7 +62,13 @@ body
 	background-color: rgba(70, 70, 70, 0.5);
 }
 
-.buttonPressed
+/*.buttonPressed
+{
+	border-style: inset;
+	background-position: 2px 2px;
+}*/
+
+.button:active
 {
 	border-style: inset;
 	background-position: 2px 2px;
@@ -76,6 +82,13 @@ body
 	background-color: rgba(10, 10, 10, 0.9);
 	-webkit-filter: grayscale;
 	-webkit-filter: brightness(30%);
+}
+
+
+.buttonHoverTitle
+{
+	margin-top: 0px;
+	margin-bottom: 10px;
 }
 
 
