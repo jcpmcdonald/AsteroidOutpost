@@ -74,10 +74,10 @@ namespace AsteroidOutpost.Entities
 
 					if(jObject["ConstructionButton"] != null)
 					{
-						ConstructionButton button = new ConstructionButton();
+						ConstructionButton button = new ConstructionButton(template.Name);
 						JsonConvert.PopulateObject(jObject["ConstructionButton"].ToString(), button);
 						button.Initialize(template);
-						constructionButtons.Add(button.Name, button);
+						constructionButtons.Add(template.Name.ToLower(), button);
 					}
 				}
 			}

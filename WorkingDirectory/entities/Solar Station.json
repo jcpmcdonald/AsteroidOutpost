@@ -36,7 +36,6 @@
     "ConstructionButton" :
     {
     	"Image" : "images/SolarStation.png",
-		"Name" : "EntityName.Name",
 		"Order" : 1,
 		"ImportantValues" : {
 			"Cost" : "Constructible.MineralsToConstruct",

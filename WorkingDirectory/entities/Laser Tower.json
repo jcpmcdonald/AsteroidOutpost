@@ -37,7 +37,6 @@
     "ConstructionButton" :
     {
     	"Image" : "images/LaserTower.png",
-		"Name" : "EntityName.Name",
 		"Order" : 4,
 		"ImportantValues" : {
 			"Cost" : "Constructible.MineralsToConstruct",

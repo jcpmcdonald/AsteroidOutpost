@@ -32,7 +32,6 @@
     "ConstructionButton" :
     {
     	"Image" : "images/PowerNode.png",
-		"Name" : "EntityName.Name",
 		"Order" : 2,
 		"ImportantValues" : {
 			"Cost" : "Constructible.MineralsToConstruct",

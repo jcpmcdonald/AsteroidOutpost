@@ -10,15 +10,20 @@ namespace AsteroidOutpost.Entities
 	internal class ConstructionButton
 	{
 		public String Image { get; set; }
-		public String Name { get; set; }
+		public String Name { get; private set; }
 		public int Order { get; set; }
 		public Dictionary<String, String> ImportantValues;
+
+
+		public ConstructionButton(String name)
+		{
+			this.Name = name;
+		}
 
 
 		public void Initialize(EntityTemplate entityTemplate)
 		{
 			Image = GetValueFor(Image, entityTemplate) ?? Image;
-			Name = GetValueFor(Name, entityTemplate) ?? Name;
 
 			String[] keys = new String[ImportantValues.Count];
 			ImportantValues.Keys.CopyTo(keys, 0);

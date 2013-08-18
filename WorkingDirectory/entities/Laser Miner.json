@@ -45,7 +45,6 @@
     "ConstructionButton" :
     {
     	"Image" : "images/LaserMiner.png",
-		"Name" : "EntityName.Name",
 		"Order" : 3,
 		"ImportantValues" : {
 			"Cost" : "Constructible.MineralsToConstruct",
