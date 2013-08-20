@@ -17,7 +17,6 @@ namespace AsteroidOutpost.Components
 
 		public Constructible(int entityID) : base(entityID)
 		{
-			IsConstructing = false;
 			IsBeingPlaced = true;
 			mineralsConstructed = 0;
 		}

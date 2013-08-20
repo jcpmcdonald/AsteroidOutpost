@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AsteroidOutpost.Components;
+using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Scenarios;
@@ -355,7 +356,24 @@ namespace AsteroidOutpost
 					quadTree.Add(position);
 				}
 
+
+				Perishable perishable = component as Perishable;
+				if(perishable != null)
+				{
+					perishable.Perishing += PerishableOnPerishing;
+				}
+
 			}
+		}
+
+
+		private void PerishableOnPerishing(EntityPerishingEventArgs args)
+		{
+			if(EntityDied != null)
+			{
+				EntityDied(args.EntityID);
+			}
+			args.Perishable.Perishing -= PerishableOnPerishing;
 		}
 
 
@@ -897,14 +915,14 @@ namespace AsteroidOutpost
 				}
 
 
-				// First tell people about dead entities
-				if (EntityDied != null && deadComponents.Count > 0)
-				{
-					foreach(var deadEntity in deadComponents.Select(x => x.EntityID).Distinct())
-					{
-						EntityDied(deadEntity);
-					}
-				}
+				//// First tell people about dead entities
+				//if (EntityDied != null && deadComponents.Count > 0)
+				//{
+				//    foreach(var deadEntity in deadComponents.Select(x => x.EntityID).Distinct())
+				//    {
+				//        EntityDied(deadEntity);
+				//    }
+				//}
 
 				// Then clean up the dead entities
 				foreach (Component deadComponent in deadComponents)

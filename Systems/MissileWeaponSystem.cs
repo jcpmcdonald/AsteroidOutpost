@@ -34,8 +34,8 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var missileLauncher in world.GetComponents<MissileWeapon>())
 			{
-				Constructible constructible = world.GetComponent<Constructible>(missileLauncher);
-				if(constructible.IsBeingPlaced || constructible.IsConstructing)
+				Constructible constructible = world.GetNullableComponent<Constructible>(missileLauncher);
+				if(constructible != null)
 				{
 					continue;
 				}
@@ -136,8 +136,8 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var missileWeapon in world.GetComponents<MissileWeapon>())
 			{
-				Constructible constructable = world.GetComponent<Constructible>(missileWeapon);
-				if (constructable.IsBeingPlaced)
+				Constructible constructable = world.GetNullableComponent<Constructible>(missileWeapon);
+				if (constructable != null && constructable.IsBeingPlaced)
 				{
 					// Draw attack range
 					Position position = world.GetComponent<Position>(missileWeapon);

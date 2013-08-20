@@ -53,8 +53,8 @@ namespace AsteroidOutpost.Systems
 				
 				if (laserMiner.RescanForAsteroids)
 				{
-					Constructible constructable = world.GetComponent<Constructible>(laserMiner);
-					if (!constructable.IsBeingPlaced)
+					Constructible constructable = world.GetNullableComponent<Constructible>(laserMiner);
+					if (constructable == null || !constructable.IsBeingPlaced)
 					{
 						laserMiner.RescanForAsteroids = false;
 						laserMiner.nearbyAsteroids.Clear();
@@ -64,8 +64,8 @@ namespace AsteroidOutpost.Systems
 
 				if (laserMiner.FirstUpdate)
 				{
-					Constructible constructable = world.GetComponent<Constructible>(laserMiner);
-					if (constructable.IsBeingPlaced || constructable.IsConstructing)
+					Constructible constructable = world.GetNullableComponent<Constructible>(laserMiner);
+					if (constructable != null)
 					{
 						continue;
 					}
@@ -274,8 +274,8 @@ namespace AsteroidOutpost.Systems
 			{
 				if (laserMiner.FirstUpdate)
 				{
-					Constructible constructable = world.GetComponent<Constructible>(laserMiner);
-					if (constructable.IsBeingPlaced)
+					Constructible constructable = world.GetNullableComponent<Constructible>(laserMiner);
+					if (constructable != null && constructable.IsBeingPlaced)
 					{
 						// Draw the links to nearby minables
 						Color color = new Color((int)(20f + world.Scale(150)),

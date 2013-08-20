@@ -38,10 +38,21 @@ namespace AsteroidOutpost.Systems
 		{
 			if (world.Paused) { return; }
 
-			var constructables = world.GetComponents<Constructible>().Where(x => x.IsConstructing);
+			var constructables = world.GetComponents<Constructible>();
 
 			foreach (var constructable in constructables)
 			{
+				if(constructable.IsBeingPlaced)
+				{
+					continue;
+				}
+				if(!constructable.IsConstructing)
+				{
+					// Uhh... Ok. Not needed
+					world.DeleteComponent(constructable);
+					continue;
+				}
+
 				float powerToUse = powerUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
 				float mineralsToUse = mineralUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
 				int deltaMinerals;
@@ -74,6 +85,8 @@ namespace AsteroidOutpost.Systems
 								{
 									ConstructionCompletedEvent(constructable.EntityID);
 								}
+
+								world.DeleteComponent(constructable);
 							}
 						}
 						else
@@ -101,7 +114,7 @@ namespace AsteroidOutpost.Systems
 		/// </summary>
 		public override void Draw(GameTime gameTime)
 		{
-			List<Constructible> constructables = world.GetComponents<Constructible>().Where(x => x.IsConstructing || x.IsBeingPlaced).ToList();
+			var constructables = world.GetComponents<Constructible>();
 
 			spriteBatch.Begin();
 

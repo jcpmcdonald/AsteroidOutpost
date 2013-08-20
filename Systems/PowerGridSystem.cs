@@ -40,7 +40,7 @@ namespace AsteroidOutpost.Systems
 			foreach(var producer in world.GetComponents<PowerProducer>().Where(p => p.ProducesPower))
 			{
 				var constructible = world.GetNullableComponent<Constructible>(producer);
-				if(constructible != null && (constructible.IsBeingPlaced || constructible.IsConstructing))
+				if(constructible != null)
 				{
 					// Ignore placing and constructing producers
 					continue;
