@@ -56,8 +56,8 @@ namespace AsteroidOutpost
 		private readonly LaserMinerSystem laserMinerSystem;
 		private readonly AccumulationSystem accumulationSystem;
 		private readonly LaserWeaponSystem laserWeaponSystem;
-		private readonly MissileWeaponSystem missileWeaponSystem;
-		private readonly MissileSystem missileSystem;
+		private readonly ProjectileLauncherSystem projectileLauncherSystem;
+		private readonly ProjectileSystem projectileSystem;
 		private readonly FlockingSystem movementSystem;
 		private readonly HitPointSystem hitPointSystem;
 		private readonly SelectionSystem selectionSystem;
@@ -102,8 +102,8 @@ namespace AsteroidOutpost
 			laserMinerSystem = new LaserMinerSystem(game, this);
 			accumulationSystem = new AccumulationSystem(game, this, 500);
 			laserWeaponSystem = new LaserWeaponSystem(game, this);
-			missileWeaponSystem = new MissileWeaponSystem(game, this);
-			missileSystem = new MissileSystem(game, this);
+			projectileLauncherSystem = new ProjectileLauncherSystem(game, this);
+			projectileSystem = new ProjectileSystem(game, this);
 			movementSystem = new FlockingSystem(game, this);
 			hitPointSystem = new HitPointSystem(game, this);
 			particleEngine = new ParticleEngine(game, this);
@@ -128,8 +128,8 @@ namespace AsteroidOutpost
 			game.Components.Add(laserMinerSystem);
 			game.Components.Add(accumulationSystem);
 			game.Components.Add(laserWeaponSystem);
-			game.Components.Add(missileWeaponSystem);
-			game.Components.Add(missileSystem);
+			game.Components.Add(projectileLauncherSystem);
+			game.Components.Add(projectileSystem);
 			game.Components.Add(movementSystem);
 			game.Components.Add(hitPointSystem);
 			game.Components.Add(selectionSystem);

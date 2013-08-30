@@ -22,11 +22,10 @@
 			"Armour" : 100,
 			"TotalArmour" : 100,
 		},
-		"MissileWeapon" : {
+		"ProjectileLauncher" : {
+			"ProjectileType" : "Missile",
 			"Range" : 300,
-			"Damage" : 25,
 			"FireRate" : 1500,
-			"Acceleration" : 50,
 		},
 		"Targetable" : {},
 		"Perishable" : {

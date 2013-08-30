@@ -146,8 +146,8 @@
     <Compile Include="Components\LaserWeapon.cs" />
     <Compile Include="Components\Minable.cs" />
     <Compile Include="Components\Flocking.cs" />
-    <Compile Include="Components\MissileProjectile.cs" />
-    <Compile Include="Components\MissileWeapon.cs" />
+    <Compile Include="Components\Projectile.cs" />
+    <Compile Include="Components\ProjectileLauncher.cs" />
     <Compile Include="Components\EntityName.cs" />
     <Compile Include="Components\Perishable.cs" />
     <Compile Include="Components\PowerGridNode.cs" />
@@ -195,7 +195,7 @@
     <Compile Include="Scenarios\RandomScenario.cs" />
     <Compile Include="Scenarios\Scenario.cs" />
     <Compile Include="Scenarios\TutorialScenario.cs" />
-    <Compile Include="Systems\MissileSystem.cs" />
+    <Compile Include="Systems\ProjectileSystem.cs" />
     <Compile Include="Systems\ParticleEngine.cs" />
     <Compile Include="Systems\SelectionSystem.cs" />
     <Compile Include="World.cs" />
@@ -215,7 +215,7 @@
     <Compile Include="Systems\HitPointSystem.cs" />
     <Compile Include="Systems\LaserMinerSystem.cs" />
     <Compile Include="Systems\LaserWeaponSystem.cs" />
-    <Compile Include="Systems\MissileWeaponSystem.cs" />
+    <Compile Include="Systems\ProjectileLauncherSystem.cs" />
     <Compile Include="Systems\MissionSystem.cs" />
     <Compile Include="Systems\FlockingSystem.cs" />
     <Compile Include="Systems\PhysicsSystem.cs" />

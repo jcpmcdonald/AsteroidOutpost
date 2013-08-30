@@ -87,11 +87,11 @@ namespace AsteroidOutpost.Systems
 					                        Color.Red);
 				}
 
-				MissileWeapon missileWeapon = world.GetNullableComponent<MissileWeapon>(selectedEntity);
-				if(missileWeapon != null)
+				ProjectileLauncher projectileLauncher = world.GetNullableComponent<ProjectileLauncher>(selectedEntity);
+				if(projectileLauncher != null)
 				{
 					spriteBatch.DrawEllipse(world.WorldToScreen(selectedEntityPosition.Center),
-					                        world.Scale(missileWeapon.Range),
+					                        world.Scale(projectileLauncher.Range),
 					                        Color.Red);
 				}
 			}

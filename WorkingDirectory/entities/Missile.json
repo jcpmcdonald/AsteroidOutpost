@@ -17,11 +17,11 @@
 			"CurrentAnimation" : "Idle",
 			"CurrentOrientation" : 0,
 		},
-		"MissileProjectile" : {
-			"Damage" : "**",
-			"Acceleration" : "**",
+		"Projectile" : {
+			"Damage" : 25,
+			"AccelerationMagnitude" : 50,
+			"AccelerationVector" : "**",
 			"DetonationDistance" : 0,
-			"Target" : "**",
 		},
 		"HitPoints" : {
 			"Armour" : 20,
