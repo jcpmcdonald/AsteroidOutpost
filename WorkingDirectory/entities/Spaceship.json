@@ -1,6 +1,6 @@
 {
 	"Name" : "Spaceship",
-    "Components" : {
+	"Components" : {
 		"EntityName" : {
 			"Name" : "Spaceship",
 		},
@@ -39,6 +39,6 @@
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
 		"Selectable" : {},
-    }
+	}
 }
 

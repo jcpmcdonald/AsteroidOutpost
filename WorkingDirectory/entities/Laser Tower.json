@@ -1,6 +1,6 @@
 {
 	"Name" : "Laser Tower",
-    "Components" : {
+	"Components" : {
 		"EntityName" : {
 			"Name" : "Laser Tower",
 		},
@@ -33,10 +33,10 @@
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
 		"Selectable" : {},
-    },
-    "ConstructionButton" :
-    {
-    	"Image" : "images/LaserTower.png",
+	},
+	"ConstructionButton" :
+	{
+		"Image" : "images/LaserTower.png",
 		"Order" : 4,
 		"ImportantValues" : {
 			"Cost" : "Constructible.MineralsToConstruct",
@@ -44,6 +44,6 @@
 			"Damage" : "LaserWeapon.Damage",
 			"Range" : "LaserWeapon.Range",
 		}
-    },
+	},
 }
 

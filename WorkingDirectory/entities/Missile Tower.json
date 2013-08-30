@@ -1,6 +1,6 @@
 {
 	"Name" : "Missile Tower",
-    "Components" : {
+	"Components" : {
 		"EntityName" : {
 			"Name" : "Missile Tower",
 		},
@@ -33,10 +33,10 @@
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
 		"Selectable" : {},
-    },
-    "ConstructionButton" :
-    {
-    	"Image" : "images/MissileTower.png",
+	},
+	"ConstructionButton" :
+	{
+		"Image" : "images/MissileTower.png",
 		"Order" : 5,
 		"ImportantValues" : {
 			"Cost" : "Constructible.MineralsToConstruct",
@@ -44,6 +44,6 @@
 			"Damage" : "16.6",
 			"Range" : "MissileWeapon.Range",
 		}
-    },
+	},
 }
 

@@ -1,6 +1,6 @@
 {
 	"Name" : "Solar Station",
-    "Components" : {
+	"Components" : {
 		"EntityName" : {
 			"Name" : "Solar Station",
 		},
@@ -32,10 +32,10 @@
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
 		"Selectable" : {},
-    },
-    "ConstructionButton" :
-    {
-    	"Image" : "images/SolarStation.png",
+	},
+	"ConstructionButton" :
+	{
+		"Image" : "images/SolarStation.png",
 		"Order" : 1,
 		"ImportantValues" : {
 			"Cost" : "Constructible.MineralsToConstruct",
@@ -43,6 +43,6 @@
 			"Production Rate" : "PowerProducer.PowerProductionRate",
 			"Max Power" : "PowerProducer.MaxPower",
 		}
-    },
+	},
 }
 

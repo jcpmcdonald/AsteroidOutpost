@@ -55,24 +55,7 @@ namespace AsteroidOutpost.Components
 			}
 		}
 
-
-
-		// This is left here (for now) for my reflection system
-		public void SetCenter(Vector2 newCenter)
-		{
-			Center = newCenter;
-		}
-
-
-		/// <summary>
-		/// Gets whether this entity is solid or not
-		/// </summary>
 		public bool Solid { get; set; }
-
-
-		/// <summary>
-		/// Gets or set the radius
-		/// </summary>
 		public int Radius { get; set; }
 
 

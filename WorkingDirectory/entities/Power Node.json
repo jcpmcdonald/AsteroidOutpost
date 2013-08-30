@@ -1,6 +1,6 @@
 {
 	"Name" : "Power Node",
-    "Components" : {
+	"Components" : {
 		"EntityName" : {
 			"Name" : "Power Node",
 		},
@@ -28,15 +28,15 @@
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
 		"Selectable" : {},
-    },
-    "ConstructionButton" :
-    {
-    	"Image" : "images/PowerNode.png",
+	},
+	"ConstructionButton" :
+	{
+		"Image" : "images/PowerNode.png",
 		"Order" : 2,
 		"ImportantValues" : {
 			"Cost" : "Constructible.MineralsToConstruct",
 			"HP" : "HitPoints.TotalArmour",
 		}
-    },
+	},
 }
 

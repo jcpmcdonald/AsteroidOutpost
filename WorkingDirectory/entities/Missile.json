@@ -1,6 +1,6 @@
 {
 	"Name" : "Missile",
-    "Components" : {
+	"Components" : {
 		"EntityName" : {
 			"Name" : "Missile",
 		},
@@ -30,6 +30,6 @@
 		"Perishable" : {
 			"ParticleEffectOnPerish" : "Mini Explosion",
 		},
-    }
+	}
 }
 

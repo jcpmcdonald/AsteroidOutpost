@@ -1,6 +1,6 @@
 {
 	"Name" : "**",
-    "Components" : {
+	"Components" : {
 		"EntityName" : {
 			"Name" : "**",
 		},
@@ -17,7 +17,7 @@
 			"Angle" : 0,
 			"CurrentSet" : "Idle",
 		},
-    }
+	}
 }
 
 
