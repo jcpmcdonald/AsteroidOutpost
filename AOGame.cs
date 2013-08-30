@@ -35,6 +35,10 @@ namespace AsteroidOutpost
 		public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int cx, int cy, int wFlags);
 
 
+		[DllImport("user32.dll", EntryPoint = "ClipCursor")]
+		private static extern void ClipCursor(ref Rectangle rect);
+
+
 		private const short SWP_NOMOVE = 0X2;
 		private const short SWP_NOSIZE = 1;
 		private const short SWP_NOZORDER = 0X4;
@@ -314,7 +318,7 @@ namespace AsteroidOutpost
 
 			music.Add(Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 04 Inner Battles (Bignic Remix)"));
 			music.Add(Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 01 The Plan"));
-			currentTrack = 0;
+			currentTrack = 1;
 
 			//MediaPlayer.IsRepeating = true;
 
@@ -322,6 +326,15 @@ namespace AsteroidOutpost
 			{
 				stopwatch.Stop();
 				Console.WriteLine("Loaded in " + stopwatch.ElapsedMilliseconds + "ms");
+			}
+
+			if(graphics.IsFullScreen)
+			{
+				// Clip the mouse to the window in full screen mode
+				Rectangle rect = Window.ClientBounds;
+				rect.Width += rect.X;
+				rect.Height += rect.Y;
+				ClipCursor(ref rect);
 			}
 		}
 
@@ -371,7 +384,7 @@ namespace AsteroidOutpost
 					base.Update(new GameTime(accumulatedTime, fixedDeltaTime));
 				}
 
-				if (!musicStarted)
+				if (!musicStarted && gameTime.TotalGameTime.TotalSeconds > 3)
 				{
 					if (settings.MusicVolume > 0)
 					{
