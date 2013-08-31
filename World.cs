@@ -828,7 +828,7 @@ namespace AsteroidOutpost
 		/// </summary>
 		public void StartServer(Scenario scenario)
 		{
-			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\UI\HUD.html").ToUri();
+			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\data\HUD\HUD.html").ToUri();
 			if(this.scenario != null)
 			{
 				// Is this normal?

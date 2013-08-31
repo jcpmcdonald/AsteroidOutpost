@@ -18,15 +18,15 @@ namespace AsteroidOutpost
 
 		public static void LoadContent(GraphicsDevice graphicsDevice)
 		{
-			textures.Add("ellipse25", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse25.png")));
-			textures.Add("ellipse25bold", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse25Bold.png")));
-			textures.Add("ellipse25back", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse25Back.png")));
-			textures.Add("ellipse25front", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse25Front.png")));
-			textures.Add("ellipse50", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse50.png")));
-			textures.Add("ellipse50back", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse50Back.png")));
-			textures.Add("ellipse50front", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse50Front.png")));
-			textures.Add("ellipse100", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse100.png")));
-			textures.Add("ellipse220", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\Content\Ellipse220.png")));
+			textures.Add("ellipse25", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\Ellipse25.png")));
+			textures.Add("ellipse25bold", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\Ellipse25Bold.png")));
+			textures.Add("ellipse25back", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\Ellipse25Back.png")));
+			textures.Add("ellipse25front", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\Ellipse25Front.png")));
+			textures.Add("ellipse50", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\Ellipse50.png")));
+			textures.Add("ellipse50back", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\Ellipse50Back.png")));
+			textures.Add("ellipse50front", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\Ellipse50Front.png")));
+			textures.Add("ellipse100", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\Ellipse100.png")));
+			textures.Add("ellipse220", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\Ellipse220.png")));
 		}
 
 

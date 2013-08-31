@@ -133,769 +133,769 @@
 	<orientation name="354.375" />
 	<orientation name="357.1875" />
 	<sequence set="Default" animation="Idle" orientation="0">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="0" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="2.8125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="250" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="5.625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="500" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="8.4375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="750" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="11.25">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1000" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="14.0625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1250" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="16.875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1500" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="19.6875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1750" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="22.5">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2000" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="25.3125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2250" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="28.125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2500" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="30.9375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2750" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="33.75">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3000" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="36.5625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3250" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="39.375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3500" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="42.1875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3750" y="0" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="45">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="0" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="47.8125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="250" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="50.625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="500" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="53.4375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="750" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="56.25">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1000" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="59.0625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1250" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="61.875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1500" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="64.6875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1750" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="67.5">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2000" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="70.3125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2250" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="73.125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2500" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="75.9375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2750" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="78.75">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3000" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="81.5625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3250" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="84.375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3500" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="87.1875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3750" y="250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="90">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="0" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="92.8125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="250" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="95.625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="500" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="98.4375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="750" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="101.25">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1000" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="104.0625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1250" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="106.875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1500" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="109.6875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1750" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="112.5">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2000" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="115.3125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2250" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="118.125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2500" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="120.9375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2750" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="123.75">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3000" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="126.5625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3250" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="129.375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3500" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="132.1875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3750" y="500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="135">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="0" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="137.8125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="250" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="140.625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="500" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="143.4375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="750" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="146.25">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1000" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="149.0625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1250" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="151.875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1500" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="154.6875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1750" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="157.5">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2000" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="160.3125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2250" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="163.125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2500" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="165.9375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2750" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="168.75">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3000" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="171.5625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3250" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="174.375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3500" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="177.1875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3750" y="750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="180">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="0" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="182.8125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="250" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="185.625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="500" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="188.4375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="750" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="191.25">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1000" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="194.0625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1250" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="196.875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1500" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="199.6875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1750" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="202.5">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2000" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="205.3125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2250" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="208.125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2500" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="210.9375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2750" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="213.75">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3000" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="216.5625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3250" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="219.375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3500" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="222.1875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3750" y="1000" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="225">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="0" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="227.8125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="250" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="230.625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="500" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="233.4375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="750" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="236.25">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1000" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="239.0625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1250" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="241.875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1500" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="244.6875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1750" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="247.5">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2000" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="250.3125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2250" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="253.125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2500" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="255.9375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2750" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="258.75">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3000" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="261.5625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3250" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="264.375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3500" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="267.1875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3750" y="1250" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="270">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="0" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="272.8125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="250" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="275.625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="500" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="278.4375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="750" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="281.25">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1000" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="284.0625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1250" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="286.875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1500" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="289.6875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1750" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="292.5">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2000" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="295.3125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2250" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="298.125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2500" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="300.9375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2750" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="303.75">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3000" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="306.5625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3250" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="309.375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3500" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="312.1875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3750" y="1500" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="315">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="0" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="317.8125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="250" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="320.625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="500" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="323.4375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="750" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="326.25">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1000" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="329.0625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1250" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="331.875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1500" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="334.6875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="1750" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="337.5">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2000" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="340.3125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2250" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="343.125">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2500" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="345.9375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="2750" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="348.75">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3000" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="351.5625">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3250" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="354.375">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3500" y="1750" w="250" h="250" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="357.1875">
-		<frame image="..\Sprites\Spaceship128.png">
+		<frame image="Spaceship128.png">
 			<anchor x="125" y="125" />
 			<rectangle x="3750" y="1750" w="250" h="250" />
 		</frame>

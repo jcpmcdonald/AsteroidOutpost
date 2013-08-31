@@ -37,193 +37,193 @@
 	<orientation name="337.5" />
 	<orientation name="348.75" />
 	<sequence set="Default" animation="Idle" orientation="0">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="11.25">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="22.5">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="33.75">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="45">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="56.25">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="67.5">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="900" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="78.75">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="1050" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="90">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="1200" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="101.25">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="1350" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="112.5">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="1500" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="123.75">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="1650" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="135">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="1800" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="146.25">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="157.5">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="168.75">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="180">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="191.25">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="202.5">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="213.75">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="900" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="225">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="1050" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="236.25">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="1200" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="247.5">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="1350" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="258.75">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="1500" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="270">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="1650" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="281.25">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="1800" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="292.5">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="300" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="303.75">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="300" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="315">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="300" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="326.25">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="300" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="337.5">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="300" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Idle" orientation="348.75">
-		<frame image="..\Sprites\PowerNode.png">
+		<frame image="PowerNode.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="300" w="150" h="150" />
 		</frame>

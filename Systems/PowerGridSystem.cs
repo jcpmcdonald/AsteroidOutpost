@@ -28,7 +28,7 @@ namespace AsteroidOutpost.Systems
 
 		protected override void LoadContent()
 		{
-			powerBar = Texture2DEx.FromStreamWithPremultAlphas(Game.GraphicsDevice, File.OpenRead(@"..\Content\PowerBar.png"));
+			powerBar = Texture2DEx.FromStreamWithPremultAlphas(Game.GraphicsDevice, File.OpenRead(@"..\data\images\PowerBar.png"));
 			base.LoadContent();
 		}
 

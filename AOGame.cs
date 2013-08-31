@@ -226,7 +226,7 @@ namespace AsteroidOutpost
 			jsConsole.Bind("dir", false, JSConsoleLog);
 
 			//awesomium.WebView.Source = @"..\UI\MainMenu.html".ToUri();
-			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\UI\MainMenu.html").ToUri();
+			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\data\HUD\MainMenu.html").ToUri();
 		}
 
 
@@ -306,7 +306,7 @@ namespace AsteroidOutpost
 
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			cursorTexture = Texture2DEx.FromStreamWithPremultAlphas(GraphicsDevice, File.OpenRead(@"..\Content\Cursor.png"));
+			cursorTexture = Texture2DEx.FromStreamWithPremultAlphas(GraphicsDevice, File.OpenRead(@"..\data\images\Cursor.png"));
 
 			//ThreadPool.QueueUserWorkItem(delegate { EntityFactory.LoadContent(GraphicsDevice); });
 			//ThreadPool.QueueUserWorkItem(delegate { EllipseEx.LoadContent(GraphicsDevice); });
@@ -482,7 +482,7 @@ namespace AsteroidOutpost
 		/// </summary>
 		public void DestroyWorld()
 		{
-			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\UI\Singleplayer.html").ToUri();
+			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\data\HUD\Singleplayer.html").ToUri();
 			destroyWorld = true;
 		}
 

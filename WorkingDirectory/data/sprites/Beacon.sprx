@@ -133,769 +133,769 @@
 	<orientation name="354.375" />
 	<orientation name="357.1875" />
 	<sequence set="Default" animation="Rotate" orientation="0">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="2.8125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="5.625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="8.4375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="11.25">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="14.0625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="0" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="16.875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="19.6875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="22.5">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="25.3125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="28.125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="30.9375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="33.75">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="300" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="36.5625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="300" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="39.375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="300" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="42.1875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="300" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="45">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="300" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="47.8125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="300" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="50.625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="450" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="53.4375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="450" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="56.25">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="450" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="59.0625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="450" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="61.875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="450" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="64.6875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="450" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="67.5">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="600" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="70.3125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="600" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="73.125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="600" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="75.9375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="600" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="78.75">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="600" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="81.5625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="600" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="84.375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="750" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="87.1875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="750" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="90">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="750" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="92.8125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="750" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="95.625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="750" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="98.4375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="750" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="101.25">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="900" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="104.0625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="900" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="106.875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="900" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="109.6875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="900" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="112.5">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="900" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="115.3125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="900" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="118.125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="1050" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="120.9375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="1050" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="123.75">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="1050" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="126.5625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="1050" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="129.375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="1050" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="132.1875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="1050" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="135">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="1200" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="137.8125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="1200" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="140.625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="1200" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="143.4375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="1200" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="146.25">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="1200" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="149.0625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="1200" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="151.875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="1350" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="154.6875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="1350" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="157.5">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="1350" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="160.3125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="1350" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="163.125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="1350" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="165.9375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="1350" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="168.75">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="1500" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="171.5625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="1500" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="174.375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="1500" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="177.1875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="1500" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="180">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="1500" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="182.8125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="1500" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="185.625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="1650" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="188.4375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="1650" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="191.25">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="1650" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="194.0625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="1650" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="196.875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="1650" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="199.6875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="1650" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="202.5">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="1800" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="205.3125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="1800" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="208.125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="1800" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="210.9375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="1800" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="213.75">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="1800" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="216.5625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="1800" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="219.375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="1950" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="222.1875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="1950" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="225">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="1950" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="227.8125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="1950" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="230.625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="1950" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="233.4375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="1950" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="236.25">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="2100" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="239.0625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="2100" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="241.875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="2100" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="244.6875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="2100" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="247.5">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="2100" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="250.3125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="2100" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="253.125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="2250" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="255.9375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="2250" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="258.75">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="2250" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="261.5625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="2250" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="264.375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="2250" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="267.1875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="2250" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="270">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="2400" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="272.8125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="2400" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="275.625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="2400" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="278.4375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="2400" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="281.25">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="2400" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="284.0625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="2400" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="286.875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="2550" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="289.6875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="2550" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="292.5">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="2550" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="295.3125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="2550" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="298.125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="2550" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="300.9375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="2550" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="303.75">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="2700" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="306.5625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="2700" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="309.375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="2700" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="312.1875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="2700" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="315">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="2700" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="317.8125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="2700" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="320.625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="2850" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="323.4375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="2850" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="326.25">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="2850" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="329.0625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="2850" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="331.875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="2850" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="334.6875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="2850" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="337.5">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="3000" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="340.3125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="3000" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="343.125">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="300" y="3000" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="345.9375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="450" y="3000" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="348.75">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="600" y="3000" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="351.5625">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="750" y="3000" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="354.375">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="0" y="3150" w="150" h="150" />
 		</frame>
 	</sequence>
 	<sequence set="Default" animation="Rotate" orientation="357.1875">
-		<frame image="..\Sprites\Beacon.png">
+		<frame image="Beacon.png">
 			<anchor x="75" y="75" />
 			<rectangle x="150" y="3150" w="150" h="150" />
 		</frame>

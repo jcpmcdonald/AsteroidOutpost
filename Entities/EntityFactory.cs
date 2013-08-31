@@ -31,11 +31,14 @@ namespace AsteroidOutpost.Entities
 			// Note: The world doesn't exist yet, so don't use it here
 
 			// Set up the sprites
-			foreach(var spriteFileName in Directory.EnumerateFiles(@"..\sprites\", "*.sprx"))
+			String curdirBackup = Directory.GetCurrentDirectory();
+			Directory.SetCurrentDirectory(@"..\data\sprites\");
+			foreach(var spriteFileName in Directory.EnumerateFiles(".", "*.sprx"))
 			{
 				Sprite sprite = new Sprite(File.OpenRead(spriteFileName), graphicsDevice);
 				sprites.Add(sprite.Name.ToLower(), sprite);
 			}
+			Directory.SetCurrentDirectory(curdirBackup);
 
 			LoadEntityTemplates();
 
@@ -47,11 +50,11 @@ namespace AsteroidOutpost.Entities
 
 		public static void LoadEntityTemplates()
 		{
-			String entityJson = File.ReadAllText(@"..\entities\Entity.json");
+			String entityJson = File.ReadAllText(@"..\data\entities\Entity.json");
 			JObject entityJObject = JObject.Parse(entityJson);
 			EntityTemplate baseEntity = new EntityTemplate((JObject)entityJObject["Components"]); // JsonConvert.DeserializeObject<EntityTemplate>(entityJson);
 
-			foreach(var templateFileName in Directory.EnumerateFiles(@"..\entities\", "*.json"))
+			foreach(var templateFileName in Directory.EnumerateFiles(@"..\data\entities\", "*.json"))
 			{
 				FileInfo templateFile = new FileInfo(templateFileName);
 				String fileName = templateFile.Name.Substring(0, templateFile.Name.Length - templateFile.Extension.Length).ToLower();
