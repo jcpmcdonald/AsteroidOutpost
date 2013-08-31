@@ -44,5 +44,18 @@
 			"Max Power" : "PowerProducer.MaxPower",
 		}
 	},
+	"Upgrades" :
+	{
+		"Level 2" :
+		{
+			"PowerProducer" : {
+				"PowerProductionRate" : 10,
+				"MaxPower" : 250,
+			},
+			"Animator" : {
+				"CurrentSet" : "Level 2",
+			},
+		},
+	},
 }
 
