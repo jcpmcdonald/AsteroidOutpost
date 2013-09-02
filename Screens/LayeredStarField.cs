@@ -57,7 +57,7 @@ namespace AsteroidOutpost.Screens
 
 			anomalies.Add(new Layer(Game.Content.Load<Texture2D>("Scenes\\IcePlanet"),
 			                        0.04f,
-			                        new Vector2(Game.GraphicsDevice.Viewport.Width * 0.3f, 300f)));
+			                        new Vector2(Game.GraphicsDevice.Viewport.Width * 0.3f, 500f)));
 		}
 
 
