@@ -20,14 +20,16 @@ namespace AsteroidOutpost.Systems
 		private SpriteBatch spriteBatch;
 		private ParticleEffectManager particleEffectManager;
 		private readonly World world;
-		
+		private readonly PowerGridSystem powerGridSystem;
+
 		private static SoundEffect miningSound;
 
-		public LaserMinerSystem(AOGame game, World world)
+		public LaserMinerSystem(AOGame game, World world, PowerGridSystem powerGridSystem)
 			: base(game)
 		{
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 			this.world = world;
+			this.powerGridSystem = powerGridSystem;
 			this.particleEffectManager = game.ParticleEffectManager;
 		}
 
@@ -161,7 +163,7 @@ namespace AsteroidOutpost.Systems
 			if (currentAsteroid != null)
 			{
 				Force owningForce = world.GetOwningForce(laserMiner);
-				if (world.PowerGrid[owningForce.ID].GetPower(laserMiner.EntityID, powerToUse))
+				if (powerGridSystem.GetPower(laserMiner, powerToUse))
 				{
 					if (currentAsteroid.Minerals < mineralsToExtract)
 					{

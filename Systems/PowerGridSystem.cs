@@ -16,7 +16,8 @@ namespace AsteroidOutpost.Systems
 	{
 		private World world;
 		private SpriteBatch spriteBatch;
-		private Texture2D powerBar;
+
+		private readonly Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
 
 		public PowerGridSystem(AOGame game, World world)
 			: base(game)
@@ -26,91 +27,66 @@ namespace AsteroidOutpost.Systems
 		}
 
 
-		protected override void LoadContent()
+		public void ConnectToPowerGrid(PowerGridNode powerNode)
 		{
-			powerBar = Texture2DEx.FromStreamWithPremultAlphas(Game.GraphicsDevice, File.OpenRead(@"..\data\images\PowerBar.png"));
-			base.LoadContent();
+			GetPowerGrid(powerNode).ConnectToPowerGrid(powerNode);
 		}
 
 
-		public override void Update(GameTime gameTime)
+		public void Disconnect(PowerGridNode node)
 		{
-			if (world.Paused) { return; }
+			GetPowerGrid(node).Disconnect(node);
+		}
 
-			foreach(var producer in world.GetComponents<PowerProducer>().Where(p => p.ProducesPower))
+
+		internal PowerGrid GetPowerGrid(Component componentInForce)
+		{
+			return GetPowerGrid(world.GetOwningForce(componentInForce));
+		}
+
+		internal PowerGrid GetPowerGrid(Force force)
+		{
+			if(!powerGrid.ContainsKey(force.ID))
 			{
-				var constructible = world.GetNullableComponent<Constructible>(producer);
-				if(constructible != null)
-				{
-					// Ignore placing and constructing producers
-					continue;
-				}
-				producer.AvailablePower += producer.PowerProductionRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
+				powerGrid.Add(force.ID, new PowerGrid(world));
 			}
+			return powerGrid[force.ID];
 		}
 
+
+		/// <summary>
+		/// Checks that the requested amount of power is available from a single power-source in the grid
+		/// </summary>
+		/// <param name="referenceComponent">Where in the power grid should we begin our quest for power</param>
+		/// <param name="amount">The amount of power to retrieve</param>
+		/// <returns>Returns true if successful, false otherwise</returns>
+		public bool HasPower(Component referenceComponent, float amount)
+		{
+			return GetPowerGrid(referenceComponent).HasPower(referenceComponent.EntityID, amount);
+		}
+
+
+		/// <summary>
+		/// Gets the requested amount of power from a single power-source that is able to provide it
+		/// </summary>
+		/// <param name="referenceComponent">Where in the power grid should we begin our quest for power</param>
+		/// <param name="amount">The amount of power to retrieve</param>
+		/// <returns>Returns true if successful, false otherwise</returns>
+		public bool GetPower(Component referenceComponent, float amount)
+		{
+			return GetPowerGrid(referenceComponent).GetPower(referenceComponent.EntityID, amount);
+		}
+
+
+		public void PutPower(Component referenceComponent, float amount)
+		{
+			GetPowerGrid(referenceComponent).PutPower(referenceComponent.EntityID, amount);
+		}
 
 
 		public override void Draw(GameTime gameTime)
 		{
 			spriteBatch.Begin();
-
-
-			// Draw power level bars
-			foreach (var producer in world.GetComponents<PowerProducer>())
-			{
-				if(producer.ProducesPower)
-				{
-					Position producerPosition = world.GetComponent<Position>(producer);
-
-					const float invisiblePoint = 1.5f;
-					const float fadePoint = 1.2f;
-					if(world.ScaleFactor < invisiblePoint)
-					{
-						// Default to completely visible
-						float fadePercent = 0.0f;
-						if(world.ScaleFactor > fadePoint)
-						{
-							// Fade out as we get further away
-							fadePercent = (world.ScaleFactor - fadePoint) / (invisiblePoint - fadePoint);
-						}
-
-						float percentFull = producer.AvailablePower / producer.MaxPower;
-						float scale = 0.4f;
-						int fillToHeight = (int)((powerBar.Height * percentFull) + 0.5f);
-
-						// Draw the depleted part of the bar
-						spriteBatch.Draw(powerBar,
-						                 world.WorldToScreen(new Vector2(producerPosition.Left + 10,
-						                                                 producerPosition.Top + 5)),
-						                 new Rectangle(0,
-						                               0,
-						                               powerBar.Width,
-						                               powerBar.Height - fillToHeight),
-						                 Color.White * (1 - fadePercent),
-						                 0f,
-						                 Vector2.Zero,
-						                 world.Scale(scale),
-						                 SpriteEffects.None,
-						                 0);
-
-						// Draw the available part of the bar
-						spriteBatch.Draw(powerBar,
-						                 world.WorldToScreen(new Vector2(producerPosition.Left + 10,
-						                                                 producerPosition.Top + 5 + ((powerBar.Height - fillToHeight) * scale))),
-						                 new Rectangle(0,
-						                               powerBar.Height - fillToHeight,
-						                               powerBar.Width,
-						                               fillToHeight),
-						                 Color.Green * (1 - fadePercent),
-						                 0f,
-						                 Vector2.Zero,
-						                 world.Scale(scale),
-						                 SpriteEffects.None,
-						                 0);
-					}
-				}
-			}
 
 
 			// Draw any entities being placed
@@ -119,7 +95,7 @@ namespace AsteroidOutpost.Systems
 			foreach(var placingEntity in placingEntities)
 			{
 				PowerGridNode relatedPowerNode = world.GetComponent<PowerGridNode>(placingEntity);
-				PowerGrid relatedGrid = world.GetPowerGrid(placingEntity);
+				PowerGrid relatedGrid = GetPowerGrid(placingEntity);
 				foreach (var powerLink in relatedGrid.GetAllPowerLinks(relatedPowerNode))
 				{
 					Color linkColor;
@@ -139,7 +115,7 @@ namespace AsteroidOutpost.Systems
 			}
 
 
-			foreach (var grid in world.PowerGrid.Values)
+			foreach (var grid in powerGrid.Values)
 			{
 				Color color;
 
@@ -168,17 +144,23 @@ namespace AsteroidOutpost.Systems
 
 				foreach (var nodeA in grid.powerNodes.Keys)
 				{
+					Constructible constructibleA = world.GetNullableComponent<Constructible>(nodeA);
+
 					foreach (var nodeB in grid.powerNodes[nodeA])
 					{
+						Constructible constructibleB = world.GetNullableComponent<Constructible>(nodeB);
 						var linkToDraw = new Tuple<PowerGridNode, PowerGridNode>(nodeA, nodeB);
 						if (!linksAlreadyDrawn.Contains(linkToDraw))
 						{
-							if (nodeA.IsPowerStateActive(world) && nodeB.IsPowerStateActive(world))
+							//if (nodeA.IsPowerStateActive(world) && nodeB.IsPowerStateActive(world))
+							if((constructibleA != null && !constructibleA.IsBeingPlaced) || (constructibleB != null && !constructibleB.IsBeingPlaced))
 							{
+								// Draw a normal, yellow line
 								color = new Color((int)(70 + world.Scale(50)), (int)(70 + world.Scale(50)), 0, (int)(70 + world.Scale(50)));
 							}
 							else
 							{
+								// Draw a red line to indicate that you can't connect
 								color = new Color((int)(80 + world.Scale(50)), (int)(0 + world.Scale(50)), 0, (int)(0 + world.Scale(50)));
 							}
 

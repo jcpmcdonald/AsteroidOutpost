@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AsteroidOutpost.Entities;
-using AsteroidOutpost.Entities.Eventing;
-using AsteroidOutpost.Screens;
+using AsteroidOutpost.Components;
 using Microsoft.Xna.Framework;
 
-namespace AsteroidOutpost.Components
+namespace AsteroidOutpost
 {
 	// Not *really* a component since it doesn't belong to entities
 	public class PowerGrid
@@ -204,8 +202,8 @@ namespace AsteroidOutpost.Components
 		internal bool GetPower(PowerGridNode startingLocation, float amount)
 		{
 			List<PowerGridNode> path;
-			PowerProducer powerProducer = GetProducerWithPower(startingLocation, amount, out path);
-			if(powerProducer != null)
+			PowerStorage powerStorage = GetPowerStorageWithPower(startingLocation, amount, out path);
+			if(powerStorage != null)
 			{
 				// Light up the path to the power source
 				for (int iNode = 1; iNode < path.Count; iNode++)
@@ -218,9 +216,15 @@ namespace AsteroidOutpost.Components
 					}
 				}
 
-				return powerProducer.GetPower(amount);
+				return powerStorage.GetPower(amount);
 			}
 			return false;
+		}
+
+
+		internal void PutPower(int startingEntityID, float amount)
+		{
+			GetPower(world.GetComponent<PowerGridNode>(startingEntityID), -amount);
 		}
 
 
@@ -245,11 +249,11 @@ namespace AsteroidOutpost.Components
 		internal bool HasPower(PowerGridNode startingLocation, float amount)
 		{
 			List<PowerGridNode> path;
-			return GetProducerWithPower(startingLocation, amount, out path) != null;
+			return GetPowerStorageWithPower(startingLocation, amount, out path) != null;
 		}
 
 
-		private PowerProducer GetProducerWithPower(PowerGridNode startingLocation, float amount, out List<PowerGridNode> path)
+		private PowerStorage GetPowerStorageWithPower(PowerGridNode startingLocation, float amount, out List<PowerGridNode> path)
 		{
 			// NOTE: This sorted list should be a Min Heap for best performance
 			var toVisit = new SortedList<float, Tuple<PowerGridNode, PowerGridNode>>(powerNodes.Count);		// <Distance, <NodeToVisit, VisitedFrom>>
@@ -263,25 +267,22 @@ namespace AsteroidOutpost.Components
 				visited.Add(Tuple.Create(cursor, toVisit.Values[0].Item2));
 				toVisit.RemoveAt(0);
 
-				if (cursor.ProducesPower)
+				PowerStorage storage = world.GetNullableComponent<PowerStorage>(cursor);
+				if (storage != null)
 				{
-					// OOoo, a power source
-					PowerProducer producer = cursor as PowerProducer;
-					if (producer != null)
+					float powerAfterUse = storage.AvailablePower - amount;
+					if (powerAfterUse >= 0 && powerAfterUse <= storage.MaxPower)
 					{
-						if (producer.AvailablePower >= amount)
-						{
-							// Power discovered, quit
-							path = DecodePath(visited);
-							return producer;
-						}
+						// Power discovered, quit
+						path = DecodePath(visited);
+						return storage;
 					}
 				}
 
 				// Add of my unvisited neighbours to the list, sorted by distance
 				foreach (var linkedNode in powerNodes[cursor])
 				{
-					if (visited.All(v => v.Item1 != linkedNode) && linkedNode.IsPowerStateActive(world))
+					if (visited.All(v => v.Item1 != linkedNode) && world.GetNullableComponent<Constructible>(linkedNode) == null)
 					{
 						// Get the distance from the starting location to the linked node
 						float nodeDistance = cursorDistance + Vector2.Distance(cursor.PowerLinkPointAbsolute(world), linkedNode.PowerLinkPointAbsolute(world));

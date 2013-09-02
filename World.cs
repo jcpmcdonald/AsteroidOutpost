@@ -42,8 +42,6 @@ namespace AsteroidOutpost
 		private readonly Dictionary<int, List<Component>> entityDictionary = new Dictionary<int, List<Component>>(2000);		// Note: This variable must be kept thread-safe
 		private readonly Dictionary<Type, List<Component>> componentDictionary = new Dictionary<Type, List<Component>>(10);		// Note: This variable must be kept thread-safe
 		private readonly List<Component> deadComponents = new List<Component>();
-		//private Dictionary<int, Entity> entityDictionary = new Dictionary<int, Entity>(2000);		// Note: This variable must be kept thread-safe
-		private readonly Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
 		private readonly Dictionary<int, Force> owningForces = new Dictionary<int, Force>();
 		private AOHUD hud;		// TODO: Why is this part of the world? Shouldn't it be part of the game?
 		private Scenario scenario;
@@ -52,6 +50,8 @@ namespace AsteroidOutpost
 		private readonly PhysicsSystem physicsSystem;
 		private readonly RenderQuadTreeSystem renderQuadTreeSystem;
 		private readonly PowerGridSystem powerGridSystem;
+		private readonly PowerStorageSystem powerStorageSystem;
+		private readonly PowerProductionSystem powerProductionSystem;
 		internal readonly ConstructionSystem constructionSystem;
 		private readonly LaserMinerSystem laserMinerSystem;
 		private readonly AccumulationSystem accumulationSystem;
@@ -97,11 +97,14 @@ namespace AsteroidOutpost
 			animationSystem = new AnimationSystem(game, this);
 			physicsSystem = new PhysicsSystem(game, this);
 			renderQuadTreeSystem = new RenderQuadTreeSystem(game, this);
+
 			powerGridSystem = new PowerGridSystem(game, this);
-			constructionSystem = new ConstructionSystem(game, this);
-			laserMinerSystem = new LaserMinerSystem(game, this);
+			powerStorageSystem = new PowerStorageSystem(game, this);
+			powerProductionSystem = new PowerProductionSystem(game, this, powerGridSystem);
+			constructionSystem = new ConstructionSystem(game, this, powerGridSystem);
+			laserMinerSystem = new LaserMinerSystem(game, this, powerGridSystem);
 			accumulationSystem = new AccumulationSystem(game, this, 500);
-			laserWeaponSystem = new LaserWeaponSystem(game, this);
+			laserWeaponSystem = new LaserWeaponSystem(game, this, powerGridSystem);
 			projectileLauncherSystem = new ProjectileLauncherSystem(game, this);
 			projectileSystem = new ProjectileSystem(game, this);
 			movementSystem = new FlockingSystem(game, this);
@@ -123,6 +126,8 @@ namespace AsteroidOutpost
 			game.Components.Add(physicsSystem);
 			game.Components.Add(hud);
 			game.Components.Add(renderQuadTreeSystem);
+			game.Components.Add(powerStorageSystem);
+			game.Components.Add(powerProductionSystem);
 			game.Components.Add(powerGridSystem);
 			game.Components.Add(constructionSystem);
 			game.Components.Add(laserMinerSystem);
@@ -802,25 +807,14 @@ namespace AsteroidOutpost
 		}
 
 
-		internal Dictionary<int, PowerGrid> PowerGrid
-		{
-			get
-			{
-				return powerGrid;
-			}
-		}
+		//internal Dictionary<int, PowerGrid> PowerGrid
+		//{
+		//    get
+		//    {
+		//        return powerGrid;
+		//    }
+		//}
 
-
-		internal PowerGrid GetPowerGrid(Force force)
-		{
-			return powerGrid[force.ID];
-		}
-
-
-		internal PowerGrid GetPowerGrid(Component componentInForce)
-		{
-			return powerGrid[GetOwningForce(componentInForce).ID];
-		}
 
 
 		/// <summary>
@@ -936,7 +930,7 @@ namespace AsteroidOutpost
 					PowerGridNode powerGridNode = deadComponent as PowerGridNode;
 					if(powerGridNode != null)
 					{
-						GetPowerGrid(powerGridNode).Disconnect(powerGridNode);
+						powerGridSystem.Disconnect(powerGridNode);
 					}
 
 					lock (entityDictionary)
@@ -1119,11 +1113,11 @@ namespace AsteroidOutpost
 
 
 			// serialize the power grids
-			bw.Write(powerGrid.Count);
-			foreach (int gridOwner in powerGrid.Keys)
-			{
-				bw.Write(gridOwner);
-			}
+			//bw.Write(powerGrid.Count);
+			//foreach (int gridOwner in powerGrid.Keys)
+			//{
+			//    bw.Write(gridOwner);
+			//}
 
 
 			//bw.Write(entityDictionary.Count + componentDictionary.Count);
@@ -1189,12 +1183,12 @@ namespace AsteroidOutpost
 			}
 
 
-			int powerGridCount = br.ReadInt32();
-			for (int iGrid = 0; iGrid < powerGridCount; iGrid++)
-			{
-				int owningForceID = br.ReadInt32();
-				powerGrid.Add(owningForceID, new PowerGrid(this));
-			}
+			//int powerGridCount = br.ReadInt32();
+			//for (int iGrid = 0; iGrid < powerGridCount; iGrid++)
+			//{
+			//    int owningForceID = br.ReadInt32();
+			//    powerGrid.Add(owningForceID, new PowerGrid(this));
+			//}
 
 
 			// Unpack all of the entities and components
@@ -1283,6 +1277,12 @@ namespace AsteroidOutpost
 		public void ExecuteAwesomiumJS(String js)
 		{
 			((AOGame)Game).ExecuteAwesomiumJS(js);
+		}
+
+
+		public void ConnectToPowerGrid(PowerGridNode powerNode)
+		{
+			powerGridSystem.ConnectToPowerGrid(powerNode);
 		}
 	}
 }

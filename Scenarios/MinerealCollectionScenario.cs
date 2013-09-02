@@ -51,7 +51,7 @@ namespace AsteroidOutpost.Scenarios
 			world.AddForce(aiForce);
 			world.AddController(aiController);
 
-			world.PowerGrid.Add(friendlyForce.ID, new PowerGrid(world));
+			//world.PowerGrid.Add(friendlyForce.ID, new PowerGrid(world));
 
 			startingPoint = CreateStartingBase(friendlyForce);
 			world.HUD.FocusWorldPoint = startingPoint;

@@ -73,16 +73,18 @@ namespace AsteroidOutpost.Scenarios
 		public abstract void Update(TimeSpan deltaTime);
 
 
-		protected virtual void World_EntityDied(int entityID)
+		protected virtual void World_EntityDied(int deadID)
 		{
 			// Check to see if the player has lost
 			//     The player loses if they have no more power producers
 
-			PowerProducer deadPowerProducer = world.GetNullableComponent<PowerProducer>(entityID);
-			if(deadPowerProducer != null)
+			PowerProducer deadPowerProducer = world.GetNullableComponent<PowerProducer>(deadID);
+			PowerStorage deadPowerStorage = world.GetNullableComponent<PowerStorage>(deadID);
+			if(deadPowerProducer != null || deadPowerStorage != null)
 			{
 				// A power producer has been eliminated, check to see if there is still power out there
-				if(!world.GetComponents<PowerProducer>().Any(p => p != deadPowerProducer && p.IsPowerStateActive(world) && world.GetOwningForce(p) == friendlyForce))
+				if(!world.GetComponents<PowerProducer>().Any(p => p.EntityID != deadID && world.GetOwningForce(p) == friendlyForce && world.GetNullableComponent<Constructible>(p) != null) &&
+				   !world.GetComponents<PowerStorage>().Any(p => p.EntityID != deadID && world.GetOwningForce(p) == friendlyForce && world.GetNullableComponent<Constructible>(p) != null && p.AvailablePower > 0))
 				{
 					// No power sources, it is impossible to recover. You are dead, or will be very soon
 					world.GameOver(false);
@@ -263,7 +265,7 @@ namespace AsteroidOutpost.Scenarios
 
 			// Hook it up to the grid
 			PowerGridNode powerNode = world.GetComponent<PowerGridNode>(creatingEntityID);
-			world.GetPowerGrid(powerNode).ConnectToPowerGrid(powerNode);
+			world.ConnectToPowerGrid(powerNode);
 
 			// Return the starting location
 			return origin + delta;

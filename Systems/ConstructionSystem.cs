@@ -15,17 +15,19 @@ namespace AsteroidOutpost.Systems
 	{
 		private readonly World world;
 		private SpriteBatch spriteBatch;
+		private readonly PowerGridSystem powerGridSystem;
 
 		private const float powerUsageRate = 12.0f;
 		private const float mineralUsageRate = 30.0f;
 
 		public event Action<int> ConstructionCompletedEvent;
 
-		public ConstructionSystem(AOGame game, World world)
+		public ConstructionSystem(AOGame game, World world, PowerGridSystem powerGridSystem)
 			: base(game)
 		{
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 			this.world = world;
+			this.powerGridSystem = powerGridSystem;
 		}
 
 		
@@ -59,7 +61,7 @@ namespace AsteroidOutpost.Systems
 
 				// Check that we have enough power in the grid
 				Force owningForce = world.GetOwningForce(constructable);
-				if (world.PowerGrid[owningForce.ID].HasPower(constructable.EntityID, powerToUse))
+				if (powerGridSystem.HasPower(constructable, powerToUse))
 				{
 					// Check to see if the mineralsLeftToConstruct would pass an integer boundary
 					deltaMinerals = (int)(constructable.MineralsConstructed + mineralsToUse) - (int)(constructable.MineralsConstructed);
@@ -69,16 +71,16 @@ namespace AsteroidOutpost.Systems
 						if (owningForce.GetMinerals() >= deltaMinerals)
 						{
 							// Consume the resources
-							world.PowerGrid[owningForce.ID].GetPower(constructable.EntityID, powerToUse);
+							powerGridSystem.GetPower(constructable, powerToUse);
 							constructable.MineralsConstructed += mineralsToUse;
 
 							// Set the force's minerals
 							owningForce.SetMinerals(owningForce.GetMinerals() - deltaMinerals);
 
-							if (constructable.MineralsConstructed >= constructable.MineralsToConstruct)
+							if (constructable.MineralsConstructed >= constructable.Cost)
 							{
 								// This construction is complete
-								constructable.MineralsConstructed = constructable.MineralsToConstruct;
+								constructable.MineralsConstructed = constructable.Cost;
 								constructable.IsConstructing = false;
 
 								if (ConstructionCompletedEvent != null)
@@ -101,7 +103,7 @@ namespace AsteroidOutpost.Systems
 						constructable.MineralsConstructed += mineralsToUse;
 
 						// We should consume our little tidbit of power though:
-						world.PowerGrid[owningForce.ID].GetPower(constructable.EntityID, powerToUse);
+						powerGridSystem.GetPower(constructable, powerToUse);
 					}
 				}
 			}
@@ -127,7 +129,7 @@ namespace AsteroidOutpost.Systems
 				}
 				else if (constructable.IsConstructing)
 				{
-					float percentComplete = constructable.MineralsConstructed / constructable.MineralsToConstruct;
+					float percentComplete = constructable.MineralsConstructed / constructable.Cost;
 
 					// Draw a progress bar
 					spriteBatch.FillRectangle(world.Scale(new Vector2(-position.Radius, position.Radius - 6)) + world.WorldToScreen(position.Center), world.Scale(new Vector2(position.Width, 6)), Color.Gray);

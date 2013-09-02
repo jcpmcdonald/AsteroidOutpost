@@ -93,7 +93,9 @@ namespace AsteroidOutpost.Systems
 			{
 				if (possibleTarget == projectileLauncher.EntityID ||
 					world.GetOwningForce(possibleTarget).Team == world.GetOwningForce(projectileLauncher).Team ||
-					world.GetOwningForce(possibleTarget).Team == Team.Neutral)
+					world.GetOwningForce(possibleTarget).Team == Team.Neutral ||
+					world.GetNullableComponent<Targetable>(possibleTarget) == null ||
+					world.GetNullableComponent<Constructible>(possibleTarget) != null)
 				{
 					// Eliminate invalid targets
 					continue;

@@ -1,0 +1,27 @@
+{
+	"Name" : "Solar Station L2",
+	"Payload" :
+	{
+		"Upgrading" : {
+			
+		},
+		"PowerProducer" : {
+			"PowerProductionRate" : 10,
+			"MaxPower" : 250,
+		},
+		"Animator" : {
+			"CurrentSet" : "Level 2",
+		},
+	},
+	"Button" :
+	{
+		"Image" : "images/SolarStation.png",
+		"Order" : 1,
+		"ImportantValues" : {
+			"Cost" : "Upgrading.Cost",
+			"HP" : "HitPoints.TotalArmour",
+			"Production Rate" : "PowerProducer.PowerProductionRate",
+			"Max Power" : "PowerProducer.MaxPower",
+		}
+	},
+}

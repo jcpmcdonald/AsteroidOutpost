@@ -753,7 +753,7 @@ namespace AsteroidOutpost.Systems
 			PowerGridNode powerNode = world.GetNullableComponent<PowerGridNode>(creatingEntityID.Value);
 			if(powerNode != null)
 			{
-				world.GetPowerGrid(powerNode).ConnectToPowerGrid(powerNode);
+				world.ConnectToPowerGrid(powerNode);
 			}
 
 			//// Reflectively look up what they are making, and create an other one of the same thing in the game
@@ -762,7 +762,7 @@ namespace AsteroidOutpost.Systems
 
 			//if (creatingTypeConstuctructor == null)
 			//{
-			//    System.Console.WriteLine("Failed to find a constructor for the current constructable! Unable to construct entity");
+			//    System.Console.WriteLine("Failed to find a constructor for the current constructible! Unable to construct entity");
 			//    Debugger.Break(); // John, there's a problem with the reflection above. Fix it!
 			//    return;
 			//}

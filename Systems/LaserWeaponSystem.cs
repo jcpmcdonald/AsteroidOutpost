@@ -15,11 +15,13 @@ namespace AsteroidOutpost.Systems
 	{
 		private readonly World world;
 		private SpriteBatch spriteBatch;
+		private readonly PowerGridSystem powerGridSystem;
 
-		public LaserWeaponSystem(Game game, World world)
+		public LaserWeaponSystem(Game game, World world, PowerGridSystem powerGridSystem)
 			: base(game)
 		{
 			this.world = world;
+			this.powerGridSystem = powerGridSystem;
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 		}
 
@@ -42,19 +44,12 @@ namespace AsteroidOutpost.Systems
 					if(possibleTarget == laser.EntityID ||
 						world.GetOwningForce(possibleTarget).Team == world.GetOwningForce(laser).Team ||
 						world.GetOwningForce(possibleTarget).Team == Team.Neutral ||
-						world.GetNullableComponent<Targetable>(possibleTarget) == null)
+						world.GetNullableComponent<Targetable>(possibleTarget) == null ||
+						world.GetNullableComponent<Constructible>(possibleTarget) != null)
 					{
 						// Eliminate invalid targets
 						continue;
 					}
-
-					Constructible constructibleTarget = world.GetNullableComponent<Constructible>(possibleTarget);
-					if(constructibleTarget != null && constructibleTarget.IsBeingPlaced)
-					{
-						// Eliminate targets being constructed
-						continue;
-					}
-
 
 
 					Position possibleTargetPosition = world.GetComponent<Position>(possibleTarget);
@@ -78,7 +73,7 @@ namespace AsteroidOutpost.Systems
 					{
 						float powerToUse = laser.PowerUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
 						Force owningForce = world.GetOwningForce(laser);
-						if (world.PowerGrid[owningForce.ID].GetPower(laser.EntityID, powerToUse))
+						if (powerGridSystem.GetPower(laser, powerToUse))
 						{
 							laser.HasPower = true;
 						}

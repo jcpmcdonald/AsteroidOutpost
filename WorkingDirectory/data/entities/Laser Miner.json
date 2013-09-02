@@ -16,7 +16,7 @@
 			"PowerLinkPointRelative" : "0, -16",
 		},
 		"Constructible" : {
-			"MineralsToConstruct" : 150,
+			"Cost" : 150,
 		},
 		"HitPoints" : {
 			"Armour" : 150,
@@ -47,7 +47,7 @@
 		"Image" : "images/LaserMiner.png",
 		"Order" : 3,
 		"ImportantValues" : {
-			"Cost" : "Constructible.MineralsToConstruct",
+			"Cost" : "Constructible.Cost",
 			"HP" : "HitPoints.TotalArmour",
 			"Mining Rate" : "5.76",
 		}

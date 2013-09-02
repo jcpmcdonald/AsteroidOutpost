@@ -16,7 +16,7 @@
 			"PowerLinkPointRelative" : "0, 0",
 		},
 		"Constructible" : {
-			"MineralsToConstruct" : 200,
+			"Cost" : 200,
 		},
 		"HitPoints" : {
 			"Armour" : 100,
@@ -38,7 +38,7 @@
 		"Image" : "images/MissileTower.png",
 		"Order" : 5,
 		"ImportantValues" : {
-			"Cost" : "Constructible.MineralsToConstruct",
+			"Cost" : "Constructible.Cost",
 			"HP" : "HitPoints.TotalArmour",
 			"Damage" : "16.6",
 			"Range" : "MissileWeapon.Range",

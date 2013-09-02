@@ -14,17 +14,19 @@ namespace AsteroidOutpost.Systems
 	{
 		private readonly World world;
 		private SpriteBatch spriteBatch;
+		private readonly PowerGridSystem powerGridSystem;
 
 		private const float powerUsageRate = 12.0f;
 		private const float mineralUsageRate = 30.0f;
 
 		public event Action<int> UpgradeCompletedEvent;
 
-		public UpgradeSystem(AOGame game, World world)
+		public UpgradeSystem(AOGame game, World world, PowerGridSystem powerGridSystem)
 			: base(game)
 		{
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 			this.world = world;
+			this.powerGridSystem = powerGridSystem;
 		}
 
 
@@ -41,7 +43,7 @@ namespace AsteroidOutpost.Systems
 				int deltaMinerals;
 					
 				Force owningForce = world.GetOwningForce(upgradable);
-				if (world.PowerGrid[owningForce.ID].HasPower(upgradable.EntityID, powerToUse))
+				if (powerGridSystem.HasPower(upgradable, powerToUse))
 				{
 					// Check to see if the mineralsLeftToConstruct would pass an integer boundary
 					deltaMinerals = (int)(upgradable.MineralsUpgraded + mineralsToUse) - (int)(upgradable.MineralsUpgraded);
@@ -51,7 +53,7 @@ namespace AsteroidOutpost.Systems
 						if (owningForce.GetMinerals() >= deltaMinerals)
 						{
 							// Consume the resources
-							world.PowerGrid[owningForce.ID].GetPower(upgradable.EntityID, powerToUse);
+							powerGridSystem.GetPower(upgradable, powerToUse);
 							upgradable.MineralsUpgraded += mineralsToUse;
 
 							// Set the force's minerals
@@ -81,7 +83,7 @@ namespace AsteroidOutpost.Systems
 						upgradable.MineralsUpgraded += mineralsToUse;
 
 						// We should consume our little tidbit of power though:
-						world.PowerGrid[owningForce.ID].GetPower(upgradable.EntityID, powerToUse);
+						powerGridSystem.GetPower(upgradable, powerToUse);
 					}
 				}
 			}

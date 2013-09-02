@@ -20,20 +20,12 @@ namespace AsteroidOutpost.Components
 			IsBeingPlaced = true;
 			mineralsConstructed = 0;
 		}
-		public Constructible(int entityID, int mineralsToConstruct)
-			: base(entityID)
-		{
-			IsConstructing = false;
-			IsBeingPlaced = true;
-			MineralsToConstruct = mineralsToConstruct;
-			mineralsConstructed = 0;
-		}
 
 
 		
 		public bool IsBeingPlaced { get; set; }
 		public bool IsConstructing { get; set; }
-		public int MineralsToConstruct { get; set; }
+		public int Cost { get; set; }
 		public float MineralsConstructed
 		{
 			get
@@ -42,7 +34,7 @@ namespace AsteroidOutpost.Components
 			}
 			set
 			{
-				mineralsConstructed = MathHelper.Clamp(value, 0, MineralsToConstruct);
+				mineralsConstructed = MathHelper.Clamp(value, 0, Cost);
 			}
 		}
 	}

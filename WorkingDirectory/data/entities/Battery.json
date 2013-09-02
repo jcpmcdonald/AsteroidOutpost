@@ -1,30 +1,30 @@
 {
-	"Name" : "Solar Station",
+	"Name" : "Battery",
 	"Components" : {
 		"EntityName" : {
-			"Name" : "Solar Station",
+			"Name" : "Battery",
 		},
 		"Position" : {
-			"Radius" : 40,
+			"Radius" : 25,
 		},
 		"Animator" : {
-			"SpriteName" : "Solar Station",
-			"Scale" : 0.7,
-			"CurrentSet" : "Level 1",
+			"SpriteName" : "Battery",
+			"Scale" : 0.4,
+			"CurrentSet" : "Default",
 			"CurrentAnimation" : "Idle",
 		},
-		"PowerProducer" : {
-			"PowerProductionRate" : 5,
-		},
-		"PowerStorage" : {
-			"MaxPower" : 80,
-		},
-		"PowerGridNode" : {
-			"PowerLinkPointRelative" : "-1, -13",
-			"ConductsPower" : true,
+		"Spin" : {
+			"RotationSpeed" : 50,
 		},
 		"Constructible" : {
-			"Cost" : 200,
+			"Cost" : 150,
+		},
+		"PowerStorage" : {
+			"MaxPower" : 200,
+		},
+		"PowerGridNode" : {
+			"PowerLinkPointRelative" : "0, 0",
+			"ConductsPower" : true,
 		},
 		"HitPoints" : {
 			"Armour" : 50,
@@ -38,12 +38,12 @@
 	},
 	"ConstructionButton" :
 	{
-		"Image" : "images/SolarStation.png",
-		"Order" : 1,
+		"Image" : "images/Battery.png",
+		"Description" : "Stores power that you can use at a later date",
+		"Order" : 3,
 		"ImportantValues" : {
 			"Cost" : "Constructible.Cost",
 			"HP" : "HitPoints.TotalArmour",
-			"Production Rate" : "PowerProducer.PowerProductionRate",
 			"Max Power" : "PowerStorage.MaxPower",
 		}
 	},

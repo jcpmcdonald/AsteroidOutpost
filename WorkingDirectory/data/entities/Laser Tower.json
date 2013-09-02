@@ -16,7 +16,7 @@
 			"PowerLinkPointRelative" : "0, 0",
 		},
 		"Constructible" : {
-			"MineralsToConstruct" : 150,
+			"Cost" : 150,
 		},
 		"HitPoints" : {
 			"Armour" : 150,
@@ -39,7 +39,7 @@
 		"Image" : "images/LaserTower.png",
 		"Order" : 4,
 		"ImportantValues" : {
-			"Cost" : "Constructible.MineralsToConstruct",
+			"Cost" : "Constructible.Cost",
 			"HP" : "HitPoints.TotalArmour",
 			"Damage" : "LaserWeapon.Damage",
 			"Range" : "LaserWeapon.Range",

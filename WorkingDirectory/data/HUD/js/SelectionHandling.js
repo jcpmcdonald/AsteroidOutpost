@@ -131,8 +131,8 @@ function UpdateSelection(newSelection)
 $(document).ready(function()
 {
 	scopeOf("SelectionInfoController").AddProgressBar("hitPointsProgressBar", "HitPoints", "Armour", "TotalArmour");
-	scopeOf("SelectionInfoController").AddProgressBar("constructionProgressBar", "Constructible", "MineralsConstructed", "MineralsToConstruct");
-	scopeOf("SelectionInfoController").AddProgressBar("powerLevelProgressBar", "PowerProducer", "AvailablePower", "MaxPower");
+	scopeOf("SelectionInfoController").AddProgressBar("constructionProgressBar", "Constructible", "MineralsConstructed", "Cost");
+	scopeOf("SelectionInfoController").AddProgressBar("powerLevelProgressBar", "PowerStorage", "AvailablePower", "MaxPower");
 	scopeOf("SelectionInfoController").AddProgressBar("mineralsProgressBar", "Minable", "Minerals", "StartingMinerals");
 });
 
@@ -141,6 +141,9 @@ $(document).ready(function()
 $(document).ready(function()
 {
 	
+	$("#editorPanel").hide();
+	Position();
+		
 	///
 	/// This section attempts to immatate what XNA will be doing in-game. It makes it easier to debug
 	///
@@ -156,16 +159,14 @@ $(document).ready(function()
 						"GUID" : "Flsp0Nra4Um1VieH6zRgNg=="
 					},
 					"PowerProducer" : {
+						"PowerProductionRate" : 10,
+					},
+					"PowerStorage" : {
 						"MaxPower" : 70,
 						"AvailablePower" : 19.27076,
-						"PowerProductionRate" : 10,
-						"ConductsPower" : true,
-						"ProducesPower" : true,
-						"PowerLinkPointRelative" : {
-							"X" : -1,
-							"Y" : -13
-						},
-						"GUID" : "bPWxGkDFFU+jB62HmRN1HA=="
+					},
+					"PowerNode" : {
+						"PowerLinkPointRelative" : "-1, -13",
 					},
 					"HitPoints" : {
 						"Armour" : 70,
@@ -173,7 +174,7 @@ $(document).ready(function()
 						"GUID" : "pHMJfGX6oUG6LcG1poDh+Q=="
 					},
 					"Constructible" : {
-						"MineralsToConstruct" : 200,
+						"Cost" : 200,
 						"MineralsConstructed" : 20,
 						"IsBeingPlaced" : false,
 						"IsConstructing" : true,

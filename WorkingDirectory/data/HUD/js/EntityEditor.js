@@ -106,6 +106,14 @@ function UpdateEditor(newSelection)
 	}
 }
 
+function EntityEditorOnShow()
+{
+	if($("#editorPanel").is(':visible') && $currentSelection != null)
+	{
+		$("#editorPanel").accordion("destroy");
+		$("#editorPanel").accordion({ icons: false });
+	}
+}
 
 function GetOrCreate(name, appendTo, value)
 {

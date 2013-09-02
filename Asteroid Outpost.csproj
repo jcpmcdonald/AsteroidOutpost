@@ -146,6 +146,7 @@
     <Compile Include="Components\LaserWeapon.cs" />
     <Compile Include="Components\Minable.cs" />
     <Compile Include="Components\Flocking.cs" />
+    <Compile Include="Components\PowerStorage.cs" />
     <Compile Include="Components\Projectile.cs" />
     <Compile Include="Components\ProjectileLauncher.cs" />
     <Compile Include="Components\EntityName.cs" />
@@ -191,10 +192,12 @@
     <Compile Include="Networking\EventReplicationAttribute.cs" />
     <Compile Include="Networking\ClientConnectedHandlerArgs.cs" />
     <Compile Include="Networking\ReflectiveEventArgs.cs" />
-    <Compile Include="Components\PowerGrid.cs" />
+    <Compile Include="PowerGrid.cs" />
     <Compile Include="Scenarios\RandomScenario.cs" />
     <Compile Include="Scenarios\Scenario.cs" />
     <Compile Include="Scenarios\TutorialScenario.cs" />
+    <Compile Include="Systems\PowerProductionSystem.cs" />
+    <Compile Include="Systems\PowerStorageSystem.cs" />
     <Compile Include="Systems\ProjectileSystem.cs" />
     <Compile Include="Systems\ParticleEngine.cs" />
     <Compile Include="Systems\SelectionSystem.cs" />

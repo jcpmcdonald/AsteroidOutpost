@@ -42,7 +42,7 @@ namespace AsteroidOutpost.Scenarios
 			{
 				friendlyForce = new Force(world, world.GetNextForceID(), initialMinerals, (Team)iPlayer);
 				world.AddForce(friendlyForce);
-				world.PowerGrid.Add(friendlyForce.ID, new PowerGrid(world));
+				//world.PowerGrid.Add(friendlyForce.ID, new PowerGrid(world));
 				Vector2 focusPoint = CreateStartingBase(friendlyForce);
 
 

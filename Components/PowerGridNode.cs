@@ -13,30 +13,9 @@ namespace AsteroidOutpost.Components
 {
 	public class PowerGridNode : Component
 	{
-		public PowerGridNode(int entityID) : base(entityID) {}
-		public PowerGridNode(int entityID, bool conductsPower)
+		public PowerGridNode(int entityID)
 			: base(entityID)
 		{
-			ProducesPower = false;
-			this.ConductsPower = conductsPower;
-		}
-
-
-		/// <summary>
-		/// True if this node is active and ready to either conduct or produce power (not used for consumers)
-		/// </summary>
-		public bool IsPowerStateActive(World world)
-		{
-			Constructible constructable = world.GetNullableComponent<Constructible>(EntityID);
-			if(constructable != null)
-			{
-				return !constructable.IsBeingPlaced && !constructable.IsConstructing;
-			}
-			else
-			{
-				// I suppose I'm active?
-				return true;
-			}
 		}
 
 
@@ -44,12 +23,6 @@ namespace AsteroidOutpost.Components
 		/// True if this conducts power
 		/// </summary>
 		public bool ConductsPower { get; set; }
-
-
-		/// <summary>
-		/// True if this produces power  (note that power producers should also conduct power)
-		/// </summary>
-		public bool ProducesPower { get; set; }
 
 
 		/// <summary>
@@ -68,5 +41,6 @@ namespace AsteroidOutpost.Components
 			Position entityPosition = world.GetComponent<Position>(EntityID);
 			return entityPosition.Center + PowerLinkPointRelative;
 		}
+
 	}
 }

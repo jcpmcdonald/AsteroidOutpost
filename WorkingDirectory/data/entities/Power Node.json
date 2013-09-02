@@ -17,7 +17,7 @@
 			"ConductsPower" : true,
 		},
 		"Constructible" : {
-			"MineralsToConstruct" : 50,
+			"Cost" : 50,
 		},
 		"HitPoints" : {
 			"Armour" : 50,
@@ -34,7 +34,7 @@
 		"Image" : "images/PowerNode.png",
 		"Order" : 2,
 		"ImportantValues" : {
-			"Cost" : "Constructible.MineralsToConstruct",
+			"Cost" : "Constructible.Cost",
 			"HP" : "HitPoints.TotalArmour",
 		}
 	},

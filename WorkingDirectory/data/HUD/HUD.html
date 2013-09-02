@@ -71,16 +71,16 @@
 					<span id="lblContructing" class="selectionLabel"></span>
 					<div id="constructionProgressBar" class="selectionProgressBar">
 						<span class="selectionProgressData">
-							{{selectedUnits[0].Constructible.MineralsConstructed | number:0}} / {{selectedUnits[0].Constructible.MineralsToConstruct | number:0}}
+							{{selectedUnits[0].Constructible.MineralsConstructed | number:0}} / {{selectedUnits[0].Constructible.Cost | number:0}}
 						</span>
 					</div>
 				</div></div>
 				
-				<div ng-switch="has('PowerProducer')"><div ng-switch-when="true">
+				<div ng-switch="has('PowerStorage')"><div ng-switch-when="true">
 					<span id="lblPower" class="selectionLabel"></span>
 					<div id="powerLevelProgressBar" class="selectionProgressBar">
 						<span class="selectionProgressData">
-							{{selectedUnits[0].PowerProducer.AvailablePower | number:0}} / {{selectedUnits[0].PowerProducer.MaxPower | number:0}}
+							{{selectedUnits[0].PowerStorage.AvailablePower | number:0}} / {{selectedUnits[0].PowerStorage.MaxPower | number:0}}
 						</span>
 					</div>
 				</div></div>

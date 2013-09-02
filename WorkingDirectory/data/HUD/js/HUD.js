@@ -177,47 +177,49 @@ $(document).ready(function()
 });
 
 
+var Position = function()
+{
+	// $("#editorPanel").position({
+		// of: $(body),
+		// my: "right bottom",
+		// at: "right bottom"
+	// });
+	
+	
+	if($("#editorPanel").is(':visible'))
+	{
+		$("#console").position({
+			of: $("#editorPanel"),
+			my: "right bottom",
+			at: "left bottom"
+		});
+		
+		$("#editorToggleButton").position({
+			of: $("#editorPanel"),
+			my: "right center",
+			at: "left center"
+		});
+	}
+	else
+	{
+		$("#console").position({
+			of: $(window),
+			my: "right bottom",
+			at: "right bottom"
+		});
+		
+		$("#editorToggleButton").position({
+			of: $(window),
+			my: "right center",
+			at: "right center"
+		});
+	}
+};
+
+
 
 $(document).ready(function()
 {
-	function Position()
-	{
-		// $("#editorPanel").position({
-			// of: $(body),
-			// my: "right bottom",
-			// at: "right bottom"
-		// });
-		
-		
-		if($("#editorPanel").is(':visible'))
-		{
-			$("#console").position({
-				of: $("#editorPanel"),
-				my: "right bottom",
-				at: "left bottom"
-			});
-			
-			$("#editorToggleButton").position({
-				of: $("#editorPanel"),
-				my: "right center",
-				at: "left center"
-			});
-		}
-		else
-		{
-			$("#console").position({
-				of: $(window),
-				my: "right bottom",
-				at: "right bottom"
-			});
-			
-			$("#editorToggleButton").position({
-				of: $(window),
-				my: "right center",
-				at: "right center"
-			});
-		}
-	};
 	
 	$(window).resize(Position);
 	Position();
@@ -225,6 +227,7 @@ $(document).ready(function()
 	$("#editorToggleButton").click(function(){
 		$("#editorToggleButton").hide("slide", {direction:'right'}, 60, function(){
 			$("#editorPanel").toggle("slide", { direction:'right'}, 500, function(){
+				EntityEditorOnShow();
 				Position();
 				$("#editorToggleButton").show("slide", {direction:'right'}, 60, function(){ Position(); } );
 			});
