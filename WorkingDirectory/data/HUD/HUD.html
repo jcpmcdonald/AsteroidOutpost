@@ -25,7 +25,7 @@
 	<script type="text/javascript" src="js/KeyDefinitions.js"></script>
 	<script type="text/javascript" src="js/Common.js"></script>
 	<script type="text/javascript" src="js/EntityEditor.js"></script>
-	<script type="text/javascript" src="js/ConstructionButtons.js"></script>
+	<script type="text/javascript" src="js/ContextButtons.js"></script>
 	<script type="text/javascript" src="js/HUD.js"></script>
 	<script type="text/javascript" src="js/Console.js"></script>
 	<script type="text/javascript" src="js/Missions.js"></script>
@@ -34,17 +34,12 @@
 
 </head>
 <body>
-	<div id="constructionMenu" class="panel" ng-controller="ConstructionButtonController">
+	<div id="contextButtonMenu" class="panel" ng-controller="ContextButtonController">
 		
 		<div ng-repeat="button in buttons">
-			<span id="{{button.$Name.replace(' ', '')}}" index="{{$index}}" call='hud.Build("{{button.$Name}}")' onClick="XNACall($(this));" class="button constructionButton" style="background-image: url('{{button.$Image}}');"></span>
+			<span id="{{button.$Name.replace(' ', '')}}" index="{{$index}}" call='hud.Build("{{button.$Name}}")' onClick="XNACall($(this));" class="button contextButton" style="background-image: url('{{button.$Image}}');"></span>
 		</div>
 		
-		<!-- <span id="SolarStation" class="button constructionButton"></span> -->
-		<!-- <span id="LaserMiner" class="button constructionButton"></span> -->
-		<!-- <span id="PowerNode" class="button constructionButton"></span> -->
-		<!-- <span id="LaserTower" class="button constructionButton"></span> -->
-		<!-- <span id="MissileTower" class="button constructionButton"></span> -->
 	</div>
 	
 	<div id="modalOverlay"></div>

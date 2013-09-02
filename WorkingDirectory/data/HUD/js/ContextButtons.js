@@ -1,6 +1,6 @@
 
 
-function ConstructionButtonController($scope)
+function ContextButtonController($scope)
 {
 	$scope.buttons = [];
 	
@@ -60,9 +60,9 @@ function ConstructionButtonController($scope)
 }
 
 
-function SetConstructionButtons($buttonList)
+function SetContextButtons($buttonList)
 {
-	scopeOf("ConstructionButtonController").SetButtons($buttonList);
+	scopeOf("ContextButtonController").SetButtons($buttonList);
 }
 
 
@@ -72,7 +72,7 @@ $(document).ready(function()
 {
 	if(!InXNA())
 	{
-		SetConstructionButtons([
+		SetContextButtons([
 			{
 				"$Name" : "Solar Station",
 				"$Image" : "images/SolarStation.png",

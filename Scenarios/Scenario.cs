@@ -245,26 +245,20 @@ namespace AsteroidOutpost.Scenarios
 			}
 
 			// Create the solar station
-			int creatingEntityID = EntityFactory.Create("Solar Station", force, new JObject{
+			int solarStationID = EntityFactory.Create("Solar Station", force, new JObject{
 				{ "Animator", new JObject{
 					{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
 				}},
 				{ "Position", new JObject{
 					{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", origin.X + delta.X, origin.Y + delta.Y) },
-				}},
-				{ "Constructible", new JObject{
-					{ "IsBeingPlaced", false },
-					{ "IsConstructing", false },
 				}}
 			});
 
-			// Set this building as done constructing
-			//Constructible solarStation = world.GetComponent<Constructible>(creatingEntityID);
-			//solarStation.IsBeingPlaced = false;
-			//solarStation.IsConstructing = false;
+			// Remove the constructing component for the starting solar station
+			world.DeleteComponent(world.GetComponent<Constructible>(solarStationID));
 
 			// Hook it up to the grid
-			PowerGridNode powerNode = world.GetComponent<PowerGridNode>(creatingEntityID);
+			PowerGridNode powerNode = world.GetComponent<PowerGridNode>(solarStationID);
 			world.ConnectToPowerGrid(powerNode);
 
 			// Return the starting location
@@ -275,7 +269,7 @@ namespace AsteroidOutpost.Scenarios
 		protected void CreateConstructionButtons()
 		{
 			//SetButtons
-			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetConstructionButtons('{0}');", EntityFactory.GetConstructionButtonJSON()));
+			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetContextButtons('{0}');", EntityFactory.GetConstructionButtonJSON()));
 		}
 
 	}
