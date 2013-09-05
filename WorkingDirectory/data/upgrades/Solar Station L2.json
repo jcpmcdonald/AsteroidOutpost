@@ -3,7 +3,7 @@
 	"Payload" :
 	{
 		"Upgrading" : {
-			
+			"Cost" : 200,
 		},
 		"PowerProducer" : {
 			"PowerProductionRate" : 10,
@@ -16,7 +16,7 @@
 	"Button" :
 	{
 		"Image" : "images/SolarStation.png",
-		"Order" : 1,
+		"Slot" : 1,
 		"ImportantValues" : {
 			"Cost" : "Upgrading.Cost",
 			"HP" : "HitPoints.TotalArmour",

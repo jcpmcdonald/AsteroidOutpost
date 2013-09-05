@@ -158,6 +158,8 @@
     <Compile Include="Components\Targetable.cs" />
     <Compile Include="Components\Upgradable.cs" />
     <Compile Include="Components\Velocity.cs" />
+    <Compile Include="ContextMenu.cs" />
+    <Compile Include="ContextMenuPage.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="AIController.cs" />
     <Compile Include="Components\Accumulator.cs" />
@@ -166,7 +168,7 @@
     <Compile Include="EllipseEx.cs" />
     <Compile Include="EnhancedKeyboardState.cs" />
     <Compile Include="EnhancedMouseState.cs" />
-    <Compile Include="Entities\ConstructionButton.cs" />
+    <Compile Include="ContextButton.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
     <Compile Include="Entities\EntityTemplate.cs" />
     <Compile Include="JsonEx.cs" />

@@ -60,8 +60,6 @@ namespace AsteroidOutpost.Scenarios
 			//    // A friendly force is required
 			//    Debugger.Break();
 			//}
-
-			CreateConstructionButtons();
 		}
 
 		public virtual void End()
@@ -76,7 +74,7 @@ namespace AsteroidOutpost.Scenarios
 		protected virtual void World_EntityDied(int deadID)
 		{
 			// Check to see if the player has lost
-			//     The player loses if they have no more power producers
+			//     The player loses if they have no more power producers or storage with power
 
 			PowerProducer deadPowerProducer = world.GetNullableComponent<PowerProducer>(deadID);
 			PowerStorage deadPowerStorage = world.GetNullableComponent<PowerStorage>(deadID);
@@ -263,13 +261,6 @@ namespace AsteroidOutpost.Scenarios
 
 			// Return the starting location
 			return origin + delta;
-		}
-
-
-		protected void CreateConstructionButtons()
-		{
-			//SetButtons
-			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetContextButtons('{0}');", EntityFactory.GetConstructionButtonJSON()));
 		}
 
 	}

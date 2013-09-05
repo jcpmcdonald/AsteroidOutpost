@@ -42,14 +42,14 @@
 		},
 		"Selectable" : {},
 	},
-	"ConstructionButton" :
+	"Button" :
 	{
 		"Image" : "images/LaserMiner.png",
-		"Order" : 3,
+		"Slot" : 3,
 		"ImportantValues" : {
-			"Cost" : "Constructible.Cost",
-			"HP" : "HitPoints.TotalArmour",
-			"Mining Rate" : "5.76",
+			"Cost" : "%Constructible.Cost% minerals",
+			"HP" : "%HitPoints.TotalArmour%",
+			"Mining Rate" : "5.76 mps",
 		}
 	},
 }

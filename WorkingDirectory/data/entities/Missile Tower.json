@@ -33,15 +33,15 @@
 		},
 		"Selectable" : {},
 	},
-	"ConstructionButton" :
+	"Button" :
 	{
 		"Image" : "images/MissileTower.png",
-		"Order" : 5,
+		"Slot" : 5,
 		"ImportantValues" : {
-			"Cost" : "Constructible.Cost",
-			"HP" : "HitPoints.TotalArmour",
-			"Damage" : "16.6",
-			"Range" : "MissileWeapon.Range",
+			"Cost" : "%Constructible.Cost% minerals",
+			"HP" : "%HitPoints.TotalArmour%",
+			"Damage" : "16.6 dps",
+			"Range" : "%ProjectileLauncher.Range%",
 		}
 	},
 }

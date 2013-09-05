@@ -23,7 +23,7 @@ namespace AsteroidOutpost.Entities
 
 		//private static EntityTemplate asteroidTemplate;
 		private static Dictionary<String, EntityTemplate> templates = new Dictionary<string, EntityTemplate>();
-		private static Dictionary<String, ConstructionButton> constructionButtons = new Dictionary<string, ConstructionButton>();
+		private static Dictionary<String, ContextButton> contextButtons = new Dictionary<string, ContextButton>();
 
 
 		public static void LoadContent(GraphicsDevice graphicsDevice)
@@ -75,12 +75,12 @@ namespace AsteroidOutpost.Entities
 					}
 
 
-					if(jObject["ConstructionButton"] != null)
+					if(jObject["Button"] != null)
 					{
-						ConstructionButton button = new ConstructionButton(template.Name);
-						JsonConvert.PopulateObject(jObject["ConstructionButton"].ToString(), button);
+						ContextButton button = new ContextButton(template.Name);
+						JsonConvert.PopulateObject(jObject["Button"].ToString(), button);
 						button.Initialize(template);
-						constructionButtons.Add(template.Name.ToLower(), button);
+						contextButtons.Add(template.Name.ToLower(), button);
 					}
 				}
 			}
@@ -153,15 +153,9 @@ namespace AsteroidOutpost.Entities
 		}
 
 
-		public static String GetConstructionButtonJSON()
+		public static Dictionary<String, ContextButton> GetContextButtons()
 		{
-			String json = "[";
-			foreach (var button in constructionButtons.Values.OrderBy(b => b.Order))
-			{
-				json += button.GetButtonJSON() + ",";
-			}
-			json += "]";
-			return json;
+			return contextButtons;
 		}
 	}
 }

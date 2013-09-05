@@ -29,13 +29,13 @@
 		},
 		"Selectable" : {},
 	},
-	"ConstructionButton" :
+	"Button" :
 	{
 		"Image" : "images/PowerNode.png",
-		"Order" : 2,
+		"Slot" : 2,
 		"ImportantValues" : {
-			"Cost" : "Constructible.Cost",
-			"HP" : "HitPoints.TotalArmour",
+			"Cost" : "%Constructible.Cost% minerals",
+			"HP" : "%HitPoints.TotalArmour%",
 		}
 	},
 }

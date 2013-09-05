@@ -34,8 +34,6 @@ namespace AsteroidOutpost.Systems
 		private EnhancedMouseState theMouse = new EnhancedMouseState();
 		private EnhancedKeyboardState theKeyboard = new EnhancedKeyboardState();
 
-
-
 		private readonly World world;
 		private readonly AwesomiumComponent awesomium;
 		private SelectionSystem selectionSystem;
@@ -46,11 +44,11 @@ namespace AsteroidOutpost.Systems
 		private Controller localActor;
 		private bool isDraggingScreen;
 
-
 		private Dictionary<Keys, EventHandler> hotkeys = new Dictionary<Keys, EventHandler>();
 
-
 		private SoundEffect constructionSound;
+
+		private ContextMenu contextMenu;
 
 
 		// Local event only
@@ -66,6 +64,8 @@ namespace AsteroidOutpost.Systems
 		{
 			this.world = world;
 			this.selectionSystem = selectionSystem;
+
+			contextMenu = new ContextMenu(world);
 
 			// Set up some hotkeys
 			hotkeys.Add(Keys.S, btnPower_Clicked);

@@ -33,7 +33,7 @@ function ContextButtonController($scope)
 			track: true,
 			show: false,
 			hide: false,
-			items: ".constructionButton",
+			items: ".contextButton",
 			content: function(){
 				var element = $(this);
 				var index = element.attr("index");
