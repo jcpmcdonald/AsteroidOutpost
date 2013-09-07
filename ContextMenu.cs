@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Entities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AsteroidOutpost
 {
@@ -13,19 +17,26 @@ namespace AsteroidOutpost
 		Dictionary<String, ContextMenuPage> contextPages = new Dictionary<String, ContextMenuPage>();
 		private ContextMenuPage currentPage;
 
-		public ContextMenu(World world)
+		public ContextMenu(World world, Dictionary<String, EntityTemplate> entityTemplates)
 		{
-			this.world = world;
-			ContextMenuPage mainPage = new ContextMenuPage();
+			this.world = world; 
 
-			var contextButtonPool = EntityFactory.GetContextButtons();
-			foreach (var contextButton in contextButtonPool.Values)
+			foreach(var contextFileName in Directory.EnumerateFiles(@"..\data\context\", "*.json"))
 			{
-				mainPage.AddButton(contextButton);
+				String json = File.ReadAllText(contextFileName);
+				JObject jObject = JObject.Parse(json);
+
+				ContextMenuPage page = new ContextMenuPage();
+				JsonConvert.PopulateObject(jObject.ToString(), page);
+				contextPages.Add(page.Name.ToLowerInvariant(), page);
+
+				foreach (var contextButton in page.ContextButtons)
+				{
+					contextButton.Initialize(entityTemplates);
+				}
 			}
-			
-			contextPages.Add("main", mainPage);
-			currentPage = mainPage;
+
+			currentPage = contextPages["main"];
 
 			SetContextButtons();
 		}
@@ -33,7 +44,8 @@ namespace AsteroidOutpost
 
 		protected void SetContextButtons()
 		{
-			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetContextButtons('{0}');", currentPage.GetJSON()));
+			String json = JObject.FromObject(currentPage).ToString(Formatting.None);
+			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetContextPage('{0}');", json));
 		}
 
 	}

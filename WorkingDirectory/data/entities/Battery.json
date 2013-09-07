@@ -36,16 +36,5 @@
 		},
 		"Selectable" : {},
 	},
-	"Button" :
-	{
-		"Image" : "images/Battery.png",
-		"Description" : "Stores power that you can use at a later date",
-		"Slot" : 3,
-		"ImportantValues" : {
-			"Cost" : "%Constructible.Cost% minerals",
-			"HP" : "%HitPoints.TotalArmour%",
-			"Max Power" : "%PowerStorage.MaxPower%",
-		}
-	},
 }
 

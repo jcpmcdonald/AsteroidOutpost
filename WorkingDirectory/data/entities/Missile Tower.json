@@ -33,16 +33,5 @@
 		},
 		"Selectable" : {},
 	},
-	"Button" :
-	{
-		"Image" : "images/MissileTower.png",
-		"Slot" : 5,
-		"ImportantValues" : {
-			"Cost" : "%Constructible.Cost% minerals",
-			"HP" : "%HitPoints.TotalArmour%",
-			"Damage" : "16.6 dps",
-			"Range" : "%ProjectileLauncher.Range%",
-		}
-	},
 }
 

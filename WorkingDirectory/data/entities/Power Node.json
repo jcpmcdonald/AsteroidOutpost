@@ -29,14 +29,5 @@
 		},
 		"Selectable" : {},
 	},
-	"Button" :
-	{
-		"Image" : "images/PowerNode.png",
-		"Slot" : 2,
-		"ImportantValues" : {
-			"Cost" : "%Constructible.Cost% minerals",
-			"HP" : "%HitPoints.TotalArmour%",
-		}
-	},
 }
 

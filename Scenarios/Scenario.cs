@@ -186,7 +186,7 @@ namespace AsteroidOutpost.Scenarios
 				}
 
 
-				EntityFactory.Create("Asteroid", asteroidForce, new JObject{
+				world.Create("Asteroid", asteroidForce, new JObject{
 					{ "Animator", new JObject{
 						{ "Scale", scale },
 						{ "CurrentSet", "Asteroid " + GlobalRandom.Next(1, 4) },
@@ -243,7 +243,7 @@ namespace AsteroidOutpost.Scenarios
 			}
 
 			// Create the solar station
-			int solarStationID = EntityFactory.Create("Solar Station", force, new JObject{
+			int solarStationID = world.Create("Solar Station", force, new JObject{
 				{ "Animator", new JObject{
 					{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
 				}},

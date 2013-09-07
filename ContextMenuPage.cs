@@ -8,18 +8,20 @@ namespace AsteroidOutpost
 {
 	internal class ContextMenuPage
 	{
-		List<ContextButton> contextButtons = new List<ContextButton>(12);
+		public String Name { get; set; }
+		public List<ContextButton> ContextButtons = new List<ContextButton>(12);
+
 
 		public void AddButton(ContextButton button)
 		{
-			contextButtons.Add(button);
+			ContextButtons.Add(button);
 		}
 
 
 		public String GetJSON()
 		{
 			String json = "[";
-			foreach (var button in contextButtons.OrderBy(b => b.Slot))
+			foreach (var button in ContextButtons.OrderBy(b => b.Slot))
 			{
 				json += button.GetJSON() + ",";
 			}

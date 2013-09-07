@@ -14,19 +14,18 @@ using XNASpriteLib;
 
 namespace AsteroidOutpost.Entities
 {
-	internal static class EntityFactory
+	internal class EntityFactory
 	{
-		private static World world;
-		private static Dictionary<String, Sprite> sprites = new Dictionary<String, Sprite>();
-		private static object loadSync = new object();
+		private Dictionary<String, Sprite> sprites = new Dictionary<String, Sprite>();
+		private object loadSync = new object();
 
 
 		//private static EntityTemplate asteroidTemplate;
-		private static Dictionary<String, EntityTemplate> templates = new Dictionary<string, EntityTemplate>();
-		private static Dictionary<String, ContextButton> contextButtons = new Dictionary<string, ContextButton>();
+		internal Dictionary<String, EntityTemplate> templates = new Dictionary<string, EntityTemplate>();
+		
 
 
-		public static void LoadContent(GraphicsDevice graphicsDevice)
+		public void LoadContent(GraphicsDevice graphicsDevice)
 		{
 			// Note: The world doesn't exist yet, so don't use it here
 
@@ -48,7 +47,7 @@ namespace AsteroidOutpost.Entities
 			}
 		}
 
-		public static void LoadEntityTemplates()
+		public void LoadEntityTemplates()
 		{
 			String entityJson = File.ReadAllText(@"..\data\entities\Entity.json");
 			JObject entityJObject = JObject.Parse(entityJson);
@@ -73,21 +72,12 @@ namespace AsteroidOutpost.Entities
 						Console.WriteLine("An entity name must be provided in the entity JSON");
 						Debugger.Break();
 					}
-
-
-					if(jObject["Button"] != null)
-					{
-						ContextButton button = new ContextButton(template.Name);
-						JsonConvert.PopulateObject(jObject["Button"].ToString(), button);
-						button.Initialize(template);
-						contextButtons.Add(template.Name.ToLower(), button);
-					}
 				}
 			}
 		}
 
 
-		public static void Refresh(World world)
+		public void Refresh(World world)
 		{
 			Console.WriteLine("REFRESHING Entity Templates");
 			templates.Clear();
@@ -117,9 +107,9 @@ namespace AsteroidOutpost.Entities
 		
 
 
-		public static int LoadProgress { get; private set; }
+		public int LoadProgress { get; private set; }
 
-		public static object LoadSync
+		public object LoadSync
 		{
 			get
 			{
@@ -132,13 +122,7 @@ namespace AsteroidOutpost.Entities
 		}
 
 
-		public static void Init(World theWorld)
-		{
-			world = theWorld;
-		}
-
-
-		public static int Create(String entityName, Force owningForce, JObject jsonValues)
+		public int Create(World world, String entityName, Force owningForce, JObject jsonValues)
 		{
 			int entityID = world.GetNextEntityID();
 			world.SetOwningForce(entityID, owningForce);
@@ -150,12 +134,6 @@ namespace AsteroidOutpost.Entities
 			}
 
 			return entityID;
-		}
-
-
-		public static Dictionary<String, ContextButton> GetContextButtons()
-		{
-			return contextButtons;
 		}
 	}
 }

@@ -51,7 +51,7 @@ namespace AsteroidOutpost.Systems
 					Position targetPosition = world.GetComponent<Position>(projectileLauncher.Target.Value);
 					Vector2 accelerationVector = Vector2.Normalize(targetPosition.Center - position.Center);
 
-					int missileID = EntityFactory.Create(projectileLauncher.ProjectileType, world.GetOwningForce(projectileLauncher), new JObject{
+					int missileID = world.Create(projectileLauncher.ProjectileType, world.GetOwningForce(projectileLauncher), new JObject{
 						{ "Position", new JObject{
 							{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", position.Center.X, position.Center.Y) },
 						}},

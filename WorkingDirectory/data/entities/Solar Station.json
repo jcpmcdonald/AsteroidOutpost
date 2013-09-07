@@ -36,16 +36,5 @@
 		},
 		"Selectable" : {},
 	},
-	"Button" :
-	{
-		"Image" : "images/SolarStation.png",
-		"Slot" : 1,
-		"ImportantValues" : {
-			"Cost" : "%Constructible.Cost% minerals",
-			"HP" : "%HitPoints.TotalArmour%",
-			"Production Rate" : "%PowerProducer.PowerProductionRate% pps",
-			"Max Power" : "%PowerStorage.MaxPower%",
-		}
-	},
 }
 

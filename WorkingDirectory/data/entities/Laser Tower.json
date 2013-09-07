@@ -34,16 +34,5 @@
 		},
 		"Selectable" : {},
 	},
-	"Button" :
-	{
-		"Image" : "images/LaserTower.png",
-		"Slot" : 4,
-		"ImportantValues" : {
-			"Cost" : "%Constructible.Cost% minerals",
-			"HP" : "%HitPoints.TotalArmour%",
-			"Damage" : "%LaserWeapon.Damage% dps",
-			"Range" : "%LaserWeapon.Range%",
-		}
-	},
 }
 

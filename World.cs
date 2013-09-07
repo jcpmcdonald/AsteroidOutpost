@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AsteroidOutpost.Components;
+using AsteroidOutpost.Entities;
 using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
@@ -18,6 +19,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using AsteroidOutpost.Systems;
 using System.Globalization;
+using Newtonsoft.Json.Linq;
 
 namespace AsteroidOutpost
 {
@@ -34,6 +36,7 @@ namespace AsteroidOutpost
 		public const UInt32 StreamIdent = 0x607A0BAD;  // Have you got it?
 		
 		private AOGame theGame;
+		private readonly EntityFactory entityFactory;
 		private SpriteBatch spriteBatch;
 
 		private LayeredStarField layeredStarField;
@@ -86,9 +89,10 @@ namespace AsteroidOutpost
 
 		public event Action<int> EntityDied;
 		
-		public World(AOGame game) : base(game)
+		internal World(AOGame game, EntityFactory entityFactory) : base(game)
 		{
 			theGame = game;
+			this.entityFactory = entityFactory;
 
 			network = new AONetwork(this);
 			selectionSystem = new SelectionSystem(game, this);
@@ -371,6 +375,20 @@ namespace AsteroidOutpost
 			}
 		}
 
+
+		public int Create(String entityName, Force owningForce, JObject jsonValues)
+		{
+			return entityFactory.Create(this, entityName, owningForce, jsonValues);
+		}
+
+
+		internal Dictionary<String, EntityTemplate> EntityTemplates
+		{
+			get
+			{
+				return entityFactory.templates;
+			}
+		}
 
 		private void PerishableOnPerishing(EntityPerishingEventArgs args)
 		{
