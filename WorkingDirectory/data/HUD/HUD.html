@@ -37,7 +37,7 @@
 	<div id="contextButtonMenu" class="panel" ng-controller="ContextButtonController">
 		
 		<div ng-repeat="button in buttons">
-			<span id="{{button.Name.replace(' ', '')}}" index="{{$index}}" call='hud.Build("{{button.Name}}")' onClick="XNACall($(this));" class="button contextButton {{button.EnabledCSS}}" style="background-image: url('{{button.Image}}');"></span>
+			<span id="{{button.Name.replace(' ', '')}}" index="{{$index}}" call="{{button.CallbackJS}}" onClick="XNACall($(this));" class="button contextButton {{button.EnabledCSS}}" style="background-image: url('{{button.Image}}');"></span>
 		</div>
 		
 	</div>

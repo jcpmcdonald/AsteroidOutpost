@@ -17,6 +17,7 @@ function ContextButtonController($scope)
 		});
 		
 		$scope.InitTooltips();
+		//$scope.$apply();
 	};
 	
 	$scope.AddButton = function(buttonData)

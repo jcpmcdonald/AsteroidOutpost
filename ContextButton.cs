@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using AsteroidOutpost.Entities;
+using AsteroidOutpost.Systems;
+using Awesomium.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -11,11 +14,89 @@ namespace AsteroidOutpost
 {
 	internal class ContextButton
 	{
-		public String Name { get; set; }
-		public String Image { get; set; }
-		public int Slot { get; set; }
+		public event Action<ContextButton> ButtonChanged;
+
+		private bool enabled;
+		private int slot;
+		private string image;
+		private string name;
 		public Dictionary<String, String> ImportantValues;
-		private bool Enabled { get; set; }
+		private string callbackJS;
+		private string hotkey;
+		private Call onClickData;
+
+		[JsonIgnore]
+		private AOHUD hud;
+
+		public String Name
+		{
+			get { return name; }
+			set
+			{
+				name = value;
+				OnButtonChanged();
+			}
+		}
+
+		public String Image
+		{
+			get { return image; }
+			set
+			{
+				image = value;
+				OnButtonChanged();
+			}
+		}
+
+		public int Slot
+		{
+			get { return slot; }
+			set
+			{
+				slot = value;
+				OnButtonChanged();
+			}
+		}
+
+		public String Hotkey
+		{
+			get { return hotkey; }
+			set
+			{
+				hotkey = value;
+				OnButtonChanged();
+			}
+		}
+
+		
+		public Call OnClickData
+		{
+			set
+			{
+				onClickData = value;
+				OnButtonChanged();
+			}
+		}
+
+		public String CallbackJS
+		{
+			get { return callbackJS; }
+			set
+			{
+				callbackJS = value;
+				OnButtonChanged();
+			}
+		}
+
+		public bool Enabled
+		{
+			get { return enabled; }
+			set
+			{
+				enabled = value;
+				OnButtonChanged();
+			}
+		}
 
 
 		public ContextButton(String name)
@@ -25,10 +106,54 @@ namespace AsteroidOutpost
 		}
 
 
-		public void Initialize(Dictionary<String, EntityTemplate> entityTemplates)
+		private void OnButtonChanged()
 		{
-			Name = Evaluate(Name, entityTemplates) ?? Name;
-			Image = Evaluate(Image, entityTemplates) ?? Image;
+			if(ButtonChanged != null)
+			{
+				ButtonChanged(this);
+			}
+		}
+
+
+		private void OnClick(Object sender, JavascriptMethodEventArgs args)
+		{
+			if(onClickData != null)
+			{
+				onClickData.Invoke(hud);
+			}
+			else
+			{
+				Console.WriteLine("There is no click data!");
+				Debugger.Break();
+			}
+		}
+
+
+		public void Initialize(String pageName, AOHUD hud, JSObject jsContextMenu, Dictionary<String, EntityTemplate> entityTemplates)
+		{
+			this.hud = hud;
+
+			name = Evaluate(name, entityTemplates) ?? name;
+			image = Evaluate(image, entityTemplates) ?? image;
+			hotkey = Evaluate(hotkey, entityTemplates) ?? hotkey;
+
+			if(onClickData != null)
+			{
+				for (int index = 0; index < onClickData.Parameters.Count; index++)
+				{
+					String s = onClickData.Parameters[index] as String;
+					if (s != null)
+					{
+						onClickData.Parameters[index] = Evaluate(s, entityTemplates) ?? s;
+					}
+				}
+			}
+
+
+			// Set up a JS callback to catch when this button is clicked
+			String clickMethodName = String.Format(CultureInfo.InvariantCulture, "{0}{1}Click", pageName, name).Replace(" ", "");
+			callbackJS = String.Format(CultureInfo.InvariantCulture, "{1}.{0}()", clickMethodName, jsContextMenu.GlobalObjectName);
+			jsContextMenu.Bind(clickMethodName, false, OnClick);
 
 			String[] keys = new String[ImportantValues.Count];
 			ImportantValues.Keys.CopyTo(keys, 0);
@@ -47,6 +172,8 @@ namespace AsteroidOutpost
 		/// <returns>Returns the new field</returns>
 		private String Evaluate(String fullField, Dictionary<String, EntityTemplate> entityTemplates)
 		{
+			if(fullField == null){ return null; }
+
 			int percentStart = fullField.IndexOf("%", StringComparison.InvariantCulture);
 			while(percentStart >= 0)
 			{
@@ -99,19 +226,35 @@ namespace AsteroidOutpost
 				return field;
 			}
 		}
+	}
 
 
-		public String GetJSON()
+	internal class Call
+	{
+		public String Method;
+		public List<object> Parameters;
+
+
+		public void Invoke(AOHUD hud)
 		{
-			JObject jObject = new JObject{
-				{ "$Image", Image },
-				{ "$Name", Name },
-				{ "$Enabled", Enabled.ToString().ToLowerInvariant() }
-			};
+			String[] methodParts = Method.Split(new char[]{ '.' }, 2);
 
-			jObject.Extend(JObject.FromObject(ImportantValues));
+			if (methodParts[0] == "hud" || methodParts.Length == 1)
+			{
+				String methodName = (methodParts.Length == 1) ? methodParts[0] : methodParts[1];
 
-			return jObject.ToString(Formatting.None);
+				hud.GetType().InvokeMember(methodName,
+				                           BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
+				                           null,
+				                           hud,
+				                           Parameters.ToArray());
+
+			}
+			else
+			{
+				Console.WriteLine("I don't know how to call the method requested");
+				Debugger.Break();
+			}
 		}
 	}
 }

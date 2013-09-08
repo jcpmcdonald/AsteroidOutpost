@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Entities;
+using AsteroidOutpost.Systems;
+using Awesomium.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -14,12 +16,15 @@ namespace AsteroidOutpost
 	internal class ContextMenu
 	{
 		private readonly World world;
-		Dictionary<String, ContextMenuPage> contextPages = new Dictionary<String, ContextMenuPage>();
+
+		public Dictionary<String, ContextMenuPage> ContextPages = new Dictionary<String, ContextMenuPage>();
 		private ContextMenuPage currentPage;
 
-		public ContextMenu(World world, Dictionary<String, EntityTemplate> entityTemplates)
+		public ContextMenu(AOGame game, World world, AOHUD hud, Dictionary<String, EntityTemplate> entityTemplates)
 		{
 			this.world = world; 
+
+			JSObject jsContextMenu = game.Awesomium.WebView.CreateGlobalJavascriptObject("contextMenu");
 
 			foreach(var contextFileName in Directory.EnumerateFiles(@"..\data\context\", "*.json"))
 			{
@@ -28,24 +33,44 @@ namespace AsteroidOutpost
 
 				ContextMenuPage page = new ContextMenuPage();
 				JsonConvert.PopulateObject(jObject.ToString(), page);
-				contextPages.Add(page.Name.ToLowerInvariant(), page);
+				ContextPages.Add(page.Name.ToLowerInvariant(), page);
 
-				foreach (var contextButton in page.ContextButtons)
-				{
-					contextButton.Initialize(entityTemplates);
-				}
+				page.Initialize(hud, jsContextMenu, entityTemplates);
 			}
 
-			currentPage = contextPages["main"];
-
-			SetContextButtons();
+			SetPage("main");
 		}
 
 
-		protected void SetContextButtons()
+		public void SetPage(String pageName)
 		{
-			String json = JObject.FromObject(currentPage).ToString(Formatting.None);
-			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetContextPage('{0}');", json));
+			if(ContextPages.ContainsKey(pageName))
+			{
+				if(currentPage != null)
+				{
+					currentPage.PageChanged -= CurrentPageOnPageChanged;
+				}
+				currentPage = ContextPages[pageName];
+				ApplyContextPage(world);
+				currentPage.PageChanged += CurrentPageOnPageChanged;
+			}
+			else
+			{
+				Console.WriteLine("The page name '{0}' does not exist, the page will not be flipped", pageName);
+				Debugger.Break();
+			}
+		}
+
+
+		private void CurrentPageOnPageChanged(ContextMenuPage contextMenuPage)
+		{
+			ApplyContextPage(world);
+		}
+
+
+		protected void ApplyContextPage(World world)
+		{
+			currentPage.Apply(world);
 		}
 
 	}

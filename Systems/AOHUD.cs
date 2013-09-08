@@ -65,7 +65,7 @@ namespace AsteroidOutpost.Systems
 			this.world = world;
 			this.selectionSystem = selectionSystem;
 
-			contextMenu = new ContextMenu(world, world.EntityTemplates);
+			contextMenu = new ContextMenu(game, world, this, world.EntityTemplates);
 
 			// Set up some hotkeys
 			hotkeys.Add(Keys.S, btnPower_Clicked);
@@ -73,6 +73,7 @@ namespace AsteroidOutpost.Systems
 			hotkeys.Add(Keys.M, btnLaserMiner_Clicked);
 			hotkeys.Add(Keys.L, btnLaserTower_Clicked);
 			hotkeys.Add(Keys.I, btnMissileTower_Clicked);
+
 			hotkeys.Add(Keys.H, GoHome);
 			hotkeys.Add(Keys.R, RefreshEntityTemplates);
 			hotkeys.Add(Keys.OemPlus, TimeSpeedUp);
@@ -139,66 +140,6 @@ namespace AsteroidOutpost.Systems
 		private void GoHome(object sender, EventArgs e)
 		{
 
-		}
-
-
-		public void DisablePowerButton()
-		{
-			hotkeys.Remove(Keys.S);
-			world.ExecuteAwesomiumJS("$('#SolarStation').addClass('disabled');");
-		}
-		public void EnablePowerButton()
-		{
-			hotkeys.Add(Keys.S, btnPower_Clicked);
-			world.ExecuteAwesomiumJS("$('#SolarStation').removeClass('disabled');");
-		}
-
-
-		public void DisableMinerButton()
-		{
-			hotkeys.Remove(Keys.M);
-			world.ExecuteAwesomiumJS("$('#LaserMiner').addClass('disabled');");
-		}
-		public void EnableMinerButton()
-		{
-			hotkeys.Add(Keys.M, btnLaserMiner_Clicked);
-			world.ExecuteAwesomiumJS("$('#LaserMiner').removeClass('disabled');");
-		}
-
-
-		public void DisablePowerNodeButton()
-		{
-			hotkeys.Remove(Keys.N);
-			world.ExecuteAwesomiumJS("$('#PowerNode').addClass('disabled');");
-		}
-		public void EnablePowerNodeButton()
-		{
-			hotkeys.Add(Keys.N, btnPowerNode_Clicked);
-			world.ExecuteAwesomiumJS("$('#PowerNode').removeClass('disabled');");
-		}
-
-
-		public void DisableLaserTowerButton()
-		{
-			hotkeys.Remove(Keys.L);
-			world.ExecuteAwesomiumJS("$('#LaserTower').addClass('disabled');");
-		}
-		public void EnableLaserTowerButton()
-		{
-			hotkeys.Add(Keys.L, btnLaserTower_Clicked);
-			world.ExecuteAwesomiumJS("$('#LaserTower').removeClass('disabled');");
-		}
-
-
-		public void DisableMissileTowerButton()
-		{
-			hotkeys.Remove(Keys.I);
-			world.ExecuteAwesomiumJS("$('#MissileTower').addClass('disabled')");
-		}
-		public void EnableMissileTowerButton()
-		{
-			hotkeys.Add(Keys.I, btnMissileTower_Clicked);
-			world.ExecuteAwesomiumJS("$('#MissileTower').removeClass('disabled');");
 		}
 
 
@@ -437,6 +378,8 @@ namespace AsteroidOutpost.Systems
 			// Cancel whatever they are creating
 			world.DeleteComponents(creatingEntityID.Value);
 			creatingEntityID = null;
+
+			contextMenu.SetPage("main");
 		}
 		
 		
@@ -605,6 +548,14 @@ namespace AsteroidOutpost.Systems
 			}
 		}
 
+		internal ContextMenu ContextMenu
+		{
+			get
+			{
+				return contextMenu;
+			}
+		}
+
 
 		public float Scale(float value)
 		{
@@ -624,7 +575,7 @@ namespace AsteroidOutpost.Systems
 			Build(e.Arguments[0].ToString());
 		}
 
-		private void Build(string name)
+		public void Build(string name)
 		{
 			if (!world.Paused)
 			{
@@ -642,6 +593,8 @@ namespace AsteroidOutpost.Systems
 						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
 					}}
 				});
+
+				contextMenu.SetPage("placing");
 			}
 		}
 

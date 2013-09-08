@@ -6,6 +6,13 @@
 			"Name" : "Solar Station",
 			"Image" : "images/SolarStation.png",
 			"Slot" : 1,
+			"Hotkey" : "S",
+			"OnClickData" : {
+				"Method" : "hud.Build",
+				"Parameters" : [
+					"%Solar Station.EntityName.Name%",
+				],
+			},
 			"ImportantValues" : {
 				"Cost" : "%Solar Station.Constructible.Cost% minerals",
 				"HP" : "%Solar Station.HitPoints.TotalArmour%",
@@ -17,6 +24,13 @@
 			"Name" : "Power Node",
 			"Image" : "images/PowerNode.png",
 			"Slot" : 2,
+			"Hotkey" : "N",
+			"OnClickData" : {
+				"Method" : "hud.Build",
+				"Parameters" : [
+					"%Power Node.EntityName.Name%",
+				],
+			},
 			"ImportantValues" : {
 				"Cost" : "%Power Node.Constructible.Cost% minerals",
 				"HP" : "%Power Node.HitPoints.TotalArmour%",
@@ -26,6 +40,13 @@
 			"Name" : "Laser Miner",
 			"Image" : "images/LaserMiner.png",
 			"Slot" : 3,
+			"Hotkey" : "M",
+			"OnClickData" : {
+				"Method" : "hud.Build",
+				"Parameters" : [
+					"%Laser Miner.EntityName.Name%",
+				],
+			},
 			"ImportantValues" : {
 				"Cost" : "%Laser Miner.Constructible.Cost% minerals",
 				"HP" : "%Laser Miner.HitPoints.TotalArmour%",
@@ -37,6 +58,13 @@
 			"Image" : "images/Battery.png",
 			"Description" : "Stores power that you can use at a later date",
 			"Slot" : 3,
+			"Hotkey" : "B",
+			"OnClickData" : {
+				"Method" : "hud.Build",
+				"Parameters" : [
+					"%Battery.EntityName.Name%",
+				],
+			},
 			"ImportantValues" : {
 				"Cost" : "%Battery.Constructible.Cost% minerals",
 				"HP" : "%Battery.HitPoints.TotalArmour%",
@@ -47,6 +75,13 @@
 			"Name" : "Laser Tower",
 			"Image" : "images/LaserTower.png",
 			"Slot" : 4,
+			"Hotkey" : "L",
+			"OnClickData" : {
+				"Method" : "hud.Build",
+				"Parameters" : [
+					"%Laser Tower.EntityName.Name%",
+				],
+			},
 			"ImportantValues" : {
 				"Cost" : "%Laser Tower.Constructible.Cost% minerals",
 				"HP" : "%Laser Tower.HitPoints.TotalArmour%",
@@ -58,6 +93,13 @@
 			"Name" : "Missile Tower",
 			"Image" : "images/MissileTower.png",
 			"Slot" : 5,
+			"Hotkey" : "I",
+			"OnClickData" : {
+				"Method" : "hud.Build",
+				"Parameters" : [
+					"%Missile Tower.EntityName.Name%",
+				],
+			},
 			"ImportantValues" : {
 				"Cost" : "%Missile Tower.Constructible.Cost% minerals",
 				"HP" : "%Missile Tower.HitPoints.TotalArmour%",

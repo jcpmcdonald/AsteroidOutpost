@@ -1,0 +1,17 @@
+{
+	"Name" : "Placing",
+	"ContextButtons" :
+	[
+		{
+			"Name" : "Cancel",
+			"Image" : "images/X.png",
+			"Slot" : 1,
+			"OnClickData" : {
+				"Method" : "hud.OnCancelCreation",
+				"Parameters" : [],
+			},
+			"ImportantValues" : {
+			}
+		},
+	],
+}

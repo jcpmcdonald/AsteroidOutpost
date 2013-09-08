@@ -63,56 +63,15 @@ namespace AsteroidOutpost.Scenarios
 			world.HUD.FocusWorldPoint = startingPoint;
 
 
-			world.HUD.DisablePowerButton();
-			world.HUD.DisableLaserTowerButton();
-			world.HUD.DisableMissileTowerButton();
+			world.HUD.ContextMenu.ContextPages["main"].ContextButtonDictionary["solar station"].Enabled = false;
+			world.HUD.ContextMenu.ContextPages["main"].ContextButtonDictionary["laser tower"].Enabled = false;
+			world.HUD.ContextMenu.ContextPages["main"].ContextButtonDictionary["missile tower"].Enabled = false;
+			world.HUD.ContextMenu.ContextPages["main"].ContextButtonDictionary["battery"].Enabled = false;
 
 			currentMission = buildMiners;
 			StartMission();
 
-
 			world.constructionSystem.ConstructionCompletedEvent += ConstructionSystem_ConstructionCompletedEvent;
-
-			// Create a beacon
-			//EntityFactory.Create("Beacon", new Dictionary<String, object>(){
-			//    { "Sprite.Scale", 0.7f },
-			//    { "Sprite.Set", null },
-			//    { "Sprite.Animation", "Rotate" },
-			//    { "Sprite.Orientation", GlobalRandom.Next(0, 359) },
-			//    { "Transpose.Position", new Vector2((world.MapWidth / 2.0f) + 200, world.MapHeight / 2.0f) },
-			//    { "Transpose.Radius", 40 },
-			//    { "OwningForce", localForce }
-			//});
-
-
-
-			//EntityFactory.Create("(rotate frame)", new Dictionary<String, object>(){
-			//    { "Sprite.Scale", 0.7f },
-			//    { "Sprite.Set", null },
-			//    { "Sprite.Animation", "Rotate" },
-			//    { "Sprite.Orientation", 0f },
-			//    { "Transpose.Position", new Vector2((world.MapWidth / 2.0f) + 200, world.MapHeight / 2.0f) },
-			//    { "Transpose.Radius", 40 },
-			//    { "OwningForce", localForce }
-			//});
-
-
-			//EntityFactory.Create("(use frames only)", new Dictionary<String, object>(){
-			//    { "Sprite.Scale", 0.7f },
-			//    { "Sprite.Set", null },
-			//    { "Sprite.Animation", "Rotate" },
-			//    { "Sprite.Orientation", 0f },
-			//    { "Transpose.Position", new Vector2((world.MapWidth / 2.0f) + 300, world.MapHeight / 2.0f) },
-			//    { "Transpose.Radius", 40 },
-			//    { "OwningForce", localForce }
-			//});
-
-
-			//Beacon minerBeacon = new Beacon(world, world, localForce, new Vector2((world.MapWidth / 2.0f) + 200, world.MapHeight / 2.0f), 40);
-			//beacons.Add(minerBeacon);
-
-			//world.HUD.AddControl(frmInstructions);
-
 
 			GenerateAsteroidField(1000);
 		}
@@ -233,7 +192,7 @@ namespace AsteroidOutpost.Scenarios
 			else if(currentMission == buildLasers)
 			{
 				world.HUD.ShowModalDialog("Now that we have a good income stream, we should build some defences. Enemies can come from anywhere, so build 3 laser towers, each guarding a separate part of the base.");
-				world.HUD.EnableLaserTowerButton();
+				world.HUD.ContextMenu.ContextPages["main"].ContextButtonDictionary["laser tower"].Enabled = true;
 				missions.Add(buildLasers);
 
 
@@ -241,7 +200,7 @@ namespace AsteroidOutpost.Scenarios
 			else if(currentMission == buildMorePower)
 			{
 				world.HUD.ShowModalDialog("Good Job! Let's build an other solar station so that our lasers will always have power. Power consumers can only be connected to a single power source, so you will need to build this next to home.");
-				world.HUD.EnablePowerButton();
+				world.HUD.ContextMenu.ContextPages["main"].ContextButtonDictionary["solar station"].Enabled = true;
 				missions.Add(buildMorePower);
 
 

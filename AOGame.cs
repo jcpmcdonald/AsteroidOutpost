@@ -110,6 +110,8 @@ namespace AsteroidOutpost
 
 
 		private bool displayPerformanceGraph;
+		private bool executingNextCycleJS;
+
 		public bool DisplayPerformanceGraph
 		{
 			get
@@ -370,12 +372,8 @@ namespace AsteroidOutpost
 				accumulatedTime += fixedDeltaTime;
 				frameRateCounter.StartOfUpdate(gameTime);
 
-				for (int i = executeAwesomiumJSNextCycle.Count - 1; i >= 0; i--)
-				{
-					var js = executeAwesomiumJSNextCycle[i];
-					executeAwesomiumJSNextCycle.RemoveAt(i);
-					ExecuteAwesomiumJS(js);
-				}
+				// Execute anything we weren't able to before
+				ExecuteNextCycleAwesomiumJS();
 
 				if(world != null)
 				{
@@ -582,6 +580,12 @@ namespace AsteroidOutpost
 				//awesomium.WebView.ExecuteJavascriptWithResult(js, 50);
 				try
 				{
+					if(!executingNextCycleJS)
+					{
+						// Execute anything we weren't able to before
+						ExecuteNextCycleAwesomiumJS();
+					}
+
 					LastJSExecuted = js;
 					awesomium.WebView.ExecuteJavascript(js);
 				}
@@ -596,6 +600,20 @@ namespace AsteroidOutpost
 				executeAwesomiumJSNextCycle.Add(js);
 				Console.WriteLine("JS Executed Next Cycle");
 			}
+		}
+
+
+		private void ExecuteNextCycleAwesomiumJS()
+		{
+			executingNextCycleJS = true;
+			int count = executeAwesomiumJSNextCycle.Count;
+			for (int i = 0; i < count; i++)
+			{
+				var js = executeAwesomiumJSNextCycle[0];
+				executeAwesomiumJSNextCycle.RemoveAt(0);
+				ExecuteAwesomiumJS(js);
+			}
+			executingNextCycleJS = false;
 		}
 	}
 }
