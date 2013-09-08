@@ -34,7 +34,7 @@
 		"Perishable" : {
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
-		"Selectable" : {},
+		"Selectable" : { },
 	},
 }
 

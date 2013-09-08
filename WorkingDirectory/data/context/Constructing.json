@@ -1,0 +1,22 @@
+{
+	"Name" : "Constructing",
+	"ContextButtons" :
+	[
+		{
+			"Name" : "Cancel Construction",
+			"Image" : "images/X.png",
+			"Slot" : 0,
+			"OnClickData" : {
+				"Method" : "hud.CancelConstruction",
+			},
+		},
+		{
+			"Name" : "Deselect",
+			"Image" : "images/X.png",
+			"Slot" : 8,
+			"OnClickData" : {
+				"Method" : "hud.ClearSelection",
+			},
+		},
+	],
+}

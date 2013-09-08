@@ -6,6 +6,7 @@ using System.Text;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 using System.Globalization;
@@ -71,7 +72,7 @@ namespace AsteroidOutpost.Scenarios
 			currentMission = buildMiners;
 			StartMission();
 
-			world.constructionSystem.ConstructionCompletedEvent += ConstructionSystem_ConstructionCompletedEvent;
+			world.constructionSystem.AnyConstructionCompletedEvent += ConstructionSystem_AnyConstructionCompletedEvent;
 
 			GenerateAsteroidField(1000);
 		}
@@ -113,11 +114,11 @@ namespace AsteroidOutpost.Scenarios
 		}
 
 
-		void ConstructionSystem_ConstructionCompletedEvent(int entityID)
+		void ConstructionSystem_AnyConstructionCompletedEvent(ConstructionCompleteEventArgs args)
 		{
 			if(currentMission == buildMiners)
 			{
-				var miner = world.GetNullableComponent<LaserMiner>(entityID);
+				var miner = world.GetNullableComponent<LaserMiner>(args.EntityID);
 				if (miner != null)
 				{
 					// miner.ConnectedPowerSources().Count > 0 &&
@@ -144,7 +145,7 @@ namespace AsteroidOutpost.Scenarios
 			else if(currentMission == buildLasers)
 			{
 				// This is a laser tower, right? It's got lasers!
-				var laserTower = world.GetNullableComponent<LaserWeapon>(entityID);
+				var laserTower = world.GetNullableComponent<LaserWeapon>(args.EntityID);
 				if (laserTower != null)
 				{
 					lasersBuilt++;
@@ -166,7 +167,7 @@ namespace AsteroidOutpost.Scenarios
 			}
 			else if(currentMission == buildMorePower)
 			{
-				var solarStation = world.GetNullableComponent<PowerProducer>(entityID);
+				var solarStation = world.GetNullableComponent<PowerProducer>(args.EntityID);
 				if (solarStation != null)
 				{
 					buildMorePower.Done = true;

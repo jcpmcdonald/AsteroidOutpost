@@ -84,6 +84,15 @@ body
 	-webkit-filter: brightness(30%);
 }
 
+.button.blank,.buttonPressed.blank
+{
+	border-style: outset;
+	background-position: 0px 0px;
+	background-color: rgba(20, 20, 20, 0.9);
+	-webkit-filter: grayscale;
+	-webkit-filter: brightness(30%);
+}
+
 
 .buttonHoverTitle
 {

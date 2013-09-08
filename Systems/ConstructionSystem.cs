@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
+using AsteroidOutpost.Entities.Eventing;
+using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
@@ -20,7 +22,7 @@ namespace AsteroidOutpost.Systems
 		private const float powerUsageRate = 12.0f;
 		private const float mineralUsageRate = 30.0f;
 
-		public event Action<int> ConstructionCompletedEvent;
+		public event Action<ConstructionCompleteEventArgs> AnyConstructionCompletedEvent;
 
 		public ConstructionSystem(AOGame game, World world, PowerGridSystem powerGridSystem)
 			: base(game)
@@ -30,9 +32,7 @@ namespace AsteroidOutpost.Systems
 			this.powerGridSystem = powerGridSystem;
 		}
 
-		
-		
-		
+
 		/// <summary>
 		/// Update this constructing building
 		/// </summary>
@@ -40,18 +40,18 @@ namespace AsteroidOutpost.Systems
 		{
 			if (world.Paused) { return; }
 
-			var constructables = world.GetComponents<Constructible>();
+			var constructibles = world.GetComponents<Constructible>();
 
-			foreach (var constructable in constructables)
+			foreach (var constructible in constructibles)
 			{
-				if(constructable.IsBeingPlaced)
+				if(constructible.IsBeingPlaced)
 				{
 					continue;
 				}
-				if(!constructable.IsConstructing)
+				if(!constructible.IsConstructing)
 				{
 					// Uhh... Ok. Not needed
-					world.DeleteComponent(constructable);
+					world.DeleteComponent(constructible);
 					continue;
 				}
 
@@ -60,35 +60,32 @@ namespace AsteroidOutpost.Systems
 				int deltaMinerals;
 
 				// Check that we have enough power in the grid
-				Force owningForce = world.GetOwningForce(constructable);
-				if (powerGridSystem.HasPower(constructable, powerToUse))
+				Force owningForce = world.GetOwningForce(constructible);
+				if (powerGridSystem.HasPower(constructible, powerToUse))
 				{
 					// Check to see if the mineralsLeftToConstruct would pass an integer boundary
-					deltaMinerals = (int)(constructable.MineralsConstructed + mineralsToUse) - (int)(constructable.MineralsConstructed);
+					deltaMinerals = (int)(constructible.MineralsConstructed + mineralsToUse) - (int)(constructible.MineralsConstructed);
 					if (deltaMinerals != 0)
 					{
 						// If the force doesn't have enough minerals, we will halt the construction here until it does 
 						if (owningForce.GetMinerals() >= deltaMinerals)
 						{
 							// Consume the resources
-							powerGridSystem.GetPower(constructable, powerToUse);
-							constructable.MineralsConstructed += mineralsToUse;
+							powerGridSystem.GetPower(constructible, powerToUse);
+							constructible.MineralsConstructed += mineralsToUse;
 
 							// Set the force's minerals
 							owningForce.SetMinerals(owningForce.GetMinerals() - deltaMinerals);
 
-							if (constructable.MineralsConstructed >= constructable.Cost)
+							if (constructible.MineralsConstructed >= constructible.Cost)
 							{
 								// This construction is complete
-								constructable.MineralsConstructed = constructable.Cost;
-								constructable.IsConstructing = false;
+								constructible.MineralsConstructed = constructible.Cost;
+								constructible.IsConstructing = false;
 
-								if (ConstructionCompletedEvent != null)
-								{
-									ConstructionCompletedEvent(constructable.EntityID);
-								}
+								OnConstructionComplete(constructible);
 
-								world.DeleteComponent(constructable);
+								world.DeleteComponent(constructible);
 							}
 						}
 						else
@@ -100,14 +97,25 @@ namespace AsteroidOutpost.Systems
 					{
 						// We have not passed an integer boundary, so just keep track of the change locally
 						// We'll get around to subtracting this from the force's minerals when we pass an integer boundary
-						constructable.MineralsConstructed += mineralsToUse;
+						constructible.MineralsConstructed += mineralsToUse;
 
 						// We should consume our little tidbit of power though:
-						powerGridSystem.GetPower(constructable, powerToUse);
+						powerGridSystem.GetPower(constructible, powerToUse);
 					}
 				}
 			}
 
+		}
+
+
+		private void OnConstructionComplete(Constructible constructible)
+		{
+			constructible.OnConstructionComplete(new ConstructionCompleteEventArgs(constructible));
+
+			if (AnyConstructionCompletedEvent != null)
+			{
+				AnyConstructionCompletedEvent(new ConstructionCompleteEventArgs(constructible));
+			}
 		}
 
 

@@ -16,16 +16,16 @@ namespace AsteroidOutpost
 	{
 		public event Action<ContextButton> ButtonChanged;
 
-		private bool enabled;
+		private String image;
+		private String name;
+		private String description;
 		private int slot;
-		private string image;
-		private string name;
-		public Dictionary<String, String> ImportantValues;
-		private string callbackJS;
-		private string hotkey;
+		private bool enabled;
+		private String hotkey;
 		private Call onClickData;
+		public Dictionary<String, String> ImportantValues;
 
-		[JsonIgnore]
+		private String callbackJS;
 		private AOHUD hud;
 
 		public String Name
@@ -34,6 +34,16 @@ namespace AsteroidOutpost
 			set
 			{
 				name = value;
+				OnButtonChanged();
+			}
+		}
+
+		public String Description
+		{
+			get { return description; }
+			set
+			{
+				description = value;
 				OnButtonChanged();
 			}
 		}
@@ -137,7 +147,7 @@ namespace AsteroidOutpost
 			image = Evaluate(image, entityTemplates) ?? image;
 			hotkey = Evaluate(hotkey, entityTemplates) ?? hotkey;
 
-			if(onClickData != null)
+			if(onClickData != null && onClickData.Parameters != null)
 			{
 				for (int index = 0; index < onClickData.Parameters.Count; index++)
 				{
@@ -155,11 +165,14 @@ namespace AsteroidOutpost
 			callbackJS = String.Format(CultureInfo.InvariantCulture, "{1}.{0}()", clickMethodName, jsContextMenu.GlobalObjectName);
 			jsContextMenu.Bind(clickMethodName, false, OnClick);
 
-			String[] keys = new String[ImportantValues.Count];
-			ImportantValues.Keys.CopyTo(keys, 0);
-			foreach (var key in keys)
+			if(ImportantValues != null)
 			{
-				ImportantValues[key] = Evaluate(ImportantValues[key], entityTemplates) ?? ImportantValues[key];
+				String[] keys = new String[ImportantValues.Count];
+				ImportantValues.Keys.CopyTo(keys, 0);
+				foreach (var key in keys)
+				{
+					ImportantValues[key] = Evaluate(ImportantValues[key], entityTemplates) ?? ImportantValues[key];
+				}
 			}
 		}
 
@@ -247,7 +260,7 @@ namespace AsteroidOutpost
 				                           BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
 				                           null,
 				                           hud,
-				                           Parameters.ToArray());
+				                           Parameters == null ? null : Parameters.ToArray());
 
 			}
 			else

@@ -1,13 +1,13 @@
 {
-	"Name" : "Placing",
+	"Name" : "Deselect",
 	"ContextButtons" :
 	[
 		{
-			"Name" : "Cancel",
+			"Name" : "Deselect",
 			"Image" : "images/X.png",
 			"Slot" : 8,
 			"OnClickData" : {
-				"Method" : "hud.OnCancelCreation",
+				"Method" : "hud.ClearSelection",
 			},
 		},
 	],

@@ -195,24 +195,27 @@ namespace AsteroidOutpost.Systems
 					}
 				}
 
-				if (!clickHandled)
+				if (!clickHandled && selectedEntities.Count > 0)
 				{
-					if (selectedEntities.Count > 0)
-					{
-						// Deselect the selected unit(s)
-
-						// Disconnect from the death events
-						foreach (Perishable selectedPerishable in selectedEntities.Select(selectedEntity => world.GetNullableComponent<Perishable>(selectedEntity)).Where(p => p != null))
-						{
-							selectedPerishable.Perishing -= SelectedEntityDying;
-						}
-
-						selectedEntities.Clear();
-
-						OnSelectionChanged();
-					}
+					ClearSelection();
 				}
 			}
+		}
+
+
+		public void ClearSelection()
+		{
+			// Deselect the selected unit(s)
+
+			// Disconnect from the death events
+			foreach (Perishable selectedPerishable in selectedEntities.Select(selectedEntity => world.GetNullableComponent<Perishable>(selectedEntity)).Where(p => p != null))
+			{
+				selectedPerishable.Perishing -= SelectedEntityDying;
+			}
+
+			selectedEntities.Clear();
+
+			OnSelectionChanged();
 		}
 
 
@@ -237,7 +240,59 @@ namespace AsteroidOutpost.Systems
 				SelectionChanged(new MultiEntityEventArgs(selectedEntities));
 			}
 
+			UpdateContextMenu();
+
 			SetSelection();
+		}
+
+
+		protected void UpdateContextMenu()
+		{
+			if(selectedEntities.Count == 1)
+			{
+				Constructible constructible = world.GetNullableComponent<Constructible>(selectedEntities[0]);
+				if(constructible != null)
+				{
+					world.HUD.ContextMenu.SetPage("constructing");
+
+					constructible.ConstructionComplete += ConstructibleOnConstructionComplete;
+				}
+				else
+				{
+					Selectable selectable = world.GetComponent<Selectable>(selectedEntities[0]);
+					if(selectable.ContextMenu != null)
+					{
+						world.HUD.ContextMenu.SetPage(selectable.ContextMenu);
+					}
+					else
+					{
+						world.HUD.ContextMenu.SetPage("deselect");
+					}
+				}
+			}
+			else
+			{
+				world.HUD.ContextMenu.SetPage("main");
+			}
+		}
+
+
+		private void ConstructibleOnConstructionComplete(ConstructionCompleteEventArgs args)
+		{
+			args.Constructible.ConstructionComplete -= ConstructibleOnConstructionComplete;
+
+			if(selectedEntities.Count == 1 && args.EntityID == selectedEntities[0])
+			{
+				Selectable selectable = world.GetComponent<Selectable>(selectedEntities[0]);
+				if(selectable.ContextMenu != null)
+				{
+					world.HUD.ContextMenu.SetPage(selectable.ContextMenu);
+				}
+				else
+				{
+					world.HUD.ContextMenu.SetPage("deselect");
+				}
+			}
 		}
 
 
@@ -294,6 +349,22 @@ namespace AsteroidOutpost.Systems
 			else
 			{
 				return "[]";
+			}
+		}
+
+
+		public void CancelConstruction()
+		{
+			if(selectedEntities.Count == 1)
+			{
+				int entityID = selectedEntities[0];
+				Constructible constructible = world.GetNullableComponent<Constructible>(entityID);
+				if (constructible != null)
+				{
+					Perishable perishable = world.GetComponent<Perishable>(entityID);
+					perishable.OnPerish(new EntityPerishingEventArgs(perishable));
+					world.DeleteComponents(entityID);
+				}
 			}
 		}
 	}

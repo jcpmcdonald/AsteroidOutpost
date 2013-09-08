@@ -145,6 +145,28 @@ namespace AsteroidOutpost.Eventing
 
 	#region Construction Events
 
+	internal class ConstructionCompleteEventArgs : ComponentReflectiveEventArgs
+	{
+		public ConstructionCompleteEventArgs(Constructible constructible)
+			: base(constructible, "OnConstructionComplete", new object[]{ })
+		{
+		}
+
+		public Constructible Constructible {
+			get
+			{
+				return (Constructible)Component;
+			}
+		}
+
+		public int EntityID {
+			get
+			{
+				return Component.EntityID;
+			}
+		}
+	}
+
 	//public class EntityConstructionProgressEventArgs : EntityReflectiveEventArgs, IQuantifiable
 	//{
 	//    public EntityConstructionProgressEventArgs(ConstructableEntity constructable, float newMineralsLeftToConstruct, int delta)

@@ -60,7 +60,7 @@ namespace AsteroidOutpost
 		public void Apply(World world)
 		{
 			String json = JObject.FromObject(this).ToString(Formatting.None);
-			Console.WriteLine(json);
+			//Console.WriteLine(json);
 			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetContextPage('{0}');", json.Replace("'", "\\'")));
 		}
 

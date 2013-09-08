@@ -44,6 +44,7 @@ namespace AsteroidOutpost
 
 		public void SetPage(String pageName)
 		{
+			pageName = pageName.ToLowerInvariant();
 			if(ContextPages.ContainsKey(pageName))
 			{
 				if(currentPage != null)

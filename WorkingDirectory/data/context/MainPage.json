@@ -5,7 +5,7 @@
 		{
 			"Name" : "Solar Station",
 			"Image" : "images/SolarStation.png",
-			"Slot" : 1,
+			"Slot" : 0,
 			"Hotkey" : "S",
 			"OnClickData" : {
 				"Method" : "hud.Build",
@@ -23,7 +23,7 @@
 		{
 			"Name" : "Power Node",
 			"Image" : "images/PowerNode.png",
-			"Slot" : 2,
+			"Slot" : 1,
 			"Hotkey" : "N",
 			"OnClickData" : {
 				"Method" : "hud.Build",
@@ -39,7 +39,7 @@
 		{
 			"Name" : "Laser Miner",
 			"Image" : "images/LaserMiner.png",
-			"Slot" : 3,
+			"Slot" : 2,
 			"Hotkey" : "M",
 			"OnClickData" : {
 				"Method" : "hud.Build",
@@ -92,7 +92,7 @@
 		{
 			"Name" : "Missile Tower",
 			"Image" : "images/MissileTower.png",
-			"Slot" : 5,
+			"Slot" : 6,
 			"Hotkey" : "I",
 			"OnClickData" : {
 				"Method" : "hud.Build",

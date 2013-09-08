@@ -214,7 +214,7 @@ namespace AsteroidOutpost.Systems
 			{
 				ScaleFactor = desiredScaleFactor + (theMouse.ScrollWheelDelta / 120.0f) * (scaleFactor * -0.2f);
 			}
-			else if (scaleFactor != desiredScaleFactor)
+			if (scaleFactor != desiredScaleFactor)
 			{
 				// Smooth the zooming in and out
 				float absDiff = Math.Abs(scaleFactor - desiredScaleFactor);
@@ -721,6 +721,8 @@ namespace AsteroidOutpost.Systems
 			//}
 
 			creatingEntityID = null;
+			contextMenu.SetPage("main");
+
 			//if (!theKeyboard.IsKeyDown(Keys.LeftShift) && !theKeyboard.IsKeyDown(Keys.RightShift))
 			//{
 			//    OnCancelCreation();
@@ -781,6 +783,24 @@ namespace AsteroidOutpost.Systems
 			}
 
 			return blockers;
+		}
+
+
+		public void ClearSelection()
+		{
+			selectionSystem.ClearSelection();
+		}
+
+
+		public void CancelConstruction()
+		{
+			selectionSystem.CancelConstruction();
+		}
+
+
+		public void Upgrade(String upgradeName)
+		{
+			
 		}
 	}
 }
