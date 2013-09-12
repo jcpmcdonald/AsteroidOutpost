@@ -22,6 +22,10 @@
 			"Armour" : 150,
 			"TotalArmour" : 150,
 		},
+		"AutoHeal" : {
+			"Delay" : 15,
+			"Rate" : 3,
+		},
 		"LaserMiner" : {
 			"MiningSourceOffset" : "0, 0",
 			"MiningRate" : 25,

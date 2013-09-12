@@ -141,6 +141,7 @@
     <Compile Include="ColorEx.cs" />
     <Compile Include="ColorF.cs" />
     <Compile Include="Components\Animator.cs" />
+    <Compile Include="Components\AutoHeal.cs" />
     <Compile Include="Components\Constructable.cs" />
     <Compile Include="Components\LaserMiner.cs" />
     <Compile Include="Components\LaserWeapon.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="Scenarios\MinerealCollectionScenario.cs" />
     <Compile Include="Scenarios\Mission.cs" />
     <Compile Include="Screens\Layer.cs" />
+    <Compile Include="Systems\AutoHealSystem.cs" />
     <Compile Include="Systems\FrameRateCounter.cs" />
     <Compile Include="Interfaces\IIdentifiable.cs" />
     <Compile Include="Interfaces\IQuantifiable.cs" />

@@ -8,15 +8,18 @@ using Microsoft.Xna.Framework;
 
 namespace AsteroidOutpost.Systems
 {
-	public class ProjectileSystem : GameComponent
+	class ProjectileSystem : GameComponent
 	{
 		private readonly World world;
+		private readonly HitPointSystem hitPointSystem;
 
-		public ProjectileSystem(Game game, World world)
+		public ProjectileSystem(Game game, World world, HitPointSystem hitPointSystem)
 			: base(game)
 		{
 			this.world = world;
+			this.hitPointSystem = hitPointSystem;
 		}
+
 
 		public override void Update(GameTime gameTime)
 		{
@@ -55,7 +58,7 @@ namespace AsteroidOutpost.Systems
 						HitPoints enemyHP = world.GetNullableComponent<HitPoints>(possibleHit);
 						if(enemyHP != null)
 						{
-							HitPointSystem.InflictDamageOn(enemyHP, projectile.Damage);
+							hitPointSystem.InflictDamageOn(enemyHP, projectile.Damage);
 						}
 
 						

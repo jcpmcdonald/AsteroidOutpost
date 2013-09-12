@@ -62,7 +62,12 @@ namespace AsteroidOutpost.Systems
 		}
 
 
-		public static void InflictDamageOn(HitPoints victim, float damage)
+		public void Heal(HitPoints target, float amount)
+		{
+			InflictDamageOn(target, -amount);
+		}
+
+		public void InflictDamageOn(HitPoints victim, float damage)
 		{
 			int initialArmour = (int)victim.Armour;
 			victim.Armour = MathHelper.Clamp(victim.Armour - damage, 0, victim.TotalArmour);
@@ -70,6 +75,15 @@ namespace AsteroidOutpost.Systems
 			if(delta != 0)
 			{
 				victim.OnArmourChanged(new EntityArmourChangedEventArgs(victim, delta));
+			}
+
+			if(damage >= 0)
+			{
+				AutoHeal autoHeal = world.GetNullableComponent<AutoHeal>(victim);
+				if (autoHeal != null)
+				{
+					autoHeal.TimeSinceLastHit = TimeSpan.Zero;
+				}
 			}
 		}
 	}

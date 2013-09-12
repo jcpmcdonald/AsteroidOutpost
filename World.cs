@@ -65,6 +65,7 @@ namespace AsteroidOutpost
 		private readonly HitPointSystem hitPointSystem;
 		private readonly SelectionSystem selectionSystem;
 		private readonly ParticleEngine particleEngine;
+		private readonly AutoHealSystem autoHealSystem;
 
 		private MissionSystem missionSystem;     // Created when world starts, instead of the world is created
 
@@ -101,6 +102,7 @@ namespace AsteroidOutpost
 			animationSystem = new AnimationSystem(game, this);
 			physicsSystem = new PhysicsSystem(game, this);
 			renderQuadTreeSystem = new RenderQuadTreeSystem(game, this);
+			hitPointSystem = new HitPointSystem(game, this);
 
 			powerGridSystem = new PowerGridSystem(game, this);
 			powerStorageSystem = new PowerStorageSystem(game, this);
@@ -108,12 +110,12 @@ namespace AsteroidOutpost
 			constructionSystem = new ConstructionSystem(game, this, powerGridSystem);
 			laserMinerSystem = new LaserMinerSystem(game, this, powerGridSystem);
 			accumulationSystem = new AccumulationSystem(game, this, 500);
-			laserWeaponSystem = new LaserWeaponSystem(game, this, powerGridSystem);
+			laserWeaponSystem = new LaserWeaponSystem(game, this, powerGridSystem, hitPointSystem);
 			projectileLauncherSystem = new ProjectileLauncherSystem(game, this);
-			projectileSystem = new ProjectileSystem(game, this);
+			projectileSystem = new ProjectileSystem(game, this, hitPointSystem);
 			movementSystem = new FlockingSystem(game, this);
-			hitPointSystem = new HitPointSystem(game, this);
 			particleEngine = new ParticleEngine(game, this);
+			autoHealSystem = new AutoHealSystem(game, this, hitPointSystem);
 
 			awesomium = game.Awesomium;
 
@@ -143,6 +145,7 @@ namespace AsteroidOutpost
 			game.Components.Add(hitPointSystem);
 			game.Components.Add(selectionSystem);
 			game.Components.Add(particleEngine);
+			game.Components.Add(autoHealSystem);
 		}
 
 

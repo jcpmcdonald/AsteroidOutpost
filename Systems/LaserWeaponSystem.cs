@@ -16,12 +16,14 @@ namespace AsteroidOutpost.Systems
 		private readonly World world;
 		private SpriteBatch spriteBatch;
 		private readonly PowerGridSystem powerGridSystem;
+		private readonly HitPointSystem hitPointSystem;
 
-		public LaserWeaponSystem(Game game, World world, PowerGridSystem powerGridSystem)
+		public LaserWeaponSystem(Game game, World world, PowerGridSystem powerGridSystem, HitPointSystem hitPointSystem)
 			: base(game)
 		{
 			this.world = world;
 			this.powerGridSystem = powerGridSystem;
+			this.hitPointSystem = hitPointSystem;
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 		}
 
@@ -95,7 +97,7 @@ namespace AsteroidOutpost.Systems
 						if (targetHitPoints != null)
 						{
 							float damage = (laser.Damage * (float)gameTime.ElapsedGameTime.TotalSeconds);
-							HitPointSystem.InflictDamageOn(targetHitPoints, damage);
+							hitPointSystem.InflictDamageOn(targetHitPoints, damage);
 						}
 						else
 						{
