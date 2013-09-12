@@ -127,13 +127,13 @@ namespace AsteroidOutpost.Systems
 
 		private void UpdateCharging(GameTime gameTime, LaserMiner laserMiner)
 		{
-			if (laserMiner.TimeSinceLastStageChange.TotalMilliseconds > laserMiner.ChargeTime)
+			if (laserMiner.TimeSinceLastStageChange.TotalSeconds > laserMiner.ChargeTime)
 			{
 				// Loose any partial mining progress when we start charging. If the math and upgrades are set properly, this shouldn't really come into play
 				laserMiner.PartialMineralsToExtract = 0.0;
 
 				// I don't want to loose fractions of a second, so just subtract instead of set
-				laserMiner.TimeSinceLastStageChange = laserMiner.TimeSinceLastStageChange.Subtract(new TimeSpan(0, 0, 0, 0, laserMiner.ChargeTime));
+				laserMiner.TimeSinceLastStageChange = laserMiner.TimeSinceLastStageChange.Subtract(new TimeSpan( 0, 0, 0, 0, (int)(laserMiner.ChargeTime * 1000f)));
 				if (laserMiner.nearbyAsteroids.Count > 0)
 				{
 					StartMining(laserMiner);
@@ -198,7 +198,7 @@ namespace AsteroidOutpost.Systems
 				}
 			}
 
-			if (laserMiner.TimeSinceLastStageChange.TotalMilliseconds > laserMiner.MineTime)
+			if (laserMiner.TimeSinceLastStageChange.TotalSeconds > laserMiner.MineTime)
 			{
 				StartCharging(laserMiner);
 			}
@@ -262,7 +262,7 @@ namespace AsteroidOutpost.Systems
 		private void StartCharging(LaserMiner laserMiner)
 		{
 			// I don't want to loose fractions of a second, so just add instead of set
-			laserMiner.TimeSinceLastStageChange = laserMiner.TimeSinceLastStageChange.Subtract(new TimeSpan(0, 0, 0, 0, laserMiner.MineTime));
+			laserMiner.TimeSinceLastStageChange = laserMiner.TimeSinceLastStageChange.Subtract(new TimeSpan(0, 0, 0, 0, (int)(laserMiner.MineTime * 1000f)));
 
 			laserMiner.State = MiningState.Charging;
 		}
@@ -305,13 +305,13 @@ namespace AsteroidOutpost.Systems
 					//Asteroid asteroid = nearbyAsteroids[miningAsteroid];
 
 					float amplitude;
-					if (laserMiner.TimeSinceLastStageChange.TotalMilliseconds > 300)
+					if (laserMiner.TimeSinceLastStageChange.TotalSeconds > 0.3f)
 					{
 						amplitude = 1.0f;
 					}
 					else
 					{
-						amplitude = (float)(laserMiner.TimeSinceLastStageChange.TotalMilliseconds / 300f);
+						amplitude = (float)(laserMiner.TimeSinceLastStageChange.TotalSeconds / 0.3f);
 					}
 
 					Color color = new Color((int)((20f + world.Scale(150)) * amplitude),

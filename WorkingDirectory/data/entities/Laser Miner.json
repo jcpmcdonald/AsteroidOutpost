@@ -26,8 +26,8 @@
 			"MiningSourceOffset" : "0, 0",
 			"MiningRate" : 25,
 			"EnergyUsageRate" : 5,
-			"ChargeTime" : 3000,
-			"MineTime" : 900,
+			"ChargeTime" : 3.0,
+			"MineTime" : 0.900,
 			"MiningRange" : 90,
 		},
 		"Accumulator" : {

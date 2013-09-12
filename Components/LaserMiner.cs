@@ -59,14 +59,14 @@ namespace AsteroidOutpost.Components
 		public float EnergyUsageRate { get; set; }
 
 		/// <summary>
-		/// Charging time in milliseconds
+		/// Charging time in seconds
 		/// </summary>
-		public int ChargeTime { get; set; }
+		public float ChargeTime { get; set; }
 
 		/// <summary>
-		/// Mining time in milliseconds
+		/// Mining time in seconds
 		/// </summary>
-		public int MineTime { get; set; }
+		public float MineTime { get; set; }
 
 
 		public int MiningRange
