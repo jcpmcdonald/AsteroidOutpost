@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
@@ -40,18 +41,12 @@ namespace AsteroidOutpost.Systems
 		{
 			if (world.Paused) { return; }
 
-			var constructibles = world.GetComponents<Constructible>();
+			var constructibles = world.GetComponents<Constructing>();
 
 			foreach (var constructible in constructibles)
 			{
 				if(constructible.IsBeingPlaced)
 				{
-					continue;
-				}
-				if(!constructible.IsConstructing)
-				{
-					// Uhh... Ok. Not needed
-					world.DeleteComponent(constructible);
 					continue;
 				}
 
@@ -81,7 +76,6 @@ namespace AsteroidOutpost.Systems
 							{
 								// This construction is complete
 								constructible.MineralsConstructed = constructible.Cost;
-								constructible.IsConstructing = false;
 
 								OnConstructionComplete(constructible);
 
@@ -108,13 +102,13 @@ namespace AsteroidOutpost.Systems
 		}
 
 
-		private void OnConstructionComplete(Constructible constructible)
+		private void OnConstructionComplete(Constructing constructing)
 		{
-			constructible.OnConstructionComplete(new ConstructionCompleteEventArgs(constructible));
+			constructing.OnConstructionComplete(new ConstructionCompleteEventArgs(constructing));
 
 			if (AnyConstructionCompletedEvent != null)
 			{
-				AnyConstructionCompletedEvent(new ConstructionCompleteEventArgs(constructible));
+				AnyConstructionCompletedEvent(new ConstructionCompleteEventArgs(constructing));
 			}
 		}
 
@@ -124,7 +118,7 @@ namespace AsteroidOutpost.Systems
 		/// </summary>
 		public override void Draw(GameTime gameTime)
 		{
-			var constructables = world.GetComponents<Constructible>();
+			var constructables = world.GetComponents<Constructing>();
 
 			spriteBatch.Begin();
 
@@ -135,7 +129,7 @@ namespace AsteroidOutpost.Systems
 				{
 					spriteBatch.DrawEllipse(world.WorldToScreen(position.Center), world.Scale(PowerGrid.PowerConductingDistance), Color.White);
 				}
-				else if (constructable.IsConstructing)
+				else
 				{
 					float percentComplete = constructable.MineralsConstructed / constructable.Cost;
 

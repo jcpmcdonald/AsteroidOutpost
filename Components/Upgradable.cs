@@ -65,13 +65,13 @@ namespace AsteroidOutpost.Components
 
 
 		/// <summary>
-		/// How many minerals does this constructible take to upgrade?
+		/// How many minerals does this Constructing take to upgrade?
 		/// </summary>
 		public int MineralsToUpgrade { get; set; }
 
 
 		/// <summary>
-		/// How many minerals are left to upgrade this constructible?
+		/// How many minerals are left to upgrade this Constructing?
 		/// </summary>
 		public float MineralsUpgraded
 		{

@@ -15,12 +15,16 @@
 		"PowerGridNode" : {
 			"PowerLinkPointRelative" : "0, 0",
 		},
-		"Constructible" : {
+		"Constructing" : {
 			"Cost" : 150,
 		},
 		"HitPoints" : {
 			"Armour" : 150,
 			"TotalArmour" : 150,
+		},
+		"AutoHeal" : {
+			"Delay" : 15,
+			"Rate" : 3,
 		},
 		"LaserWeapon" : {
 			"Range" : 150,

@@ -147,15 +147,15 @@ namespace AsteroidOutpost.Eventing
 
 	internal class ConstructionCompleteEventArgs : ComponentReflectiveEventArgs
 	{
-		public ConstructionCompleteEventArgs(Constructible constructible)
-			: base(constructible, "OnConstructionComplete", new object[]{ })
+		public ConstructionCompleteEventArgs(Constructing constructing)
+			: base(constructing, "OnConstructionComplete", new object[]{ })
 		{
 		}
 
-		public Constructible Constructible {
+		public Constructing Constructing {
 			get
 			{
-				return (Constructible)Component;
+				return (Constructing)Component;
 			}
 		}
 

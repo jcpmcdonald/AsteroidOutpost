@@ -23,18 +23,24 @@
 			"PowerLinkPointRelative" : "-1, -13",
 			"ConductsPower" : true,
 		},
-		"Constructible" : {
+		"Constructing" : {
 			"Cost" : 200,
 		},
 		"HitPoints" : {
 			"Armour" : 50,
 			"TotalArmour" : 50,
 		},
+		"AutoHeal" : {
+			"Delay" : 15,
+			"Rate" : 3,
+		},
 		"Targetable" : {},
 		"Perishable" : {
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
-		"Selectable" : { },
+		"Selectable" : {
+			"ContextMenu" : "SolarStationL1",
+		},
 	},
 }
 

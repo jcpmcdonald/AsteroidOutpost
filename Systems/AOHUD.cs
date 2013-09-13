@@ -696,11 +696,10 @@ namespace AsteroidOutpost.Systems
 
 			constructionSound.Play(Math.Min(1, world.Scale(1f)), 0, 0);
 
-			Constructible constructable = world.GetNullableComponent<Constructible>(creatingEntityID.Value);
+			Constructing constructable = world.GetNullableComponent<Constructing>(creatingEntityID.Value);
 			if(constructable != null)
 			{
 				constructable.IsBeingPlaced = false;
-				constructable.IsConstructing = true;
 			}
 
 			PowerGridNode powerNode = world.GetNullableComponent<PowerGridNode>(creatingEntityID.Value);
@@ -715,7 +714,7 @@ namespace AsteroidOutpost.Systems
 
 			//if (creatingTypeConstuctructor == null)
 			//{
-			//    System.Console.WriteLine("Failed to find a constructor for the current constructible! Unable to construct entity");
+			//    System.Console.WriteLine("Failed to find a constructor for the current Constructing! Unable to construct entity");
 			//    Debugger.Break(); // John, there's a problem with the reflection above. Fix it!
 			//    return;
 			//}

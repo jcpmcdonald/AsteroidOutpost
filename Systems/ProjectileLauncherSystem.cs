@@ -34,8 +34,8 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var projectileLauncher in world.GetComponents<ProjectileLauncher>())
 			{
-				Constructible constructible = world.GetNullableComponent<Constructible>(projectileLauncher);
-				if(constructible != null)
+				Constructing constructing = world.GetNullableComponent<Constructing>(projectileLauncher);
+				if(constructing != null)
 				{
 					continue;
 				}
@@ -95,7 +95,7 @@ namespace AsteroidOutpost.Systems
 					world.GetOwningForce(possibleTarget).Team == world.GetOwningForce(projectileLauncher).Team ||
 					world.GetOwningForce(possibleTarget).Team == Team.Neutral ||
 					world.GetNullableComponent<Targetable>(possibleTarget) == null ||
-					world.GetNullableComponent<Constructible>(possibleTarget) != null)
+					world.GetNullableComponent<Constructing>(possibleTarget) != null)
 				{
 					// Eliminate invalid targets
 					continue;
@@ -120,7 +120,7 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var missileWeapon in world.GetComponents<ProjectileLauncher>())
 			{
-				Constructible constructable = world.GetNullableComponent<Constructible>(missileWeapon);
+				Constructing constructable = world.GetNullableComponent<Constructing>(missileWeapon);
 				if (constructable != null && constructable.IsBeingPlaced)
 				{
 					// Draw attack range

@@ -16,7 +16,7 @@
 		"Spin" : {
 			"RotationSpeed" : 50,
 		},
-		"Constructible" : {
+		"Constructing" : {
 			"Cost" : 150,
 		},
 		"PowerStorage" : {
@@ -29,6 +29,10 @@
 		"HitPoints" : {
 			"Armour" : 50,
 			"TotalArmour" : 50,
+		},
+		"AutoHeal" : {
+			"Delay" : 15,
+			"Rate" : 3,
 		},
 		"Targetable" : {},
 		"Perishable" : {

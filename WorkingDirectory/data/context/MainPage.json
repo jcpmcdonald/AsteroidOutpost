@@ -14,7 +14,7 @@
 				],
 			},
 			"ImportantValues" : {
-				"Cost" : "%Solar Station.Constructible.Cost% minerals",
+				"Cost" : "%Solar Station.Constructing.Cost% minerals",
 				"HP" : "%Solar Station.HitPoints.TotalArmour%",
 				"Production Rate" : "%Solar Station.PowerProducer.PowerProductionRate% pps",
 				"Max Power" : "%Solar Station.PowerStorage.MaxPower%",
@@ -32,7 +32,7 @@
 				],
 			},
 			"ImportantValues" : {
-				"Cost" : "%Power Node.Constructible.Cost% minerals",
+				"Cost" : "%Power Node.Constructing.Cost% minerals",
 				"HP" : "%Power Node.HitPoints.TotalArmour%",
 			}
 		},
@@ -48,7 +48,7 @@
 				],
 			},
 			"ImportantValues" : {
-				"Cost" : "%Laser Miner.Constructible.Cost% minerals",
+				"Cost" : "%Laser Miner.Constructing.Cost% minerals",
 				"HP" : "%Laser Miner.HitPoints.TotalArmour%",
 				"Mining Rate" : "5.76 mps",
 			}
@@ -66,7 +66,7 @@
 				],
 			},
 			"ImportantValues" : {
-				"Cost" : "%Battery.Constructible.Cost% minerals",
+				"Cost" : "%Battery.Constructing.Cost% minerals",
 				"HP" : "%Battery.HitPoints.TotalArmour%",
 				"Max Power" : "%Battery.PowerStorage.MaxPower%",
 			}
@@ -83,7 +83,7 @@
 				],
 			},
 			"ImportantValues" : {
-				"Cost" : "%Laser Tower.Constructible.Cost% minerals",
+				"Cost" : "%Laser Tower.Constructing.Cost% minerals",
 				"HP" : "%Laser Tower.HitPoints.TotalArmour%",
 				"Damage" : "%Laser Tower.LaserWeapon.Damage% dps",
 				"Range" : "%Laser Tower.LaserWeapon.Range%",
@@ -101,7 +101,7 @@
 				],
 			},
 			"ImportantValues" : {
-				"Cost" : "%Missile Tower.Constructible.Cost% minerals",
+				"Cost" : "%Missile Tower.Constructing.Cost% minerals",
 				"HP" : "%Missile Tower.HitPoints.TotalArmour%",
 				"Damage" : "16.6 dps",
 				"Range" : "%Missile Tower.ProjectileLauncher.Range%",

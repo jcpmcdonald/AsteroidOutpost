@@ -12,13 +12,13 @@ using Microsoft.Xna.Framework;
 
 namespace AsteroidOutpost.Components
 {
-	internal class Constructible : Component
+	internal class Constructing : Component
 	{
 		private float mineralsConstructed;
 
 		public event Action<ConstructionCompleteEventArgs> ConstructionComplete;
 
-		public Constructible(int entityID) : base(entityID)
+		public Constructing(int entityID) : base(entityID)
 		{
 			IsBeingPlaced = true;
 			mineralsConstructed = 0;
@@ -27,7 +27,6 @@ namespace AsteroidOutpost.Components
 
 		
 		public bool IsBeingPlaced { get; set; }
-		public bool IsConstructing { get; set; }
 		public int Cost { get; set; }
 		public float MineralsConstructed
 		{

@@ -142,7 +142,7 @@
     <Compile Include="ColorF.cs" />
     <Compile Include="Components\Animator.cs" />
     <Compile Include="Components\AutoHeal.cs" />
-    <Compile Include="Components\Constructable.cs" />
+    <Compile Include="Components\Constructing.cs" />
     <Compile Include="Components\LaserMiner.cs" />
     <Compile Include="Components\LaserWeapon.cs" />
     <Compile Include="Components\Minable.cs" />

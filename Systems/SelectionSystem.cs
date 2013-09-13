@@ -250,12 +250,12 @@ namespace AsteroidOutpost.Systems
 		{
 			if(selectedEntities.Count == 1)
 			{
-				Constructible constructible = world.GetNullableComponent<Constructible>(selectedEntities[0]);
-				if(constructible != null)
+				Constructing constructing = world.GetNullableComponent<Constructing>(selectedEntities[0]);
+				if(constructing != null)
 				{
 					world.HUD.ContextMenu.SetPage("constructing");
 
-					constructible.ConstructionComplete += ConstructibleOnConstructionComplete;
+					constructing.ConstructionComplete += ConstructibleOnConstructionComplete;
 				}
 				else
 				{
@@ -279,7 +279,7 @@ namespace AsteroidOutpost.Systems
 
 		private void ConstructibleOnConstructionComplete(ConstructionCompleteEventArgs args)
 		{
-			args.Constructible.ConstructionComplete -= ConstructibleOnConstructionComplete;
+			args.Constructing.ConstructionComplete -= ConstructibleOnConstructionComplete;
 
 			if(selectedEntities.Count == 1 && args.EntityID == selectedEntities[0])
 			{
@@ -358,8 +358,8 @@ namespace AsteroidOutpost.Systems
 			if(selectedEntities.Count == 1)
 			{
 				int entityID = selectedEntities[0];
-				Constructible constructible = world.GetNullableComponent<Constructible>(entityID);
-				if (constructible != null)
+				Constructing constructing = world.GetNullableComponent<Constructing>(entityID);
+				if (constructing != null)
 				{
 					Perishable perishable = world.GetComponent<Perishable>(entityID);
 					perishable.OnPerish(new EntityPerishingEventArgs(perishable));

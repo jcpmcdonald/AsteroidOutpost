@@ -15,12 +15,16 @@
 		"PowerGridNode" : {
 			"PowerLinkPointRelative" : "0, 0",
 		},
-		"Constructible" : {
+		"Constructing" : {
 			"Cost" : 200,
 		},
 		"HitPoints" : {
 			"Armour" : 100,
 			"TotalArmour" : 100,
+		},
+		"AutoHeal" : {
+			"Delay" : 15,
+			"Rate" : 3,
 		},
 		"ProjectileLauncher" : {
 			"ProjectileType" : "Missile",

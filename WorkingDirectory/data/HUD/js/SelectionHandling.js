@@ -79,9 +79,8 @@ function SelectionInfoController($scope)
 	{
 		return ($scope.selectedUnits != null &&
 				$scope.selectedUnits.length == 1 &&
-				typeof $scope.selectedUnits[0].Constructible != 'undefined' &&
-				$scope.selectedUnits[0].Constructible.IsConstructing == true &&
-				$scope.selectedUnits[0].Constructible.IsBeingPlaced == false);
+				typeof $scope.selectedUnits[0].Constructing != 'undefined' &&
+				$scope.selectedUnits[0].Constructing.IsBeingPlaced == false);
 	};
 	
 	$scope.has = function($component)
@@ -131,7 +130,7 @@ function UpdateSelection(newSelection)
 $(document).ready(function()
 {
 	scopeOf("SelectionInfoController").AddProgressBar("hitPointsProgressBar", "HitPoints", "Armour", "TotalArmour");
-	scopeOf("SelectionInfoController").AddProgressBar("constructionProgressBar", "Constructible", "MineralsConstructed", "Cost");
+	scopeOf("SelectionInfoController").AddProgressBar("constructionProgressBar", "Constructing", "MineralsConstructed", "Cost");
 	scopeOf("SelectionInfoController").AddProgressBar("powerLevelProgressBar", "PowerStorage", "AvailablePower", "MaxPower");
 	scopeOf("SelectionInfoController").AddProgressBar("mineralsProgressBar", "Minable", "Minerals", "StartingMinerals");
 });
@@ -173,7 +172,7 @@ $(document).ready(function()
 						"TotalArmour" : 250,
 						"GUID" : "pHMJfGX6oUG6LcG1poDh+Q=="
 					},
-					"Constructible" : {
+					"Constructing" : {
 						"Cost" : 200,
 						"MineralsConstructed" : 20,
 						"IsBeingPlaced" : false,

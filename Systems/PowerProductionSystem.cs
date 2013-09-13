@@ -28,7 +28,7 @@ namespace AsteroidOutpost.Systems
 
 			foreach(var producer in world.GetComponents<PowerProducer>())
 			{
-				if(world.GetNullableComponent<Constructible>(producer) != null)
+				if(world.GetNullableComponent<Constructing>(producer) != null)
 				{
 					// Ignore placing and constructing producers
 					continue;

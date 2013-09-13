@@ -81,8 +81,8 @@ namespace AsteroidOutpost.Scenarios
 			if(deadPowerProducer != null || deadPowerStorage != null)
 			{
 				// A power producer has been eliminated, check to see if there is still power out there
-				if(!world.GetComponents<PowerProducer>().Any(p => p.EntityID != deadID && world.GetOwningForce(p) == friendlyForce && world.GetNullableComponent<Constructible>(p) != null) &&
-				   !world.GetComponents<PowerStorage>().Any(p => p.EntityID != deadID && world.GetOwningForce(p) == friendlyForce && world.GetNullableComponent<Constructible>(p) != null && p.AvailablePower > 0))
+				if(!world.GetComponents<PowerProducer>().Any(p => p.EntityID != deadID && world.GetOwningForce(p) == friendlyForce && world.GetNullableComponent<Constructing>(p) != null) &&
+				   !world.GetComponents<PowerStorage>().Any(p => p.EntityID != deadID && world.GetOwningForce(p) == friendlyForce && world.GetNullableComponent<Constructing>(p) != null && p.AvailablePower > 0))
 				{
 					// No power sources, it is impossible to recover. You are dead, or will be very soon
 					world.GameOver(false);
@@ -253,7 +253,7 @@ namespace AsteroidOutpost.Scenarios
 			});
 
 			// Remove the constructing component for the starting solar station
-			world.DeleteComponent(world.GetComponent<Constructible>(solarStationID));
+			world.DeleteComponent(world.GetComponent<Constructing>(solarStationID));
 
 			// Hook it up to the grid
 			PowerGridNode powerNode = world.GetComponent<PowerGridNode>(solarStationID);

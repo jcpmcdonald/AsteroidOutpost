@@ -16,12 +16,16 @@
 			"PowerLinkPointRelative" : "0, -16",
 			"ConductsPower" : true,
 		},
-		"Constructible" : {
+		"Constructing" : {
 			"Cost" : 50,
 		},
 		"HitPoints" : {
 			"Armour" : 50,
 			"TotalArmour" : 50,
+		},
+		"AutoHeal" : {
+			"Delay" : 15,
+			"Rate" : 3,
 		},
 		"Targetable" : {},
 		"Perishable" : {

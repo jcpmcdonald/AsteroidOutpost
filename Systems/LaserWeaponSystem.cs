@@ -33,8 +33,8 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var laser in world.GetComponents<LaserWeapon>())
 			{
-				Constructible constructible = world.GetNullableComponent<Constructible>(laser);
-				if (constructible != null && (constructible.IsConstructing || constructible.IsBeingPlaced)) { return; }
+				Constructing constructing = world.GetNullableComponent<Constructing>(laser);
+				if (constructing != null) { return; }
 
 				Position position = world.GetComponent<Position>(laser);
 				List<int> possibleTargets = world.EntitiesInArea(position.Center, laser.Range);
@@ -47,7 +47,7 @@ namespace AsteroidOutpost.Systems
 						world.GetOwningForce(possibleTarget).Team == world.GetOwningForce(laser).Team ||
 						world.GetOwningForce(possibleTarget).Team == Team.Neutral ||
 						world.GetNullableComponent<Targetable>(possibleTarget) == null ||
-						world.GetNullableComponent<Constructible>(possibleTarget) != null)
+						world.GetNullableComponent<Constructing>(possibleTarget) != null)
 					{
 						// Eliminate invalid targets
 						continue;
@@ -117,7 +117,7 @@ namespace AsteroidOutpost.Systems
 
 			foreach (var laser in world.GetComponents<LaserWeapon>())
 			{
-				Constructible constructable = world.GetNullableComponent<Constructible>(laser);
+				Constructing constructable = world.GetNullableComponent<Constructing>(laser);
 				if (constructable != null && constructable.IsBeingPlaced)
 				{
 					// Draw attack range

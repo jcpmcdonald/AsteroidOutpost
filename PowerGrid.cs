@@ -282,7 +282,7 @@ namespace AsteroidOutpost
 				// Add of my unvisited neighbours to the list, sorted by distance
 				foreach (var linkedNode in powerNodes[cursor])
 				{
-					if (visited.All(v => v.Item1 != linkedNode) && world.GetNullableComponent<Constructible>(linkedNode) == null)
+					if (visited.All(v => v.Item1 != linkedNode) && world.GetNullableComponent<Constructing>(linkedNode) == null)
 					{
 						// Get the distance from the starting location to the linked node
 						float nodeDistance = cursorDistance + Vector2.Distance(cursor.PowerLinkPointAbsolute(world), linkedNode.PowerLinkPointAbsolute(world));

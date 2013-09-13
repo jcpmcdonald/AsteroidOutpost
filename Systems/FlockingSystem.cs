@@ -204,8 +204,8 @@ namespace AsteroidOutpost.Systems
 				var nearbyPosition = world.GetComponent<Position>(nearbyEntity);
 				if(myPosition != nearbyPosition && nearbyPosition.Solid)
 				{
-					Constructible constructible = world.GetNullableComponent<Constructible>(nearbyEntity);
-					if(constructible != null && constructible.IsBeingPlaced) { continue; }
+					Constructing constructing = world.GetNullableComponent<Constructing>(nearbyEntity);
+					if(constructing != null && constructing.IsBeingPlaced) { continue; }
 
 					float distance = myPosition.Distance(nearbyPosition);
 					if (distance > 0 && distance < (separationDistance + nearbyPosition.Radius))

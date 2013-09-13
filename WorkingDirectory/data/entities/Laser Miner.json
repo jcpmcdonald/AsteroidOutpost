@@ -15,7 +15,7 @@
 		"PowerGridNode" : {
 			"PowerLinkPointRelative" : "0, -16",
 		},
-		"Constructible" : {
+		"Constructing" : {
 			"Cost" : 150,
 		},
 		"HitPoints" : {

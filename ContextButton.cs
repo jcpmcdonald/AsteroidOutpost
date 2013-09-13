@@ -180,7 +180,7 @@ namespace AsteroidOutpost
 		/// <summary>
 		/// Looks up the value for a given field inside the template.
 		/// </summary>
-		/// <param name="fullField">The full field name, eg "%Constructible.Cost% minerals"</param>
+		/// <param name="fullField">The full field name, eg "%Constructing.Cost% minerals"</param>
 		/// <param name="template">The template that contains the desired information</param>
 		/// <returns>Returns the new field</returns>
 		private String Evaluate(String fullField, Dictionary<String, EntityTemplate> entityTemplates)

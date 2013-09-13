@@ -90,7 +90,7 @@ namespace AsteroidOutpost.Systems
 
 
 			// Draw any entities being placed
-			IEnumerable<Constructible> placingEntities = world.GetComponents<Constructible>();
+			IEnumerable<Constructing> placingEntities = world.GetComponents<Constructing>();
 			placingEntities =  placingEntities.Where(x => x.IsBeingPlaced).ToList();
 			foreach(var placingEntity in placingEntities)
 			{
@@ -144,16 +144,16 @@ namespace AsteroidOutpost.Systems
 
 				foreach (var nodeA in grid.powerNodes.Keys)
 				{
-					Constructible constructibleA = world.GetNullableComponent<Constructible>(nodeA);
+					Constructing constructingA = world.GetNullableComponent<Constructing>(nodeA);
 
 					foreach (var nodeB in grid.powerNodes[nodeA])
 					{
-						Constructible constructibleB = world.GetNullableComponent<Constructible>(nodeB);
+						Constructing constructingB = world.GetNullableComponent<Constructing>(nodeB);
 						var linkToDraw = new Tuple<PowerGridNode, PowerGridNode>(nodeA, nodeB);
 						if (!linksAlreadyDrawn.Contains(linkToDraw))
 						{
 							//if (nodeA.IsPowerStateActive(world) && nodeB.IsPowerStateActive(world))
-							if((constructibleA != null && !constructibleA.IsBeingPlaced) || (constructibleB != null && !constructibleB.IsBeingPlaced))
+							if((constructingA != null && !constructingA.IsBeingPlaced) || (constructingB != null && !constructingB.IsBeingPlaced))
 							{
 								// Draw a normal, yellow line
 								color = new Color((int)(70 + world.Scale(50)), (int)(70 + world.Scale(50)), 0, (int)(70 + world.Scale(50)));
