@@ -1,7 +1,15 @@
 {
-	"Name" : "Deselect",
+	"Name" : "Upgrading",
 	"ContextButtons" :
 	[
+		{
+			"Name" : "Cancel Upgrade",
+			"Image" : "images/X.png",
+			"Slot" : 0,
+			"OnClickData" : {
+				"Method" : "hud.CancelUpgrade",
+			},
+		},
 		{
 			"Name" : "Deselect",
 			"Image" : "images/Deselect.png",

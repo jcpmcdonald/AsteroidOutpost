@@ -39,6 +39,13 @@
 	background-size: 25px 25px;
 }
 
+#lblUpgrading
+{
+	padding-left: 20px;
+	background-image: url("../images/Constructing.png");
+	background-size: 25px 25px;
+}
+
 #lblPower
 {
 	padding-left: 20px;

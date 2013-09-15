@@ -142,6 +142,7 @@
     <Compile Include="ColorF.cs" />
     <Compile Include="Components\Animator.cs" />
     <Compile Include="Components\AutoHeal.cs" />
+    <Compile Include="Components\Upgrading.cs" />
     <Compile Include="Components\Constructing.cs" />
     <Compile Include="Components\LaserMiner.cs" />
     <Compile Include="Components\LaserWeapon.cs" />
@@ -157,7 +158,6 @@
     <Compile Include="Components\Selectable.cs" />
     <Compile Include="Components\Spin.cs" />
     <Compile Include="Components\Targetable.cs" />
-    <Compile Include="Components\Upgradable.cs" />
     <Compile Include="Components\Velocity.cs" />
     <Compile Include="ContextMenu.cs" />
     <Compile Include="ContextMenuPage.cs" />
@@ -170,8 +170,11 @@
     <Compile Include="EnhancedKeyboardState.cs" />
     <Compile Include="EnhancedMouseState.cs" />
     <Compile Include="ContextButton.cs" />
+    <Compile Include="Entities\UpgradeFactory.cs" />
+    <Compile Include="Entities\UpgradeTemplate.cs" />
     <Compile Include="Entities\EntityFactory.cs" />
     <Compile Include="Entities\EntityTemplate.cs" />
+    <Compile Include="Interfaces\IConstructible.cs" />
     <Compile Include="JsonEx.cs" />
     <Compile Include="ParticleEffectManager.cs" />
     <Compile Include="Profile.cs" />
@@ -207,7 +210,6 @@
     <Compile Include="Systems\SelectionSystem.cs" />
     <Compile Include="World.cs" />
     <Compile Include="Systems\AOHUD.cs" />
-    <Compile Include="Entities\Upgrade.cs" />
     <Compile Include="Force.cs" />
     <Compile Include="Networking\AOIncomingMessage.cs" />
     <Compile Include="Networking\AONetwork.cs" />
@@ -228,7 +230,6 @@
     <Compile Include="Systems\PhysicsSystem.cs" />
     <Compile Include="Systems\PowerGridSystem.cs" />
     <Compile Include="Systems\RenderQuadTreeSystem.cs" />
-    <Compile Include="Systems\UpgradeSystem.cs" />
     <Compile Include="Texture2DEx.cs" />
     <Compile Include="Screens\HeadsUpDisplay\Radar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

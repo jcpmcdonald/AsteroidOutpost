@@ -4,7 +4,7 @@
 	[
 		{
 			"Name" : "Cancel",
-			"Image" : "images/X.png",
+			"Image" : "images/Cancel.png",
 			"Slot" : 8,
 			"OnClickData" : {
 				"Method" : "hud.OnCancelCreation",

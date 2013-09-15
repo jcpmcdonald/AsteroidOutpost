@@ -12,7 +12,7 @@
 		},
 		{
 			"Name" : "Deselect",
-			"Image" : "images/X.png",
+			"Image" : "images/Deselect.png",
 			"Slot" : 8,
 			"OnClickData" : {
 				"Method" : "hud.ClearSelection",

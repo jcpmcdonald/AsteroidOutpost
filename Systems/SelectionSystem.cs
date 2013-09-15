@@ -19,7 +19,6 @@ namespace AsteroidOutpost.Systems
 	{
 		private SpriteBatch spriteBatch;
 		private readonly World world;
-		private AwesomiumComponent awesomium;
 
 		private readonly List<int> selectedEntities = new List<int>();
 		public event Action<MultiEntityEventArgs> SelectionChanged;
@@ -34,7 +33,6 @@ namespace AsteroidOutpost.Systems
 		{
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
 			this.world = world;
-			awesomium = game.Awesomium;
 		}
 
 
@@ -246,7 +244,7 @@ namespace AsteroidOutpost.Systems
 		}
 
 
-		protected void UpdateContextMenu()
+		public void UpdateContextMenu()
 		{
 			if(selectedEntities.Count == 1)
 			{
@@ -259,14 +257,24 @@ namespace AsteroidOutpost.Systems
 				}
 				else
 				{
-					Selectable selectable = world.GetComponent<Selectable>(selectedEntities[0]);
-					if(selectable.ContextMenu != null)
+					Upgrading upgrading  = world.GetNullableComponent<Upgrading>(selectedEntities[0]);
+					if (upgrading != null)
 					{
-						world.HUD.ContextMenu.SetPage(selectable.ContextMenu);
+						world.HUD.ContextMenu.SetPage("upgrading");
+
+						upgrading.UpgradeComplete += UpgradingOnUpgradeComplete;
 					}
 					else
 					{
-						world.HUD.ContextMenu.SetPage("deselect");
+						Selectable selectable = world.GetComponent<Selectable>(selectedEntities[0]);
+						if (selectable.ContextMenu != null)
+						{
+							world.HUD.ContextMenu.SetPage(selectable.ContextMenu);
+						}
+						else
+						{
+							world.HUD.ContextMenu.SetPage("deselect");
+						}
 					}
 				}
 			}
@@ -280,6 +288,25 @@ namespace AsteroidOutpost.Systems
 		private void ConstructibleOnConstructionComplete(ConstructionCompleteEventArgs args)
 		{
 			args.Constructing.ConstructionComplete -= ConstructibleOnConstructionComplete;
+
+			if(selectedEntities.Count == 1 && args.EntityID == selectedEntities[0])
+			{
+				Selectable selectable = world.GetComponent<Selectable>(selectedEntities[0]);
+				if(selectable.ContextMenu != null)
+				{
+					world.HUD.ContextMenu.SetPage(selectable.ContextMenu);
+				}
+				else
+				{
+					world.HUD.ContextMenu.SetPage("deselect");
+				}
+			}
+		}
+
+
+		private void UpgradingOnUpgradeComplete(UpgradeCompleteEventArgs args)
+		{
+			args.Upgrading.UpgradeComplete -= UpgradingOnUpgradeComplete;
 
 			if(selectedEntities.Count == 1 && args.EntityID == selectedEntities[0])
 			{
@@ -365,6 +392,15 @@ namespace AsteroidOutpost.Systems
 					perishable.OnPerish(new EntityPerishingEventArgs(perishable));
 					world.DeleteComponents(entityID);
 				}
+			}
+		}
+
+
+		public List<int> CurrentSelection
+		{
+			get
+			{
+				return selectedEntities;
 			}
 		}
 	}

@@ -33,20 +33,21 @@ namespace AsteroidOutpost
 	public class World : DrawableGameComponent, IReflectionTarget
 	{
 		public const UInt32 Version = 2;
-		public const UInt32 StreamIdent = 0x607A0BAD;  // Have you got it?
-		
+		public const UInt32 StreamIdent = 0x607A0BAD; // Have you got it?
+
 		private AOGame theGame;
 		private readonly EntityFactory entityFactory;
+		private readonly UpgradeFactory upgradeFactory;
 		private SpriteBatch spriteBatch;
 
 		private LayeredStarField layeredStarField;
 		private QuadTree<Position> quadTree;
 		private AwesomiumComponent awesomium;
-		private readonly Dictionary<int, List<Component>> entityDictionary = new Dictionary<int, List<Component>>(2000);		// Note: This variable must be kept thread-safe
-		private readonly Dictionary<Type, List<Component>> componentDictionary = new Dictionary<Type, List<Component>>(10);		// Note: This variable must be kept thread-safe
+		private readonly Dictionary<int, List<Component>> entityDictionary = new Dictionary<int, List<Component>>(2000); // Note: This variable must be kept thread-safe
+		private readonly Dictionary<Type, List<Component>> componentDictionary = new Dictionary<Type, List<Component>>(10); // Note: This variable must be kept thread-safe
 		private readonly List<Component> deadComponents = new List<Component>();
 		private readonly Dictionary<int, Force> owningForces = new Dictionary<int, Force>();
-		private AOHUD hud;		// TODO: Why is this part of the world? Shouldn't it be part of the game?
+		private AOHUD hud; // TODO: Why is this part of the world? Shouldn't it be part of the game?
 		private Scenario scenario;
 
 		private readonly AnimationSystem animationSystem;
@@ -67,7 +68,7 @@ namespace AsteroidOutpost
 		private readonly ParticleEngine particleEngine;
 		private readonly AutoHealSystem autoHealSystem;
 
-		private MissionSystem missionSystem;     // Created when world starts, instead of the world is created
+		private MissionSystem missionSystem; // Created when world starts, instead of the world is created
 
 		private bool paused;
 		private float timeMultiplier = 1.0f;
@@ -89,11 +90,14 @@ namespace AsteroidOutpost
 		//public event Action<EntityEventArgs> StructureStartedEventPostAuth;
 
 		public event Action<int> EntityDied;
-		
-		internal World(AOGame game, EntityFactory entityFactory) : base(game)
+
+
+		internal World(AOGame game, EntityFactory entityFactory, UpgradeFactory upgradeFactory)
+			: base(game)
 		{
 			theGame = game;
 			this.entityFactory = entityFactory;
+			this.upgradeFactory = upgradeFactory;
 
 			network = new AONetwork(this);
 			selectionSystem = new SelectionSystem(game, this);
@@ -160,15 +164,15 @@ namespace AsteroidOutpost
 
 			// Remove all the systems from the component list
 			var systems = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-			foreach(var system in systems)
+			foreach (var system in systems)
 			{
-				if(system.GetValue(this) is GameComponent)
+				if (system.GetValue(this) is GameComponent)
 				{
 					Game.Components.Remove((GameComponent)system.GetValue(this));
 				}
 			}
 
- 			base.Dispose(disposing);
+			base.Dispose(disposing);
 		}
 
 
@@ -210,10 +214,13 @@ namespace AsteroidOutpost
 		/// </summary>
 		public bool Paused
 		{
-			get { return paused; }
+			get
+			{
+				return paused;
+			}
 			set
 			{
-				if(!gameOver)
+				if (!gameOver)
 				{
 					// TODO: Handle this over the network. Should clients be allowed to pause the server?
 					paused = value;
@@ -235,7 +242,7 @@ namespace AsteroidOutpost
 				PauseToggledEvent(paused);
 			}
 		}
-		
+
 
 		public float TimeMultiplier
 		{
@@ -307,13 +314,13 @@ namespace AsteroidOutpost
 		{
 			if (component != null)
 			{
-				
+
 				if (component.EntityID == -1)
 				{
 					// Assign an ID
 					component.EntityID = PopNextComponentID();
 				}
-				else if(isAuthoritative)
+				else if (isAuthoritative)
 				{
 					//lock(componentDictionary)
 					//{
@@ -329,13 +336,13 @@ namespace AsteroidOutpost
 				{
 					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.EntityID,
 					                                                       "Add",
-					                                                       new object[]{component, true}));
+					                                                       new object[]{ component, true }));
 				}
-				else if(!isAuthoritative)
+				else if (!isAuthoritative)
 				{
 					network.EnqueueMessage(new AOReflectiveOutgoingMessage(this.EntityID,
 					                                                       "Add",
-					                                                       new object[]{component}));
+					                                                       new object[]{ component }));
 				}
 
 				// Tell my network object to listen to anything that may happen
@@ -344,7 +351,7 @@ namespace AsteroidOutpost
 				// Add this to a dictionary for quick ID-based lookups
 				lock (entityDictionary)
 				{
-					if(entityDictionary.ContainsKey(component.EntityID))
+					if (entityDictionary.ContainsKey(component.EntityID))
 					{
 						entityDictionary[component.EntityID].Add(component);
 					}
@@ -352,7 +359,7 @@ namespace AsteroidOutpost
 					{
 						entityDictionary.Add(component.EntityID, new List<Component>(){ component });
 					}
-					if(componentDictionary.ContainsKey(component.GetType()))
+					if (componentDictionary.ContainsKey(component.GetType()))
 					{
 						componentDictionary[component.GetType()].Add(component);
 					}
@@ -363,14 +370,14 @@ namespace AsteroidOutpost
 				}
 
 				Position position = component as Position;
-				if(position != null)
+				if (position != null)
 				{
 					quadTree.Add(position);
 				}
 
 
 				Perishable perishable = component as Perishable;
-				if(perishable != null)
+				if (perishable != null)
 				{
 					perishable.Perishing += PerishableOnPerishing;
 				}
@@ -384,6 +391,16 @@ namespace AsteroidOutpost
 			return entityFactory.Create(this, entityName, owningForce, jsonValues);
 		}
 
+		public void StartUpgrade(int entityID, String upgradeName)
+		{
+			upgradeFactory.ApplyOnStartPayload(this, entityID, upgradeName);
+			selectionSystem.UpdateContextMenu();
+		}
+
+		public void UpgradeComplete(int entityID)
+		{
+			upgradeFactory.ApplyOnCompletePayload(this, entityID);
+		}
 
 		internal Dictionary<String, EntityTemplate> EntityTemplates
 		{
@@ -393,9 +410,18 @@ namespace AsteroidOutpost
 			}
 		}
 
+		internal Dictionary<String, UpgradeTemplate> UpgradeTemplates
+		{
+			get
+			{
+				return upgradeFactory.Upgrades;
+			}
+		}
+
+
 		private void PerishableOnPerishing(EntityPerishingEventArgs args)
 		{
-			if(EntityDied != null)
+			if (EntityDied != null)
 			{
 				EntityDied(args.EntityID);
 			}
@@ -416,7 +442,7 @@ namespace AsteroidOutpost
 		/// <returns>A list of entities that are intersecting with the search area</returns>
 		public List<int> EntitiesInArea(Rectangle rect, bool onlySolids = false)
 		{
-			if(onlySolids)
+			if (onlySolids)
 			{
 				return quadTree.GetObjects(rect).Where(x => x.Solid).Select(x => x.EntityID).ToList();
 			}
@@ -425,6 +451,7 @@ namespace AsteroidOutpost
 				return quadTree.GetObjects(rect).Select(x => x.EntityID).ToList();
 			}
 		}
+
 
 		/// <summary>
 		/// Gets a list of entities that are intersecting with the search area
@@ -439,6 +466,7 @@ namespace AsteroidOutpost
 			return EntitiesInArea(new Rectangle(x, y, w, h), onlySolids);
 		}
 
+
 		/// <summary>
 		/// Gets a list of entities that are intersecting with the search area
 		/// </summary>
@@ -450,6 +478,7 @@ namespace AsteroidOutpost
 		{
 			return EntitiesInArea(new Rectangle((int)(x - (radius / 2f)), (int)(y - (radius / 2f)), radius * 2, radius * 2), onlySolids);
 		}
+
 
 		/// <summary>
 		/// Gets a list of entities that are intersecting with the search area
@@ -511,11 +540,11 @@ namespace AsteroidOutpost
 				{
 					IEnumerator<Component> matches = entity.Where(x => x.GetType() == type).GetEnumerator();
 					Component firstMatch = null;
-					if(matches.MoveNext())
+					if (matches.MoveNext())
 					{
 						firstMatch = matches.Current;
 
-						if(matches.MoveNext())
+						if (matches.MoveNext())
 						{
 							// There were two or more records, error
 							Debugger.Break();
@@ -539,7 +568,7 @@ namespace AsteroidOutpost
 		public T GetComponent<T>(int entityID) where T : Component
 		{
 			T nullableComponent = GetNullableComponent<T>(entityID);
-			if(nullableComponent == null)
+			if (nullableComponent == null)
 			{
 				// If you are expecting this, use GetNullableComponent instead
 				Debugger.Break();
@@ -575,11 +604,11 @@ namespace AsteroidOutpost
 				{
 					IEnumerator<T> matches = entity.OfType<T>().GetEnumerator();
 					T firstMatch = null;
-					if(matches.MoveNext())
+					if (matches.MoveNext())
 					{
 						firstMatch = matches.Current;
 
-						if(matches.MoveNext())
+						if (matches.MoveNext())
 						{
 							// There were two or more records, error
 							Debugger.Break();
@@ -611,11 +640,11 @@ namespace AsteroidOutpost
 		/// This method is thread safe
 		/// </summary>
 		/// <returns>Returns a list of components of the type specified</returns>
-		public IEnumerable<T> GetComponents<T>() where T: Component
+		public IEnumerable<T> GetComponents<T>() where T : Component
 		{
-			lock(componentDictionary)
+			lock (componentDictionary)
 			{
-				if(componentDictionary.ContainsKey(typeof(T)))
+				if (componentDictionary.ContainsKey(typeof (T)))
 				{
 					return componentDictionary[typeof (T)].Select(x => x as T);
 				}
@@ -625,7 +654,8 @@ namespace AsteroidOutpost
 				}
 			}
 		}
-		
+
+
 		/// <summary>
 		/// Looks up weapons by entityID
 		/// This method is thread safe
@@ -646,6 +676,7 @@ namespace AsteroidOutpost
 			}
 		}
 
+
 		/// <summary>
 		/// Looks up weapons by a reference component
 		/// This method is thread safe
@@ -660,7 +691,7 @@ namespace AsteroidOutpost
 
 		public void SetOwningForce(int entityID, Force force)
 		{
-			if(owningForces.ContainsKey(EntityID))
+			if (owningForces.ContainsKey(EntityID))
 			{
 				owningForces[entityID] = force;
 			}
@@ -676,10 +707,12 @@ namespace AsteroidOutpost
 			return GetOwningForce(referenceComponent.EntityID);
 		}
 
+
 		public Force GetOwningForce(int entityID)
 		{
 			return owningForces[entityID];
 		}
+
 
 		public IEnumerable<int> GetEntitiesOwnedBy(Force force)
 		{
@@ -692,7 +725,10 @@ namespace AsteroidOutpost
 		/// </summary>
 		public int MapWidth
 		{
-			get { return quadTree.QuadRect.Width; }
+			get
+			{
+				return quadTree.QuadRect.Width;
+			}
 		}
 
 
@@ -701,7 +737,10 @@ namespace AsteroidOutpost
 		/// </summary>
 		public int MapHeight
 		{
-			get { return quadTree.QuadRect.Height; }
+			get
+			{
+				return quadTree.QuadRect.Height;
+			}
 		}
 
 
@@ -775,10 +814,13 @@ namespace AsteroidOutpost
 			}
 		}
 
+
 		public float Scale(float value)
 		{
 			return hud.Scale(value);
 		}
+
+
 		public Vector2 Scale(Vector2 value)
 		{
 			return hud.Scale(value);
@@ -790,7 +832,10 @@ namespace AsteroidOutpost
 		/// </summary>
 		public bool IsServer
 		{
-			get { return isServer; }
+			get
+			{
+				return isServer;
+			}
 			set
 			{
 				isServer = value;
@@ -843,8 +888,8 @@ namespace AsteroidOutpost
 		/// </summary>
 		public void StartServer(Scenario scenario)
 		{
-			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\data\HUD\HUD.html").ToUri();
-			if(this.scenario != null)
+			awesomium.WebView.Source = (Environment.CurrentDirectory + @"\..\data\HUD\HUD.html").ToUri();
+			if (this.scenario != null)
 			{
 				// Is this normal?
 				Debugger.Break();
@@ -913,11 +958,11 @@ namespace AsteroidOutpost
 		{
 			TimeSpan deltaTime = gameTime.ElapsedGameTime;
 			network.ProcessIncomingQueue(deltaTime);
-			
+
 			if (!paused)
 			{
 				// Update the current scenario, if any
-				if(scenario != null)
+				if (scenario != null)
 				{
 					scenario.Update(deltaTime);
 				}
@@ -943,20 +988,20 @@ namespace AsteroidOutpost
 				foreach (Component deadComponent in deadComponents)
 				{
 					Position deadPosition = deadComponent as Position;
-					if(deadPosition != null)
+					if (deadPosition != null)
 					{
 						quadTree.Remove(deadPosition);
 					}
 
 					PowerGridNode powerGridNode = deadComponent as PowerGridNode;
-					if(powerGridNode != null)
+					if (powerGridNode != null)
 					{
 						powerGridSystem.Disconnect(powerGridNode);
 					}
 
 					lock (entityDictionary)
 					{
-						if(entityDictionary[deadComponent.EntityID].Count == 1)
+						if (entityDictionary[deadComponent.EntityID].Count == 1)
 						{
 							entityDictionary.Remove(deadComponent.EntityID);
 							owningForces.Remove(deadComponent.EntityID);
@@ -1006,9 +1051,9 @@ namespace AsteroidOutpost
 		/// <returns></returns>
 		public Force GetForceByID(int owningForceID)
 		{
-			foreach(Force force in forces)
+			foreach (Force force in forces)
 			{
-				if(force.ID == owningForceID)
+				if (force.ID == owningForceID)
 				{
 					return force;
 				}
@@ -1018,6 +1063,7 @@ namespace AsteroidOutpost
 			Debugger.Break();
 			return null;
 		}
+
 
 		public List<Force> GetForcesOnTeam(Team team)
 		{
@@ -1061,7 +1107,7 @@ namespace AsteroidOutpost
 			{
 				network.EnqueueMessage(new AOReflectiveOutgoingMessage(EntityID,
 				                                                       "AddForce",
-				                                                       new object[]{force}));
+				                                                       new object[]{ force }));
 			}
 
 			network.ListenToEvents(force);
@@ -1071,7 +1117,7 @@ namespace AsteroidOutpost
 		public void AddController(Controller controller)
 		{
 			controllers.Add(controller);
-			if(controller.Role == ControllerRole.Local && hud.LocalActor == null)
+			if (controller.Role == ControllerRole.Local && hud.LocalActor == null)
 			{
 				hud.LocalActor = controller;
 			}
@@ -1189,14 +1235,14 @@ namespace AsteroidOutpost
 			UInt32 version = br.ReadUInt32();
 			StreamType streamType = (StreamType)br.ReadByte();
 
-			if(streamType != StreamType.GameData)
+			if (streamType != StreamType.GameData)
 			{
 				Debugger.Break();
 			}
 
 
 			int forceCount = br.ReadInt32();
-			for(int iForce = 0; iForce < forceCount; iForce++)
+			for (int iForce = 0; iForce < forceCount; iForce++)
 			{
 				Force force = new Force(br);
 				AddForce(force);
@@ -1221,12 +1267,12 @@ namespace AsteroidOutpost
 
 				// Use reflection to make a new entity of... whatever type was sent to us
 				Type t = Type.GetType(assemName);
-				ConstructorInfo entityConstructor = t.GetConstructor(new Type[] { typeof(BinaryReader) });
+				ConstructorInfo entityConstructor = t.GetConstructor(new Type[]{ typeof (BinaryReader) });
 				Object obj = entityConstructor.Invoke(new object[]{ br });
 				ISerializable serializableObj = obj as ISerializable;
 				IIdentifiable identifiableObj = obj as IIdentifiable;
 
-				if(serializableObj != null)
+				if (serializableObj != null)
 				{
 					//createdEntities.Add(serializableObj);
 					serializableObj.PostDeserializeLink(this);
@@ -1283,7 +1329,7 @@ namespace AsteroidOutpost
 
 		public void GameOver(bool win)
 		{
-			if(win)
+			if (win)
 			{
 				((AOGame)Game).ActiveProfile.ScenarioCompleted(scenario);
 			}
@@ -1292,7 +1338,7 @@ namespace AsteroidOutpost
 			awesomium.WebView.ExecuteJavascript(String.Format(CultureInfo.InvariantCulture, "GameOver({0})", win.ToString().ToLower()));
 		}
 
-		
+
 
 
 		public void ExecuteAwesomiumJS(String js)

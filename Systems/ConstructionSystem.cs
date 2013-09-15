@@ -7,6 +7,7 @@ using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Eventing;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
@@ -24,6 +25,7 @@ namespace AsteroidOutpost.Systems
 		private const float mineralUsageRate = 30.0f;
 
 		public event Action<ConstructionCompleteEventArgs> AnyConstructionCompletedEvent;
+		public event Action<UpgradeCompleteEventArgs> AnyUpgradeCompletedEvent;
 
 		public ConstructionSystem(AOGame game, World world, PowerGridSystem powerGridSystem)
 			: base(game)
@@ -41,11 +43,13 @@ namespace AsteroidOutpost.Systems
 		{
 			if (world.Paused) { return; }
 
-			var constructibles = world.GetComponents<Constructing>();
+			List<IConstructible> constructibles = new List<IConstructible>();
+			constructibles.AddRange(world.GetComponents<Constructing>());
+			constructibles.AddRange(world.GetComponents<Upgrading>());
 
 			foreach (var constructible in constructibles)
 			{
-				if(constructible.IsBeingPlaced)
+				if(constructible is Constructing && ((Constructing)constructible).IsBeingPlaced)
 				{
 					continue;
 				}
@@ -55,8 +59,8 @@ namespace AsteroidOutpost.Systems
 				int deltaMinerals;
 
 				// Check that we have enough power in the grid
-				Force owningForce = world.GetOwningForce(constructible);
-				if (powerGridSystem.HasPower(constructible, powerToUse))
+				Force owningForce = world.GetOwningForce(constructible as Component);
+				if (powerGridSystem.HasPower(constructible as Component, powerToUse))
 				{
 					// Check to see if the mineralsLeftToConstruct would pass an integer boundary
 					deltaMinerals = (int)(constructible.MineralsConstructed + mineralsToUse) - (int)(constructible.MineralsConstructed);
@@ -66,7 +70,7 @@ namespace AsteroidOutpost.Systems
 						if (owningForce.GetMinerals() >= deltaMinerals)
 						{
 							// Consume the resources
-							powerGridSystem.GetPower(constructible, powerToUse);
+							powerGridSystem.GetPower(constructible as Component, powerToUse);
 							constructible.MineralsConstructed += mineralsToUse;
 
 							// Set the force's minerals
@@ -79,7 +83,7 @@ namespace AsteroidOutpost.Systems
 
 								OnConstructionComplete(constructible);
 
-								world.DeleteComponent(constructible);
+								world.DeleteComponent(constructible as Component);
 							}
 						}
 						else
@@ -94,7 +98,7 @@ namespace AsteroidOutpost.Systems
 						constructible.MineralsConstructed += mineralsToUse;
 
 						// We should consume our little tidbit of power though:
-						powerGridSystem.GetPower(constructible, powerToUse);
+						powerGridSystem.GetPower(constructible as Component, powerToUse);
 					}
 				}
 			}
@@ -102,14 +106,35 @@ namespace AsteroidOutpost.Systems
 		}
 
 
-		private void OnConstructionComplete(Constructing constructing)
+		private void OnConstructionComplete(IConstructible constructible)
 		{
-			constructing.OnConstructionComplete(new ConstructionCompleteEventArgs(constructing));
-
-			if (AnyConstructionCompletedEvent != null)
+			Constructing constructing = constructible as Constructing;
+			if(constructing != null)
 			{
-				AnyConstructionCompletedEvent(new ConstructionCompleteEventArgs(constructing));
+				constructing.OnConstructionComplete(new ConstructionCompleteEventArgs(constructing));
+
+				if (AnyConstructionCompletedEvent != null)
+				{
+					AnyConstructionCompletedEvent(new ConstructionCompleteEventArgs(constructing));
+				}
 			}
+			else
+			{
+				Upgrading upgrading = constructible as Upgrading;
+				if(upgrading != null)
+				{
+					world.UpgradeComplete(upgrading.EntityID);
+
+					upgrading.OnUpgradeComplete(new UpgradeCompleteEventArgs(upgrading));
+
+					if (AnyConstructionCompletedEvent != null)
+					{
+						AnyUpgradeCompletedEvent(new UpgradeCompleteEventArgs(upgrading));
+					}
+				}
+			}
+
+			
 		}
 
 

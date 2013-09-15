@@ -20,7 +20,7 @@ namespace AsteroidOutpost
 		public Dictionary<String, ContextMenuPage> ContextPages = new Dictionary<String, ContextMenuPage>();
 		private ContextMenuPage currentPage;
 
-		public ContextMenu(AOGame game, World world, AOHUD hud, Dictionary<String, EntityTemplate> entityTemplates)
+		public ContextMenu(AOGame game, World world, AOHUD hud, Dictionary<String, EntityTemplate> entityTemplates, Dictionary<String, UpgradeTemplate> upgradeTemplates)
 		{
 			this.world = world; 
 
@@ -29,13 +29,12 @@ namespace AsteroidOutpost
 			foreach(var contextFileName in Directory.EnumerateFiles(@"..\data\context\", "*.json"))
 			{
 				String json = File.ReadAllText(contextFileName);
-				JObject jObject = JObject.Parse(json);
 
 				ContextMenuPage page = new ContextMenuPage();
-				JsonConvert.PopulateObject(jObject.ToString(), page);
+				JsonConvert.PopulateObject(json, page);
 				ContextPages.Add(page.Name.ToLowerInvariant(), page);
 
-				page.Initialize(hud, jsContextMenu, entityTemplates);
+				page.Initialize(hud, jsContextMenu, entityTemplates, upgradeTemplates);
 			}
 
 			SetPage("main");

@@ -72,6 +72,7 @@ namespace AsteroidOutpost
 		private LayeredStarField starField;
 		private World world;
 		private EntityFactory entityFactory;
+		private UpgradeFactory upgradeFactory;
 		private Texture2D cursorTexture;
 
 		private Stopwatch stopwatch = new Stopwatch();
@@ -157,6 +158,7 @@ namespace AsteroidOutpost
 			starField = new LayeredStarField(this);
 			Components.Add(starField);
 			entityFactory = new EntityFactory();
+			upgradeFactory = new UpgradeFactory();
 
 			frameRateCounter = new FrameRateCounter(this);
 			//Components.Add(frameRateCounter);
@@ -315,6 +317,7 @@ namespace AsteroidOutpost
 			//ThreadPool.QueueUserWorkItem(delegate { EntityFactory.LoadContent(GraphicsDevice); });
 			//ThreadPool.QueueUserWorkItem(delegate { EllipseEx.LoadContent(GraphicsDevice); });
 			entityFactory.LoadContent(GraphicsDevice);
+			upgradeFactory.LoadUpgradeTemplates();
 			EllipseEx.LoadContent(GraphicsDevice);
 
 			particleEffectManager = new ParticleEffectManager();
@@ -500,7 +503,7 @@ namespace AsteroidOutpost
 				Debugger.Break();
 			}
 
-			world = new World(this, entityFactory);
+			world = new World(this, entityFactory, upgradeFactory);
 
 
 			Scenario scenario;

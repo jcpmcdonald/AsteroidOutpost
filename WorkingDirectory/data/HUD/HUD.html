@@ -71,6 +71,15 @@
 					</div>
 				</div></div>
 				
+				<div ng-switch="has('Upgrading')"><div ng-switch-when="true">
+					<span id="lblUpgrading" class="selectionLabel"></span>
+					<div id="upgradingProgressBar" class="selectionProgressBar">
+						<span class="selectionProgressData">
+							{{selectedUnits[0].Upgrading.MineralsConstructed | number:0}} / {{selectedUnits[0].Upgrading.Cost | number:0}}
+						</span>
+					</div>
+				</div></div>
+				
 				<div ng-switch="has('PowerStorage')"><div ng-switch-when="true">
 					<span id="lblPower" class="selectionLabel"></span>
 					<div id="powerLevelProgressBar" class="selectionProgressBar">

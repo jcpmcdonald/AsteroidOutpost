@@ -6,13 +6,14 @@ using System.Linq;
 using System.Text;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Eventing;
+using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 
 namespace AsteroidOutpost.Components
 {
-	internal class Constructing : Component
+	internal class Constructing : Component, IConstructible
 	{
 		private float mineralsConstructed;
 

@@ -28,17 +28,17 @@ namespace AsteroidOutpost.Entities.Eventing
 	}
 
 
-	public class EntityUpgradeEventArgs : EntityEventArgs
-	{
+	//public class EntityUpgradeEventArgs : EntityEventArgs
+	//{
 
-		public EntityUpgradeEventArgs(int entityID, Upgrade theUpgrade)
-			: base(entityID)
-		{
-			Upgrade = theUpgrade;
-		}
+	//    public EntityUpgradeEventArgs(int entityID, Upgrade theUpgrade)
+	//        : base(entityID)
+	//    {
+	//        Upgrade = theUpgrade;
+	//    }
 
-		public Upgrade Upgrade { get; set; }
-	}
+	//    public Upgrade Upgrade { get; set; }
+	//}
 
 
 	public class EntityEventArgs : EventArgs

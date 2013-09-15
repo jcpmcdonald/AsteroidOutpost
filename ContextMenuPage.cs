@@ -65,11 +65,11 @@ namespace AsteroidOutpost
 		}
 
 
-		public void Initialize(AOHUD hud, JSObject jsContextMenu, Dictionary<string, EntityTemplate> entityTemplates)
+		public void Initialize(AOHUD hud, JSObject jsContextMenu, Dictionary<String, EntityTemplate> entityTemplates, Dictionary<String, UpgradeTemplate> upgradeTemplates)
 		{
 			foreach (var button in ContextButtons)
 			{
-				button.Initialize(name, hud, jsContextMenu, entityTemplates);
+				button.Initialize(name, hud, jsContextMenu, entityTemplates, upgradeTemplates);
 				ContextButtonDictionary.Add(button.Name.ToLowerInvariant(), button);
 				button.ButtonChanged += OnPageChanged;
 			}

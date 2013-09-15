@@ -196,6 +196,28 @@ namespace AsteroidOutpost.Eventing
 
 	#region Upgrade Events
 
+	internal class UpgradeCompleteEventArgs : ComponentReflectiveEventArgs
+	{
+		public UpgradeCompleteEventArgs(Upgrading upgrading)
+			: base(upgrading, "OnUpgradeComplete", new object[]{ })
+		{
+		}
+
+		public Upgrading Upgrading {
+			get
+			{
+				return (Upgrading)Component;
+			}
+		}
+
+		public int EntityID {
+			get
+			{
+				return Component.EntityID;
+			}
+		}
+	}
+
 	//public class EntityUpgradeStartedEventArgs : EntityReflectiveEventArgs
 	//{
 	//    public EntityUpgradeStartedEventArgs(ConstructableEntity constructable, Upgrade theUpgrade)

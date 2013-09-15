@@ -139,13 +139,13 @@ namespace AsteroidOutpost
 		}
 
 
-		public void Initialize(String pageName, AOHUD hud, JSObject jsContextMenu, Dictionary<String, EntityTemplate> entityTemplates)
+		public void Initialize(String pageName, AOHUD hud, JSObject jsContextMenu, Dictionary<String, EntityTemplate> entityTemplates, Dictionary<String, UpgradeTemplate> upgradeTemplates)
 		{
 			this.hud = hud;
 
-			name = Evaluate(name, entityTemplates) ?? name;
-			image = Evaluate(image, entityTemplates) ?? image;
-			hotkey = Evaluate(hotkey, entityTemplates) ?? hotkey;
+			name = Evaluate(name, entityTemplates, upgradeTemplates) ?? name;
+			image = Evaluate(image, entityTemplates, upgradeTemplates) ?? image;
+			hotkey = Evaluate(hotkey, entityTemplates, upgradeTemplates) ?? hotkey;
 
 			if(onClickData != null && onClickData.Parameters != null)
 			{
@@ -154,7 +154,7 @@ namespace AsteroidOutpost
 					String s = onClickData.Parameters[index] as String;
 					if (s != null)
 					{
-						onClickData.Parameters[index] = Evaluate(s, entityTemplates) ?? s;
+						onClickData.Parameters[index] = Evaluate(s, entityTemplates, upgradeTemplates) ?? s;
 					}
 				}
 			}
@@ -171,7 +171,7 @@ namespace AsteroidOutpost
 				ImportantValues.Keys.CopyTo(keys, 0);
 				foreach (var key in keys)
 				{
-					ImportantValues[key] = Evaluate(ImportantValues[key], entityTemplates) ?? ImportantValues[key];
+					ImportantValues[key] = Evaluate(ImportantValues[key], entityTemplates, upgradeTemplates) ?? ImportantValues[key];
 				}
 			}
 		}
@@ -183,7 +183,7 @@ namespace AsteroidOutpost
 		/// <param name="fullField">The full field name, eg "%Constructing.Cost% minerals"</param>
 		/// <param name="template">The template that contains the desired information</param>
 		/// <returns>Returns the new field</returns>
-		private String Evaluate(String fullField, Dictionary<String, EntityTemplate> entityTemplates)
+		private String Evaluate(String fullField, Dictionary<String, EntityTemplate> entityTemplates, Dictionary<String, UpgradeTemplate> upgradeTemplates)
 		{
 			if(fullField == null){ return null; }
 
@@ -194,7 +194,7 @@ namespace AsteroidOutpost
 				if(percentEnd >= 0)
 				{
 					String percentField = fullField.Substring(percentStart, percentEnd - percentStart + 1);
-					fullField = fullField.Replace(percentField, GetFieldValue(percentField.Replace("%", ""), entityTemplates));
+					fullField = fullField.Replace(percentField, GetFieldValue(percentField.Replace("%", ""), entityTemplates, upgradeTemplates));
 
 					percentStart = fullField.IndexOf("%", StringComparison.InvariantCulture);
 				}
@@ -207,7 +207,7 @@ namespace AsteroidOutpost
 		}
 
 
-		private String GetFieldValue(String field, Dictionary<String, EntityTemplate> entityTemplates)
+		private String GetFieldValue(String field, Dictionary<String, EntityTemplate> entityTemplates, Dictionary<String, UpgradeTemplate> upgradeTemplates)
 		{
 			String[] fieldParts = field.Split(new char[]{ '.' });
 
@@ -231,6 +231,27 @@ namespace AsteroidOutpost
 				}
 
 				return curr.ToString();
+			}
+			else if(upgradeTemplates.ContainsKey(fieldParts[0].ToLowerInvariant()))
+			{
+				UpgradeTemplate upgrade = upgradeTemplates[fieldParts[0].ToLowerInvariant()];
+
+				if(upgrade.OnCompletePayload.ContainsKey(fieldParts[1]))
+				{
+					JObject curr = upgrade.OnCompletePayload[fieldParts[1]];
+					return curr[fieldParts[2]].ToString();
+				}
+				else if(upgrade.OnStartPayload.ContainsKey(fieldParts[1]))
+				{
+					JObject curr = upgrade.OnStartPayload[fieldParts[1]];
+					return curr[fieldParts[2]].ToString();
+				}
+				else
+				{
+					Console.WriteLine("Could not find a value for a percent-delimited field. Not good");
+					Debugger.Break();
+					return null;
+				}
 			}
 			else
 			{

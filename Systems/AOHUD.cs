@@ -65,7 +65,7 @@ namespace AsteroidOutpost.Systems
 			this.world = world;
 			this.selectionSystem = selectionSystem;
 
-			contextMenu = new ContextMenu(game, world, this, world.EntityTemplates);
+			contextMenu = new ContextMenu(game, world, this, world.EntityTemplates, world.UpgradeTemplates);
 
 			// Set up some hotkeys
 			hotkeys.Add(Keys.S, btnPower_Clicked);
@@ -797,9 +797,12 @@ namespace AsteroidOutpost.Systems
 		}
 
 
-		public void Upgrade(String upgradeName)
+		public void StartUpgrade(String upgradeName)
 		{
-			
+			if (!world.Paused && selectionSystem.CurrentSelection.Count == 1)
+			{
+				world.StartUpgrade(selectionSystem.CurrentSelection[0], upgradeName);
+			}
 		}
 	}
 }

@@ -1,27 +1,25 @@
 {
-	"Name" : "Solar Station L2",
-	"Payload" :
+	"Name" : "Solar Station L2 Upgrade",
+	"OnStartPayload" :
 	{
 		"Upgrading" : {
 			"Cost" : 200,
 		},
-		"PowerProducer" : {
-			"PowerProductionRate" : 10,
-			"MaxPower" : 250,
-		},
+	},
+	"OnCompletePayload" :
+	{
 		"Animator" : {
 			"CurrentSet" : "Level 2",
 		},
-	},
-	"Button" :
-	{
-		"Image" : "images/SolarStation.png",
-		"Slot" : 1,
-		"ImportantValues" : {
-			"Cost" : "Upgrading.Cost",
-			"HP" : "HitPoints.TotalArmour",
-			"Production Rate" : "PowerProducer.PowerProductionRate",
-			"Max Power" : "PowerProducer.MaxPower",
-		}
+		"PowerProducer" : {
+			"PowerProductionRate" : 10,
+		},
+		"PowerStorage" : {
+			"MaxPower" : 250,
+		},
+		"Selectable" : {
+			"ContextMenu" : "Deselect",
+		},
 	},
 }
+

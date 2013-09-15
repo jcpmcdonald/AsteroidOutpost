@@ -1,0 +1,31 @@
+{
+	"Name" : "SolarStationL1",
+	"ContextButtons" :
+	[
+		{
+			"Name" : "Upgrade to L2",
+			"Image" : "images/SolarStationL2.png",
+			"Slot" : 0,
+			"OnClickData" : {
+				"Method" : "hud.StartUpgrade",
+				"Parameters" : [
+					"Solar Station L2 Upgrade"
+				],
+			},
+			"ImportantValues" : {
+				"Cost" : "%Solar Station L2 Upgrade.Upgrading.Cost% minerals",
+				"Production Rate" : "%Solar Station L2 Upgrade.PowerProducer.PowerProductionRate% pps",
+				"Max Power" : "%Solar Station L2 Upgrade.PowerStorage.MaxPower%",
+			}
+		},
+		{
+			"Name" : "Deselect",
+			"Image" : "images/Deselect.png",
+			"Slot" : 8,
+			"OnClickData" : {
+				"Method" : "hud.ClearSelection",
+			},
+		},
+	],
+}
+

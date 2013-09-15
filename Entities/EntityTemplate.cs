@@ -167,6 +167,7 @@ namespace AsteroidOutpost.Entities
 			}
 			catch (FormatException fe)
 			{
+				Debugger.Break();
 				Console.WriteLine("Error parsing JSON: " + fe.StackTrace);
 			}
 		}

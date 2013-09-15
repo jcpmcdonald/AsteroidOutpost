@@ -131,6 +131,7 @@ $(document).ready(function()
 {
 	scopeOf("SelectionInfoController").AddProgressBar("hitPointsProgressBar", "HitPoints", "Armour", "TotalArmour");
 	scopeOf("SelectionInfoController").AddProgressBar("constructionProgressBar", "Constructing", "MineralsConstructed", "Cost");
+	scopeOf("SelectionInfoController").AddProgressBar("upgradingProgressBar", "Upgrading", "MineralsConstructed", "Cost");
 	scopeOf("SelectionInfoController").AddProgressBar("powerLevelProgressBar", "PowerStorage", "AvailablePower", "MaxPower");
 	scopeOf("SelectionInfoController").AddProgressBar("mineralsProgressBar", "Minable", "Minerals", "StartingMinerals");
 });
