@@ -395,6 +395,19 @@ namespace AsteroidOutpost.Systems
 			}
 		}
 
+		public void CancelUpgrade()
+		{
+			if(selectedEntities.Count == 1)
+			{
+				int entityID = selectedEntities[0];
+				Upgrading upgrading = world.GetNullableComponent<Upgrading>(entityID);
+				if (upgrading != null)
+				{
+					world.DeleteComponent(upgrading);
+				}
+			}
+		}
+
 
 		public List<int> CurrentSelection
 		{

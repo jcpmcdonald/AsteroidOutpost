@@ -796,6 +796,11 @@ namespace AsteroidOutpost.Systems
 			selectionSystem.CancelConstruction();
 		}
 
+		public void CancelUpgrade()
+		{
+			selectionSystem.CancelUpgrade();
+		}
+
 
 		public void StartUpgrade(String upgradeName)
 		{
