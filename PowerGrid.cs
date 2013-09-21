@@ -68,9 +68,6 @@ namespace AsteroidOutpost
 		{
 			powerNodes.Add(newNode, new List<PowerGridNode>(6));
 
-			// TODO: 2012-08-11 Power node dying event needs to be hooked up
-			//newNode.DyingEvent += NodeDying;
-
 			List<KeyValuePair<float, PowerGridNode>> allPowerLinks = GetAllPowerLinks(newNode);
 
 			if(newNode.ConductsPower)
@@ -111,26 +108,12 @@ namespace AsteroidOutpost
 			}
 		}
 
-
-		public void NodeDying(/*EntityReflectiveEventArgs e*/)
-		{
-			// TODO: 2012-08-11 Event broken
-			//PowerGridNode node = e.Entity as PowerGridNode;
-			//if (node != null)
-			//{
-			//    Disconnect(node);
-			//}
-		}
-
 		internal void Disconnect(PowerGridNode node)
 		{
 			if(node == null || !powerNodes.ContainsKey(node))
 			{
 				return;
 			}
-
-			// TODO: 2012-08-11 Power node dying event needs to be hooked up
-			//node.DyingEvent -= NodeDying;
 
 			List<PowerGridNode> connectedNodes = powerNodes[node];
 			foreach (var connectedNode in connectedNodes)
