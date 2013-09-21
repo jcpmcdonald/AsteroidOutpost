@@ -82,7 +82,7 @@ namespace AsteroidOutpost
 		{
 			get
 			{
-				return new Color(R, G, B, A);
+				return new Color((int)R, (int)G, (int)B, (int)A);
 			}
 			set
 			{
