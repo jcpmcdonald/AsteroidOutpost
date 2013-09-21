@@ -37,8 +37,8 @@
 		"Accumulator" : {
 			"Offset" : "-5, -4",
 			"Velocity" : "0, -26",
-			"FadeRate" : 50,
-			"Color" : "0, 100, 0, 255",
+			"FadeTime" : 3,
+			"StartingColor" : "0, 255, 0, 255",
 		},
 		"Targetable" : {},
 		"Perishable" : {

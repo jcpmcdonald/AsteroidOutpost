@@ -139,7 +139,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorEx.cs" />
-    <Compile Include="ColorF.cs" />
     <Compile Include="Components\Animator.cs" />
     <Compile Include="Components\AutoHeal.cs" />
     <Compile Include="Components\Upgrading.cs" />

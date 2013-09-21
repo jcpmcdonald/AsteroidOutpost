@@ -49,27 +49,21 @@ namespace AsteroidOutpost.Systems
 			List<FloatingText> deadFloatingTexts = new List<FloatingText>();
 			foreach (var floatingText in floatingTexts)
 			{
-				// TODO: 2012-10-07 Fix up this code, it doesn't fade very well. Zoom in and see for yourself
-
-				//floatingText.CumulativeTime += gameTime.ElapsedGameTime;
-				float fadeAmount = floatingText.FadeRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
-				floatingText.Position += floatingText.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-				floatingText.Color = new ColorF(floatingText.Color.R - fadeAmount,
-				                                floatingText.Color.G - fadeAmount,
-				                                floatingText.Color.B - fadeAmount,
-				                                floatingText.Color.A - fadeAmount);
-
-				//Console.WriteLine(String.Format(CultureInfo.InvariantCulture, "{0} {1} {2} {3}", floatingText.Color.R, floatingText.Color.G, floatingText.Color.B, floatingText.Color.A));
-
-				if (floatingText.Color.A <= 0 ||
-				    (floatingText.Color.R <= 0 &&
-				     floatingText.Color.G <= 0 &&
-				     floatingText.Color.B <= 0))
+				floatingText.FadeTimeRemaining = floatingText.FadeTimeRemaining.Subtract(gameTime.ElapsedGameTime);
+				if(floatingText.FadeTimeRemaining <= TimeSpan.Zero)
 				{
-					//floatingText.SetDead(true, true);
-					//world.DeleteComponent(floatingText);
 					deadFloatingTexts.Add(floatingText);
+				}
+				else
+				{
+					floatingText.Position += floatingText.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+					float percentDone = 1f - ((float)floatingText.FadeTimeRemaining.TotalSeconds / floatingText.FadeTime);
+
+					floatingText.Color = new Color(MathHelper.SmoothStep(floatingText.StartingColor.R, floatingText.EndingColor.R, percentDone),
+					                               MathHelper.SmoothStep(floatingText.StartingColor.G, floatingText.EndingColor.G, percentDone),
+					                               MathHelper.SmoothStep(floatingText.StartingColor.B, floatingText.EndingColor.B, percentDone),
+					                               MathHelper.SmoothStep(floatingText.StartingColor.A, floatingText.EndingColor.A, percentDone));
 				}
 			}
 
@@ -90,11 +84,17 @@ namespace AsteroidOutpost.Systems
 					if (accumulator.Value != 0)
 					{
 						Position position = world.GetComponent<Position>(accumulator);
-						FloatingText freeText = new FloatingText(position.Center + accumulator.Offset,
-						                                         accumulator.Velocity,
-						                                         accumulator.Value.ToString("+0;-0;+0"),
-						                                         accumulator.Color,
-						                                         accumulator.FadeRate);
+						Vector2 pos = position.Center + accumulator.Offset;
+						FloatingText freeText = new FloatingText{
+							Position = position.Center + accumulator.Offset,
+							Velocity = accumulator.Velocity,
+							Text = accumulator.Value.ToString("+0;-0;+0"),
+							StartingColor = accumulator.StartingColor,
+							EndingColor = accumulator.EndingColor,
+							FadeTime = accumulator.FadeTime,
+							FadeTimeRemaining = new TimeSpan(0, 0, 0, 0, (int)(accumulator.FadeTime * 1000f))
+						};
+
 						floatingTexts.Add(freeText);
 
 						accumulator.Value = 0;
@@ -115,7 +115,7 @@ namespace AsteroidOutpost.Systems
 				spriteBatch.DrawString(font,
 				                       floatingText.Text,
 				                       world.WorldToScreen(floatingText.Position),
-				                       floatingText.Color.Color,
+				                       floatingText.Color,
 				                       0,
 				                       Vector2.Zero,
 				                       1 / world.ScaleFactor,
@@ -130,39 +130,14 @@ namespace AsteroidOutpost.Systems
 
 	class FloatingText
 	{
-		private ColorF color;
 		public Vector2 Position { get; set; }
 		public Vector2 Velocity { get; set; }
-		public string Text { get; set; }
-		public ColorF Color
-		{
-			get
-			{
-				return color;
-			}
-			set
-			{
-				color = value;
-			}
-		}
+		public String Text { get; set; }
 
-		//public TimeSpan CumulativeTime { get; set; }
-		public float FadeRate { get; set; }
-		//public float FadeAmount { get; set; }
-
-
-		public FloatingText(Vector2 position,
-		                    Vector2 velocity,
-		                    string text,
-		                    Color color,
-		                    float fadeRate = 150)
-		{
-			Text = text;
-			Position = position;
-			Velocity = velocity;
-			this.color.Color = color;
-			FadeRate = fadeRate;
-			//CumulativeTime = new TimeSpan(0);
-		}
+		public Color StartingColor { get; set; }
+		public Color EndingColor { get; set; }
+		public Color Color { get; set; }
+		public float FadeTime { get; set; }
+		public TimeSpan FadeTimeRemaining { get; set; }
 	}
 }

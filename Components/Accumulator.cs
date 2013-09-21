@@ -11,21 +11,10 @@ namespace AsteroidOutpost.Components
 	public class Accumulator : Component
 	{
 
-		public Accumulator(int entityID) : base(entityID) {}
-		public Accumulator(int entityID,
-		                   Vector2 offset,
-		                   Vector2 velocity,
-		                   Color color,
-		                   float fadeRate = 120)
-			: base(entityID)
+		public Accumulator(int entityID) : base(entityID)
 		{
-			this.Offset = offset;
-			this.Velocity = velocity;
-			this.Color = color;
-			this.FadeRate = fadeRate;
+			EndingColor = new Color(0, 0, 0, 0);
 		}
-
-
 
 
 		public void Accumulate(IQuantifiable e)
@@ -37,7 +26,9 @@ namespace AsteroidOutpost.Components
 		public int Value { get; set; }
 		public Vector2 Offset { get; set; }
 		public Vector2 Velocity { get; set; }
-		public float FadeRate { get; set; }
-		public Color Color { get; set; }
+
+		public Color StartingColor { get; set; }
+		public Color EndingColor { get; set; }
+		public float FadeTime { get; set; }
 	}
 }
