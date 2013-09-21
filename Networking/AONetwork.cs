@@ -37,7 +37,7 @@ namespace AsteroidOutpost.Networking
 
 
 		// TODO: Store this list of matchmakers in a file, and get them here
-		String[] matchmakers = new String[] { "http://cell.stat-life.com/matchmaker/" };
+		String[] matchmakers = new String[] { "http://jcpmcdonald.com/matchmaker/" };
 		private Thread serverBeacon;
 		private bool serverBeaconActive;
 
