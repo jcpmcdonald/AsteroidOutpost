@@ -5,17 +5,9 @@
 		{
 			"Name" : "Cancel Upgrade",
 			"Image" : "images/X.png",
-			"Slot" : 0,
-			"OnClickData" : {
-				"Method" : "hud.CancelUpgrade",
-			},
-		},
-		{
-			"Name" : "Deselect",
-			"Image" : "images/Deselect.png",
 			"Slot" : 8,
 			"OnClickData" : {
-				"Method" : "hud.ClearSelection",
+				"Method" : "hud.CancelUpgrade",
 			},
 		},
 	],

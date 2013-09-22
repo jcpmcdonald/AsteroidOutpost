@@ -273,7 +273,7 @@ namespace AsteroidOutpost.Systems
 						}
 						else
 						{
-							world.HUD.ContextMenu.SetPage("deselect");
+							world.HUD.ContextMenu.SetPage("blank");
 						}
 					}
 				}
@@ -298,7 +298,7 @@ namespace AsteroidOutpost.Systems
 				}
 				else
 				{
-					world.HUD.ContextMenu.SetPage("deselect");
+					world.HUD.ContextMenu.SetPage("blank");
 				}
 			}
 		}
@@ -317,7 +317,7 @@ namespace AsteroidOutpost.Systems
 				}
 				else
 				{
-					world.HUD.ContextMenu.SetPage("deselect");
+					world.HUD.ContextMenu.SetPage("blank");
 				}
 			}
 		}
