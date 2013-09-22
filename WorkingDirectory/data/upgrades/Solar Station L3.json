@@ -1,0 +1,25 @@
+{
+	"Name" : "Solar Station L3 Upgrade",
+	"OnStartPayload" :
+	{
+		"Upgrading" : {
+			"Cost" : 500,
+		},
+	},
+	"OnCompletePayload" :
+	{
+		"Animator" : {
+			"CurrentSet" : "Level 3",
+		},
+		"PowerProducer" : {
+			"PowerProductionRate" : 50,
+		},
+		"PowerStorage" : {
+			"MaxPower" : 650,
+		},
+		"Selectable" : {
+			"ContextMenu" : "Blank",
+		},
+	},
+}
+

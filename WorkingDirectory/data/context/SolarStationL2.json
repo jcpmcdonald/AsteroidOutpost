@@ -1,0 +1,23 @@
+{
+	"Name" : "SolarStationL2",
+	"ContextButtons" :
+	[
+		{
+			"Name" : "Upgrade to L3",
+			"Image" : "images/SolarStationL3.png",
+			"Slot" : 0,
+			"OnClickData" : {
+				"Method" : "hud.StartUpgrade",
+				"Parameters" : [
+					"Solar Station L3 Upgrade"
+				],
+			},
+			"ImportantValues" : {
+				"Cost" : "%Solar Station L3 Upgrade.Upgrading.Cost% minerals",
+				"Production Rate" : "%Solar Station L3 Upgrade.PowerProducer.PowerProductionRate% pps",
+				"Max Power" : "%Solar Station L3 Upgrade.PowerStorage.MaxPower%",
+			}
+		},
+	],
+}
+
