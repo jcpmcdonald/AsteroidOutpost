@@ -564,7 +564,12 @@ namespace AsteroidOutpost.Systems
 
 		public Vector2 Scale(Vector2 value)
 		{
-			return value / scaleFactor;
+			return Scale(value.X, value.Y);
+		}
+
+		public Vector2 Scale(float x, float y)
+		{
+			return new Vector2(x / scaleFactor * (float)Math.Sqrt(3), y / scaleFactor);
 		}
 
 		#region Button Handlers

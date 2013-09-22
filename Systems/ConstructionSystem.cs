@@ -127,7 +127,7 @@ namespace AsteroidOutpost.Systems
 
 					upgrading.OnUpgradeComplete(new UpgradeCompleteEventArgs(upgrading));
 
-					if (AnyConstructionCompletedEvent != null)
+					if (AnyUpgradeCompletedEvent != null)
 					{
 						AnyUpgradeCompletedEvent(new UpgradeCompleteEventArgs(upgrading));
 					}
@@ -143,11 +143,10 @@ namespace AsteroidOutpost.Systems
 		/// </summary>
 		public override void Draw(GameTime gameTime)
 		{
-			var constructables = world.GetComponents<Constructing>();
 
 			spriteBatch.Begin();
 
-			foreach (var constructable in constructables)
+			foreach (var constructable in world.GetComponents<Constructing>())
 			{
 				Position position = world.GetComponent<Position>(constructable.EntityID);
 				if (constructable.IsBeingPlaced)
@@ -165,6 +164,24 @@ namespace AsteroidOutpost.Systems
 			}
 
 			spriteBatch.End();
+
+
+			//spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+
+			//foreach (var constructable in world.GetComponents<Constructing>())
+			//{
+			//    Position position = world.GetComponent<Position>(constructable.EntityID);
+			//    if (!constructable.IsBeingPlaced)
+			//    {
+			//        float percentComplete = constructable.MineralsConstructed / constructable.Cost;
+
+			//        spriteBatch.FillRectangle(world.WorldToScreen(position.Center.X - position.Radius, position.Center.Y + position.Radius - (position.Height * percentComplete)),
+			//                                  world.Scale(position.Width, 2),
+			//                                  Color.Green);
+			//    }
+			//}
+
+			//spriteBatch.End();
 		}
 	}
 }

@@ -128,6 +128,7 @@ namespace AsteroidOutpost
 
 			animationSystem.DrawOrder = 1000;
 			movementSystem.DrawOrder = 1001;
+			constructionSystem.DrawOrder = 1002;
 			laserMinerSystem.DrawOrder = 1025;
 			particleEngine.DrawOrder = 1050;
 			accumulationSystem.DrawOrder = 1100;
@@ -824,6 +825,12 @@ namespace AsteroidOutpost
 		public Vector2 Scale(Vector2 value)
 		{
 			return hud.Scale(value);
+		}
+
+
+		public Vector2 Scale(float x, float y)
+		{
+			return hud.Scale(x, y);
 		}
 
 
