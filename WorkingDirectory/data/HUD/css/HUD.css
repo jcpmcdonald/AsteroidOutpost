@@ -174,7 +174,7 @@ body
 #editorPanel
 {
 	position: absolute;
-    display: block;
+	display: block;
 	
 	top: 0px;
 	right: 0px;
@@ -197,19 +197,15 @@ body
 	/*font-size: small;*/
 }
 
-#editorPanel
-{
-}
-
 #editorToggleButton
 {
 	position: absolute;
-    display: block;
-    
-    width: 10px;
-    height: 100px;
-    
-    background-color: rgba(100, 100, 100, 0.7);
+	display: block;
+	
+	width: 10px;
+	height: 100px;
+	
+	background-color: rgba(100, 100, 100, 0.7);
 	border-color: #bbbbbb;
 	border-width: 1px;
 	

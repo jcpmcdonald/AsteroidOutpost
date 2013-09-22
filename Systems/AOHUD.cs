@@ -44,6 +44,7 @@ namespace AsteroidOutpost.Systems
 		private Controller localActor;
 		private bool isDraggingScreen;
 
+		private bool consoleActive = false;
 		private Dictionary<Keys, EventHandler> hotkeys = new Dictionary<Keys, EventHandler>();
 
 		private SoundEffect constructionSound;
@@ -191,7 +192,11 @@ namespace AsteroidOutpost.Systems
 
 			if (theKeyboard[Keys.Escape] == EnhancedKeyState.JUST_PRESSED)
 			{
-				if (creatingEntityID != null)
+				if(ConsoleActive)
+				{
+					ConsoleActive = false;
+				}
+				else if (creatingEntityID != null)
 				{
 					OnCancelCreation();
 				}
@@ -251,12 +256,21 @@ namespace AsteroidOutpost.Systems
 			//}
 
 
-			// Handle the hotkeys
-			foreach (Keys pressed in theKeyboard.GetJustPressedKeys())
+			if(theKeyboard[Keys.OemTilde] == EnhancedKeyState.JUST_RELEASED)
 			{
-				if (hotkeys.ContainsKey(pressed))
+				ConsoleActive = !ConsoleActive;
+			}
+
+
+			// Handle the hotkeys
+			if(!ConsoleActive)
+			{
+				foreach (Keys pressed in theKeyboard.GetJustPressedKeys())
 				{
-					hotkeys[pressed](this, EventArgs.Empty);
+					if (hotkeys.ContainsKey(pressed))
+					{
+						hotkeys[pressed](this, EventArgs.Empty);
+					}
 				}
 			}
 
@@ -553,6 +567,19 @@ namespace AsteroidOutpost.Systems
 			get
 			{
 				return contextMenu;
+			}
+		}
+
+		private bool ConsoleActive
+		{
+			get
+			{
+				return consoleActive;
+			}
+			set
+			{
+				consoleActive = value;
+				world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetConsoleVisible({0});", consoleActive.ToString().ToLowerInvariant()));
 			}
 		}
 

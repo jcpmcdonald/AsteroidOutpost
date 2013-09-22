@@ -188,11 +188,11 @@ var Position = function()
 	
 	if($("#editorPanel").is(':visible'))
 	{
-		$("#console").position({
-			of: $("#editorPanel"),
-			my: "right bottom",
-			at: "left bottom"
-		});
+		// $("#console").position({
+			// of: $("#editorPanel"),
+			// my: "right bottom",
+			// at: "left bottom"
+		// });
 		
 		$("#editorToggleButton").position({
 			of: $("#editorPanel"),
@@ -202,11 +202,11 @@ var Position = function()
 	}
 	else
 	{
-		$("#console").position({
-			of: $(window),
-			my: "right bottom",
-			at: "right bottom"
-		});
+		// $("#console").position({
+			// of: $(window),
+			// my: "right bottom",
+			// at: "right bottom"
+		// });
 		
 		$("#editorToggleButton").position({
 			of: $(window),

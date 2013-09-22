@@ -59,13 +59,13 @@
 
 
 table.jqplot-table-legend, table.jqplot-cursor-legend {
-    background-color: rgba(100, 100, 100, 0);
-    color: white;
-    border: 0px;
-    font-size: 0.75em;
-    position: absolute;
+	background-color: rgba(100, 100, 100, 0);
+	color: white;
+	border: 0px;
+	font-size: 0.75em;
+	position: absolute;
 }
 table.jqplot-table-legend {
-    margin: 0px;
-    
+	margin: 0px;
+
 }

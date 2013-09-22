@@ -5,4 +5,5 @@ var KEY_DOWN = 40;
 var KEY_ENTER = 13;
 var KEY_SPACE = 32;
 var KEY_ESC = 27;
+var KEY_TILDE = 192;
 

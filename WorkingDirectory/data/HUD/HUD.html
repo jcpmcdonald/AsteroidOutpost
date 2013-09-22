@@ -158,28 +158,26 @@
 	</div>
 	
 	
+	<div id="editorToggleButton"></div>
+	<div id="editorPanel" class="panel"></div>
+	
+	
 	<div id="console" class="panel" ng-controller="ConsoleController">
-		<div id="consoleWrap">
-			<div id="history">
-				
-				<div class="consoleLine" ng-repeat="line in consoleLines">
-					<span class="consoleID">{{line.username}}</span>
-					<span class="consoleText">{{line.message}}</span>
-					<span class="consoleTime">{{line.timestamp | date:'mediumTime'}}</span>
-				</div>
-				
+		<div id="history">
+			<div class="consoleLine" ng-repeat="line in consoleLines">
+				<span class="consoleID">{{line.username}}</span>
+				<span class="consoleText">{{line.message}}</span>
+				<!--span class="consoleTime">{{line.timestamp | date:'mediumTime'}}</span-->
 			</div>
-			<div id="consoleInputWrap">
-				<form ng-submit="addConsoleMessage()">
-					<input type=text id="consoleInput" ng-model="consoleInput">
-				</form>
-			</div>
+		</div>
+		
+		<div id="consoleInputWrap">
+			<form ng-submit="addConsoleMessage()">
+				<input type=text id="consoleInput" ng-model="consoleInput">
+			</form>
 		</div>
 	</div>
 	
-	
-	<div id="editorToggleButton"></div>
-	<div id="editorPanel" class="panel"></div>
 </body>
 </html>
 

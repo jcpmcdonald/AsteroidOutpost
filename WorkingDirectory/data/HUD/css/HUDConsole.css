@@ -1,36 +1,26 @@
 
 #console
 {
-	position: absolute;
-    display: block;
+	position: fixed;
+	width: 100%;
+	/*display: block;*/
 	
 	font-size: small;
 	text-shadow:0 1px 0 rgba(255,255,255,0.3);
 	
-	padding: 10px;
-	border-radius: 15px 15px 0px 0px;
-	border-style: solid solid none solid;
+	border-style: none none solid none;
 	-moz-user-select: text;
 	-webkit-user-select: text;
 }
 
-#consoleWrap
-{
-	position: relative;
-	width: 350px;
-    
-	display: table-cell;
-	vertical-align: bottom;
-}
-
 #history
 {
-    overflow: auto;
+	overflow: auto;
 	
-	height: 150px;
-	max-height: 150px;
+	height: 76px;
+	max-height: 76px;
 	
-	background-color: rgba(70, 70, 70, 0.5);
+	background-color: rgba(70, 70, 70, 0.4);
 }
 
 .consoleID
@@ -47,10 +37,10 @@
 
 .consoleLine:hover
 {
-	background-color: rgba(70, 70, 70, 0.6);
+	background-color: rgba(30, 30, 30, 0.8);
 }
 
-.consoleTime
+/*.consoleTime
 {
 	color: rgba(220, 220, 220, 0.6);
 	float: right;
@@ -58,7 +48,7 @@
 	
 	-moz-user-select: none;
 	-webkit-user-select: none;
-}
+}*/
 
 #consoleInputWrap
 {
@@ -70,5 +60,8 @@
 {
 	width: 100%;
 	padding: 0px;
+	background-color: rgba(120, 120, 120, 0.8);
+	color: #FFFFFF;
+	border-style: none;
 }
 
