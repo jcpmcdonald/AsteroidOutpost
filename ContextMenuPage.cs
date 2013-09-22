@@ -74,5 +74,17 @@ namespace AsteroidOutpost
 				button.ButtonChanged += OnPageChanged;
 			}
 		}
+
+
+		public void HandleHotKeys(EnhancedKeyboardState keyboard)
+		{
+			foreach (var button in ContextButtons)
+			{
+				if(keyboard[button.Hotkey] == EnhancedKeyState.JUST_PRESSED)
+				{
+					button.OnClick();
+				}
+			}
+		}
 	}
 }

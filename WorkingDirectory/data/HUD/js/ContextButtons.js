@@ -49,7 +49,13 @@ function ContextButtonController($scope)
 				var index = element.attr("index");
 				if(typeof $scope.buttons[index] != 'undefined' && $scope.buttons[index] != null)
 				{
-					var rv = "<h3 class='buttonHoverTitle'>" + $scope.buttons[index]["Name"] + "</h3>";
+					var rv = "<h3 class='buttonHoverTitle'>" + $scope.buttons[index]["Name"];
+					
+					if(typeof $scope.buttons[index]["HotkeyName"] != 'undefined' && $scope.buttons[index]["HotkeyName"] != null)
+					{
+						rv += "  (" + $scope.buttons[index]["HotkeyName"] + ")";
+					}
+					rv += "</h3>";
 					
 					if(typeof $scope.buttons[index]["Description"] != 'undefined' && $scope.buttons[index]["Description"] != null)
 					{
@@ -135,6 +141,7 @@ $(document).ready(function()
 					"Name": "Battery",
 					"Image": "images/Battery.png",
 					"Slot": 3,
+					"HotkeyName" : "B",
 					"Description" : "Stores power that you can use at a later date",
 				},
 				{

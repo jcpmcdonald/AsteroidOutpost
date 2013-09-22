@@ -69,12 +69,6 @@ namespace AsteroidOutpost.Systems
 			contextMenu = new ContextMenu(game, world, this, world.EntityTemplates, world.UpgradeTemplates);
 
 			// Set up some hotkeys
-			hotkeys.Add(Keys.S, btnPower_Clicked);
-			hotkeys.Add(Keys.N, btnPowerNode_Clicked);
-			hotkeys.Add(Keys.M, btnLaserMiner_Clicked);
-			hotkeys.Add(Keys.L, btnLaserTower_Clicked);
-			hotkeys.Add(Keys.I, btnMissileTower_Clicked);
-
 			hotkeys.Add(Keys.H, GoHome);
 			hotkeys.Add(Keys.R, RefreshEntityTemplates);
 			hotkeys.Add(Keys.OemPlus, TimeSpeedUp);
@@ -272,6 +266,8 @@ namespace AsteroidOutpost.Systems
 						hotkeys[pressed](this, EventArgs.Empty);
 					}
 				}
+
+				contextMenu.HandleHotKeys(theKeyboard);
 			}
 
 

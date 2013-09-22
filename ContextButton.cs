@@ -7,6 +7,7 @@ using System.Reflection;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Systems;
 using Awesomium.Core;
+using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -21,7 +22,8 @@ namespace AsteroidOutpost
 		private String description;
 		private int slot;
 		private bool enabled;
-		private String hotkey;
+		private String hotkeyName;
+		private Keys hotkey;
 		private Call onClickData;
 		public Dictionary<String, String> ImportantValues;
 
@@ -68,13 +70,25 @@ namespace AsteroidOutpost
 			}
 		}
 
-		public String Hotkey
+		public String HotkeyName
 		{
-			get { return hotkey; }
+			get { return hotkeyName; }
 			set
 			{
-				hotkey = value;
+				hotkeyName = value;
+
+				hotkey = (Keys)(typeof (Keys).GetField(hotkeyName).GetRawConstantValue());
+
 				OnButtonChanged();
+			}
+		}
+
+
+		public Keys Hotkey
+		{
+			get
+			{
+				return hotkey;
 			}
 		}
 
@@ -125,7 +139,12 @@ namespace AsteroidOutpost
 		}
 
 
-		private void OnClick(Object sender, JavascriptMethodEventArgs args)
+		private void OnClickJS(Object sender, JavascriptMethodEventArgs args)
+		{
+			OnClick();
+		}
+
+		public void OnClick()
 		{
 			if(onClickData != null)
 			{
@@ -145,7 +164,7 @@ namespace AsteroidOutpost
 
 			name = Evaluate(name, entityTemplates, upgradeTemplates) ?? name;
 			image = Evaluate(image, entityTemplates, upgradeTemplates) ?? image;
-			hotkey = Evaluate(hotkey, entityTemplates, upgradeTemplates) ?? hotkey;
+			hotkeyName = Evaluate(hotkeyName, entityTemplates, upgradeTemplates) ?? hotkeyName;
 
 			if(onClickData != null && onClickData.Parameters != null)
 			{
@@ -163,7 +182,7 @@ namespace AsteroidOutpost
 			// Set up a JS callback to catch when this button is clicked
 			String clickMethodName = String.Format(CultureInfo.InvariantCulture, "{0}{1}Click", pageName, name).Replace(" ", "");
 			callbackJS = String.Format(CultureInfo.InvariantCulture, "{1}.{0}()", clickMethodName, jsContextMenu.GlobalObjectName);
-			jsContextMenu.Bind(clickMethodName, false, OnClick);
+			jsContextMenu.Bind(clickMethodName, false, OnClickJS);
 
 			if(ImportantValues != null)
 			{

@@ -5,8 +5,9 @@
 		{
 			"Name" : "Solar Station",
 			"Image" : "images/SolarStation.png",
+			"Description" : "Produces power",
 			"Slot" : 0,
-			"Hotkey" : "S",
+			"HotkeyName" : "S",
 			"OnClickData" : {
 				"Method" : "hud.Build",
 				"Parameters" : [
@@ -23,8 +24,9 @@
 		{
 			"Name" : "Power Node",
 			"Image" : "images/PowerNode.png",
+			"Description" : "Conducts power",
 			"Slot" : 1,
-			"Hotkey" : "N",
+			"HotkeyName" : "N",
 			"OnClickData" : {
 				"Method" : "hud.Build",
 				"Parameters" : [
@@ -39,8 +41,9 @@
 		{
 			"Name" : "Laser Miner",
 			"Image" : "images/LaserMiner.png",
+			"Description" : "Mines minerals from asteroids with a laser",
 			"Slot" : 2,
-			"Hotkey" : "M",
+			"HotkeyName" : "M",
 			"OnClickData" : {
 				"Method" : "hud.Build",
 				"Parameters" : [
@@ -56,9 +59,9 @@
 		{
 			"Name" : "Battery",
 			"Image" : "images/Battery.png",
-			"Description" : "Stores power that you can use at a later date",
+			"Description" : "Stores power",
 			"Slot" : 3,
-			"Hotkey" : "B",
+			"HotkeyName" : "B",
 			"OnClickData" : {
 				"Method" : "hud.Build",
 				"Parameters" : [
@@ -74,8 +77,9 @@
 		{
 			"Name" : "Laser Tower",
 			"Image" : "images/LaserTower.png",
+			"Description" : "Shoots lasers",
 			"Slot" : 4,
-			"Hotkey" : "L",
+			"HotkeyName" : "L",
 			"OnClickData" : {
 				"Method" : "hud.Build",
 				"Parameters" : [
@@ -92,8 +96,9 @@
 		{
 			"Name" : "Missile Tower",
 			"Image" : "images/MissileTower.png",
+			"Description" : "Fires missiles",
 			"Slot" : 6,
-			"Hotkey" : "I",
+			"HotkeyName" : "I",
 			"OnClickData" : {
 				"Method" : "hud.Build",
 				"Parameters" : [

@@ -73,5 +73,11 @@ namespace AsteroidOutpost
 			currentPage.Apply(world);
 		}
 
+
+		public void HandleHotKeys(EnhancedKeyboardState keyboard)
+		{
+			currentPage.HandleHotKeys(keyboard);
+		}
+
 	}
 }
