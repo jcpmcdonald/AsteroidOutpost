@@ -1,21 +1,21 @@
 {
-	"Name" : "Constructing",
+	"Name" : "UpgradingPriority",
 	"ContextButtons" :
 	[
 		{
-			"Name" : "High Priority",
-			"Image" : "images/HighPriority.png",
+			"Name" : "Normal Priority",
+			"Image" : "images/NormalPriority.png",
 			"Slot" : 0,
 			"OnClickData" : {
 				"Method" : "hud.ToggleHighPriority",
 			},
 		},
 		{
-			"Name" : "Cancel Construction",
+			"Name" : "Cancel Upgrade",
 			"Image" : "images/X.png",
 			"Slot" : 8,
 			"OnClickData" : {
-				"Method" : "hud.CancelConstruction",
+				"Method" : "hud.CancelUpgrade",
 			},
 		},
 	],

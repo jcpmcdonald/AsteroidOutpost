@@ -132,6 +132,7 @@ namespace AsteroidOutpost
 			laserMinerSystem.DrawOrder = 1025;
 			particleEngine.DrawOrder = 1050;
 			accumulationSystem.DrawOrder = 1100;
+			powerGridSystem.DrawOrder = 1200;
 
 			game.Components.Add(animationSystem);
 			game.Components.Add(physicsSystem);

@@ -1,10 +1,10 @@
 {
-	"Name" : "Constructing",
+	"Name" : "ConstructingPriority",
 	"ContextButtons" :
 	[
 		{
-			"Name" : "High Priority",
-			"Image" : "images/HighPriority.png",
+			"Name" : "Normal Priority",
+			"Image" : "images/NormalPriority.png",
 			"Slot" : 0,
 			"OnClickData" : {
 				"Method" : "hud.ToggleHighPriority",

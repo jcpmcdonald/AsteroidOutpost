@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Eventing;
+using AsteroidOutpost.Interfaces;
 using Awesomium.Core;
 using AwesomiumXNA;
 using Microsoft.Xna.Framework;
@@ -251,7 +253,7 @@ namespace AsteroidOutpost.Systems
 				Constructing constructing = world.GetNullableComponent<Constructing>(selectedEntities[0]);
 				if(constructing != null)
 				{
-					world.HUD.ContextMenu.SetPage("constructing");
+					world.HUD.ContextMenu.SetPage(constructing.Priority > 0 ? "constructingPriority" : "constructing");
 
 					constructing.ConstructionComplete += ConstructibleOnConstructionComplete;
 				}
@@ -260,7 +262,7 @@ namespace AsteroidOutpost.Systems
 					Upgrading upgrading  = world.GetNullableComponent<Upgrading>(selectedEntities[0]);
 					if (upgrading != null)
 					{
-						world.HUD.ContextMenu.SetPage("upgrading");
+						world.HUD.ContextMenu.SetPage(upgrading.Priority > 0 ? "upgradingPriority" : "upgrading");
 
 						upgrading.UpgradeComplete += UpgradingOnUpgradeComplete;
 					}
@@ -414,6 +416,30 @@ namespace AsteroidOutpost.Systems
 			get
 			{
 				return selectedEntities;
+			}
+		}
+
+
+		public void ToggleHighPriority()
+		{
+			if(selectedEntities.Count == 1)
+			{
+				int entityID = selectedEntities[0];
+				IConstructible constructible = world.GetNullableComponent<Constructing>(entityID);
+				if (constructible == null)
+				{
+					constructible = world.GetNullableComponent<Upgrading>(entityID);
+				}
+
+				if(constructible == null)
+				{
+					Console.WriteLine("Trying to toggle the priority on a non-constructible entity");
+					Debugger.Break();
+					return;
+				}
+
+				constructible.Priority = constructible.Priority > 0 ? 0 : 1;
+				UpdateContextMenu();
 			}
 		}
 	}

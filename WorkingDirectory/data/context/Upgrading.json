@@ -3,6 +3,14 @@
 	"ContextButtons" :
 	[
 		{
+			"Name" : "High Priority",
+			"Image" : "images/HighPriority.png",
+			"Slot" : 0,
+			"OnClickData" : {
+				"Method" : "hud.ToggleHighPriority",
+			},
+		},
+		{
 			"Name" : "Cancel Upgrade",
 			"Image" : "images/X.png",
 			"Slot" : 8,

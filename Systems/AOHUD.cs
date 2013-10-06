@@ -837,5 +837,11 @@ namespace AsteroidOutpost.Systems
 				world.StartUpgrade(selectionSystem.CurrentSelection[0], upgradeName);
 			}
 		}
+
+
+		public void ToggleHighPriority()
+		{
+			selectionSystem.ToggleHighPriority();
+		}
 	}
 }

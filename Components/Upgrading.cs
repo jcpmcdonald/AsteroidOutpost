@@ -32,6 +32,7 @@ namespace AsteroidOutpost.Components
 				mineralsUpgraded = MathHelper.Clamp(value, 0, Cost);
 			}
 		}
+		public int Priority { get; set; }
 
 		public string UpgradeName { get; set; }
 

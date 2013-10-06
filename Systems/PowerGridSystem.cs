@@ -16,6 +16,7 @@ namespace AsteroidOutpost.Systems
 	{
 		private World world;
 		private SpriteBatch spriteBatch;
+		private Texture2D powerStarvedTexture;
 
 		private readonly Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
 
@@ -24,6 +25,12 @@ namespace AsteroidOutpost.Systems
 		{
 			this.world = world;
 			spriteBatch = new SpriteBatch(game.GraphicsDevice);
+		}
+
+		protected override void LoadContent()
+		{
+			base.LoadContent();
+			powerStarvedTexture = Texture2D.FromStream(Game.GraphicsDevice, File.OpenRead(@"..\data\images\NoPowerSymbol.png"));
 		}
 
 
@@ -90,9 +97,7 @@ namespace AsteroidOutpost.Systems
 
 
 			// Draw any entities being placed
-			IEnumerable<Constructing> placingEntities = world.GetComponents<Constructing>();
-			placingEntities =  placingEntities.Where(x => x.IsBeingPlaced).ToList();
-			foreach(var placingEntity in placingEntities)
+			foreach(var placingEntity in world.GetComponents<Constructing>().Where(x => x.IsBeingPlaced))
 			{
 				PowerGridNode relatedPowerNode = world.GetComponent<PowerGridNode>(placingEntity);
 				PowerGrid relatedGrid = GetPowerGrid(placingEntity);
@@ -115,6 +120,26 @@ namespace AsteroidOutpost.Systems
 			}
 
 
+			// Draw power symbols above structures not getting enough power
+			foreach (PowerGrid grid in powerGrid.Values)
+			{
+				foreach (PowerGridNode starvedNode in grid.powerNodes.Keys.Where(x => x.PowerStarved))
+				{
+					Position position = world.GetComponent<Position>(starvedNode);
+					spriteBatch.Draw(powerStarvedTexture,
+					                 world.WorldToScreen(position.Center),
+					                 null,
+					                 Color.White,
+					                 0f,
+					                 new Vector2(powerStarvedTexture.Width / 2f, powerStarvedTexture.Height / 2f), 
+					                 1f / world.ScaleFactor,
+					                 SpriteEffects.None,
+					                 0);
+				}
+			}
+
+
+			// Draw all power links
 			foreach (var grid in powerGrid.Values)
 			{
 				Color color;
@@ -142,6 +167,7 @@ namespace AsteroidOutpost.Systems
 				grid.recentlyActiveLinks.Clear();
 
 
+				// Draw all remaining power links
 				foreach (var nodeA in grid.powerNodes.Keys)
 				{
 					Constructing constructingA = world.GetNullableComponent<Constructing>(nodeA);
@@ -172,8 +198,12 @@ namespace AsteroidOutpost.Systems
 							linksAlreadyDrawn.Add(new Tuple<PowerGridNode, PowerGridNode>(nodeB, nodeA));
 						}
 					}
+
+					// Reset power starving on each power node
+					nodeA.PowerStarved = false;
 				}
 			}
+
 
 			spriteBatch.End();
 			base.Draw(gameTime);

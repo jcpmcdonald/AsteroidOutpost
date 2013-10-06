@@ -40,6 +40,7 @@ namespace AsteroidOutpost.Components
 				mineralsConstructed = MathHelper.Clamp(value, 0, Cost);
 			}
 		}
+		public int Priority { get; set; }
 
 
 		public void OnConstructionComplete(ConstructionCompleteEventArgs e)

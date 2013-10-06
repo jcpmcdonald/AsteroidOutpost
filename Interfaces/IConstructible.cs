@@ -9,5 +9,6 @@ namespace AsteroidOutpost.Interfaces
 	{
 		int Cost { get; set; }
 		float MineralsConstructed { get; set; }
+		int Priority { get; set; }
 	}
 }

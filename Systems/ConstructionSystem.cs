@@ -46,6 +46,7 @@ namespace AsteroidOutpost.Systems
 			List<IConstructible> constructibles = new List<IConstructible>();
 			constructibles.AddRange(world.GetComponents<Constructing>());
 			constructibles.AddRange(world.GetComponents<Upgrading>());
+			constructibles = constructibles.OrderByDescending(x => x.Priority).ToList();
 
 			foreach (var constructible in constructibles)
 			{
@@ -88,6 +89,7 @@ namespace AsteroidOutpost.Systems
 						}
 						else
 						{
+							// No minerals
 							// Construction Halts, no progress, no consumption
 						}
 					}
@@ -99,6 +101,18 @@ namespace AsteroidOutpost.Systems
 
 						// We should consume our little tidbit of power though:
 						powerGridSystem.GetPower(constructible as Component, powerToUse);
+					}
+				}
+				else
+				{
+					// No power
+					world.GetComponent<PowerGridNode>(constructible as Component).PowerStarved = true;
+					if(constructible.Priority > 0)
+					{
+						// A high-priority structure is power starved!
+
+						// Make sure no low-priority structures get power
+
 					}
 				}
 			}

@@ -32,6 +32,10 @@ namespace AsteroidOutpost.Components
 		public Vector2 PowerLinkPointRelative { get; set; }
 
 
+		[JsonIgnore][XmlIgnore]
+		public bool PowerStarved { get; set; }
+
+
 		/// <summary>
 		/// Returns the absolute location showing where the power link should be displayed
 		/// </summary>
