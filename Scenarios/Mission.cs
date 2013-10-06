@@ -8,10 +8,11 @@ namespace AsteroidOutpost.Scenarios
 	public class Mission
 	{
 		private String key;
-		private string description;
-		private Boolean done;
+		private String description;
+		private bool done;
 
-		private Boolean dirty = true;
+		private bool isNew = true;
+		private bool dirty = true;
 
 		public Mission(string key, string description, bool done)
 		{
@@ -61,6 +62,18 @@ namespace AsteroidOutpost.Scenarios
 			{
 				done = value;
 				dirty = true;
+			}
+		}
+
+		public bool New
+		{
+			get
+			{
+				return isNew;
+			}
+			set
+			{
+				isNew = value;
 			}
 		}
 

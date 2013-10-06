@@ -122,8 +122,8 @@ $(document).ready(function()
 		$(".btnMainMenu").click( function (event){ window.location = "Singleplayer.html"; });
 		
 		// Add some missions
-		scopeOf("MissionController").AddMission("buildMiners", "Build 3 miners near asteroids", true);
-		scopeOf("MissionController").AddMission("buildLaserTowers", "Build 2 laser towers", false);
+		AddMission("buildMiners", "Build 3 miners near asteroids", true);
+		AddMission("buildLaserTowers", "Build 2 laser towers", false);
 	}
 
 });
