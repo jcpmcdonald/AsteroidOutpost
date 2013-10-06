@@ -454,9 +454,7 @@ namespace AsteroidOutpost
 
 			frameRateCounter.StartOfDraw(gameTime);
 
-			spriteBatch.Begin();
-			starField.Draw(spriteBatch, Color.White);
-			spriteBatch.End();
+			starField.Draw(gameTime);
 
 			// Note: This needs to be called before we can draw Awesomium
 			base.Draw(gameTime);

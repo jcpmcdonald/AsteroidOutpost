@@ -12,13 +12,16 @@ namespace AsteroidOutpost.Screens
 {
 	public class LayeredStarField : DrawableGameComponent
 	{
-		private List<Layer> starLayers = new List<Layer>();
-		private List<Layer> anomalies = new List<Layer>();
-		private List<Layer> distantAnomalies = new List<Layer>();
+		//private List<Layer> starLayers = new List<Layer>();
+		//private List<Layer> anomalies = new List<Layer>();
+		//private List<Layer> distantAnomalies = new List<Layer>();
+		private List<Layer> layers = new List<Layer>();
+
 		private Vector2 offset = Vector2.Zero;
 		private Vector2? lastFocusPoint;
 
 		private AOGame aoGame;
+		private SpriteBatch spriteBatch;
 
 
 		public LayeredStarField(Game game)
@@ -30,34 +33,56 @@ namespace AsteroidOutpost.Screens
 
 		protected override void LoadContent()
 		{
+			spriteBatch = new SpriteBatch(aoGame.GraphicsDevice);
+
 			/*
 			starLayers.Add(new Tuple<Texture2D, float, Rectangle>(content.Load<Texture2D>("Scenes\\stars1"),
 			                                                      0.06f,
 			                                                      new Rectangle(GlobalRandom.Next(64), GlobalRandom.Next(64), GlobalRandom.Next(128, 512 - 64), GlobalRandom.Next(128, 512 - 64))));
 			*/
-			starLayers.Add(new Layer(Game.Content.Load<Texture2D>("Scenes\\stars1"),
-			                         0.04f,
-			                         new Rectangle(GlobalRandom.Next(64), GlobalRandom.Next(64), GlobalRandom.Next(128, 512 - 64), GlobalRandom.Next(128, 512 - 64))));
+			layers.Add(new Layer(){
+				Texture = Game.Content.Load<Texture2D>("Scenes\\stars1"),
+				Speed = 0.04f,
+				Tile = true,
+				TileRect = new Rectangle(GlobalRandom.Next(64),
+				                           GlobalRandom.Next(64),
+				                           GlobalRandom.Next(128, 512 - 64),
+				                           GlobalRandom.Next(128, 512 - 64))
+			});
 
-			starLayers.Add(new Layer(Game.Content.Load<Texture2D>("Scenes\\stars1"),
-			                         0.025f,
-			                         new Rectangle(GlobalRandom.Next(64), GlobalRandom.Next(64), GlobalRandom.Next(128, 512 - 64), GlobalRandom.Next(128, 512 - 64))));
+			layers.Add(new Layer(){
+				Texture = Game.Content.Load<Texture2D>("Scenes\\stars1"),
+				Speed = 0.025f,
+				Tile = true,
+				TileRect = new Rectangle(GlobalRandom.Next(64),
+				                           GlobalRandom.Next(64),
+				                           GlobalRandom.Next(128, 512 - 64),
+				                           GlobalRandom.Next(128, 512 - 64))
+			});
 
-			starLayers.Add(new Layer(Game.Content.Load<Texture2D>("Scenes\\stars1"),
-			                         0.0125f,
-			                         new Rectangle(GlobalRandom.Next(64), GlobalRandom.Next(64), GlobalRandom.Next(128, 512 - 64), GlobalRandom.Next(128, 512 - 64))));
+			layers.Add(new Layer(){
+				Texture = Game.Content.Load<Texture2D>("Scenes\\stars1"),
+				Speed = 0.0125f,
+				Tile = true,
+				TileRect = new Rectangle(GlobalRandom.Next(64),
+				                           GlobalRandom.Next(64),
+				                           GlobalRandom.Next(128, 512 - 64),
+				                           GlobalRandom.Next(128, 512 - 64))
+			});
 
+			layers.Add(new Layer(){
+				Texture = Game.Content.Load<Texture2D>("Scenes\\SpaceNebula"),
+				Speed = 0.03f,
+				Tint = new Color(200, 200, 200, 100),
+				Scale = 2f,
+				Position = new Vector2(-1500, -1500)
+			});
 
-			Layer nebula = new Layer(Game.Content.Load<Texture2D>("Scenes\\SpaceNebula"),
-			                         0.03f,
-			                         new Vector2(-1500, -1500));
-			nebula.Tint = new Color(200, 200, 200, 100);
-			nebula.Scale = 2f;
-			distantAnomalies.Add(nebula);
-
-			anomalies.Add(new Layer(Game.Content.Load<Texture2D>("Scenes\\IcePlanet"),
-			                        0.04f,
-			                        new Vector2(Game.GraphicsDevice.Viewport.Width * 0.3f, 500f)));
+			layers.Add(new Layer(){
+				Texture = Game.Content.Load<Texture2D>("Scenes\\IcePlanet"),
+				Speed = 0.04f,
+				Position = new Vector2(Game.GraphicsDevice.Viewport.Width * 0.3f, 500f)
+			});
 		}
 
 
@@ -83,31 +108,18 @@ namespace AsteroidOutpost.Screens
 		}
 
 
-
-
-
-		public void Draw(SpriteBatch spriteBatch, Color tint)
+		public override void Draw(GameTime gameTime)
 		{
-			spriteBatch.GraphicsDevice.Clear(Color.Black.Blend(tint));
+			spriteBatch.Begin();
+			spriteBatch.GraphicsDevice.Clear(Color.Black);
 
-
-
-			foreach (var starLayer in starLayers)
+			foreach (var layer in layers)
 			{
-				starLayer.Draw(spriteBatch, tint, offset);
+				layer.Draw(spriteBatch, offset);
 			}
+			spriteBatch.End();
 
-			foreach (var distantAnomaly in distantAnomalies)
-			{
-				distantAnomaly.Draw(spriteBatch, tint, offset);
-				//spriteBatch.Draw(distantAnomaly.Item1, distantAnomaly.Item3 + (offset * distantAnomaly.Item2), null, ColorPalette.ApplyTint(tint, new Color(200, 200, 200, 100)), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-			}
-
-			foreach (var anomaly in anomalies)
-			{
-				anomaly.Draw(spriteBatch, tint, offset);
-				//spriteBatch.Draw(anomaly.Item1, anomaly.Item3 + (offset * anomaly.Item2), null, tint, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-			}
+			base.Draw(gameTime);
 		}
 
 
