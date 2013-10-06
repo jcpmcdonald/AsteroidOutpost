@@ -80,7 +80,7 @@ namespace AsteroidOutpost
 		{
 			foreach (var button in ContextButtons)
 			{
-				if(keyboard[button.Hotkey] == EnhancedKeyState.JUST_PRESSED)
+				if(keyboard[button.Hotkey] == EnhancedKeyState.JUST_PRESSED && button.Enabled)
 				{
 					button.OnClick();
 				}
