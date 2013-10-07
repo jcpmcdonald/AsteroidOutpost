@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Newtonsoft.Json;
 using ProjectMercury;
 using ProjectMercury.Renderers;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
@@ -155,7 +156,7 @@ namespace AsteroidOutpost
 
 			settings = new Settings();
 			//world = new World(this);
-			starField = new LayeredStarField(this);
+			starField = new LayeredStarField(this, "Snow&Ice");
 			Components.Add(starField);
 			entityFactory = new EntityFactory();
 			upgradeFactory = new UpgradeFactory();

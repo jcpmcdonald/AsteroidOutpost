@@ -1,0 +1,36 @@
+{
+	"Layers" : [
+		{
+			"TexturePath" : "Snow&Ice\\stars1.png",
+			"Distance" : 30,
+			"Tiled" : true,
+		},
+		{
+			"TexturePath" : "Snow&Ice\\stars2.png",
+			"Distance" : 40,
+			"Tiled" : true,
+		},
+		{
+			"TexturePath" : "Snow&Ice\\stars3.png",
+			"Distance" : 70,
+			"Tiled" : true,
+		},
+		{
+			"TexturePath" : "Snow&Ice\\stars4.png",
+			"Distance" : 80,
+			"Tiled" : true,
+		},
+		{
+			"TexturePath" : "Snow&Ice\\SpaceNebula.png",
+			"Distance" : 35,
+			"Tint" : "200, 200, 200, 100",
+			"Scale" : 2.0,
+			"Position" : "-1500, -1500",
+		},
+		{
+			"TexturePath" : "Snow&Ice\\IcePlanet.png",
+			"Distance" : 20,
+			"Position" : "576, 500",
+		},
+	]
+}

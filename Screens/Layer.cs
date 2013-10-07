@@ -1,4 +1,9 @@
-﻿namespace AsteroidOutpost.Screens
+﻿using System;
+using System.IO;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
+
+namespace AsteroidOutpost.Screens
 {
 	using Microsoft.Xna.Framework;
 	using Microsoft.Xna.Framework.Graphics;
@@ -6,15 +11,23 @@
 	/// <summary>
 	/// Layer is an image scrolling in the background.
 	/// </summary>
-	internal class Layer
+	public class Layer
 	{
-		public Texture2D Texture { get; set; }
-		public float Speed { get; set; }
-		public Vector2 Position { get; set; }
-		public bool Tile { get; set; }
-		public Rectangle TileRect { get; set; }
+		public String TexturePath { get; set; }
+		public float Distance { get; set; }
 		public Color Tint { get; set; }
 		public float Scale { get; set; }
+		
+		// If set, this layer will be tiled
+		public bool Tiled { get; set; }
+
+		// The position of layer if it's not tiled
+		public Vector2 Position { get; set; }
+
+
+		[JsonIgnore][XmlIgnore]
+		public Texture2D Texture { get; set; }
+
 
 
 		public Layer()
@@ -24,23 +37,29 @@
 		}
 
 
+		public void LoadContent(GraphicsDevice graphicsDevice)
+		{
+			Texture = Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\scenes\" + TexturePath));
+		}
+
+
 		public void Draw(SpriteBatch spriteBatch, Vector2 offset)
 		{
 
-			if (Tile)
+			if (Tiled)
 			{
 				Rectangle viewportRect = new Rectangle(0, 0, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height);
 
-				int gridsHorizontal = (int)((viewportRect.Width / (TileRect.Width * Scale)) + 1) + 1;
-				int gridsVertical = (int)((viewportRect.Height / (TileRect.Height * Scale)) + 1) + 1;
+				int gridsHorizontal = (int)((viewportRect.Width / (Texture.Width * Scale)) + 1) + 1;
+				int gridsVertical = (int)((viewportRect.Height / (Texture.Height * Scale)) + 1) + 1;
 
 
 				Vector2 start = //world.WorldToScreen(world.HUD.FocusWorldPoint)
 					new Vector2(viewportRect.Center.X, viewportRect.Center.Y)
-					+ new Vector2((offset.X * Speed), (offset.Y * Speed));
+					+ new Vector2((offset.X / Distance), (offset.Y / Distance));
 
-				start = new Vector2(start.X % (TileRect.Width * Scale), start.Y % (TileRect.Height * Scale))
-				        - new Vector2((TileRect.Width * Scale), (TileRect.Height * Scale));
+				start = new Vector2(start.X % (Texture.Width * Scale), start.Y % (Texture.Height * Scale))
+				        - new Vector2((Texture.Width * Scale), (Texture.Height * Scale));
 
 				start = start + new Vector2(viewportRect.X, viewportRect.Y);
 
@@ -48,12 +67,12 @@
 				{
 					for (int y = 0; y < gridsVertical; y++)
 					{
-						Vector2 destinationLocation = start + new Vector2(x * TileRect.Width * Scale, y * TileRect.Height * Scale);
+						Vector2 destinationLocation = start + new Vector2(x * Texture.Width * Scale, y * Texture.Height * Scale);
 						//spriteBatch.DrawRectangle(destinationLocation, new Vector2(imgSize.Width, imgSize.Height), Color.Red);
 
 						spriteBatch.Draw(Texture,
 						                 destinationLocation,
-						                 new Rectangle(TileRect.X, TileRect.Y, (int)(TileRect.Width * Scale), (int)(TileRect.Height * Scale)),
+						                 new Rectangle(0, 0, (int)(Texture.Width * Scale), (int)(Texture.Height * Scale)),
 						                 Tint,
 						                 0,
 						                 Vector2.Zero,
@@ -68,7 +87,7 @@
 			else
 			{
 				spriteBatch.Draw(Texture,
-				                 Position + (offset * Speed),
+				                 Position + (offset / Distance),
 				                 null,
 				                 Tint,
 				                 0,
