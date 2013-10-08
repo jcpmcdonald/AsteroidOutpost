@@ -156,7 +156,8 @@ namespace AsteroidOutpost
 
 			settings = new Settings();
 			//world = new World(this);
-			starField = new LayeredStarField(this, "Snow&Ice");
+			//starField = new LayeredStarField(this, "Snow&Ice");
+			starField = new LayeredStarField(this, "Sufista");
 			Components.Add(starField);
 			entityFactory = new EntityFactory();
 			upgradeFactory = new UpgradeFactory();

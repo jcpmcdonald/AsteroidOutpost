@@ -15,9 +15,6 @@ namespace AsteroidOutpost.Screens
 {
 	public class LayeredStarField : DrawableGameComponent
 	{
-		//private List<Layer> starLayers = new List<Layer>();
-		//private List<Layer> anomalies = new List<Layer>();
-		//private List<Layer> distantAnomalies = new List<Layer>();
 		public List<Layer> Layers = new List<Layer>();
 
 		private Vector2 offset = Vector2.Zero;
@@ -42,55 +39,6 @@ namespace AsteroidOutpost.Screens
 		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(aoGame.GraphicsDevice);
-
-			/*
-			starLayers.Add(new Tuple<Texture2D, float, Rectangle>(content.Load<Texture2D>("Scenes\\stars1"),
-			                                                      0.06f,
-			                                                      new Rectangle(GlobalRandom.Next(64), GlobalRandom.Next(64), GlobalRandom.Next(128, 512 - 64), GlobalRandom.Next(128, 512 - 64))));
-			*/
-			//Layers.Add(new Layer(){
-			//    TexturePath = @"Snow&Ice\stars1.png",
-			//    Speed = 0.04f,
-			//    Tiled = true,
-			//    TileRect = new Rectangle(GlobalRandom.Next(64),
-			//                             GlobalRandom.Next(64),
-			//                             GlobalRandom.Next(128, 512 - 64),
-			//                             GlobalRandom.Next(128, 512 - 64))
-			//});
-
-			//Layers.Add(new Layer(){
-			//    TexturePath = @"Snow&Ice\stars1.png",
-			//    Speed = 0.025f,
-			//    Tiled = true,
-			//    TileRect = new Rectangle(GlobalRandom.Next(64),
-			//                             GlobalRandom.Next(64),
-			//                             GlobalRandom.Next(128, 512 - 64),
-			//                             GlobalRandom.Next(128, 512 - 64))
-			//});
-
-			//Layers.Add(new Layer(){
-			//    TexturePath = @"Snow&Ice\stars1.png",
-			//    Speed = 0.0125f,
-			//    Tiled = true,
-			//    TileRect = new Rectangle(GlobalRandom.Next(64),
-			//                             GlobalRandom.Next(64),
-			//                             GlobalRandom.Next(128, 512 - 64),
-			//                             GlobalRandom.Next(128, 512 - 64))
-			//});
-
-			//Layers.Add(new Layer(){
-			//    TexturePath = @"Snow&Ice\SpaceNebula.png",
-			//    Speed = 0.03f,
-			//    Tint = new Color(200, 200, 200, 100),
-			//    Scale = 2f,
-			//    Position = new Vector2(-1500, -1500)
-			//});
-
-			//Layers.Add(new Layer(){
-			//    TexturePath = @"Snow&Ice\IcePlanet.png",
-			//    Speed = 0.04f,
-			//    Position = new Vector2(aoGame.GraphicsDevice.Viewport.Width * 0.3f, 500f)
-			//});
 
 			foreach (var layer in Layers)
 			{
