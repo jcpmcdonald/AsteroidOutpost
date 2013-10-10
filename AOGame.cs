@@ -69,7 +69,7 @@ namespace AsteroidOutpost
 		private bool changingTrack = false;
 		private bool musicStarted = false;
 
-		private SceneManager sceneManager;
+		public SceneManager sceneManager;
 		private World world;
 		private EntityFactory entityFactory;
 		private UpgradeFactory upgradeFactory;
@@ -80,6 +80,7 @@ namespace AsteroidOutpost
 
 		private List<String> executeAwesomiumJSNextCycle = new List<string>();
 
+		private Vector2? previousMousePos = null;
 
 		public Profile ActiveProfile { get; private set; }
 
@@ -384,9 +385,19 @@ namespace AsteroidOutpost
 				if(world != null)
 				{
 					base.Update(new GameTime(accumulatedTime, new TimeSpan((long)(fixedDeltaTime.Ticks * world.TimeMultiplier))));
+					previousMousePos = null;
 				}
 				else
 				{
+					Vector2 currentMouse = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+					Vector2 mouseDrift = Vector2.Zero;
+					if(previousMousePos != null)
+					{
+						mouseDrift = currentMouse - previousMousePos.Value;
+					}
+					sceneManager.Move(mouseDrift);
+					previousMousePos = currentMouse;
+
 					base.Update(new GameTime(accumulatedTime, fixedDeltaTime));
 				}
 
@@ -488,6 +499,8 @@ namespace AsteroidOutpost
 		{
 			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\data\HUD\Singleplayer.html").ToUri();
 			destroyWorld = true;
+
+			sceneManager.SetScene("Sufista");
 		}
 
 

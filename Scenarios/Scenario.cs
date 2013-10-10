@@ -18,7 +18,7 @@ namespace AsteroidOutpost.Scenarios
 	public abstract class Scenario
 	{
 		public String Name { get; set; }
-		protected String Author { get; set; }
+		public String SceneName { get; set; }
 
 		protected AOGame theGame;
 		protected World world;

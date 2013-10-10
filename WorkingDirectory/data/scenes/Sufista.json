@@ -13,9 +13,9 @@
 		},
 		{
 			"TexturePath" : "Sufista\\main_clouds.png",
-			"Distance" : 35,
+			"Distance" : 70,
 			"Scale" : 0.5,
-			"Position" : "-100, -100",
+			"Position" : "-200, -200",
 		},
 	]
 }

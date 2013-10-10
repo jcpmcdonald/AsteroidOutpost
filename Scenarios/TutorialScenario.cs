@@ -31,7 +31,7 @@ namespace AsteroidOutpost.Scenarios
 		public TutorialScenario()
 		{
 			Name = "Tutorial";
-			Author = "John McDonald";
+			SceneName = "snow&ice";
 		}
 
 

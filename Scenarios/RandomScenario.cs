@@ -28,7 +28,7 @@ namespace AsteroidOutpost.Scenarios
 		public RandomScenario()
 		{
 			Name = "Endless";
-			Author = "John McDonald";
+			SceneName = "Snow&Ice";
 		}
 
 

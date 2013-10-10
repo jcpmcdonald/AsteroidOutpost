@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace AsteroidOutpost.Scenes
 {
-	internal class SceneManager : DrawableGameComponent
+	public class SceneManager : DrawableGameComponent
 	{
 		private AOGame game;
 		private SpriteBatch spriteBatch;
@@ -95,6 +95,12 @@ namespace AsteroidOutpost.Scenes
 			spriteBatch.End();
 
 			base.Draw(gameTime);
+		}
+
+
+		public void Move(Vector2 delta)
+		{
+			currentScene.Move(delta);
 		}
 	}
 }

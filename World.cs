@@ -41,7 +41,6 @@ namespace AsteroidOutpost
 		private readonly UpgradeFactory upgradeFactory;
 		private SpriteBatch spriteBatch;
 
-		private Scene layeredStarField;
 		private QuadTree<Position> quadTree;
 		private AwesomiumComponent awesomium;
 		private readonly Dictionary<int, List<Component>> entityDictionary = new Dictionary<int, List<Component>>(2000); // Note: This variable must be kept thread-safe
@@ -911,23 +910,24 @@ namespace AsteroidOutpost
 
 			isServer = true;
 			this.scenario.Start((AOGame)Game, 1);
+			SetScene(scenario.SceneName);
 			network.StartGame();
 		}
 
 
 
-		/// <summary>
-		/// Starts this instance of the game as a client
-		/// </summary>
-		public void StartClient(int startingComponentID)
-		{
-			nextComponentID = startingComponentID;
-			isServer = false;
-			//ScreenMan.SwitchScreens("Game");
-			hud.FocusWorldPoint = new Vector2(MapWidth / 2f, MapHeight / 2f);
+		///// <summary>
+		///// Starts this instance of the game as a client
+		///// </summary>
+		//public void StartClient(int startingComponentID)
+		//{
+		//    nextComponentID = startingComponentID;
+		//    isServer = false;
+		//    //ScreenMan.SwitchScreens("Game");
+		//    hud.FocusWorldPoint = new Vector2(MapWidth / 2f, MapHeight / 2f);
 
-			AddController(new Controller(this, ControllerRole.Local, GetForcesOnTeam(Team.Team2)[0]));
-		}
+		//    AddController(new Controller(this, ControllerRole.Local, GetForcesOnTeam(Team.Team2)[0]));
+		//}
 
 
 		/// <summary>
@@ -1135,9 +1135,9 @@ namespace AsteroidOutpost
 
 
 
-		public void SetScene(Scene starField)
+		public void SetScene(String name)
 		{
-			this.layeredStarField = starField;
+			theGame.sceneManager.SetScene(name);
 		}
 
 

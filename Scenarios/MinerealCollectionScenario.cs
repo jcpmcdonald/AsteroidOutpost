@@ -26,7 +26,7 @@ namespace AsteroidOutpost.Scenarios
 		public MinerealCollectionScenario()
 		{
 			Name = "Mineral Grab";
-			Author = "John McDonald";
+			SceneName = "snow&ice";
 		}
 
 
