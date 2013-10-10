@@ -179,7 +179,8 @@
     <Compile Include="Profile.cs" />
     <Compile Include="Scenarios\MinerealCollectionScenario.cs" />
     <Compile Include="Scenarios\Mission.cs" />
-    <Compile Include="Screens\Layer.cs" />
+    <Compile Include="Scenes\Layer.cs" />
+    <Compile Include="Scenes\SceneManager.cs" />
     <Compile Include="Systems\AutoHealSystem.cs" />
     <Compile Include="Systems\FrameRateCounter.cs" />
     <Compile Include="Interfaces\IIdentifiable.cs" />
@@ -215,7 +216,7 @@
     <Compile Include="Networking\BinaryStreamExtensions.cs" />
     <Compile Include="Networking\AOOutgoingMessage.cs" />
     <Compile Include="Networking\Network.cs" />
-    <Compile Include="Screens\LayeredStarField.cs" />
+    <Compile Include="Scenes\Scene.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Systems\AccumulationSystem.cs" />
     <Compile Include="Systems\AnimationSystem.cs" />

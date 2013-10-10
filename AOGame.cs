@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows.Forms;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Scenarios;
+using AsteroidOutpost.Scenes;
 using AsteroidOutpost.Screens;
 using Awesomium.Core;
 using AwesomiumXNA;
@@ -48,8 +49,6 @@ namespace AsteroidOutpost
 		#endregion
 
 
-		#region Fields
-
 		private bool moveWindow = false;
 		private int moveWindowX;
 		private int moveWindowY;
@@ -70,7 +69,7 @@ namespace AsteroidOutpost
 		private bool changingTrack = false;
 		private bool musicStarted = false;
 
-		private LayeredStarField starField;
+		private SceneManager sceneManager;
 		private World world;
 		private EntityFactory entityFactory;
 		private UpgradeFactory upgradeFactory;
@@ -81,7 +80,6 @@ namespace AsteroidOutpost
 
 		private List<String> executeAwesomiumJSNextCycle = new List<string>();
 
-		#endregion
 
 		public Profile ActiveProfile { get; private set; }
 
@@ -157,8 +155,9 @@ namespace AsteroidOutpost
 			settings = new Settings();
 			//world = new World(this);
 			//starField = new LayeredStarField(this, "Snow&Ice");
-			starField = new LayeredStarField(this, "Sufista");
-			Components.Add(starField);
+			//starField = new Scene(this, "Sufista");
+			sceneManager = new SceneManager(this);
+			Components.Add(sceneManager);
 			entityFactory = new EntityFactory();
 			upgradeFactory = new UpgradeFactory();
 
@@ -314,6 +313,8 @@ namespace AsteroidOutpost
 
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
+			sceneManager.SetScene("Sufista");
+
 			cursorTexture = Texture2DEx.FromStreamWithPremultAlphas(GraphicsDevice, File.OpenRead(@"..\data\images\Cursor.png"));
 
 			//ThreadPool.QueueUserWorkItem(delegate { EntityFactory.LoadContent(GraphicsDevice); });
@@ -456,7 +457,7 @@ namespace AsteroidOutpost
 
 			frameRateCounter.StartOfDraw(gameTime);
 
-			starField.Draw(gameTime);
+			//sceneManager.Draw(gameTime);
 
 			// Note: This needs to be called before we can draw Awesomium
 			base.Draw(gameTime);

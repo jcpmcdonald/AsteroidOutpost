@@ -10,6 +10,7 @@ using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Scenarios;
+using AsteroidOutpost.Scenes;
 using AsteroidOutpost.Screens;
 using AsteroidOutpost.Screens.HeadsUpDisplay;
 using Awesomium.Core;
@@ -40,7 +41,7 @@ namespace AsteroidOutpost
 		private readonly UpgradeFactory upgradeFactory;
 		private SpriteBatch spriteBatch;
 
-		private LayeredStarField layeredStarField;
+		private Scene layeredStarField;
 		private QuadTree<Position> quadTree;
 		private AwesomiumComponent awesomium;
 		private readonly Dictionary<int, List<Component>> entityDictionary = new Dictionary<int, List<Component>>(2000); // Note: This variable must be kept thread-safe
@@ -1134,7 +1135,7 @@ namespace AsteroidOutpost
 
 
 
-		public void SetScene(LayeredStarField starField)
+		public void SetScene(Scene starField)
 		{
 			this.layeredStarField = starField;
 		}

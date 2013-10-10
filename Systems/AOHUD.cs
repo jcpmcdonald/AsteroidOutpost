@@ -71,7 +71,7 @@ namespace AsteroidOutpost.Systems
 			// Set up some hotkeys
 			hotkeys.Add(Keys.H, GoHome);
 			hotkeys.Add(Keys.R, RefreshEntityTemplates);
-			hotkeys.Add(Keys.OemPlus, TimeSpeedUp);
+			hotkeys.Add(Keys.OemPlus, TimeSpeedUp);			// Shhhh. For debugging only
 			hotkeys.Add(Keys.OemMinus, TimeSlowDown);
 			hotkeys.Add(Keys.D0, TimeReset);
 

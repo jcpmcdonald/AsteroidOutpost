@@ -2,12 +2,11 @@
 using System.IO;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace AsteroidOutpost.Screens
+namespace AsteroidOutpost.Scenes
 {
-	using Microsoft.Xna.Framework;
-	using Microsoft.Xna.Framework.Graphics;
-
 	/// <summary>
 	/// Layer is an image scrolling in the background.
 	/// </summary>
