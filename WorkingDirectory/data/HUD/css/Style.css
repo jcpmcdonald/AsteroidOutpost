@@ -1,8 +1,13 @@
 
 
 @font-face {
-    font-family: "Roboto";
-    src: url("../Fonts/Roboto-Regular.ttf");
+	font-family: "Roboto";
+	src: url("../Fonts/Roboto-Regular.ttf");
+}
+
+@font-face {
+	font-family: "Orator";
+	src: url("../Fonts/OratorStd.otf");
 }
 
 
@@ -17,10 +22,16 @@ body
 	font-family: "Roboto";
 }
 
-body.nebula
+body.inXNA.snowice
 {
 	/* This will be visible when viewing in a web-browser */
-	background-image: url("../images/TestNebula.png");
+	background-image: url("../images/TestSceneSnow&Ice.png");
+}
+
+body.inXNA.sufista
+{
+	/* This will be visible when viewing in a web-browser */
+	background-image: url("../images/TestSceneSufista.png");
 }
 
 
@@ -47,14 +58,5 @@ a
 {
 	color: inherit;
 	text-decoration: inherit;
-}
-
-#logo
-{
-	display: block;
-    margin-left:auto;
-	margin-right:auto;
-	margin-top: 6%;
-	margin-bottom: 10%;
 }
 

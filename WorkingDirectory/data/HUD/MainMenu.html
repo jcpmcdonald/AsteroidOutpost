@@ -5,21 +5,40 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="css/Style.css" type="text/css" />
 <link rel="stylesheet" href="css/Menu.css" type="text/css" />
+
 <script type="text/javascript" src="js/jquery-latest.js"></script>
+<script type="text/javascript" src="js/jquery.fittext.js"></script>
+
 <script type="text/javascript" src="js/KeyDefinitions.js"></script>
 <script type="text/javascript" src="js/Common.js"></script>
 <script type="text/javascript" src="js/Menu.js"></script>
+
 </head>
-<body>
-	<img id="selectionMarker" src="images/SelectionArrow.png">
+<body class="sufista">
 	<div id="Menu">
-		<img id="logo" src="images/AO.png">
-		<div id="MenuItems">
-			<h2 id="singleplayer" href="Singleplayer.html" call="xna.PopulateScenarioList();">Singleplayer</h2>
-			<h2 id="multiplayer" class="disabled" href="ServerBrowser.html">Multiplayer</h2>
-			<h2 id="credits" href="Credits.html">Credits</h2>
-			<h2 id="exit" call="xna.Exit()">Exit</h2>
-		</div>
+		<img id="ao" src="images/main/ao.png">
+		<img id="logo" src="images/main/logo.png">
+		
+		
+		<a href="Singleplayer.html" call="xna.PopulateScenarioList();">
+			<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">New Game</span></div>
+		</a>
+		
+		
+		<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Continue</span></div>
+		<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Options</span></div>
+		<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Soundtrack</span></div>
+		
+		<a call="xna.Exit()">
+			<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Exit</span></div>
+		</a>
+		
+		
+		<!-- <div id="MenuItems"> -->
+			<!-- <a id="singleplayer" class="button" href="Singleplayer.html" call="xna.PopulateScenarioList();">Singleplayer</a><br/> -->
+			<!-- <a id="credits" class="button" href="Credits.html">Credits</a><br/> -->
+			<!-- <a id="exit" class="button" call="xna.Exit()">Exit</a><br/> -->
+		<!-- </div> -->
 	</div>
 </body>
 </html>

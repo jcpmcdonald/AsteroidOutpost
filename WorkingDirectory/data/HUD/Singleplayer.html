@@ -5,21 +5,41 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="css/Style.css" type="text/css" />
 <link rel="stylesheet" href="css/Menu.css" type="text/css" />
+
 <script type="text/javascript" src="js/jquery-latest.js"></script>
+<script type="text/javascript" src="js/jquery.fittext.js"></script>
+
 <script type="text/javascript" src="js/KeyDefinitions.js"></script>
 <script type="text/javascript" src="js/Common.js"></script>
 <script type="text/javascript" src="js/Menu.js"></script>
 </head>
-<body>
-	<img id="selectionMarker" src="images/SelectionArrow.png">
+<body class="sufista">
 	<div id="Menu">
-		<img id="logo" src="images/AO.png">
-		<div id="MenuItems">
-			<h2 href="HUD.html" call="xna.StartWorld('World1')">World1</h3>
-			<h2 href="HUD.html" call="xna.StartWorld('Tutorial')">Tutorial</h3>
-			<h2 href="HUD.html" call="xna.StartWorld('Endless')">Endless</h3>
-			<h2 href="MainMenu.html">Back</h3>
-		</div>
+		<img id="ao" src="images/main/ao.png">
+		<img id="logo" src="images/main/logo.png">
+		
+		<a href="HUD.html" call="xna.StartWorld('World1')">
+			<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">World1</span></div>
+		</a>
+		
+		<a href="HUD.html" call="xna.StartWorld('Tutorial')">
+			<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Tutorial</span></div>
+		</a>
+		
+		<a href="HUD.html" call="xna.StartWorld('Endless')">
+			<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Endless</span></div>
+		</a>
+		
+		<a href="MainMenu.html">
+			<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Back</span></div>
+		</a>
+		
+		<!-- <div id="MenuItems"> -->
+			<!-- <h2 href="HUD.html" call="xna.StartWorld('World1')">World1</h3> -->
+			<!-- <h2 href="HUD.html" call="xna.StartWorld('Tutorial')">Tutorial</h3> -->
+			<!-- <h2 href="HUD.html" call="xna.StartWorld('Endless')">Endless</h3> -->
+			<!-- <h2 href="MainMenu.html">Back</h3> -->
+		<!-- </div> -->
 	</div>
 </body>
 </html>

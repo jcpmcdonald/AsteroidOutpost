@@ -11,14 +11,14 @@ $(document).ready(function ()
 {
 	if (!InXNA())
 	{
-		$("body").addClass("nebula");
+		$("body").addClass("inXNA");
 	}
 });
 
 
 // Inject a new function to make working inside scopes a little nicer
 window.scopeOf = function(selector){
-    return angular.element('[ng-controller=' + selector + ']').scope();
+	return angular.element('[ng-controller=' + selector + ']').scope();
 };
 
 
