@@ -12,6 +12,7 @@ using AsteroidOutpost.Screens;
 using Awesomium.Core;
 using AwesomiumXNA;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -68,6 +69,8 @@ namespace AsteroidOutpost
 		private int currentTrack;
 		private bool changingTrack = false;
 		private bool musicStarted = false;
+
+		private Dictionary<String, SoundEffect> soundEffects = new Dictionary<string, SoundEffect>();
 
 		public SceneManager sceneManager;
 		private World world;
@@ -227,6 +230,7 @@ namespace AsteroidOutpost
 			jsXNA.Bind("StartWorld", false, StartWorld);
 			jsXNA.Bind("PopulateScenarioList", false, PopulateScenarioList);
 			jsXNA.Bind("Exit", false, Exit);
+			jsXNA.Bind("PlaySound", false, PlaySound);
 
 			// Create somewhere to log messages to
 			JSObject jsConsole = awesomium.WebView.CreateGlobalJavascriptObject("console");
@@ -235,6 +239,18 @@ namespace AsteroidOutpost
 
 			//awesomium.WebView.Source = @"..\UI\MainMenu.html".ToUri();
 			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\data\HUD\MainMenu.html").ToUri();
+		}
+
+
+		private void PlaySound(object sender, JavascriptMethodEventArgs javascriptMethodEventArgs)
+		{
+			String soundName = javascriptMethodEventArgs.Arguments[0].ToString();
+			PlaySound(soundName);
+		}
+
+		private void PlaySound(String soundName)
+		{
+			soundEffects[soundName.ToLowerInvariant()].Play();
 		}
 
 
@@ -311,10 +327,17 @@ namespace AsteroidOutpost
 			}
 
 			ActiveProfile = new Profile();
-
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			sceneManager.SetScene("Sufista");
+
+
+			foreach (var soundFileName in Directory.EnumerateFiles(@"..\data\soundEffects\", "*.wav"))
+			{
+				FileInfo soundFileInfo = new FileInfo(soundFileName);
+				soundEffects.Add(soundFileInfo.Name.Replace(".wav", "").ToLowerInvariant(), SoundEffect.FromStream(File.OpenRead(soundFileName)));
+			}
+
 
 			cursorTexture = Texture2DEx.FromStreamWithPremultAlphas(GraphicsDevice, File.OpenRead(@"..\data\images\Cursor.png"));
 

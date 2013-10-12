@@ -1,6 +1,6 @@
 <!DOCTYPE html>  
 
-<html>
+<html ng-app>
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" href="css/Style.css" type="text/css" />
@@ -8,38 +8,49 @@
 
 <script type="text/javascript" src="js/jquery-latest.js"></script>
 <script type="text/javascript" src="js/jquery.fittext.js"></script>
+	<script type="text/javascript" src="js/angular.min.js"></script>
 
 <script type="text/javascript" src="js/KeyDefinitions.js"></script>
 <script type="text/javascript" src="js/Common.js"></script>
 <script type="text/javascript" src="js/Menu.js"></script>
+<script type="text/javascript" src="js/ScenarioController.js"></script>
 </head>
 <body class="sufista">
 	<div id="Menu">
 		<img id="ao" src="images/main/ao.png">
 		<img id="logo" src="images/main/logo.png">
 		
-		<a href="HUD.html" call="xna.StartWorld('World1')">
-			<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">World1</span></div>
-		</a>
 		
-		<a href="HUD.html" call="xna.StartWorld('Tutorial')">
-			<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Tutorial</span></div>
-		</a>
+		<div ng-controller="ScenarioController">
+			
+			<div ng-repeat="scenario in AvailableScenarios">
+				<a href="HUD.html" call="xna.PlaySound('select_forward'); xna.StartWorld('{{scenario.name}}');">
+					<div class="imgButtonWrap">
+						<img src="images/main/button_null.png" class="imgButton" />
+						<span class="buttontext fit">{{scenario.name}}</span>
+					</div>
+				</a>
+				<!-- <span id="{{button.Name.replace(' ', '')}}" index="{{$index}}" call="{{button.CallbackJS}}" onClick="XNACall($(this));" class="button contextButton {{button.EnabledCSS}}" style="background-image: url('{{button.Image}}');"></span> -->
+			</div>
+			
+		</div>
 		
-		<a href="HUD.html" call="xna.StartWorld('Endless')">
-			<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Endless</span></div>
-		</a>
+		<!-- <a href="HUD.html" call="xna.PlaySound('select_forward'); xna.StartWorld('World1');"> -->
+			<!-- <div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">World1</span></div> -->
+		<!-- </a> -->
 		
-		<a href="MainMenu.html">
+		<!-- <a href="HUD.html" call="xna.PlaySound('select_forward'); xna.StartWorld('Tutorial');"> -->
+			<!-- <div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Tutorial</span></div> -->
+		<!-- </a> -->
+		
+		<!-- <a href="HUD.html" call="xna.PlaySound('select_forward'); xna.StartWorld('Endless');"> -->
+			<!-- <div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Endless</span></div> -->
+		<!-- </a> -->
+		
+		<a href="MainMenu.html" call="xna.PlaySound('select_back');">
 			<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Back</span></div>
 		</a>
 		
-		<!-- <div id="MenuItems"> -->
-			<!-- <h2 href="HUD.html" call="xna.StartWorld('World1')">World1</h3> -->
-			<!-- <h2 href="HUD.html" call="xna.StartWorld('Tutorial')">Tutorial</h3> -->
-			<!-- <h2 href="HUD.html" call="xna.StartWorld('Endless')">Endless</h3> -->
-			<!-- <h2 href="MainMenu.html">Back</h3> -->
-		<!-- </div> -->
 	</div>
 </body>
 </html>

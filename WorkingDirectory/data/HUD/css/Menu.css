@@ -86,7 +86,7 @@ body, html {
 #ao
 {
 	display: block;
-	width: 20%;
+	width: 22.7%;
 	margin-left:auto;
 	margin-right:auto;
 	padding-top: 3%;
@@ -99,7 +99,7 @@ body, html {
 	margin-left:auto;
 	margin-right:auto;
 	margin-top: 0;
-	margin-bottom: 2%;
+	margin-bottom: 7%;
 }
 
 .button
@@ -148,7 +148,7 @@ body, html {
 {
 	display: block;
 	margin-top: -14%;
-	margin-bottom: 6%;
+	margin-bottom: 10%;
 	width: 100%;
 	pointer-events:none;
 }
