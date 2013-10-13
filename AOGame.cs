@@ -546,7 +546,7 @@ namespace AsteroidOutpost
 			Scenario scenario;
 			switch(mapName.ToLower())
 			{
-			case "world1":
+			case "mineral grab":
 				scenario = new MinerealCollectionScenario();
 				break;
 

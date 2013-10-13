@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<sprite name="Bullet" fps="10">
+	<set name="Default" fpsMultiplier="1" />
+	<animation name="Idle">
+		<nextAnimations />
+	</animation>
+	<orientation name="0" />
+	<orientation name="45" />
+	<orientation name="90" />
+	<orientation name="135" />
+	<orientation name="180" />
+	<orientation name="225" />
+	<orientation name="270" />
+	<orientation name="315" />
+	<sequence set="Default" animation="Idle" orientation="0">
+		<frame image="Bullet.png">
+			<anchor x="10" y="10" />
+			<rectangle x="0" y="0" w="20" h="20" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="45">
+		<frame image="Bullet.png">
+			<anchor x="10" y="10" />
+			<rectangle x="20" y="0" w="20" h="20" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="90">
+		<frame image="Bullet.png">
+			<anchor x="10" y="10" />
+			<rectangle x="40" y="0" w="20" h="20" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="135">
+		<frame image="Bullet.png">
+			<anchor x="10" y="10" />
+			<rectangle x="60" y="0" w="20" h="20" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="180">
+		<frame image="Bullet.png">
+			<anchor x="10" y="10" />
+			<rectangle x="80" y="0" w="20" h="20" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="225">
+		<frame image="Bullet.png">
+			<anchor x="10" y="10" />
+			<rectangle x="100" y="0" w="20" h="20" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="270">
+		<frame image="Bullet.png">
+			<anchor x="10" y="10" />
+			<rectangle x="120" y="0" w="20" h="20" />
+		</frame>
+	</sequence>
+	<sequence set="Default" animation="Idle" orientation="315">
+		<frame image="Bullet.png">
+			<anchor x="10" y="10" />
+			<rectangle x="140" y="0" w="20" h="20" />
+		</frame>
+	</sequence>
+</sprite>

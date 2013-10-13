@@ -94,6 +94,25 @@
 			}
 		},
 		{
+			"Name" : "Gatling Gun",
+			"Image" : "images/GatlingGun.png",
+			"Description" : "Hammers Mass",
+			"Slot" : 5,
+			"HotkeyName" : "G",
+			"OnClickData" : {
+				"Method" : "hud.Build",
+				"Parameters" : [
+					"%Gatling Gun.EntityName.Name%",
+				],
+			},
+			"ImportantValues" : {
+				"Cost" : "%Gatling Gun.Constructing.Cost% minerals",
+				"HP" : "%Gatling Gun.HitPoints.TotalArmour%",
+				"Damage" : "? dps",
+				"Range" : "%Gatling Gun.ProjectileLauncher.Range%",
+			}
+		},
+		{
 			"Name" : "Missile Tower",
 			"Image" : "images/MissileTower.png",
 			"Description" : "Fires missiles",

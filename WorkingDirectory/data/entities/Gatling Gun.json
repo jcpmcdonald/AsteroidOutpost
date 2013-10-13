@@ -1,0 +1,42 @@
+{
+	"Name" : "Gatling Gun",
+	"Components" : {
+		"EntityName" : {
+			"Name" : "Gatling Gun",
+		},
+		"Position" : {
+			"Radius" : 30,
+		},
+		"Animator" : {
+			"SpriteName" : "Gatling Gun",
+			"Scale" : 0.6,
+			"CurrentAnimation" : "Idle",
+		},
+		"PowerGridNode" : {
+			"PowerLinkPointRelative" : "0, 0",
+		},
+		"Constructing" : {
+			"Cost" : 200,
+		},
+		"HitPoints" : {
+			"Armour" : 150,
+			"TotalArmour" : 150,
+		},
+		"AutoHeal" : {
+			"Delay" : 15,
+			"Rate" : 3,
+		},
+		"ProjectileLauncher" : {
+			"ProjectileType" : "Small Bullet",
+			"Range" : 300,
+			"FireRate" : 50,
+			"InitialVelocity" : 500,
+		},
+		"Targetable" : {},
+		"Perishable" : {
+			"ParticleEffectOnPerish" : "Basic Explosion",
+		},
+		"Selectable" : {},
+	},
+}
+

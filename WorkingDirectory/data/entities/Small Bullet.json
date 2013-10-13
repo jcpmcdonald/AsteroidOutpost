@@ -1,0 +1,37 @@
+{
+	"Name" : "Small Bullet",
+	"Components" : {
+		"EntityName" : {
+			"Name" : "Small Bullet",
+		},
+		"Position" : {
+			"Radius" : 1,
+			"Solid" : false,
+		},
+		"Velocity" : {
+			"CurrentVelocity" : "0, 0",
+		},
+		"Animator" : {
+			"SpriteName" : "Bullet",
+			"Scale" : 0.1,
+			"CurrentAnimation" : "Idle",
+			"CurrentOrientation" : 0,
+		},
+		"Projectile" : {
+			"Damage" : 2,
+			"AccelerationVector" : "**",
+			"DetonationDistance" : 0,
+		},
+		"HitPoints" : {
+			"Armour" : 20,
+			"TotalArmour" : 20,
+		},
+		"Perishable" : {
+			"ParticleEffectOnPerish" : "Impact",
+		},
+		"Spin" : {
+			"RotationSpeed" : 45,
+		}
+	}
+}
+

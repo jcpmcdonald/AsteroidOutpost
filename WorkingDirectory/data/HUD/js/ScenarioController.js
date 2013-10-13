@@ -7,6 +7,11 @@ function ScenarioController($scope)
 	{
 		$scope.AvailableScenarios.push({"name": $name});
 		$scope.$apply();
+		
+		$("a:not(.disabled)").click( function()
+		{
+			XNACall($(this).attr("call"));
+		});
 	}
 }
 
