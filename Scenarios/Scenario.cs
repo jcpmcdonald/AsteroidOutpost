@@ -249,11 +249,15 @@ namespace AsteroidOutpost.Scenarios
 				}},
 				{ "Position", new JObject{
 					{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", origin.X + delta.X, origin.Y + delta.Y) },
-				}}
+				}},
 			});
 
 			// Remove the constructing component for the starting solar station
 			world.DeleteComponent(world.GetComponent<Constructing>(solarStationID));
+
+			// Fill it up with power
+			PowerStorage storage = world.GetComponent<PowerStorage>(solarStationID);
+			storage.AvailablePower = storage.MaxPower;
 
 			// Hook it up to the grid
 			PowerGridNode powerNode = world.GetComponent<PowerGridNode>(solarStationID);
