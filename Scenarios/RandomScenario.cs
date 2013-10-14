@@ -15,6 +15,8 @@ namespace AsteroidOutpost.Scenarios
 {
 	public class RandomScenario : Scenario
 	{
+		Vector2 startingPoint;
+
 		private static readonly TimeSpan timeBetweenWaves = TimeSpan.FromSeconds(60);
 		private TimeSpan waveTimer = timeBetweenWaves;
 		private int sequence = 0;
@@ -43,12 +45,12 @@ namespace AsteroidOutpost.Scenarios
 				friendlyForce = new Force(world, world.GetNextForceID(), initialMinerals, (Team)iPlayer);
 				world.AddForce(friendlyForce);
 				//world.PowerGrid.Add(friendlyForce.ID, new PowerGrid(world));
-				Vector2 focusPoint = CreateStartingBase(friendlyForce);
+				startingPoint = CreateStartingBase(friendlyForce);
 
 
 				if (iPlayer == 0)
 				{
-					world.HUD.FocusWorldPoint = focusPoint;
+					world.HUD.FocusWorldPoint = startingPoint;
 
 					Controller controller = new Controller(world, ControllerRole.Local, friendlyForce);
 					world.AddController(controller);
@@ -81,7 +83,8 @@ namespace AsteroidOutpost.Scenarios
 				sequence++;
 				waveTimer = waveTimer.Add(timeBetweenWaves);
 
-				WaveFactory.CreateWave(world, 100 * sequence, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(3000, -3000));
+				Vector2 enemyLocation = (Vector2.Normalize(new Vector2((float)GlobalRandom.NextDouble() - 0.5f, (float)GlobalRandom.NextDouble() - 0.5f)) * 3000) + startingPoint;
+				WaveFactory.CreateWave(world, 100 * sequence, enemyLocation);
 			}
 
 			if(timeAlive.TotalMinutes >= lifeGoal)
