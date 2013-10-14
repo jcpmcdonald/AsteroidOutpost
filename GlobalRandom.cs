@@ -32,6 +32,11 @@ namespace AsteroidOutpost
 			return rand.Next(min, max);
 		}
 
+		public static float Next(float min, float max)
+		{
+			return min + ((float)rand.NextDouble() * (max - min));
+		}
+
 		public static double NextDouble()
 		{
 			return rand.NextDouble();

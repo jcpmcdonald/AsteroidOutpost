@@ -30,7 +30,9 @@
 			"ProjectileType" : "Small Bullet",
 			"Range" : 300,
 			"FireRate" : 50,
-			"InitialVelocity" : 500,
+			"InitialVelocityMin" : 480,
+			"InitialVelocityMax" : 520,
+			"Spray" : 0.05,
 		},
 		"Targetable" : {},
 		"Perishable" : {

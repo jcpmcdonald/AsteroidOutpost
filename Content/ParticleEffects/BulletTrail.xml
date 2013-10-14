@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent>
+  <Asset Type="ProjectMercury.ParticleEffect">
+    <Name>Bullet Trail</Name>
+    <Author>John McDonald</Author>
+    <Description Null="true" />
+    <Emitters>
+      <Item Type="ProjectMercury.Emitters.PointEmitter">
+        <Name>Trail</Name>
+        <Budget>5000</Budget>
+        <Term>0.2</Term>
+        <ReleaseQuantity>5</ReleaseQuantity>
+        <Enabled>true</Enabled>
+        <ReleaseSpeed>[1,5]</ReleaseSpeed>
+        <ReleaseColour>
+          <Red>[1,1]</Red>
+          <Green>[1,1]</Green>
+          <Blue>[1,1]</Blue>
+        </ReleaseColour>
+        <ReleaseOpacity>[1,1]</ReleaseOpacity>
+        <ReleaseScale>[3,6]</ReleaseScale>
+        <ReleaseRotation>
+          <Pitch>[0,0]</Pitch>
+          <Yaw>[0,0]</Yaw>
+          <Roll>[0,0]</Roll>
+        </ReleaseRotation>
+        <ParticleTextureAssetPath>Cloud001</ParticleTextureAssetPath>
+        <BlendMode>Alpha</BlendMode>
+        <Modifiers>
+          <Modifier Type="ProjectMercury.Modifiers.OpacityFastFadeModifier">
+            <InitialOpacity>0.2</InitialOpacity>
+          </Modifier>
+        </Modifiers>
+        <Controllers />
+      </Item>
+    </Emitters>
+  </Asset>
+</XnaContent>

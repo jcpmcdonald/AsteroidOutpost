@@ -349,6 +349,7 @@ namespace AsteroidOutpost
 
 			particleEffectManager = new ParticleEffectManager();
 			particleEffectManager.LoadParticles(graphics, Content);
+			Services.AddService(particleEffectManager.GetType(), particleEffectManager);
 
 			music.Add(Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 04 Inner Battles (Bignic Remix)"));
 			music.Add(Content.Load<Song>(@"Music\Soulfrost - You Should Have Never Trusted Hollywood EP - 01 The Plan"));

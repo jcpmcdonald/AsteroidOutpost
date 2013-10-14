@@ -22,6 +22,7 @@
 			"AccelerationMagnitude" : 50,
 			"AccelerationVector" : "**",
 			"DetonationDistance" : 0,
+			"TrailEffect" : "Missile Trail",
 		},
 		"HitPoints" : {
 			"Armour" : 20,

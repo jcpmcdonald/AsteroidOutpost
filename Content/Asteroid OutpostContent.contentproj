@@ -126,6 +126,21 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ParticleEffects\Impact.xml">
+      <Name>Impact</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
+    <Compile Include="ParticleEffects\MiniExplosion.xml">
+      <Name>MiniExplosion</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
+    <Compile Include="ParticleEffects\Mining.xml">
+      <Name>Mining</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
     <Compile Include="Sound Effects\BeamLaser.wav">
       <Name>BeamLaser</Name>
       <Importer>WavImporter</Importer>
@@ -166,20 +181,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ParticleEffects\MiniExplosion.xml">
-      <Name>MiniExplosion</Name>
-      <Importer>XmlImporter</Importer>
-      <Processor>PassThroughProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ParticleEffects\Mining.xml">
-      <Name>Mining</Name>
-      <Importer>XmlImporter</Importer>
-      <Processor>PassThroughProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="ParticleTextures\FlowerBurst.png">
       <Name>FlowerBurst</Name>
       <Importer>TextureImporter</Importer>
@@ -192,8 +193,29 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ParticleEffects\Impact.xml">
-      <Name>Impact</Name>
+    <Compile Include="ParticleEffects\MissileTrail.xml">
+      <Name>MissileTrail</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ParticleTextures\Flame.png">
+      <Name>Flame</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ParticleTextures\Cloud004.png">
+      <Name>Cloud004</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ParticleEffects\BulletTrail.xml">
+      <Name>BulletTrail</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
     </Compile>

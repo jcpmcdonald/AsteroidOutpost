@@ -24,28 +24,15 @@
 		<div ng-controller="ScenarioController">
 			
 			<div ng-repeat="scenario in AvailableScenarios">
-				<a href="HUD.html" call="xna.PlaySound('select_forward'); xna.StartWorld('{{scenario.name}}');">
+				<a href="HUD.html" onClick="XNACall($(this));" call="xna.PlaySound('select_forward'); xna.StartWorld('{{scenario.name}}');">
 					<div class="imgButtonWrap">
 						<img src="images/main/button_null.png" class="imgButton" />
 						<span class="buttontext fit">{{scenario.name}}</span>
 					</div>
 				</a>
-				<!-- <span id="{{button.Name.replace(' ', '')}}" index="{{$index}}" call="{{button.CallbackJS}}" onClick="XNACall($(this));" class="button contextButton {{button.EnabledCSS}}" style="background-image: url('{{button.Image}}');"></span> -->
 			</div>
 			
 		</div>
-		
-		<!-- <a href="HUD.html" call="xna.PlaySound('select_forward'); xna.StartWorld('World1');"> -->
-			<!-- <div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">World1</span></div> -->
-		<!-- </a> -->
-		
-		<!-- <a href="HUD.html" call="xna.PlaySound('select_forward'); xna.StartWorld('Tutorial');"> -->
-			<!-- <div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Tutorial</span></div> -->
-		<!-- </a> -->
-		
-		<!-- <a href="HUD.html" call="xna.PlaySound('select_forward'); xna.StartWorld('Endless');"> -->
-			<!-- <div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Endless</span></div> -->
-		<!-- </a> -->
 		
 		<a href="MainMenu.html" call="xna.PlaySound('select_back');">
 			<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Back</span></div>

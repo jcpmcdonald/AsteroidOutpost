@@ -13,7 +13,9 @@ namespace AsteroidOutpost.Components
 		public int Range { get; set; }
 		public float FireRate { get; set; }
 		public int? Target { get; set; }
-		public float InitialVelocity { get; set; }
+		public float InitialVelocityMin { get; set; }
+		public float InitialVelocityMax { get; set; }
+		public float Spray { get; set; }
 
 
 		[XmlIgnore]

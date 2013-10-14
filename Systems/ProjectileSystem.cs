@@ -36,7 +36,12 @@ namespace AsteroidOutpost.Systems
 				//float velocityMagnitude = velocity.CurrentVelocity.Length();
 				velocity.CurrentVelocity += projectile.AccelerationVector * projectile.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-					
+				if(projectile.TrailEffect != null)
+				{
+					ParticleEffectManager particleEffectManager = (ParticleEffectManager)Game.Services.GetService(typeof(ParticleEffectManager));
+					particleEffectManager.Trigger(projectile.TrailEffect, position.Center);
+				}
+
 				// Boom?
 				List<int> targets = world.EntitiesInArea(position.Center, position.Radius, true);
 				foreach(int possibleHit in targets.Where(e => e != projectile.EntityID))

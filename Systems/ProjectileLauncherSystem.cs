@@ -50,7 +50,12 @@ namespace AsteroidOutpost.Systems
 					Position position = world.GetComponent<Position>(projectileLauncher);
 					Position targetPosition = world.GetComponent<Position>(projectileLauncher.Target.Value);
 					Vector2 accelerationVector = Vector2.Normalize(targetPosition.Center - position.Center);
-					Vector2 initialVelocity = accelerationVector * projectileLauncher.InitialVelocity;
+
+					Matrix sprayMatrix = Matrix.CreateRotationZ(GlobalRandom.Next(-projectileLauncher.Spray, projectileLauncher.Spray));
+					Vector2.Transform(ref accelerationVector, ref sprayMatrix, out accelerationVector);
+
+					Vector2 initialVelocity = accelerationVector * GlobalRandom.Next(projectileLauncher.InitialVelocityMin, projectileLauncher.InitialVelocityMax);
+
 
 					int missileID = world.Create(projectileLauncher.ProjectileType, world.GetOwningForce(projectileLauncher), new JObject{
 						{ "Position", new JObject{
