@@ -14,6 +14,7 @@ namespace AsteroidOutpost
 		public Profile()
 		{
 			availableScenarios.Add(typeof(TutorialScenario), new TutorialScenario());
+			availableScenarios.Add(typeof(RandomScenario), new RandomScenario());
 		}
 
 		public void ScenarioCompleted(Scenario completedScenario)
