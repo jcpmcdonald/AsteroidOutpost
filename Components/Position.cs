@@ -15,48 +15,12 @@ namespace AsteroidOutpost.Components
 {
 	public class Position : Component, IQuadStorable
 	{
-		private Vector2 offset;		// from the origin (0,0)
-
-
-		//[EventReplication(EventReplication.ServerToClients)]
-		public event Action<EntityMovedEventArgs> MovedEvent;
+		public Vector2 Center { get; set; }
+		public bool Solid { get; set; }
+		public int Radius { get; set; }
 
 
 		public Position(int entityID) : base(entityID) {}
-		public Position(int entityID, Vector2 center, int radius = 0)
-			: base(entityID)
-		{
-			Solid = true;
-			offset = center;
-			this.Radius = radius;
-		}
-
-
-		/// <summary>
-		/// Gets the center coordinates of this component
-		/// </summary>
-		public virtual Vector2 Center
-		{
-			get
-			{
-				return offset;
-			}
-			set
-			{
-				Vector2 delta = offset - value;
-
-				offset = value;
-
-				// Since we moved, make sure to tell others
-				if (MovedEvent != null)
-				{
-					MovedEvent(new EntityMovedEventArgs(this, delta));
-				}
-			}
-		}
-
-		public bool Solid { get; set; }
-		public int Radius { get; set; }
 
 
 		/// <summary>
@@ -155,11 +119,11 @@ namespace AsteroidOutpost.Components
 
 		public virtual float Distance(Position other)
 		{
-			return Distance(other.offset);
+			return Distance(other.Center);
 		}
 		public virtual float Distance(Vector2 thePoint)
 		{
-			return Vector2.Distance(offset, thePoint);
+			return Vector2.Distance(Center, thePoint);
 		}
 
 
@@ -174,15 +138,15 @@ namespace AsteroidOutpost.Components
 			float m1 = (p1.Y - p2.Y) / (p1.X - p2.X);
 			float m2 = 1.0f / -m1;
 			float c1 = p1.Y - (m1 * p1.X);
-			float c2 = offset.Y - (m2 * offset.X);
+			float c2 = Center.Y - (m2 * Center.X);
 
 			float xI = (c1 - c2) / (m2 - m1);
 			float yI = (m2 * xI) + c2;
 
-			float distanceToIntersection = Vector2.Distance(offset, new Vector2(xI, yI));
+			float distanceToIntersection = Vector2.Distance(Center, new Vector2(xI, yI));
 			//Console.WriteLine(distanceToIntersection);
-			float distanceToP1 = Vector2.Distance(offset, p1);
-			float distanceToP2 = Vector2.Distance(offset, p2);
+			float distanceToP1 = Vector2.Distance(Center, p1);
+			float distanceToP2 = Vector2.Distance(Center, p2);
 
 			if (Vector2.Distance(p1, new Vector2(xI, yI)) > Vector2.Distance(p1, p2))
 			{
