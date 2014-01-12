@@ -197,21 +197,6 @@ body
 	/*font-size: small;*/
 }
 
-#editorToggleButton
-{
-	position: absolute;
-	display: block;
-	
-	width: 10px;
-	height: 100px;
-	
-	background-color: rgba(100, 100, 100, 0.7);
-	border-color: #bbbbbb;
-	border-width: 1px;
-	
-	border-radius: 5px 0px 0px 5px;
-	border-style: solid none solid solid;
-}
 
 #modalOverlay
 {

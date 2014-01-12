@@ -142,7 +142,6 @@ $(document).ready(function()
 {
 	
 	$("#editorPanel").hide();
-	Position();
 		
 	///
 	/// This section attempts to immatate what XNA will be doing in-game. It makes it easier to debug
