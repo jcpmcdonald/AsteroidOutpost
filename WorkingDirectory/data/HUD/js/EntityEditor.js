@@ -56,7 +56,7 @@ function UpdateEditor(newSelection)
 				selection = newSelection[0];
 			}
 			
-			editorPanel = GetOrCreate('editorPanel', $('body'), '<div id="editorPanel" class="panel"></div><div id="editorToggleButton"></div>');
+			editorPanel = GetOrCreate('editorPanel', $('body'), '<div id="editorPanel" class="panel"></div>');
 			$currentSelection = newSelection;
 			
 			for(component in selection)
