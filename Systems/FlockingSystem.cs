@@ -202,7 +202,7 @@ namespace AsteroidOutpost.Systems
 			foreach(var nearbyEntity in world.EntitiesInArea(myPosition.Center, (int)separationDistance, true))
 			{
 				var nearbyPosition = world.GetComponent<Position>(nearbyEntity);
-				if(myPosition != nearbyPosition && nearbyPosition.Solid)
+				if(myPosition != nearbyPosition && !nearbyPosition.CanMoveThrough)
 				{
 					Constructing constructing = world.GetNullableComponent<Constructing>(nearbyEntity);
 					if(constructing != null && constructing.IsBeingPlaced) { continue; }

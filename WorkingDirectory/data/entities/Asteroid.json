@@ -4,6 +4,9 @@
 		"EntityName" : {
 			"Name" : "Asteroid",
 		},
+		"Position" : {
+			"Solid" : false,
+		},
 		"Minable" : {
 			"Minerals" : "**",
 			"StartingMinerals" : "**",

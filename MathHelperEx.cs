@@ -47,7 +47,7 @@ namespace AsteroidOutpost
 				if (ignoreList == null || !ignoreList.Contains(obstructingEntity))
 				{
 					Position obstructingPosition = world.GetComponent<Position>(obstructingEntity);
-					if (obstructingPosition.Solid && obstructingPosition.ShortestDistanceToLine(pointA, pointB) < obstructingPosition.Radius)
+					if (!obstructingPosition.CanConductThrough && obstructingPosition.ShortestDistanceToLine(pointA, pointB) < obstructingPosition.Radius)
 					{
 						// It's obstructed
 						return true;

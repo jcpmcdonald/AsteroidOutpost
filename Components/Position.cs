@@ -16,7 +16,9 @@ namespace AsteroidOutpost.Components
 	public class Position : Component, IQuadStorable
 	{
 		public Vector2 Center { get; set; }
-		public bool Solid { get; set; }
+		public bool CanMoveThrough { get; set; }
+		public bool CanBuildOn { get; set; }
+		public bool CanConductThrough { get; set; }
 		public int Radius { get; set; }
 
 

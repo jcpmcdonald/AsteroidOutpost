@@ -446,7 +446,7 @@ namespace AsteroidOutpost
 		{
 			if (onlySolids)
 			{
-				return quadTree.GetObjects(rect).Where(x => x.Solid).Select(x => x.EntityID).ToList();
+				return quadTree.GetObjects(rect).Where(x => !x.CanBuildOn || !x.CanConductThrough || x.CanMoveThrough).Select(x => x.EntityID).ToList();
 			}
 			else
 			{
