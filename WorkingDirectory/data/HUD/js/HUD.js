@@ -52,6 +52,14 @@ function ShowModalDialog(text)
 
 
 
+function ShowConversation(text, portrait)
+{
+	$("#dialog .modalText").html(text);
+	$("#dialog").show();
+}
+
+
+
 
 function MakeTimerPanel()
 {

@@ -5,20 +5,38 @@ function ConsoleController($scope)
 {
 	$scope.consoleLines = [ {username:'System', message:'Welcome to Asteroid Outpost!', timestamp:new Date()} ];
 	
-	$scope.addConsoleMessage = function()
+	$scope.consoleSubmit = function()
 	{
-		// Execute javascript on request
-		if($scope.consoleInput.toLowerCase().indexOf("/js ") == 0)
+		if($scope.consoleInput.trim() != "")
 		{
-			eval("(" + $scope.consoleInput.substr(4) + ")");
+			$scope.addConsoleMessage($scope.consoleInput, true);
+		}
+		$scope.consoleInput = "";
+	}
+	
+	$scope.addConsoleMessage = function(text, scrollToNew)
+	{
+		if(scrollToNew === undefined)
+		{
+			scrollToNew = $("#history").height() + $("#history").scrollTop() >= $("#history").prop("scrollHeight");
 		}
 		
-		$scope.consoleLines.push({username:$username, message:$scope.consoleInput, timestamp:new Date() });
-		$scope.consoleInput = "";
-		
-		setTimeout(function(){
-			$("#history").scrollTop($("#history").prop("scrollHeight"))
-		}, 0);
+		// Execute javascript on request
+		if(text.toLowerCase().indexOf("/js ") == 0)
+		{
+			eval("(" + text.substr(4) + ")");
+		}
+		else
+		{
+			$scope.consoleLines.push({username:$username, message:text, timestamp:new Date() });
+			
+			if(scrollToNew)
+			{
+				setTimeout(function(){
+					$("#history").scrollTop($("#history").prop("scrollHeight"))
+				}, 0);
+			}
+		}
 	}
 }
 
