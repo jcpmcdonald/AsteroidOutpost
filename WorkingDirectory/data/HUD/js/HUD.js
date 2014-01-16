@@ -54,8 +54,13 @@ function ShowModalDialog(text)
 
 function ShowConversation(text, portrait)
 {
-	$("#dialog .modalText").html(text);
-	$("#dialog").show();
+	$("#convoText").html(text);
+	$("#convo").show();
+}
+
+function DismissConversation()
+{
+	$("#convo").hide();
 }
 
 
@@ -140,28 +145,6 @@ $(document).ready(function()
 $(document).ready(function()
 {
 	
-	// Make button presses look cool
-	// $(".button").mousedown( function(event)
-	// {
-		// $(this).addClass("buttonPressed");
-	// });
-	
-	// $(".button").mouseup( function(event)
-	// {
-		// //$(this).removeClass("buttonPressed");
-		// if(!$(this).hasClass("disabled"))
-		// {
-			// XNACall($(this));
-		// }
-	// });
-	
-	// $(".button").mouseleave( function(event)
-	// {
-		// $(this).removeClass("buttonPressed");
-	// });
-	
-	
-	
 	// Capture mouse up/down events so we can tell XNA if we've handled the action or not
 	$(document).mousedown( function(event)
 	{
@@ -182,81 +165,6 @@ $(document).ready(function()
 	{
 		mouseUpOverHUD = true;
 	});
-});
-
-
-// var Position = function()
-// {
-// 	// $("#editorPanel").position({
-// 		// of: $(body),
-// 		// my: "right bottom",
-// 		// at: "right bottom"
-// 	// });
-	
-	
-// 	if($("#editorPanel").is(':visible'))
-// 	{
-// 		// $("#console").position({
-// 			// of: $("#editorPanel"),
-// 			// my: "right bottom",
-// 			// at: "left bottom"
-// 		// });
-		
-// 		$("#editorToggleButton").position({
-// 			of: $("#editorPanel"),
-// 			my: "right center",
-// 			at: "left center"
-// 		});
-// 	}
-// 	else
-// 	{
-// 		// $("#console").position({
-// 			// of: $(window),
-// 			// my: "right bottom",
-// 			// at: "right bottom"
-// 		// });
-		
-// 		$("#editorToggleButton").position({
-// 			of: $(window),
-// 			my: "right center",
-// 			at: "right center"
-// 		});
-// 	}
-// };
-
-
-
-$(document).ready(function()
-{
-	
-	//$(window).resize(Position);
-	//Position();
-	
-	// //$("#editorToggleButton").click(function(){
-	// 	//$("#editorToggleButton").hide("slide", {direction:'right'}, 60, function(){
-	// 		$("#editorPanel").toggle("slide", { direction:'right'}, 500, function(){
-	// 			EntityEditorOnShow();
-	// 			//Position();
-	// 			//$("#editorToggleButton").show("slide", {direction:'right'}, 60, function(){ Position(); } );
-	// 		});
-	// 	//});
-	// //});
-	
-	EntityEditorOnShow();
-	
-	if(!InXNA())
-	{
-		$(document).keydown(function(event)
-		{
-			if(event.keyCode === KEY_F7)
-			{
-				$("#editorPanel").toggle("slide", { direction:'right'}, 500, function(){
-					EntityEditorOnShow();
-				});
-			}
-		});
-	}
-	
 });
 
 

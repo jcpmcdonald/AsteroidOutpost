@@ -45,6 +45,7 @@ namespace AsteroidOutpost.Systems
 		private bool isDraggingScreen;
 
 		private bool consoleActive = false;
+		private bool entityEditorActive = false;
 		private Dictionary<Keys, EventHandler> hotkeys = new Dictionary<Keys, EventHandler>();
 
 		private SoundEffect constructionSound;
@@ -144,6 +145,11 @@ namespace AsteroidOutpost.Systems
 			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "ShowModalDialog('{0}')", text.Replace("'", "\\'")));
 		}
 
+
+		public void ShowConversation(String text)
+		{
+			world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "ShowConversation('{0}', 'TCP Steampunk 1')", text.Replace("'", "\\'")));
+		}
 
 
 		private void WorldOnPauseToggledEvent(bool paused)
@@ -255,9 +261,14 @@ namespace AsteroidOutpost.Systems
 				ConsoleActive = !ConsoleActive;
 			}
 
+			if(theKeyboard[Keys.Tab] == EnhancedKeyState.JUST_RELEASED)
+			{
+				EntityEditorActive = !EntityEditorActive;
+			}
+
 
 			// Handle the hotkeys
-			if(!ConsoleActive)
+			if(!ConsoleActive && !EntityEditorActive)
 			{
 				foreach (Keys pressed in theKeyboard.GetJustPressedKeys())
 				{
@@ -576,6 +587,19 @@ namespace AsteroidOutpost.Systems
 			{
 				consoleActive = value;
 				world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetConsoleVisible({0});", consoleActive.ToString().ToLowerInvariant()));
+			}
+		}
+
+		private bool EntityEditorActive
+		{
+			get
+			{
+				return entityEditorActive;
+			}
+			set
+			{
+				entityEditorActive = value;
+				world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetEntityEditorVisible({0});", entityEditorActive.ToString().ToLowerInvariant()));
 			}
 		}
 

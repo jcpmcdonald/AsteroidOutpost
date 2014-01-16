@@ -1,7 +1,55 @@
 
 
 var EditorMode = true;
+var EditorVisible = false;
 var $currentSelection = null;
+
+
+
+$(document).ready(function()
+{
+	
+	if(!InXNA())
+	{
+		$(document).keydown(function(event)
+		{
+			if(event.keyCode === KEY_TAB)
+			{
+				SetEntityEditorVisible(!EditorVisible);
+			}
+		});
+	}
+	
+});
+
+
+function ToggleEntityEditorVisible()
+{
+	SetEntityEditorVisible(!EditorVisible);
+}
+
+
+function SetEntityEditorVisible(visible)
+{
+	EditorVisible = visible;
+	if(EditorVisible == false)
+	{
+		$("#editorPanel").hide("slide", { direction:'right'}, 500
+			//, function(){
+			//EntityEditorOnShow();
+			//}
+		);
+	}
+	else
+	{
+		// $("#editorPanel").show();
+		// EntityEditorOnShow();
+		$("#editorPanel").show("slide", { direction:'right'}, 500, function(){
+			EntityEditorOnShow();
+		});
+	}
+}
+
 
 function UpdateEditor(newSelection)
 {
@@ -108,11 +156,11 @@ function UpdateEditor(newSelection)
 
 function EntityEditorOnShow()
 {
-	if($("#editorPanel").is(':visible') && $currentSelection != null)
-	{
+	//if($("#editorPanel").is(':visible') && $currentSelection != null)
+	//{
 		$("#editorPanel").accordion("destroy");
 		$("#editorPanel").accordion({ icons: false });
-	}
+	//}
 }
 
 function GetOrCreate(name, appendTo, value)

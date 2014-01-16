@@ -68,6 +68,7 @@ namespace AsteroidOutpost.Scenarios
 			world.HUD.ContextMenu.ContextPages["main"].ContextButtonDictionary["laser tower"].Enabled = false;
 			world.HUD.ContextMenu.ContextPages["main"].ContextButtonDictionary["missile tower"].Enabled = false;
 			world.HUD.ContextMenu.ContextPages["main"].ContextButtonDictionary["battery"].Enabled = false;
+			world.HUD.ContextMenu.ContextPages["main"].ContextButtonDictionary["gatling gun"].Enabled = false;
 
 			currentMission = buildMiners;
 			StartMission();
@@ -108,6 +109,7 @@ namespace AsteroidOutpost.Scenarios
 			{
 				// Yay! The enemy has died
 				world.GameOver(true);
+				world.HUD.ShowConversation("Great job, soldier!");
 			}
 
 			base.World_EntityDied(entityID);
@@ -185,14 +187,14 @@ namespace AsteroidOutpost.Scenarios
 
 			if(currentMission == buildMiners)
 			{
-				world.HUD.ShowModalDialog("Welcome to training soldier! We need to get a base up and running asap. Build us two miners to get us started. Remember that they'll need power if they are going to do anything.");
+				world.HUD.ShowConversation("Welcome to training, soldier! We need to get a base up and running asap. Build us 2 miners to get us started. Remember, they will need power if they are going to do anything!");
 				missions.Add(buildMiners);
 
 
 			}
 			else if(currentMission == buildLasers)
 			{
-				world.HUD.ShowModalDialog("Now that we have a good income stream, we should build some defences. Enemies can come from anywhere, so build 3 laser towers, each guarding a separate part of the base.");
+				world.HUD.ShowConversation("Now that we have a good income stream, we should build some defences. Enemies can come from anywhere, so build 3 laser towers, each guarding a separate part of the base.");
 				world.HUD.ContextMenu.ContextPages["main"].ContextButtonDictionary["laser tower"].Enabled = true;
 				missions.Add(buildLasers);
 
@@ -200,7 +202,7 @@ namespace AsteroidOutpost.Scenarios
 			}
 			else if(currentMission == buildMorePower)
 			{
-				world.HUD.ShowModalDialog("Good Job! Let's build an other solar station so that our lasers will always have power. Power consumers can only be connected to a single power source, so you will need to build this next to home.");
+				world.HUD.ShowConversation("Good Job! Let's build a second solar station so that our lasers will always have power. Power consumers can only be connected to a single power source, so you will need to build this next to home.");
 				world.HUD.ContextMenu.ContextPages["main"].ContextButtonDictionary["solar station"].Enabled = true;
 				missions.Add(buildMorePower);
 
@@ -208,7 +210,7 @@ namespace AsteroidOutpost.Scenarios
 			}
 			else if(currentMission == defendYourself)
 			{
-				world.HUD.ShowModalDialog("An enemy ship has been detected! Time to test your defences. Now is a good time to fill any gaps.");
+				world.HUD.ShowConversation("An enemy ship has been detected! Time to test your defences. Now is a good time to fill any gaps.");
 				missions.Add(defendYourself);
 				Vector2 enemyLocation = (Vector2.Normalize(new Vector2((float)GlobalRandom.NextDouble() - 0.5f, (float)GlobalRandom.NextDouble() - 0.5f)) * 2000) + startingPoint;
 				WaveFactory.CreateWave(world, 100, enemyLocation);

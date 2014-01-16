@@ -83,3 +83,60 @@
 	height: 35px;
 }
 
+
+#convo
+{
+	display: none;
+	
+	left: 50%;
+	top: 0px;
+	
+	height: 160px;
+	width: 400px;
+	
+	/* margin values are half the height and width respectively */
+	margin: 0px 0 0 -150px;
+	
+	padding: 5px;
+	border-radius: 0 0 5px 5px;
+	border-style: none solid solid solid;
+	
+	z-index: 9999;
+}
+
+
+.button.convoButton
+{	
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	
+	font-size: large;
+	text-align: center;
+	
+	width: 100px;
+	height: 25px;
+	
+	border-radius: 5px;
+}
+
+
+#convoPortrait
+{
+	width: 120px;
+	height: 100%;
+	float: left;
+	background-color: white;
+	background-image: url("../images/portraits/TCP Steampunk 1.png");
+	
+	background-size: cover;
+	background-repeat:no-repeat;
+}
+
+#convoText
+{
+	margin-left: 125px;
+}
+
+
+
