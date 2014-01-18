@@ -7,6 +7,7 @@ function ScenarioController($scope)
 	{
 		$scope.AvailableScenarios.push({"name": $name});
 		$scope.$apply();
+		$(".fit").fitText(1.3);
 	}
 }
 
