@@ -1,0 +1,44 @@
+{
+	"Name" : "Deserter",
+	"Components" : {
+		"EntityName" : {
+			"Name" : "Deserter",
+		},
+		"Position" : {
+			"Radius" : 15,
+		},
+		"Velocity" : {
+			"CurrentVelocity" : "0, 0",
+		},
+		"Animator" : {
+			"SpriteName" : "Deserter",
+			"Scale" : 0.5,
+			"CurrentAnimation" : "Idle",
+			"CurrentOrientation" : 0,
+		},
+		"HitPoints" : {
+			"Armour" : 75,
+			"TotalArmour" : 75,
+		},
+		"LaserWeapon" : {
+			"Range" : 150,
+			"Damage" : 3,
+			"Color" : "139, 0, 0, 255",
+		},
+		"Flocking" : {
+			"AccelerationFactor" : 0.2,
+			"BoidVelocityTrim" : 0.8,
+			"CohesionFactor" : 1,
+			"SeparationFactor" : 5,
+			"AlignmentFactor" : 0,
+			"CohereNeighbourDistance" : 400,
+			"SeparationDistance" : 25,
+		},
+		"Targetable" : {},
+		"Perishable" : {
+			"ParticleEffectOnPerish" : "Basic Explosion",
+		},
+		"Selectable" : {},
+	}
+}
+
