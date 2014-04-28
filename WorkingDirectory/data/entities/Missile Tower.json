@@ -5,11 +5,11 @@
 			"Name" : "Missile Tower",
 		},
 		"Position" : {
-			"Radius" : 30,
+			"Radius" : 22,
 		},
 		"Animator" : {
-			"SpriteName" : "Missile Tower",
-			"Scale" : 0.6,
+			"SpriteName" : "Missile Tower 2",
+			"Scale" : 0.4,
 			"CurrentAnimation" : "Idle",
 		},
 		"PowerGridNode" : {

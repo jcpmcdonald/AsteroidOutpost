@@ -57,7 +57,7 @@ namespace AsteroidOutpost.Systems
 					Vector2 initialVelocity = accelerationVector * GlobalRandom.Next(projectileLauncher.InitialVelocityMin, projectileLauncher.InitialVelocityMax);
 
 
-					int missileID = world.Create(projectileLauncher.ProjectileType, world.GetOwningForce(projectileLauncher), new JObject{
+					int projectileID = world.Create(projectileLauncher.ProjectileType, world.GetOwningForce(projectileLauncher), new JObject{
 						{ "Position", new JObject{
 							{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", position.Center.X, position.Center.Y) },
 						}},
@@ -69,7 +69,7 @@ namespace AsteroidOutpost.Systems
 						}},
 					});
 
-					Animator projectileAnimator = world.GetComponent<Animator>(missileID);
+					Animator projectileAnimator = world.GetComponent<Animator>(projectileID);
 					projectileAnimator.SetOrientation(MathHelper.ToDegrees((float)Math.Atan2(accelerationVector.X, -accelerationVector.Y)), true);
 
 					projectileLauncher.TimeSinceLastShot = TimeSpan.Zero;

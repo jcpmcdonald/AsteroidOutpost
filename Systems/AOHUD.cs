@@ -638,9 +638,6 @@ namespace AsteroidOutpost.Systems
 
 				Vector2 worldPosition = ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
 				creatingEntityID = world.Create(name, localActor.PrimaryForce, new JObject{
-					{ "Animator", new JObject{
-						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
-					}},
 					{ "Position", new JObject{
 						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
 					}}

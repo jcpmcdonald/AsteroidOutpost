@@ -32,8 +32,10 @@ namespace AsteroidOutpost.Systems
 
 			foreach (Spin spinner in world.GetComponents<Spin>())
 			{
-				Animator animator = world.GetComponent<Animator>(spinner);
-				animator.SetOrientation(animator.Angle + (spinner.RotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds), spinner.RotateFrame);
+				foreach(Animator animator in world.GetComponents<Animator>(spinner))
+				{
+					animator.SetOrientation(animator.Angle + (spinner.RotationSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds), spinner.RotateFrame);
+				}
 			}
 		}
 
@@ -45,7 +47,7 @@ namespace AsteroidOutpost.Systems
 			// Draw all the visible entities
 			foreach (int entity in world.QuadTree.GetObjects(world.HUD.FocusScreen).Select(x => x.EntityID))
 			{
-				foreach (var animator in world.GetComponents<Animator>(entity))
+				foreach (var animator in world.GetComponents<Animator>(entity).Where(x => x.Layer <= 0))
 				{
 					animator.SpriteAnimator.Draw(spriteBatch,
 					                             world.WorldToScreen(world.GetComponent<Position>(entity).Center),
@@ -53,10 +55,60 @@ namespace AsteroidOutpost.Systems
 					                             world.Scale(animator.Scale),
 					                             animator.Tint);
 				}
+
+				AnimatorSet animatorSet = world.GetNullableComponent<AnimatorSet>(entity);
+				if(animatorSet != null)
+				{
+					var animators = animatorSet.SpriteAnimators.Where(x => x.Value <= 0).Select(x => x.Key);
+					foreach (var animator in animators)
+					{
+						animator.Draw(spriteBatch,
+						              world.WorldToScreen(world.GetComponent<Position>(entity).Center),
+						              MathHelper.ToRadians(animatorSet.FrameAngle),
+						              world.Scale(animatorSet.Scale),
+						              animatorSet.Tint);
+					}
+				}
 			}
 
 			spriteBatch.End();
 			base.Draw(gameTime);
+		}
+
+
+		public void DrawUpperLayer(GameTime gameTime)
+		{
+			spriteBatch.Begin();
+
+			// Draw all the visible entities
+			foreach (int entity in world.QuadTree.GetObjects(world.HUD.FocusScreen).Select(x => x.EntityID))
+			{
+				foreach (var animator in world.GetComponents<Animator>(entity).Where(x => x.Layer > 0))
+				{
+					animator.SpriteAnimator.Draw(spriteBatch,
+					                             world.WorldToScreen(world.GetComponent<Position>(entity).Center),
+					                             MathHelper.ToRadians(animator.FrameAngle),
+					                             world.Scale(animator.Scale),
+					                             animator.Tint);
+				}
+
+				AnimatorSet animatorSet = world.GetNullableComponent<AnimatorSet>(entity);
+				if(animatorSet != null)
+				{
+					var animators = animatorSet.SpriteAnimators.Where(x => x.Value > 0).Select(x => x.Key);
+					foreach (var animator in animators)
+					{
+						animator.Draw(spriteBatch,
+						              world.WorldToScreen(world.GetComponent<Position>(entity).Center),
+						              MathHelper.ToRadians(animatorSet.FrameAngle),
+						              world.Scale(animatorSet.Scale),
+						              animatorSet.Tint);
+					}
+				}
+			}
+
+			spriteBatch.End();
+			//base.Draw(gameTime);
 		}
 	}
 }

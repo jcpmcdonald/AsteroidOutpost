@@ -16,35 +16,13 @@ namespace AsteroidOutpost.Components
 	{
 
 		public Animator(int entityID) : base(entityID) {}
-		public Animator(int entityID, Sprite sprite, float scale, String set, String animation, float orientation, bool rotateFrame = false)
-			: base(entityID)
-		{
-			Init(scale, sprite, set, animation, orientation, rotateFrame);
-		}
 
-
-		private void Init(float scale, Sprite sprite, String set, String animation, float orientation, bool rotateFrame)
-		{
-			Scale = scale;
-			Tint = Color.White;
-			SpriteAnimator = new SpriteAnimator(sprite);
-
-			if (set != null)
-			{
-				SpriteAnimator.CurrentSet = set;
-			}
-			if (animation != null)
-			{
-				SpriteAnimator.CurrentAnimation = animation;
-			}
-			SetOrientation(orientation, rotateFrame);
-			RotateFrame = rotateFrame;
-		}
-
-
-		protected bool RotateFrame { get; set; }
+		public bool RotateFrame { get; set; }
 		public float Scale { get; set; }
-		public Color Tint { get; set; }
+		public int Layer { get; set; }
+
+		private Color tint = Color.White;
+		public Color Tint{ get{return tint;} set{tint = value;} }
 
 		[XmlIgnore]
 		[JsonIgnore]

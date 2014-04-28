@@ -15,6 +15,7 @@ namespace AsteroidOutpost
 		{
 			availableScenarios.Add(typeof(TutorialScenario), new TutorialScenario());
 			availableScenarios.Add(typeof(RandomScenario), new RandomScenario());
+			availableScenarios.Add(typeof(SuperStructureProtectScenario), new SuperStructureProtectScenario());
 		}
 
 		public void ScenarioCompleted(Scenario completedScenario)

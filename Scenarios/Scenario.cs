@@ -189,8 +189,7 @@ namespace AsteroidOutpost.Scenarios
 				world.Create("Asteroid", asteroidForce, new JObject{
 					{ "Animator", new JObject{
 						{ "Scale", scale },
-						{ "CurrentSet", "Asteroid " + GlobalRandom.Next(1, 4) },
-						{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
+						{ "CurrentSet", "Asteroid " + GlobalRandom.Next(1, 4) }
 					}},
 					{ "Position", new JObject{
 						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", x, y) },
@@ -244,9 +243,6 @@ namespace AsteroidOutpost.Scenarios
 
 			// Create the solar station
 			int solarStationID = world.Create("Solar Station", force, new JObject{
-				{ "Animator", new JObject{
-					{ "CurrentOrientation", (float)GlobalRandom.Next(0, 359) }
-				}},
 				{ "Position", new JObject{
 					{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", origin.X + delta.X, origin.Y + delta.Y) },
 				}},

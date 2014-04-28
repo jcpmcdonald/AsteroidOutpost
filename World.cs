@@ -51,6 +51,7 @@ namespace AsteroidOutpost
 		private Scenario scenario;
 
 		private readonly AnimationSystem animationSystem;
+		private readonly AnimationSystemLayer2 animationSystemLayer2;
 		private readonly PhysicsSystem physicsSystem;
 		private readonly RenderQuadTreeSystem renderQuadTreeSystem;
 		private readonly PowerGridSystem powerGridSystem;
@@ -104,6 +105,7 @@ namespace AsteroidOutpost
 			hud = new AOHUD(game, this, selectionSystem);
 
 			animationSystem = new AnimationSystem(game, this);
+			animationSystemLayer2 = new AnimationSystemLayer2(game, this, animationSystem);
 			physicsSystem = new PhysicsSystem(game, this);
 			renderQuadTreeSystem = new RenderQuadTreeSystem(game, this);
 			hitPointSystem = new HitPointSystem(game, this);
@@ -133,8 +135,10 @@ namespace AsteroidOutpost
 			particleEngine.DrawOrder = 1050;
 			accumulationSystem.DrawOrder = 1100;
 			powerGridSystem.DrawOrder = 1200;
+			animationSystemLayer2.DrawOrder = 2000;
 
 			game.Components.Add(animationSystem);
+			game.Components.Add(animationSystemLayer2);
 			game.Components.Add(physicsSystem);
 			game.Components.Add(hud);
 			game.Components.Add(renderQuadTreeSystem);
@@ -404,6 +408,12 @@ namespace AsteroidOutpost
 			upgradeFactory.ApplyOnCompletePayload(this, entityID);
 		}
 
+		public void ApplyUpgrade(int entityID, UpgradeTemplate upgrade)
+		{
+			upgradeFactory.ApplyPayload(this, entityID, upgrade.OnCompletePayload);
+		}
+
+
 		internal Dictionary<String, EntityTemplate> EntityTemplates
 		{
 			get
@@ -418,6 +428,11 @@ namespace AsteroidOutpost
 			{
 				return upgradeFactory.Upgrades;
 			}
+		}
+
+		internal UpgradeTemplate GetUpgrade(String name)
+		{
+			return upgradeFactory.Upgrades[name.ToLowerInvariant()];
 		}
 
 

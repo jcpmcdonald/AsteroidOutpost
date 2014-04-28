@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace AsteroidOutpost.Entities
 {
-	class UpgradeTemplate
+	public class UpgradeTemplate
 	{
 		public String Name { get; set; }
 		public Dictionary<String, JObject> OnStartPayload { get; set; }

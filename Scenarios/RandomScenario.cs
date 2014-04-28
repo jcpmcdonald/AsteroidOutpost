@@ -15,7 +15,7 @@ namespace AsteroidOutpost.Scenarios
 {
 	public class RandomScenario : Scenario
 	{
-		Vector2 startingPoint;
+		private Vector2 startingPoint;
 
 		private static readonly TimeSpan timeBetweenWaves = TimeSpan.FromSeconds(60);
 		private TimeSpan waveTimer = timeBetweenWaves;

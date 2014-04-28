@@ -38,7 +38,7 @@ namespace AsteroidOutpost
 			{
 				// TODO: 2012-08-10 Fix spawning bad guys
 				// Make something
-				world.Create("Spaceship", aiActor.PrimaryForce, new JObject{
+				world.Create("Deserter", aiActor.PrimaryForce, new JObject{
 					{ "Position", new JObject{
 						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", roughPosition.X + GlobalRandom.Next(-10, 10), roughPosition.Y + GlobalRandom.Next(-10, 10)) },
 					}}

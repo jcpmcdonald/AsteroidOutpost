@@ -70,17 +70,22 @@ namespace AsteroidOutpost.Entities
 						// Great, let's fill it up!
 						if (componentType == typeof(Animator))
 						{
-							Animator animator = (Animator)component;
-							Sprite sprite = sprites[jsonTemplate[componentName]["SpriteName"].ToString().ToLower()];
-							animator.SpriteAnimator = new SpriteAnimator(sprite);
-							if (template.jsonTemplate[componentName]["CurrentOrientation"] != null)
-							{
-								float angleStep = 360.0f / sprite.OrientationLookup.Count;
-								float spriteOrientation = float.Parse((String)template.jsonTemplate[componentName]["CurrentOrientation"], CultureInfo.InvariantCulture);
-								template.jsonTemplate[componentName]["CurrentOrientation"] = (angleStep * (int)((spriteOrientation / angleStep) + 0.5f)) % 360;
-							}
+							FillAnimator((Animator)component, componentJson, sprites);
 						}
-						Populate(component, (JObject)template.jsonTemplate[componentName]);
+						if(componentType == typeof(AnimatorSet))
+						{
+							FillAnimatorSet((AnimatorSet)component, componentJson, sprites);
+							//if(componentJson.Value["SpriteName2"] != null)
+							//{
+							//    Animator animator2 = new Animator(entityID);
+							//    Sprite sprite2 = sprites[componentJson.Value["SpriteName2"].ToString().ToLower()];
+							//    animator2.SpriteAnimator = new SpriteAnimator(sprite2);
+							//    Populate(animator2, (JObject)componentJson.Value);
+							//    animator2.Layer = 1;
+							//    components.Add(animator2);
+							//}
+						}
+						Populate(component, (JObject)componentJson.Value);
 						components.Add(component);
 					}
 					else
@@ -97,6 +102,39 @@ namespace AsteroidOutpost.Entities
 			}
 
 			return components;
+		}
+
+
+		private void FillAnimator(Animator animator, KeyValuePair<String, JToken> componentJson, Dictionary<String, Sprite> sprites)
+		{
+			Sprite sprite = sprites[componentJson.Value["SpriteName"].ToString().ToLower()];
+			animator.SpriteAnimator = new SpriteAnimator(sprite);
+
+			if (componentJson.Value["CurrentOrientation"] == null)
+			{
+				componentJson.Value["CurrentOrientation"] = (float)GlobalRandom.Next(0, 359);
+			}
+		}
+
+
+		private void FillAnimatorSet(AnimatorSet animatorSet, KeyValuePair<String, JToken> componentJson, Dictionary<String, Sprite> sprites)
+		{
+			List<String> spriteNames = new List<String>();
+			List<int> spriteLayers = new List<int>();
+			JsonConvert.PopulateObject(componentJson.Value["SpriteNames"].ToString(), spriteNames);
+			JsonConvert.PopulateObject(componentJson.Value["SpriteLayers"].ToString(), spriteLayers);
+
+			animatorSet.SpriteAnimators = new List<KeyValuePair<SpriteAnimator, int>>();
+			for (int i = 0; i < spriteNames.Count; i++)
+			{
+				SpriteAnimator sprite = new SpriteAnimator(sprites[spriteNames[i].ToLower()]);
+				animatorSet.SpriteAnimators.Add(new KeyValuePair<SpriteAnimator, int>(sprite, spriteLayers[i]));
+			}
+
+			if (componentJson.Value["CurrentOrientation"] == null)
+			{
+				componentJson.Value["CurrentOrientation"] = (float)GlobalRandom.Next(0, 359);
+			}
 		}
 
 
@@ -167,7 +205,7 @@ namespace AsteroidOutpost.Entities
 			}
 			catch (FormatException fe)
 			{
-				Debugger.Break();
+				//Debugger.Break();
 				Console.WriteLine("Error parsing JSON: " + fe.StackTrace);
 			}
 		}

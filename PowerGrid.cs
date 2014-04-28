@@ -286,7 +286,12 @@ namespace AsteroidOutpost
 						else
 						{
 							// There is no existing path the linked node, add one
-							toVisit.Add(nodeDistance, Tuple.Create(linkedNode, cursor));
+							float collide = 0.0f;
+							while(toVisit.ContainsKey(nodeDistance + collide))
+							{
+								collide += 0.001f;
+							}
+							toVisit.Add(nodeDistance + collide, Tuple.Create(linkedNode, cursor));
 						}
 					}
 				}

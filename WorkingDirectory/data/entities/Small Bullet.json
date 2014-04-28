@@ -6,21 +6,25 @@
 		},
 		"Position" : {
 			"Radius" : 1,
-			"Solid" : false,
+			"CanMoveThrough" : true,
+			"CanBuildOn" : true,
+			"CanConductThrough" : true,
 		},
 		"Velocity" : {
 			"CurrentVelocity" : "0, 0",
 		},
 		"Animator" : {
-			"SpriteName" : "Bullet",
-			"Scale" : 0.15,
+			"SpriteName" : "Bullet Streak",
+			"Scale" : 0.5,
 			"CurrentAnimation" : "Idle",
 			"CurrentOrientation" : 0,
+			"RotateFrame" : true,
 		},
 		"Projectile" : {
 			"Damage" : 2,
 			"AccelerationVector" : "**",
 			"DetonationDistance" : 0,
+			"TrailEffect" : "Bullet Trail",
 		},
 		"HitPoints" : {
 			"Armour" : 20,

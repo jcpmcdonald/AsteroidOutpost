@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace AsteroidOutpost.Entities
 {
-	class UpgradeFactory
+	public class UpgradeFactory
 	{
 		public Dictionary<String, UpgradeTemplate> Upgrades = new Dictionary<String, UpgradeTemplate>();
 
@@ -44,7 +44,7 @@ namespace AsteroidOutpost.Entities
 		}
 
 
-		private void ApplyPayload(World world, int entityID, Dictionary<String, JObject> payload)
+		public void ApplyPayload(World world, int entityID, Dictionary<String, JObject> payload)
 		{
 			//UpgradeTemplate upgrade = Upgrades[upgradeName.ToLowerInvariant()];
 

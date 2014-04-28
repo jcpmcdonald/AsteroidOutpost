@@ -5,15 +5,17 @@
 			"Name" : "Missile",
 		},
 		"Position" : {
-			"Radius" : 10,
-			"Solid" : false,
+			"Radius" : 5,
+			"CanMoveThrough" : true,
+			"CanBuildOn" : true,
+			"CanConductThrough" : true,
 		},
 		"Velocity" : {
 			"CurrentVelocity" : "0, 0",
 		},
 		"Animator" : {
 			"SpriteName" : "Missile",
-			"Scale" : 0.7,
+			"Scale" : 0.3,
 			"CurrentAnimation" : "Idle",
 			"CurrentOrientation" : 0,
 		},

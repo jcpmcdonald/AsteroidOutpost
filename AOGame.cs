@@ -192,7 +192,7 @@ namespace AsteroidOutpost
 
 
 			//#if UNLIMITED_FPS
-#if false
+#if true
 			graphics.SynchronizeWithVerticalRetrace = false;
 			IsFixedTimeStep = false;
 #endif
@@ -544,6 +544,7 @@ namespace AsteroidOutpost
 			world = new World(this, entityFactory, upgradeFactory);
 
 
+			// TODO: do this automatically
 			Scenario scenario;
 			switch(mapName.ToLower())
 			{
@@ -551,16 +552,21 @@ namespace AsteroidOutpost
 				scenario = new MinerealCollectionScenario();
 				break;
 
+			case "super station":
+				scenario = new SuperStructureProtectScenario();
+				break;
+
 			case "tutorial":
 				scenario = new TutorialScenario();
 				break;
 
-			case "random":
+			case "endless":
 				scenario = new RandomScenario();
 				break;
 
 			default:
-				goto case "random";
+				Debugger.Break();
+				goto case "endless";
 			}
 			world.StartServer(scenario);
 
