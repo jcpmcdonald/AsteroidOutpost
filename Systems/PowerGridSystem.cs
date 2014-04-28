@@ -17,7 +17,6 @@ namespace AsteroidOutpost.Systems
 		private World world;
 		private SpriteBatch spriteBatch;
 		private Texture2D powerStarvedTexture;
-		private Texture2D powerLineTexture;
 
 		private readonly Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
 
@@ -32,8 +31,6 @@ namespace AsteroidOutpost.Systems
 		{
 			base.LoadContent();
 			powerStarvedTexture = Texture2D.FromStream(Game.GraphicsDevice, File.OpenRead(@"..\data\images\NoPowerSymbol.png"));
-			powerLineTexture = Texture2DEx.FromStreamWithPremultAlphas(Game.GraphicsDevice, File.OpenRead(@"..\data\images\WhitePowerBeam.png"));
-			
 		}
 
 
@@ -96,7 +93,7 @@ namespace AsteroidOutpost.Systems
 
 		public override void Draw(GameTime gameTime)
 		{
-			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+			spriteBatch.Begin();
 
 
 			// Draw any entities being placed
@@ -109,21 +106,16 @@ namespace AsteroidOutpost.Systems
 					Color linkColor;
 					if (relatedGrid.IsPowerRoutableBetween(relatedPowerNode, powerLink.Value))
 					{
-						linkColor = Color.Blue;
+						linkColor = Color.Yellow;
 					}
 					else
 					{
 						linkColor = Color.Red;
 					}
 
-					//spriteBatch.DrawLine(world.WorldToScreen(relatedPowerNode.PowerLinkPointAbsolute(world)),
-					//                     world.WorldToScreen(powerLink.Value.PowerLinkPointAbsolute(world)),
-					//                     linkColor);
-
-					DrawPowerLine(spriteBatch,
-					              world.WorldToScreen(relatedPowerNode.PowerLinkPointAbsolute(world)),
-					              world.WorldToScreen(powerLink.Value.PowerLinkPointAbsolute(world)),
-					              linkColor);
+					spriteBatch.DrawLine(world.WorldToScreen(relatedPowerNode.PowerLinkPointAbsolute(world)),
+					                     world.WorldToScreen(powerLink.Value.PowerLinkPointAbsolute(world)),
+					                     linkColor);
 				}
 			}
 
@@ -160,16 +152,11 @@ namespace AsteroidOutpost.Systems
 				{
 					if (!linksAlreadyDrawn.Contains(linkToDraw))
 					{
-						//color = new Color((int)(150 + world.Scale(50)), (int)(150 + world.Scale(50)), 0, (int)(150 + world.Scale(50)));
-						color = new Color(50, 50, (int)(200 + world.Scale(50)));
+						color = new Color((int)(150 + world.Scale(50)), (int)(150 + world.Scale(50)), 0, (int)(150 + world.Scale(50)));
 
-						//spriteBatch.DrawLine(world.WorldToScreen(linkToDraw.Item1.PowerLinkPointAbsolute(world)),
-						//                     world.WorldToScreen(linkToDraw.Item2.PowerLinkPointAbsolute(world)),
-						//                     color);
-						DrawPowerLine(spriteBatch,
-						              world.WorldToScreen(linkToDraw.Item1.PowerLinkPointAbsolute(world)),
-						              world.WorldToScreen(linkToDraw.Item2.PowerLinkPointAbsolute(world)),
-						              color);
+						spriteBatch.DrawLine(world.WorldToScreen(linkToDraw.Item1.PowerLinkPointAbsolute(world)),
+						                     world.WorldToScreen(linkToDraw.Item2.PowerLinkPointAbsolute(world)),
+						                     color);
 
 						linksAlreadyDrawn.Add(linkToDraw);
 						linksAlreadyDrawn.Add(new Tuple<PowerGridNode, PowerGridNode>(linkToDraw.Item2, linkToDraw.Item1));
@@ -194,24 +181,18 @@ namespace AsteroidOutpost.Systems
 							//if (nodeA.IsPowerStateActive(world) && nodeB.IsPowerStateActive(world))
 							if((constructingA != null && !constructingA.IsBeingPlaced) || (constructingB != null && !constructingB.IsBeingPlaced))
 							{
-								// Draw a normal line
-								//color = new Color((int)(70 + world.Scale(50)), (int)(70 + world.Scale(50)), 0, (int)(70 + world.Scale(50)));
-								color = new Color(0, 0, (int)(150 + world.Scale(50)));
+								// Draw a normal, yellow line
+								color = new Color((int)(70 + world.Scale(50)), (int)(70 + world.Scale(50)), 0, (int)(70 + world.Scale(50)));
 							}
 							else
 							{
 								// Draw a red line to indicate that you can't connect
-								//color = new Color((int)(80 + world.Scale(50)), (int)(0 + world.Scale(50)), 0, (int)(0 + world.Scale(50)));
-								color = new Color(0, 0, (int)(150 + world.Scale(50)));
+								color = new Color((int)(80 + world.Scale(50)), (int)(0 + world.Scale(50)), 0, (int)(0 + world.Scale(50)));
 							}
 
-							//spriteBatch.DrawLine(world.WorldToScreen(nodeA.PowerLinkPointAbsolute(world)),
-							//                     world.WorldToScreen(nodeB.PowerLinkPointAbsolute(world)),
-							//                     color);
-							DrawPowerLine(spriteBatch,
-							              world.WorldToScreen(nodeA.PowerLinkPointAbsolute(world)),
-							              world.WorldToScreen(nodeB.PowerLinkPointAbsolute(world)),
-							              color);
+							spriteBatch.DrawLine(world.WorldToScreen(nodeA.PowerLinkPointAbsolute(world)),
+							                     world.WorldToScreen(nodeB.PowerLinkPointAbsolute(world)),
+							                     color);
 
 							linksAlreadyDrawn.Add(linkToDraw);
 							linksAlreadyDrawn.Add(new Tuple<PowerGridNode, PowerGridNode>(nodeB, nodeA));
@@ -226,52 +207,6 @@ namespace AsteroidOutpost.Systems
 
 			spriteBatch.End();
 			base.Draw(gameTime);
-		}
-
-
-		private void DrawPowerLine(SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color)
-		{
-			//spriteBatch.Draw(powerLineTexture, start, null, Color.White,
-			//                 (float)Math.Atan2(end.Y - start.Y, end.X - start.X),
-			//                 new Vector2(0f, (float)powerLineTexture.Height / 2),
-			//                 new Vector2(Vector2.Distance(start, end) / powerLineTexture.Width, world.Scale(1f)),
-			//                 SpriteEffects.None, 0f);
-
-			List<Vector2> points = MakeLightning(new List<Vector2>{ start, end }, 3, world.Scale(0.5f));
-
-			for (int i = 0; i < points.Count - 1; i++)
-			{
-				//spriteBatch.DrawLine(points[i], points[i + 1], new Color(200, 200, 255, 0), world.Scale(5 + GlobalRandom.Next(0f, 0.5f)));
-				//spriteBatch.DrawLine(points[i], points[i + 1], new Color(100, 100, 200, 0), world.Scale(2 + GlobalRandom.Next(0f, 0.5f)));
-				//spriteBatch.DrawLine(points[i], points[i + 1], Color.Blue, world.Scale(1));
-
-				spriteBatch.Draw(powerLineTexture, points[i], null, color,
-				                 (float)Math.Atan2(points[i + 1].Y - points[i].Y, points[i + 1].X - points[i].X),
-				                 new Vector2(0f, (float)powerLineTexture.Height / 2),
-				                 new Vector2(Vector2.Distance(points[i], points[i + 1]) / powerLineTexture.Width, world.Scale(0.5f)),
-				                 SpriteEffects.None, 0f);
-			}
-		}
-
-
-		private List<Vector2> MakeLightning(List<Vector2> points, int itterations, float noise)
-		{
-			if(itterations <= 0) { return points; }
-
-			for (int i = points.Count - 1; i >= 1; i--)
-			{
-				Vector2 segment = points[i - 1] - points[i];
-				Vector2 perpendicular = new Vector2(segment.Y, -segment.X);
-
-				Vector2 midPoint = (points[i - 1] + points[i]) / 2f;
-
-				midPoint += Vector2.Normalize(perpendicular) * GlobalRandom.Next(-noise, noise);
-
-				points.Insert(i, midPoint);
-				i--;
-			}
-
-			return MakeLightning(points, itterations - 1, noise);
 		}
 	}
 }

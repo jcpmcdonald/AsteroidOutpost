@@ -192,7 +192,7 @@ namespace AsteroidOutpost
 
 
 			//#if UNLIMITED_FPS
-#if false
+#if true
 			graphics.SynchronizeWithVerticalRetrace = false;
 			IsFixedTimeStep = false;
 #endif
