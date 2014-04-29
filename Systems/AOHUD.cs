@@ -383,7 +383,7 @@ namespace AsteroidOutpost.Systems
 
 			if (LocalActor != null)
 			{
-				awesomium.WebView.ExecuteJavascript(String.Format(CultureInfo.InvariantCulture, "SetResources({0})", (int)(LocalActor.PrimaryForce.GetMinerals() + 0.5)));
+				world.ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "SetResources({0})", (int)(LocalActor.PrimaryForce.GetMinerals() + 0.5)));
 			}
 		}
 

@@ -25,7 +25,7 @@ namespace AsteroidOutpost
 		private String hotkeyName;
 		private Keys hotkey;
 		private Call onClickData;
-		public Dictionary<String, String> ImportantValues;
+		public Dictionary<String, String> ImportantValues = new Dictionary<string, string>();
 
 		private String callbackJS;
 		private AOHUD hud;
@@ -284,8 +284,8 @@ namespace AsteroidOutpost
 
 	internal class Call
 	{
-		public String Method;
-		public List<object> Parameters;
+		public String Method = null;
+		public List<object> Parameters = null;
 
 
 		public void Invoke(AOHUD hud)

@@ -47,7 +47,7 @@ namespace AsteroidOutpost.Scenarios
 			world.AddController(aiController);
 
 			//startingPoint = CreateStartingBase(friendlyForce);
-			Vector2 startingPoint = new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f);
+			startingPoint = new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f);
 
 			int superStation = world.Create("Super Station", friendlyForce, new JObject{
 				{ "Position", new JObject{
