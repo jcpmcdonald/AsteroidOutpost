@@ -115,7 +115,7 @@ namespace AsteroidOutpost
 			powerProductionSystem = new PowerProductionSystem(game, this, powerGridSystem);
 			constructionSystem = new ConstructionSystem(game, this, powerGridSystem);
 			laserMinerSystem = new LaserMinerSystem(game, this, powerGridSystem);
-			accumulationSystem = new AccumulationSystem(game, this, 500);
+			accumulationSystem = new AccumulationSystem(game, this, 250);
 			laserWeaponSystem = new LaserWeaponSystem(game, this, powerGridSystem, hitPointSystem);
 			projectileLauncherSystem = new ProjectileLauncherSystem(game, this);
 			projectileSystem = new ProjectileSystem(game, this, hitPointSystem);

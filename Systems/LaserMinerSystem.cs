@@ -23,6 +23,7 @@ namespace AsteroidOutpost.Systems
 		private readonly PowerGridSystem powerGridSystem;
 
 		private static SoundEffect miningSound;
+		private Texture2D miningTexture;
 
 		public LaserMinerSystem(AOGame game, World world, PowerGridSystem powerGridSystem)
 			: base(game)
@@ -42,6 +43,7 @@ namespace AsteroidOutpost.Systems
 		protected override void LoadContent()
 		{
 			miningSound = Game.Content.Load<SoundEffect>(@"Sound Effects\BeamLaser");
+			miningTexture = Texture2DEx.FromStreamWithPremultAlphas(Game.GraphicsDevice, File.OpenRead(@"..\data\images\WhitePowerBeam.png"));
 			base.LoadContent();
 		}
 
@@ -270,7 +272,7 @@ namespace AsteroidOutpost.Systems
 
 		public override void Draw(GameTime gameTime)
 		{
-			spriteBatch.Begin();
+			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
 
 			foreach (var laserMiner in world.GetComponents<LaserMiner>())
 			{
@@ -290,9 +292,16 @@ namespace AsteroidOutpost.Systems
 						foreach (var minable in minables)
 						{
 							Position minablePosition = world.GetComponent<Position>(minable);
-							spriteBatch.DrawLine(world.WorldToScreen(laserMinerPosition.Center + laserMiner.MiningSourceOffset),
-							                     world.WorldToScreen(minablePosition.Center + laserMiner.MiningDestinationOffset),
-							                     color);
+							//spriteBatch.DrawLine(world.WorldToScreen(laserMinerPosition.Center + laserMiner.MiningSourceOffset),
+							//                     world.WorldToScreen(minablePosition.Center + laserMiner.MiningDestinationOffset),
+							//                     color);
+							Vector2 start = world.WorldToScreen(laserMinerPosition.Center + laserMiner.MiningSourceOffset);
+							Vector2 end = world.WorldToScreen(minablePosition.Center + laserMiner.MiningDestinationOffset);
+							spriteBatch.Draw(miningTexture, start, null, color,
+							                 (float)Math.Atan2(end.Y - start.Y, end.X - start.X),
+							                 new Vector2(0f, (float)miningTexture.Height / 2),
+							                 new Vector2(Vector2.Distance(start, end) / miningTexture.Width, world.Scale(0.5f)),
+							                 SpriteEffects.None, 0f);
 						}
 
 
@@ -322,11 +331,35 @@ namespace AsteroidOutpost.Systems
 					// Connect!
 					Position laserMinerPosition = world.GetComponent<Position>(laserMiner);
 					Position minablePosition = world.GetComponent<Position>(laserMiner.nearbyAsteroids[laserMiner.MiningAsteroid]);
-					spriteBatch.DrawLine(world.WorldToScreen(laserMinerPosition.Center + laserMiner.MiningSourceOffset),
-					                     world.WorldToScreen(minablePosition.Center + laserMiner.MiningDestinationOffset),
-					                     color);
+					//spriteBatch.DrawLine(world.WorldToScreen(laserMinerPosition.Center + laserMiner.MiningSourceOffset),
+					//					 world.WorldToScreen(minablePosition.Center + laserMiner.MiningDestinationOffset),
+					//					 color);
+					Vector2 start = world.WorldToScreen(laserMinerPosition.Center + laserMiner.MiningSourceOffset);
+					Vector2 end = world.WorldToScreen(minablePosition.Center + laserMiner.MiningDestinationOffset);
 
-					particleEffectManager.Trigger("Mining", minablePosition.Center + laserMiner.MiningDestinationOffset);
+					const float timeToBeamContact = 0.25f;
+					if (laserMiner.TimeSinceLastStageChange.TotalSeconds > timeToBeamContact)
+					{
+						// Draw the full beam and a particle drilling effect at the end
+						spriteBatch.Draw(miningTexture, start, null, color,
+						                 (float)Math.Atan2(end.Y - start.Y, end.X - start.X),
+						                 new Vector2(0f, (float)miningTexture.Height / 2),
+						                 new Vector2(Vector2.Distance(start, end) / miningTexture.Width, world.Scale(0.5f)),
+						                 SpriteEffects.None, 0f);
+
+						particleEffectManager.Trigger("Mining", minablePosition.Center + laserMiner.MiningDestinationOffset);
+					}
+					else
+					{
+						// Draw a partial beam
+						float percent = ((float)laserMiner.TimeSinceLastStageChange.TotalSeconds / timeToBeamContact);
+						spriteBatch.Draw(miningTexture, start, null, color,
+										 (float)Math.Atan2(end.Y - start.Y, end.X - start.X),
+										 new Vector2(0f, (float)miningTexture.Height / 2),
+										 new Vector2((Vector2.Distance(start, end) * percent) / miningTexture.Width, world.Scale(0.5f)),
+										 SpriteEffects.None, 0f);
+					}
+
 				}
 
 			}

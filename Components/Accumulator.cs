@@ -25,10 +25,14 @@ namespace AsteroidOutpost.Components
 
 		public int Value { get; set; }
 		public Vector2 Offset { get; set; }
-		public Vector2 Velocity { get; set; }
+		public Vector2 VelocityMin { get; set; }
+		public Vector2 VelocityMax { get; set; }
+		public Vector2 AccelerationMin { get; set; }
+		public Vector2 AccelerationMax { get; set; }
 
 		public Color StartingColor { get; set; }
 		public Color EndingColor { get; set; }
-		public float FadeTime { get; set; }
+		public float FadeTimeMin { get; set; }
+		public float FadeTimeMax { get; set; }
 	}
 }

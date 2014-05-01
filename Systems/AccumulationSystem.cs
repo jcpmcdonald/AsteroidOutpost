@@ -56,14 +56,15 @@ namespace AsteroidOutpost.Systems
 				}
 				else
 				{
+					floatingText.Velocity += floatingText.Acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
 					floatingText.Position += floatingText.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 					float percentDone = 1f - ((float)floatingText.FadeTimeRemaining.TotalSeconds / floatingText.FadeTime);
 
-					floatingText.Color = new Color(MathHelper.SmoothStep(floatingText.StartingColor.R, floatingText.EndingColor.R, percentDone),
-					                               MathHelper.SmoothStep(floatingText.StartingColor.G, floatingText.EndingColor.G, percentDone),
-					                               MathHelper.SmoothStep(floatingText.StartingColor.B, floatingText.EndingColor.B, percentDone),
-					                               MathHelper.SmoothStep(floatingText.StartingColor.A, floatingText.EndingColor.A, percentDone));
+					floatingText.Color = new Color((byte)MathHelper.SmoothStep(floatingText.StartingColor.R, floatingText.EndingColor.R, percentDone),
+					                               (byte)MathHelper.SmoothStep(floatingText.StartingColor.G, floatingText.EndingColor.G, percentDone),
+					                               (byte)MathHelper.SmoothStep(floatingText.StartingColor.B, floatingText.EndingColor.B, percentDone),
+					                               (byte)MathHelper.SmoothStep(floatingText.StartingColor.A, floatingText.EndingColor.A, percentDone));
 				}
 			}
 
@@ -87,13 +88,16 @@ namespace AsteroidOutpost.Systems
 						Vector2 pos = position.Center + accumulator.Offset;
 						FloatingText freeText = new FloatingText{
 							Position = position.Center + accumulator.Offset,
-							Velocity = accumulator.Velocity,
+							Velocity = new Vector2(GlobalRandom.Next(accumulator.VelocityMin.X, accumulator.VelocityMax.X),
+												   GlobalRandom.Next(accumulator.VelocityMin.Y, accumulator.VelocityMax.Y)),
+							Acceleration = new Vector2(GlobalRandom.Next(accumulator.AccelerationMin.X, accumulator.AccelerationMax.X),
+								                       GlobalRandom.Next(accumulator.AccelerationMin.Y, accumulator.AccelerationMax.Y)),
 							Text = accumulator.Value.ToString("+0;-0;+0"),
 							StartingColor = accumulator.StartingColor,
 							EndingColor = accumulator.EndingColor,
-							FadeTime = accumulator.FadeTime,
-							FadeTimeRemaining = new TimeSpan(0, 0, 0, 0, (int)(accumulator.FadeTime * 1000f))
+							FadeTime = GlobalRandom.Next(accumulator.FadeTimeMin, accumulator.FadeTimeMax)
 						};
+						freeText.FadeTimeRemaining = new TimeSpan(0, 0, 0, 0, (int)(freeText.FadeTime * 1000f));
 
 						floatingTexts.Add(freeText);
 
@@ -132,6 +136,7 @@ namespace AsteroidOutpost.Systems
 	{
 		public Vector2 Position { get; set; }
 		public Vector2 Velocity { get; set; }
+		public Vector2 Acceleration { get; set; }
 		public String Text { get; set; }
 
 		public Color StartingColor { get; set; }

@@ -37,14 +37,6 @@ namespace AsteroidOutpost.Components
 			PartialMineralsToExtract = 0;
 			MiningDestinationOffset = Vector2.Zero;
 			MiningAsteroid = -1;
-
-			// Now set in JSON
-			//MiningSourceOffset = Vector2.Zero;
-			//MiningRate = 25;
-			//EnergyUsageRate = 5;
-			//ChargeTime = 3000;
-			//MineTime = 900;
-			//MiningRange = 90;
 		}
 
 
