@@ -68,6 +68,9 @@ namespace AsteroidOutpost
 		private readonly SelectionSystem selectionSystem;
 		private readonly ParticleEngine particleEngine;
 		private readonly AutoHealSystem autoHealSystem;
+		private readonly AIBasicSystem aiBasicSystem;
+		private readonly AIStrafeSystem aiStrafeSystem;
+		private readonly TargetingSystem targetingSystem;
 
 		private MissionSystem missionSystem; // Created when world starts, instead of the world is created
 
@@ -122,6 +125,9 @@ namespace AsteroidOutpost
 			movementSystem = new FlockingSystem(game, this);
 			particleEngine = new ParticleEngine(game, this);
 			autoHealSystem = new AutoHealSystem(game, this, hitPointSystem);
+			aiBasicSystem = new AIBasicSystem(game, this);
+			aiStrafeSystem = new AIStrafeSystem(game, this);
+			targetingSystem = new TargetingSystem(game, this);
 
 			awesomium = game.Awesomium;
 
@@ -156,6 +162,9 @@ namespace AsteroidOutpost
 			game.Components.Add(selectionSystem);
 			game.Components.Add(particleEngine);
 			game.Components.Add(autoHealSystem);
+			game.Components.Add(aiBasicSystem);
+			game.Components.Add(aiStrafeSystem);
+			game.Components.Add(targetingSystem);
 		}
 
 

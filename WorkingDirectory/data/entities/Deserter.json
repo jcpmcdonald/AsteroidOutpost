@@ -39,6 +39,7 @@
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
 		"Selectable" : {},
+		"AIStrafe" : {},
 	}
 }
 

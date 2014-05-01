@@ -22,7 +22,7 @@ namespace AsteroidOutpost.Components
 		public int FlockID { get; set; }
 		public float AccelerationMagnitude { get; set; }
 		public Vector2 AccelerationVector { get; set; }
-		public int? Target { get; set; }
+		//public int? Target { get; set; }
 
 
 		[XmlIgnore]

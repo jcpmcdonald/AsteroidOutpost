@@ -137,9 +137,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorEx.cs" />
+    <Compile Include="Components\AIBasic.cs" />
+    <Compile Include="Components\AIStrafe.cs" />
     <Compile Include="Components\Animator.cs" />
     <Compile Include="Components\AutoHeal.cs" />
     <Compile Include="Components\AnimatorSet.cs" />
+    <Compile Include="Components\Targeting.cs" />
     <Compile Include="Components\Upgrading.cs" />
     <Compile Include="Components\Constructing.cs" />
     <Compile Include="Components\LaserMiner.cs" />
@@ -181,6 +184,8 @@
     <Compile Include="Scenarios\SuperStructureProtectScenario.cs" />
     <Compile Include="Scenes\Layer.cs" />
     <Compile Include="Scenes\SceneManager.cs" />
+    <Compile Include="Systems\AIBasicSystem.cs" />
+    <Compile Include="Systems\AIStrafeSystem.cs" />
     <Compile Include="Systems\AnimationSystemLayer2.cs" />
     <Compile Include="Systems\AutoHealSystem.cs" />
     <Compile Include="Systems\FrameRateCounter.cs" />
@@ -209,6 +214,7 @@
     <Compile Include="Systems\ProjectileSystem.cs" />
     <Compile Include="Systems\ParticleEngine.cs" />
     <Compile Include="Systems\SelectionSystem.cs" />
+    <Compile Include="Systems\TargetingSystem.cs" />
     <Compile Include="World.cs" />
     <Compile Include="Systems\AOHUD.cs" />
     <Compile Include="Force.cs" />

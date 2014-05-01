@@ -44,70 +44,75 @@ namespace AsteroidOutpost.Systems
 				List<Position> fleetPositions = fleet.Select(x => world.GetComponent<Position>(x)).ToList();
 				foreach (var vehicle in fleet)
 				{
+					var targeting = world.GetComponent<Targeting>(vehicle);
 
-					if(vehicle.Target != null)
+					if (targeting.Target != null)
 					{
-						Position targetPosition = world.GetNullableComponent<Position>(vehicle.Target.Value);
+						Position targetPosition = world.GetNullableComponent<Position>(targeting.Target.Value);
 						if(targetPosition == null)
 						{
-							vehicle.Target = null;
+							targeting.Target = null;
 						}
 					}
 
 					Position position = world.GetComponent<Position>(vehicle);
 					Velocity velocity = world.GetComponent<Velocity>(vehicle);
-					if (vehicle.Target == null)
-					{
-						// Find a suitable target
-						int vehicleEntityID = vehicle.EntityID;
-						var livingThings = world.GetComponents<HitPoints>().Where(x => x.EntityID != vehicleEntityID &&
-						                                                               x.IsAlive() &&
-						                                                               world.GetOwningForce(x).Team != Team.Neutral &&
-						                                                               world.GetOwningForce(x).Team != world.GetOwningForce(vehicleEntityID).Team);
 
-						var livingThingPositions = livingThings.Select(x => world.GetComponent<Position>(x));
-						Position closestLivingThing = null;
-						foreach (var livingThingPosition in livingThingPositions)
-						{
-							var targetable = world.GetNullableComponent<Targetable>(livingThingPosition);
-							if(targetable != null && (closestLivingThing == null || position.Distance(livingThingPosition) < position.Distance(closestLivingThing)))
-							{
-								closestLivingThing = livingThingPosition;
-							}
-						}
+					//// MOVED TO TARGETING SYSTEM
+					//if (vehicle.Target == null)
+					//{
+					//	// Find a suitable target
+					//	int vehicleEntityID = vehicle.EntityID;
+					//	var livingThings = world.GetComponents<HitPoints>().Where(x => x.EntityID != vehicleEntityID &&
+					//																   x.IsAlive() &&
+					//																   world.GetOwningForce(x).Team != Team.Neutral &&
+					//																   world.GetOwningForce(x).Team != world.GetOwningForce(vehicleEntityID).Team);
+
+					//	var livingThingPositions = livingThings.Select(x => world.GetComponent<Position>(x));
+					//	Position closestLivingThing = null;
+					//	foreach (var livingThingPosition in livingThingPositions)
+					//	{
+					//		var targetable = world.GetNullableComponent<Targetable>(livingThingPosition);
+					//		if(targetable != null && (closestLivingThing == null || position.Distance(livingThingPosition) < position.Distance(closestLivingThing)))
+					//		{
+					//			closestLivingThing = livingThingPosition;
+					//		}
+					//	}
 						
-						if(closestLivingThing != null)
-						{
-							vehicle.Target = closestLivingThing.EntityID;
-						}
-						else
-						{
-							vehicle.Target = null;
-						}
-					}
+					//	if(closestLivingThing != null)
+					//	{
+					//		vehicle.Target = closestLivingThing.EntityID;
+					//	}
+					//	else
+					//	{
+					//		vehicle.Target = null;
+					//	}
+					//}
 
-					if(vehicle.Target != null)
+					if (targeting.Target != null)
 					{
-						Position targetPosition = world.GetComponent<Position>(vehicle.Target.Value);
+						Position targetPosition = world.GetComponent<Position>(targeting.Target.Value);
 						List<IWeapon> weapons = world.GetWeapons(vehicle);
 						IWeapon primaryWeapon = weapons.First(x => x.Range == weapons.Min(y => y.Range));
 						const int weaponGive = 10; // Just some number to help ships & towers get closer to each other and prevent float errors
 
 						vehicle.TargetVector = Vector2.Normalize(targetPosition.Center - position.Center - (velocity.CurrentVelocity * 5)); // * vehicle.TargetVectorFactor;
 
-						if (position.Distance(targetPosition) - (primaryWeapon.Range - weaponGive) > MinDistanceToStop(velocity, vehicle))
-						{
-							vehicle.AccelerationVector = vehicle.TargetVector; // + vehicle.Cohesion + vehicle.Separation + vehicle.Alignment;
 
-							if (vehicle.AccelerationVector.Length() > 0)
-							{
-								velocity.CurrentVelocity += vehicle.AccelerationVector * vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds;
-							}
-						}
-						else
-						{
-							Decelerate(velocity, vehicle, gameTime);
-						}
+						// MOVED TO AI BEHAVIOUR SYSTEM
+						//if (position.Distance(targetPosition) - (primaryWeapon.Range - weaponGive) > MinDistanceToStop(velocity, vehicle))
+						//{
+						//	vehicle.AccelerationVector = vehicle.TargetVector; // + vehicle.Cohesion + vehicle.Separation + vehicle.Alignment;
+
+						//	if (vehicle.AccelerationVector.Length() > 0)
+						//	{
+						//		velocity.CurrentVelocity += vehicle.AccelerationVector * vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds;
+						//	}
+						//}
+						//else
+						//{
+						//	Decelerate(velocity, vehicle, gameTime);
+						//}
 
 						vehicle.Cohesion = Cohere(position, fleetPositions, vehicle.CohereNeighbourDistance, vehicle.SeparationDistance) * vehicle.CohesionFactor;
 						vehicle.Separation = Separate(position, fleetPositions, vehicle.SeparationDistance) * vehicle.SeparationFactor;

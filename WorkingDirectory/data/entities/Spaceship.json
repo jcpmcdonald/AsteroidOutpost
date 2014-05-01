@@ -35,10 +35,14 @@
 			"SeparationDistance" : 25,
 		},
 		"Targetable" : {},
+		"Targeting" : {
+			"TargetingType" : "Closest",
+		},
 		"Perishable" : {
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
 		"Selectable" : {},
+		"AIBasic" : {},
 	}
 }
 
