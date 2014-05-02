@@ -81,8 +81,9 @@ namespace AsteroidOutpost.Scenarios
 			if(deadPowerProducer != null || deadPowerStorage != null)
 			{
 				// A power producer has been eliminated, check to see if there is still power out there
-				if(!world.GetComponents<PowerProducer>().Any(p => p.EntityID != deadID && world.GetOwningForce(p) == friendlyForce && world.GetNullableComponent<Constructing>(p) != null) &&
-				   !world.GetComponents<PowerStorage>().Any(p => p.EntityID != deadID && world.GetOwningForce(p) == friendlyForce && world.GetNullableComponent<Constructing>(p) != null && p.AvailablePower > 0))
+				bool producersExist = world.GetComponents<PowerProducer>().Any(p => p.EntityID != deadID && world.GetOwningForce(p) == friendlyForce && p.PowerProductionRate > 0 && world.GetNullableComponent<Constructing>(p) == null);
+				bool storageExists = world.GetComponents<PowerStorage>().Any(p => p.EntityID != deadID && world.GetOwningForce(p) == friendlyForce && world.GetNullableComponent<Constructing>(p) == null && p.AvailablePower > 0);
+				if (!producersExist && !storageExists)
 				{
 					// No power sources, it is impossible to recover. You are dead, or will be very soon
 					world.GameOver(false);

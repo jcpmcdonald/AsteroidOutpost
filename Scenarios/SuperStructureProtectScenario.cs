@@ -15,6 +15,7 @@ namespace AsteroidOutpost.Scenarios
 	{
 		private Vector2 startingPoint;
 		private Mission currentMission;
+		private int superStation;
 
 		private Mission protectSuperStation = new Mission("protect", "Protect the super station", false);
 
@@ -49,7 +50,7 @@ namespace AsteroidOutpost.Scenarios
 			//startingPoint = CreateStartingBase(friendlyForce);
 			startingPoint = new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f);
 
-			int superStation = world.Create("Super Station", friendlyForce, new JObject{
+			superStation = world.Create("Super Station", friendlyForce, new JObject{
 				{ "Position", new JObject{
 					{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", startingPoint.X, startingPoint.Y) },
 				}},
@@ -122,6 +123,17 @@ namespace AsteroidOutpost.Scenarios
 		public override void Update(TimeSpan deltaTime)
 		{
 			
+		}
+
+
+		protected override void World_EntityDied(int deadID)
+		{
+			if (deadID == superStation)
+			{
+				// You failed to protect the super station
+				world.GameOver(false);
+			}
+			base.World_EntityDied(deadID);
 		}
 	}
 }
