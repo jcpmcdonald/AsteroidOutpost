@@ -89,9 +89,9 @@ namespace AsteroidOutpost.Systems
 						FloatingText freeText = new FloatingText{
 							Position = position.Center + accumulator.Offset,
 							Velocity = new Vector2(GlobalRandom.Next(accumulator.VelocityMin.X, accumulator.VelocityMax.X),
-												   GlobalRandom.Next(accumulator.VelocityMin.Y, accumulator.VelocityMax.Y)),
+							                       GlobalRandom.Next(accumulator.VelocityMin.Y, accumulator.VelocityMax.Y)),
 							Acceleration = new Vector2(GlobalRandom.Next(accumulator.AccelerationMin.X, accumulator.AccelerationMax.X),
-								                       GlobalRandom.Next(accumulator.AccelerationMin.Y, accumulator.AccelerationMax.Y)),
+							                           GlobalRandom.Next(accumulator.AccelerationMin.Y, accumulator.AccelerationMax.Y)),
 							Text = accumulator.Value.ToString("+0;-0;+0"),
 							StartingColor = accumulator.StartingColor,
 							EndingColor = accumulator.EndingColor,

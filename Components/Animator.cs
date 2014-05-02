@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -85,6 +86,11 @@ namespace AsteroidOutpost.Components
 
 		public void SetOrientation(float angle, bool rotateFrame = false)
 		{
+			if (float.IsNaN(angle))
+			{
+				Debugger.Break();
+			}
+
 			while (angle < 0)
 			{
 				angle += 360f;

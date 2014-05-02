@@ -40,9 +40,9 @@ namespace AsteroidOutpost.Systems
 			// Find a suitable target
 			Position position = world.GetComponent<Position>(entityID);
 			var livingThings = world.GetComponents<HitPoints>().Where(x => x.EntityID != entityID &&
-																			x.IsAlive() &&
-																			world.GetOwningForce(x).Team != Team.Neutral &&
-																			world.GetOwningForce(x).Team != world.GetOwningForce(entityID).Team);
+			                                                               x.IsAlive() &&
+			                                                               world.GetOwningForce(x).Team != Team.Neutral &&
+			                                                               world.GetOwningForce(x).Team != world.GetOwningForce(entityID).Team);
 
 			var livingThingPositions = livingThings.Select(x => world.GetComponent<Position>(x));
 			Position closestLivingThing = null;
