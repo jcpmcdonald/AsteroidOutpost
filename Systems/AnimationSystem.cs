@@ -50,7 +50,7 @@ namespace AsteroidOutpost.Systems
 				foreach (var animator in world.GetComponents<Animator>(entity).Where(x => x.Layer <= 0))
 				{
 					animator.SpriteAnimator.Draw(spriteBatch,
-					                             world.WorldToScreen(world.GetComponent<Position>(entity).Center),
+					                             world.WorldToScreen(world.GetComponent<Position>(entity).Center + animator.Offset),
 					                             MathHelper.ToRadians(animator.FrameAngle),
 					                             world.Scale(animator.Scale),
 					                             animator.Tint);
@@ -63,7 +63,7 @@ namespace AsteroidOutpost.Systems
 					foreach (var animator in animators)
 					{
 						animator.Draw(spriteBatch,
-						              world.WorldToScreen(world.GetComponent<Position>(entity).Center),
+						              world.WorldToScreen(world.GetComponent<Position>(entity).Center + animatorSet.Offset),
 						              MathHelper.ToRadians(animatorSet.FrameAngle),
 						              world.Scale(animatorSet.Scale),
 						              animatorSet.Tint);
@@ -86,7 +86,7 @@ namespace AsteroidOutpost.Systems
 				foreach (var animator in world.GetComponents<Animator>(entity).Where(x => x.Layer > 0))
 				{
 					animator.SpriteAnimator.Draw(spriteBatch,
-					                             world.WorldToScreen(world.GetComponent<Position>(entity).Center),
+					                             world.WorldToScreen(world.GetComponent<Position>(entity).Center + animator.Offset),
 					                             MathHelper.ToRadians(animator.FrameAngle),
 					                             world.Scale(animator.Scale),
 					                             animator.Tint);
@@ -99,7 +99,7 @@ namespace AsteroidOutpost.Systems
 					foreach (var animator in animators)
 					{
 						animator.Draw(spriteBatch,
-						              world.WorldToScreen(world.GetComponent<Position>(entity).Center),
+						              world.WorldToScreen(world.GetComponent<Position>(entity).Center + animatorSet.Offset),
 						              MathHelper.ToRadians(animatorSet.FrameAngle),
 						              world.Scale(animatorSet.Scale),
 						              animatorSet.Tint);

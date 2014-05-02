@@ -20,6 +20,7 @@ namespace AsteroidOutpost.Components
 		public bool RotateFrame { get; set; }
 		public float Scale { get; set; }
 		public Color Tint { get; set; }
+		public Vector2 Offset { get; set; }
 
 		[XmlIgnore]
 		[JsonIgnore]

@@ -5,11 +5,12 @@
 			"Name" : "Super Station",
 		},
 		"Position" : {
-			"Radius" : 50,
+			"Radius" : 65,
 		},
 		"AnimatorSet" : {
 			"SpriteNames" : ["Super Station Base", "Super Station Top"],
 			"SpriteLayers" : [0, 2],
+			"Offset": "0, -15",
 			"Scale" : 0.8,
 			"CurrentSet" : "Default",
 			"CurrentAnimation" : "Idle",

@@ -21,6 +21,7 @@ namespace AsteroidOutpost.Components
 		public bool RotateFrame { get; set; }
 		public float Scale { get; set; }
 		public int Layer { get; set; }
+		public Vector2 Offset { get; set; }
 
 		private Color tint = Color.White;
 		public Color Tint{ get{return tint;} set{tint = value;} }
