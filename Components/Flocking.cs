@@ -15,19 +15,12 @@ namespace AsteroidOutpost.Components
 		public Flocking(int entityID)
 			: base(entityID)
 		{
-			AccelerationMagnitude = 10f;
 		}
 
 
 		public int FlockID { get; set; }
-		public float AccelerationMagnitude { get; set; }
-		public Vector2 AccelerationVector { get; set; }
 		//public int? Target { get; set; }
 
-
-		[XmlIgnore]
-		[JsonIgnore]
-		public Vector2 TargetVector { get; set; }
 
 		[XmlIgnore]
 		[JsonIgnore]

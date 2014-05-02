@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
+using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 
 namespace AsteroidOutpost.Components
 {
@@ -13,6 +16,10 @@ namespace AsteroidOutpost.Components
 		}
 
 		public String TargetingType { get; set; }
-		public int? Target{ get; set; }
+		public int? Target { get; set; }
+
+		[XmlIgnore]
+		[JsonIgnore]
+		public Vector2 TargetVector { get; set; }
 	}
 }

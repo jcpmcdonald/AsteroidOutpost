@@ -92,11 +92,8 @@ namespace AsteroidOutpost.Systems
 					if (targeting.Target != null)
 					{
 						Position targetPosition = world.GetComponent<Position>(targeting.Target.Value);
-						List<IWeapon> weapons = world.GetWeapons(vehicle);
-						IWeapon primaryWeapon = weapons.First(x => x.Range == weapons.Min(y => y.Range));
-						const int weaponGive = 10; // Just some number to help ships & towers get closer to each other and prevent float errors
 
-						vehicle.TargetVector = Vector2.Normalize(targetPosition.Center - position.Center - (velocity.CurrentVelocity * 5)); // * vehicle.TargetVectorFactor;
+						
 
 
 						// MOVED TO AI BEHAVIOUR SYSTEM
@@ -118,17 +115,12 @@ namespace AsteroidOutpost.Systems
 						vehicle.Separation = Separate(position, fleetPositions, vehicle.SeparationDistance) * vehicle.SeparationFactor;
 						vehicle.Alignment = Align(position, fleetPositions) * vehicle.AlignmentFactor;
 
-						float boidsAcceleration =  vehicle.AccelerationMagnitude * vehicle.AccelerationFactor;
+						float boidsAcceleration =  velocity.AccelerationMagnitude * vehicle.AccelerationFactor;
 						vehicle.BoidsVelocity = vehicle.BoidsVelocity * vehicle.BoidVelocityTrim;
 						vehicle.BoidsVelocity += (vehicle.Cohesion + vehicle.Separation + vehicle.Alignment) * boidsAcceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 
-						if (vehicle.TargetVector != Vector2.Zero)
-						{
-							Animator animator = world.GetComponent<Animator>(vehicle);
-							var facing = Vector2.Normalize(targetPosition.Center - position.Center);
-							animator.SetOrientation(MathHelper.ToDegrees((float)Math.Atan2(facing.X, -facing.Y)), true);
-						}
+						
 					}
 				}
 
@@ -261,10 +253,7 @@ namespace AsteroidOutpost.Systems
 		//}
 
 
-		private float MinDistanceToStop(Velocity velocity, Flocking vehicle)
-		{
-			return (float)(0.5 * vehicle.AccelerationMagnitude * Math.Pow(velocity.CurrentVelocity.Length() / vehicle.AccelerationMagnitude, 2.0));
-		}
+		
 		
 		
 		internal void AccelerateAlong(Velocity velocity, Flocking vehicle, GameTime gameTime)
@@ -272,20 +261,7 @@ namespace AsteroidOutpost.Systems
 			
 		}
 
-		protected void Decelerate(Velocity velocity, Flocking vehicle, GameTime gameTime)
-		{
-			if (velocity.CurrentVelocity != Vector2.Zero)
-			{
-				if ((vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds) >= velocity.CurrentVelocity.Length())
-				{
-				//	velocity.CurrentVelocity = Vector2.Zero;
-				}
-				else
-				{
-					velocity.CurrentVelocity -= Vector2.Normalize(velocity.CurrentVelocity) * vehicle.AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds;
-				}
-			}
-		}
+		
 
 
 		public override void Draw(GameTime gameTime)
@@ -293,10 +269,11 @@ namespace AsteroidOutpost.Systems
 			spriteBatch.Begin();
 			foreach (var fleetBehaviour in world.GetComponents<Flocking>().Where(x => x.DebugView))
 			{
-				float scale = 20f;
+				const float scale = 20f;
 				Position position = world.GetComponent<Position>(fleetBehaviour);
+				Targeting targeting = world.GetComponent<Targeting>(fleetBehaviour);
 				spriteBatch.DrawLine(world.WorldToScreen(position.Center),
-				                     world.WorldToScreen(position.Center + (fleetBehaviour.TargetVector) * scale),
+				                     world.WorldToScreen(position.Center + (targeting.TargetVector) * scale),
 				                     Color.Yellow,
 				                     2);
 
