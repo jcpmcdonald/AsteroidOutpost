@@ -26,7 +26,7 @@ namespace AsteroidOutpost.Systems
 			{
 				if (targeting.Target == null)
 				{
-					targeting.Target = FindClosestTarget(targeting.EntityID);
+					targeting.Target = FindClosestTarget(targeting);
 				}
 			}
 
@@ -34,15 +34,15 @@ namespace AsteroidOutpost.Systems
 		}
 
 
-		private int? FindClosestTarget(int entityID)
+		private int? FindClosestTarget(Component exampleComponent)
 		{
 			
 			// Find a suitable target
-			Position position = world.GetComponent<Position>(entityID);
-			var livingThings = world.GetComponents<HitPoints>().Where(x => x.EntityID != entityID &&
+			Position position = world.GetComponent<Position>(exampleComponent.EntityID);
+			var livingThings = world.GetComponents<HitPoints>().Where(x => x.EntityID != exampleComponent.EntityID &&
 			                                                               x.IsAlive() &&
 			                                                               world.GetOwningForce(x).Team != Team.Neutral &&
-			                                                               world.GetOwningForce(x).Team != world.GetOwningForce(entityID).Team);
+			                                                               world.GetOwningForce(x).Team != world.GetOwningForce(exampleComponent.EntityID).Team);
 
 			var livingThingPositions = livingThings.Select(x => world.GetComponent<Position>(x));
 			Position closestLivingThing = null;
@@ -62,6 +62,37 @@ namespace AsteroidOutpost.Systems
 			return null;
 		}
 
+
+		//private Position AcquireTarget(ProjectileLauncher projectileLauncher)
+		//{
+		//	Position position = world.GetComponent<Position>(projectileLauncher);
+		//	List<int> possibleTargets = world.EntitiesInArea(position.Center, projectileLauncher.Range);
+
+		//	// Always pick the closest target
+		//	Position closestTargetPosition = null;
+		//	foreach (var possibleTarget in possibleTargets)
+		//	{
+		//		if (possibleTarget == projectileLauncher.EntityID ||
+		//			world.GetOwningForce(possibleTarget).Team == world.GetOwningForce(projectileLauncher).Team ||
+		//			world.GetOwningForce(possibleTarget).Team == Team.Neutral ||
+		//			world.GetNullableComponent<Targetable>(possibleTarget) == null ||
+		//			world.GetNullableComponent<Constructing>(possibleTarget) != null)
+		//		{
+		//			// Eliminate invalid targets
+		//			continue;
+		//		}
+
+
+		//		Position possibleTargetPosition = world.GetComponent<Position>(possibleTarget);
+		//		if (position.Distance(possibleTargetPosition) <= projectileLauncher.Range &&
+		//			(closestTargetPosition == null || position.Distance(closestTargetPosition) > position.Distance(possibleTargetPosition)))
+		//		{
+		//			closestTargetPosition = possibleTargetPosition;
+		//		}
+		//	}
+
+		//	return closestTargetPosition;
+		//}
 
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
@@ -21,5 +22,18 @@ namespace AsteroidOutpost.Components
 		[XmlIgnore]
 		[JsonIgnore]
 		public Vector2 TargetVector { get; set; }
+
+
+		[XmlIgnore]
+		[JsonIgnore]
+		public new int EntityID
+		{
+			get
+			{
+				// Do not confuse EntityID with Target!
+				Debugger.Break();
+				return base.EntityID;
+			}
+		}
 	}
 }

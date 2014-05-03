@@ -14,7 +14,6 @@ namespace AsteroidOutpost.Components
 	{
 		public int Range { get; set; }
 		public float Damage { get; set; }
-		public int? Target { get; set; }
 		public Color Color { get; set; }
 		public float PowerUsageRate { get; set; }
 

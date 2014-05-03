@@ -37,77 +37,57 @@ namespace AsteroidOutpost.Systems
 				if (constructing != null) { return; }
 
 				Position position = world.GetComponent<Position>(laser);
-				List<int> possibleTargets = world.EntitiesInArea(position.Center, laser.Range);
+				Targeting targeting = world.GetComponent<Targeting>(laser);
 
-				// Always pick the closest target
-				Position closestTargetPosition = null;
-				foreach (var possibleTarget in possibleTargets)
+				if (targeting.Target.HasValue)
 				{
-					if(possibleTarget == laser.EntityID ||
-						world.GetOwningForce(possibleTarget).Team == world.GetOwningForce(laser).Team ||
-						world.GetOwningForce(possibleTarget).Team == Team.Neutral ||
-						world.GetNullableComponent<Targetable>(possibleTarget) == null ||
-						world.GetNullableComponent<Constructing>(possibleTarget) != null)
+					Position targetPosition = world.GetComponent<Position>(targeting.Target.Value);
+					if (inRange(position, targetPosition, laser.Range))
 					{
-						// Eliminate invalid targets
-						continue;
-					}
-
-
-					Position possibleTargetPosition = world.GetComponent<Position>(possibleTarget);
-					if (position.Distance(possibleTargetPosition) <= laser.Range &&
-					    (closestTargetPosition == null || position.Distance(closestTargetPosition) > position.Distance(possibleTargetPosition)))
-					{
-						closestTargetPosition = possibleTargetPosition;
-					}
-				}
-
-				if(closestTargetPosition == null)
-				{
-					laser.Target = null;
-				}
-				else
-				{
-					laser.Target = closestTargetPosition.EntityID;
-
-					// Extract some power
-					if(laser.PowerUsageRate > 0)
-					{
-						float powerToUse = laser.PowerUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
-						Force owningForce = world.GetOwningForce(laser);
-						if (powerGridSystem.GetPower(laser, powerToUse))
+						// Extract some power
+						if (laser.PowerUsageRate > 0)
 						{
+							float powerToUse = laser.PowerUsageRate * (float)gameTime.ElapsedGameTime.TotalSeconds;
+							Force owningForce = world.GetOwningForce(laser);
+							if (powerGridSystem.GetPower(laser, powerToUse))
+							{
+								laser.HasPower = true;
+							}
+							else
+							{
+								laser.HasPower = false;
+							}
+						}
+						else
+						{
+							// No power required for this laser
 							laser.HasPower = true;
 						}
-						else
-						{
-							laser.HasPower = false;
-						}
-					}
-					else
-					{
-						// No power required for this laser
-						laser.HasPower = true;
-					}
 
 
-					if(laser.HasPower)
-					{
-						HitPoints targetHitPoints = world.GetNullableComponent<HitPoints>(closestTargetPosition.EntityID);
-						if (targetHitPoints != null)
+						if (laser.HasPower)
 						{
-							float damage = (laser.Damage * (float)gameTime.ElapsedGameTime.TotalSeconds);
-							hitPointSystem.InflictDamageOn(targetHitPoints, damage);
-						}
-						else
-						{
-							Console.WriteLine("Trying to shoot an invulnerable target! Target is Targetable, but has no HitPoints! What do we do?");
-							Debugger.Break();
+							HitPoints targetHitPoints = world.GetNullableComponent<HitPoints>(targeting.Target.Value);
+							if (targetHitPoints != null)
+							{
+								float damage = (laser.Damage * (float)gameTime.ElapsedGameTime.TotalSeconds);
+								hitPointSystem.InflictDamageOn(targetHitPoints, damage);
+							}
+							else
+							{
+								Console.WriteLine("Trying to shoot an invulnerable target! Target is Targetable, but has no HitPoints! What do we do?");
+								Debugger.Break();
+							}
 						}
 					}
-
 				}
 			}
+		}
+
+
+		private bool inRange(Position position, Position targetPosition, float range)
+		{
+			return position.Distance(targetPosition) - position.Radius - targetPosition.Radius <= range;
 		}
 
 
@@ -118,23 +98,29 @@ namespace AsteroidOutpost.Systems
 			foreach (var laser in world.GetComponents<LaserWeapon>())
 			{
 				Constructing constructable = world.GetNullableComponent<Constructing>(laser);
+				Position position = world.GetComponent<Position>(laser);
 				if (constructable != null && constructable.IsBeingPlaced)
 				{
 					// Draw attack range
-					Position position = world.GetComponent<Position>(laser);
 					spriteBatch.DrawEllipse(world.WorldToScreen(position.Center),
-					                        world.Scale(laser.Range),
+					                        world.Scale(laser.Range + position.Radius),
 					                        Color.Red);
 				}
-				else if (laser.Target != null && laser.HasPower)
+				else
 				{
-					Position position = world.GetComponent<Position>(laser);
-					Position targetPosition = world.GetNullableComponent<Position>(laser.Target.Value);
-					if (targetPosition != null)
+					Targeting targeting = world.GetComponent<Targeting>(laser);
+					if (targeting.Target != null)
 					{
-						spriteBatch.DrawLine(world.WorldToScreen(position.Center),
-						                     world.WorldToScreen(targetPosition.Center),
-						                     laser.Color);
+						Position targetPosition = world.GetComponent<Position>(targeting.Target.Value);
+						if (targeting.Target != null && laser.HasPower && inRange(position, targetPosition, laser.Range))
+						{
+							if (targetPosition != null)
+							{
+								spriteBatch.DrawLine(world.WorldToScreen(position.Center),
+								                     world.WorldToScreen(targetPosition.Center),
+								                     laser.Color);
+							}
+						}
 					}
 				}
 			}

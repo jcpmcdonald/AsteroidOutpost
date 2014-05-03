@@ -34,7 +34,7 @@ namespace AsteroidOutpost.Systems
 
 				Position targetPosition = world.GetComponent<Position>(targeting.Target.Value);
 
-				float distanceToTarget = position.Distance(targetPosition);
+				float distanceToTarget = position.Distance(targetPosition) - targetPosition.Radius - position.Radius;
 				IWeapon bestWeapon = weapons.Find(x => x.Range  == weapons.Min(y => y.Range));
 				const int weaponGive = 10; // Just some number to help ships & towers get closer to each other and prevent float errors
 

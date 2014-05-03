@@ -83,7 +83,7 @@ namespace AsteroidOutpost.Systems
 				if(laserWeapon != null)
 				{
 					spriteBatch.DrawEllipse(world.WorldToScreen(selectedEntityPosition.Center),
-					                        world.Scale(laserWeapon.Range),
+					                        world.Scale(laserWeapon.Range + selectedEntityPosition.Radius),
 					                        Color.Red);
 				}
 
