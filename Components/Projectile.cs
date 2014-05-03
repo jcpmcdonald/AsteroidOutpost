@@ -12,6 +12,7 @@ namespace AsteroidOutpost.Components
 		public Vector2 AccelerationVector { get; set; }
 		public int DetonationDistance { get; set; }
 		public String TrailEffect { get; set; }
+		public int TrailOffset { get; set; }
 
 
 		public Projectile(int entityID) : base(entityID) {}

@@ -39,7 +39,7 @@ namespace AsteroidOutpost.Systems
 				if(projectile.TrailEffect != null)
 				{
 					ParticleEffectManager particleEffectManager = (ParticleEffectManager)Game.Services.GetService(typeof(ParticleEffectManager));
-					particleEffectManager.Trigger(projectile.TrailEffect, position.Center);
+					particleEffectManager.Trigger(projectile.TrailEffect, position.Center - (Vector2.Normalize(velocity.CurrentVelocity) * projectile.TrailOffset));
 				}
 
 				// Boom?
