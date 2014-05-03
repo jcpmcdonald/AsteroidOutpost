@@ -35,6 +35,9 @@
 			"Spray" : 0.05,
 		},
 		"Targetable" : {},
+		"Targeting" : {
+			"TargetingType" : "Closest",
+		},
 		"Perishable" : {
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},

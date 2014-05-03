@@ -33,6 +33,9 @@
 			"PowerUsageRate" : 5,
 		},
 		"Targetable" : {},
+		"Targeting" : {
+			"TargetingType" : "Closest",
+		},
 		"Perishable" : {
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},

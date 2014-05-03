@@ -32,6 +32,9 @@
 			"FireRate" : 1500,
 		},
 		"Targetable" : {},
+		"Targeting" : {
+			"TargetingType" : "Closest",
+		},
 		"Perishable" : {
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},

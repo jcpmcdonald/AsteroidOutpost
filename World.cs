@@ -134,6 +134,9 @@ namespace AsteroidOutpost
 			// TODO: Create this on the server, then send the size to the clients
 			quadTree = new QuadTree<Position>(0, 0, 20000, 20000);
 
+			targetingSystem.UpdateOrder = -1;
+
+
 			animationSystem.DrawOrder = 1000;
 			movementSystem.DrawOrder = 1001;
 			constructionSystem.DrawOrder = 1002;

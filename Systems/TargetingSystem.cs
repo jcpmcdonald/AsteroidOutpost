@@ -24,7 +24,7 @@ namespace AsteroidOutpost.Systems
 			var targetingEntities = world.GetComponents<Targeting>();
 			foreach(var targeting in targetingEntities)
 			{
-				if (targeting.Target == null)
+				if (targeting.Target == null || world.GetNullableComponent<Targetable>(targeting.Target.Value) == null)
 				{
 					targeting.Target = FindClosestTarget(targeting);
 				}
