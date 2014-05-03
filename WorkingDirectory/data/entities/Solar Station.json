@@ -5,10 +5,11 @@
 			"Name" : "Solar Station",
 		},
 		"Position" : {
-			"Radius" : 40,
+			"Radius" : 27,
 		},
 		"Animator" : {
 			"SpriteName" : "Solar Station",
+			"Offset" : "0, -5",
 			"Scale" : 0.7,
 			"CurrentSet" : "Level 1",
 			"CurrentAnimation" : "Idle",
