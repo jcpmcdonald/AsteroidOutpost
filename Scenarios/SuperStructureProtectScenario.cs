@@ -20,7 +20,10 @@ namespace AsteroidOutpost.Scenarios
 
 		private Mission currentMission;
 		private int superStation;
-		private int rampUpState = 0;
+		private bool overloading = false;
+		private TimeSpan timeBetweenOverloadExplosions = TimeSpan.FromSeconds(0.3);
+		private TimeSpan nextOverloadExplosion = TimeSpan.Zero;
+		private bool epicExplosionDone = false;
 
 		public delegate bool OneOffCondition();
 		public delegate void OneOffAction();
@@ -118,8 +121,9 @@ namespace AsteroidOutpost.Scenarios
 		}
 
 
-		void StartMission()
+		private void StartMission()
 		{
+			var scienceVessel = world.GetComponent<ScienceVessel>(superStation);
 			if (currentMission == protectSuperStation)
 			{
 				world.HUD.ShowConversation("You see this giant thing? It needs LOTS of power, so keep the power coming. We need this to win the war, so protect it with your life.");
@@ -133,6 +137,14 @@ namespace AsteroidOutpost.Scenarios
 							                 StartMission();
 						                 }));
 
+				oneOffEvents.Add(new Tuple<OneOffCondition, OneOffAction>(
+						                 () => scienceVessel.Overload,
+						                 delegate()
+						                 {
+							                 world.HUD.ShowConversation("THE REACTOR IS OVERLOADING!!!! GET OUT OF HERE!");
+							                 overloading = true;
+						                 }));
+
 			}
 			else if (currentMission == prepareForRampUp)
 			{
@@ -143,28 +155,28 @@ namespace AsteroidOutpost.Scenarios
 						                 () => timeAlive.TotalSeconds > 50,
 						                 delegate()
 						                 {
-							                 world.GetComponent<ScienceVessel>(superStation).PowerConsumptionRate *= 1.10f;
+							                 scienceVessel.PowerConsumptionRate *= 1.10f;
 						                 }));
 
 				oneOffEvents.Add(new Tuple<OneOffCondition, OneOffAction>(
 						                 () => timeAlive.TotalSeconds > 70,
 						                 delegate()
 						                 {
-							                 world.GetComponent<ScienceVessel>(superStation).PowerConsumptionRate *= 1.20f;
+							                 scienceVessel.PowerConsumptionRate *= 1.20f;
 						                 }));
 
 				oneOffEvents.Add(new Tuple<OneOffCondition, OneOffAction>(
 						                 () => timeAlive.TotalSeconds > 90,
 						                 delegate()
 						                 {
-							                 world.GetComponent<ScienceVessel>(superStation).PowerConsumptionRate *= 1.40f;
+							                 scienceVessel.PowerConsumptionRate *= 1.40f;
 						                 }));
 
 				oneOffEvents.Add(new Tuple<OneOffCondition, OneOffAction>(
 						                 () => timeAlive.TotalSeconds > 110,
 						                 delegate()
 						                 {
-							                 world.GetComponent<ScienceVessel>(superStation).PowerConsumptionRate *= 1.70f;
+							                 scienceVessel.PowerConsumptionRate *= 1.70f;
 						                 }));
 			}
 		}
@@ -181,6 +193,31 @@ namespace AsteroidOutpost.Scenarios
 				{
 					oneOffEvents[i].Item2();
 					oneOffEvents.RemoveAt(i);
+				}
+			}
+
+
+			if (overloading)
+			{
+				nextOverloadExplosion += deltaTime;
+
+				if (nextOverloadExplosion > timeBetweenOverloadExplosions)
+				{
+					nextOverloadExplosion -= timeBetweenOverloadExplosions;
+
+					var scienceVessel = world.GetNullableComponent<ScienceVessel>(superStation);
+					if (scienceVessel != null)
+					{
+						var position = world.GetNullableComponent<Position>(scienceVessel);
+						HitPoints hitPoints = world.GetComponent<HitPoints>(scienceVessel);
+						theGame.ParticleEffectManager.Trigger("Basic Explosion", position.Center + new Vector2(GlobalRandom.Next(-50, 50), GlobalRandom.Next(-50, 50)));
+						if (hitPoints.Armour < 200 && !epicExplosionDone)
+						{
+							epicExplosionDone = true;
+							var perishable = world.GetNullableComponent<Perishable>(scienceVessel);
+							theGame.ParticleEffectManager.Trigger(perishable.ParticleEffectOnPerish, position.Center);
+						}
+					}
 				}
 			}
 		}

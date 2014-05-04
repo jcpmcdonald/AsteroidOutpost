@@ -11,13 +11,15 @@ namespace AsteroidOutpost.Systems
 	{
 		private readonly World world;
 		private readonly PowerGridSystem powerGridSystem;
+		private readonly HitPointSystem hitPointSystem;
 
 
-		public ScienceVesselSystem(Game game, World world, PowerGridSystem powerGridSystem)
+		public ScienceVesselSystem(Game game, World world, PowerGridSystem powerGridSystem, HitPointSystem hitPointSystem)
 				: base(game)
 		{
 			this.world = world;
 			this.powerGridSystem = powerGridSystem;
+			this.hitPointSystem = hitPointSystem;
 		}
 
 
@@ -28,9 +30,16 @@ namespace AsteroidOutpost.Systems
 			var scienceVessels = world.GetComponents<ScienceVessel>();
 			foreach (var scienceVessel in scienceVessels)
 			{
-				if (world.GetNullableComponent<Constructing>(scienceVessel) != null && !scienceVessel.Overload)
+				if (world.GetNullableComponent<Constructing>(scienceVessel) != null)
 				{
 					// Ignore placing and constructing
+					continue;
+				}
+
+				if (scienceVessel.Overload)
+				{
+					HitPoints hitPoints = world.GetComponent<HitPoints>(scienceVessel);
+					hitPointSystem.InflictDamageOn(hitPoints, 100f * (float)gameTime.ElapsedGameTime.TotalSeconds);
 					continue;
 				}
 

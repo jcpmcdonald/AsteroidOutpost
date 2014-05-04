@@ -129,7 +129,7 @@ namespace AsteroidOutpost
 			aiBasicSystem = new AIBasicSystem(game, this);
 			aiStrafeSystem = new AIStrafeSystem(game, this, projectileLauncherSystem);
 			targetingSystem = new TargetingSystem(game, this);
-			scienceVesselSystem = new ScienceVesselSystem(game, this, powerGridSystem);
+			scienceVesselSystem = new ScienceVesselSystem(game, this, powerGridSystem, hitPointSystem);
 
 			awesomium = game.Awesomium;
 
