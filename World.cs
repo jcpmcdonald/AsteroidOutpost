@@ -126,7 +126,7 @@ namespace AsteroidOutpost
 			particleEngine = new ParticleEngine(game, this);
 			autoHealSystem = new AutoHealSystem(game, this, hitPointSystem);
 			aiBasicSystem = new AIBasicSystem(game, this);
-			aiStrafeSystem = new AIStrafeSystem(game, this);
+			aiStrafeSystem = new AIStrafeSystem(game, this, projectileLauncherSystem);
 			targetingSystem = new TargetingSystem(game, this);
 
 			awesomium = game.Awesomium;
@@ -134,7 +134,7 @@ namespace AsteroidOutpost
 			// TODO: Create this on the server, then send the size to the clients
 			quadTree = new QuadTree<Position>(0, 0, 20000, 20000);
 
-			targetingSystem.UpdateOrder = -1;
+			targetingSystem.UpdateOrder = 1;
 
 
 			animationSystem.DrawOrder = 1000;

@@ -42,7 +42,7 @@ namespace AsteroidOutpost.Components
 			{
 				if ((AccelerationMagnitude * (float)gameTime.ElapsedGameTime.TotalSeconds) >= CurrentVelocity.Length())
 				{
-					//	velocity.CurrentVelocity = Vector2.Zero;
+					CurrentVelocity = Vector2.Zero;
 				}
 				else
 				{

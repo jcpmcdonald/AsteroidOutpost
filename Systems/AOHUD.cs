@@ -332,7 +332,7 @@ namespace AsteroidOutpost.Systems
 					//world.Add(new Ship1(world, world, aiActor.PrimaryForce, new Vector2(world.MapWidth / 2.0f, world.MapHeight / 2.0f) + new Vector2(600, -600)));
 
 					Vector2 worldPosition = world.ScreenToWorld(new Vector2(theMouse.X, theMouse.Y));
-					world.Create("Spaceship", aiActor.PrimaryForce, new JObject{
+					world.Create("Deserter", aiActor.PrimaryForce, new JObject{
 						{ "Position", new JObject{
 							{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", worldPosition.X, worldPosition.Y) },
 						}}

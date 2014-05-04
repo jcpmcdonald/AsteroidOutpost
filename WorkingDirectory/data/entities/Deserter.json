@@ -25,6 +25,13 @@
 			"Damage" : 3,
 			"Color" : "139, 0, 0, 255",
 		},
+		"ProjectileLauncher" : {
+			"ProjectileType" : "Missile",
+			"Range" : 300,
+			"FireRate" : 1500,
+			"Damage" : 10,
+			"FireMode" : "HoldFire",
+		},
 		"Flocking" : {
 			"AccelerationFactor" : 0.2,
 			"BoidVelocityTrim" : 0.8,
@@ -35,11 +42,17 @@
 			"SeparationDistance" : 25,
 		},
 		"Targetable" : {},
+		"Targeting" : {
+			"TargetingType" : "Closest",
+		},
 		"Perishable" : {
 			"ParticleEffectOnPerish" : "Basic Explosion",
 		},
 		"Selectable" : {},
-		"AIStrafe" : {},
+		"AIStrafe" : {
+			"StrafeAccelerationMagnitude" : 3,
+			"MissileCount" : 6,
+		},
 	}
 }
 
