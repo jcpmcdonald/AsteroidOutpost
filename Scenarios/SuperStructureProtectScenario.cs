@@ -14,10 +14,20 @@ namespace AsteroidOutpost.Scenarios
 	public class SuperStructureProtectScenario : Scenario
 	{
 		private Vector2 startingPoint;
+
+		private TimeSpan waveTimer = TimeSpan.FromSeconds(20);
+		private TimeSpan timeAlive = TimeSpan.Zero;
+
 		private Mission currentMission;
 		private int superStation;
+		private int rampUpState = 0;
+
+		public delegate bool OneOffCondition();
+		public delegate void OneOffAction();
+		private List<Tuple<OneOffCondition, OneOffAction>> oneOffEvents = new List<Tuple<OneOffCondition,OneOffAction>>();
 
 		private Mission protectSuperStation = new Mission("protect", "Protect the super station", false);
+		private Mission prepareForRampUp = new Mission("prepare1", "Prepare for additional power needs", false);
 
 		public SuperStructureProtectScenario()
 		{
@@ -37,7 +47,7 @@ namespace AsteroidOutpost.Scenarios
 			}
 
 			// Set up some forces and actors
-			friendlyForce = new Force(world, world.GetNextForceID(), 250, Team.Team1);
+			friendlyForce = new Force(world, world.GetNextForceID(), 800, Team.Team1);
 			Controller localController = new Controller(world, ControllerRole.Local, friendlyForce);
 			world.AddForce(friendlyForce);
 			world.AddController(localController);
@@ -110,19 +120,69 @@ namespace AsteroidOutpost.Scenarios
 
 		void StartMission()
 		{
-			//frmInstructions.Clear();
-			//frmInstructions.Title = "Training (" + (section + 1) + " / 6)";
-
 			if (currentMission == protectSuperStation)
 			{
+				world.HUD.ShowConversation("You see this giant thing? It needs LOTS of power, so keep the power coming. We need this to win the war, so protect it with your life.");
 				missions.Add(protectSuperStation);
+
+				oneOffEvents.Add(new Tuple<OneOffCondition, OneOffAction>(
+						                 () => timeAlive.TotalSeconds > 30,
+						                 delegate()
+						                 {
+							                 currentMission = prepareForRampUp;
+							                 StartMission();
+						                 }));
+
+			}
+			else if (currentMission == prepareForRampUp)
+			{
+				world.HUD.ShowConversation("Scientists are having a difficult time maintaining core temperatures and will require additional power right away. Our lives depend on this.");
+				missions.Add(prepareForRampUp);
+
+				oneOffEvents.Add(new Tuple<OneOffCondition, OneOffAction>(
+						                 () => timeAlive.TotalSeconds > 50,
+						                 delegate()
+						                 {
+							                 world.GetComponent<ScienceVessel>(superStation).PowerConsumptionRate *= 1.10f;
+						                 }));
+
+				oneOffEvents.Add(new Tuple<OneOffCondition, OneOffAction>(
+						                 () => timeAlive.TotalSeconds > 70,
+						                 delegate()
+						                 {
+							                 world.GetComponent<ScienceVessel>(superStation).PowerConsumptionRate *= 1.20f;
+						                 }));
+
+				oneOffEvents.Add(new Tuple<OneOffCondition, OneOffAction>(
+						                 () => timeAlive.TotalSeconds > 90,
+						                 delegate()
+						                 {
+							                 world.GetComponent<ScienceVessel>(superStation).PowerConsumptionRate *= 1.40f;
+						                 }));
+
+				oneOffEvents.Add(new Tuple<OneOffCondition, OneOffAction>(
+						                 () => timeAlive.TotalSeconds > 110,
+						                 delegate()
+						                 {
+							                 world.GetComponent<ScienceVessel>(superStation).PowerConsumptionRate *= 1.70f;
+						                 }));
 			}
 		}
 
 
 		public override void Update(TimeSpan deltaTime)
 		{
-			
+			timeAlive += deltaTime;
+			waveTimer = waveTimer.Subtract(deltaTime);
+
+			for (int i = oneOffEvents.Count - 1; i >= 0 ; i--)
+			{
+				if (oneOffEvents[i].Item1())
+				{
+					oneOffEvents[i].Item2();
+					oneOffEvents.RemoveAt(i);
+				}
+			}
 		}
 
 

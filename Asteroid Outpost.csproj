@@ -142,6 +142,7 @@
     <Compile Include="Components\Animator.cs" />
     <Compile Include="Components\AutoHeal.cs" />
     <Compile Include="Components\AnimatorSet.cs" />
+    <Compile Include="Components\ScienceVessel.cs" />
     <Compile Include="Components\Targeting.cs" />
     <Compile Include="Components\Upgrading.cs" />
     <Compile Include="Components\Constructing.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Systems\PowerStorageSystem.cs" />
     <Compile Include="Systems\ProjectileSystem.cs" />
     <Compile Include="Systems\ParticleEngine.cs" />
+    <Compile Include="Systems\ScienceVesselSystem.cs" />
     <Compile Include="Systems\SelectionSystem.cs" />
     <Compile Include="Systems\TargetingSystem.cs" />
     <Compile Include="World.cs" />

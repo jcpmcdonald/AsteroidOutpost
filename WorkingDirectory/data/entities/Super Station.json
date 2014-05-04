@@ -16,8 +16,16 @@
 			"CurrentAnimation" : "Idle",
 			"Tint" : "255, 255, 255, 255",
 		},
-		"PowerProducer" : {
-			"PowerProductionRate" : -30,
+		"ScienceVessel" : {
+			"PowerConsumptionRate" : 30,
+			"MaxPowerStorage" : 120,
+			"StoredPower" : 120,
+			"StoredPowerReplenishRate" : 10,
+		},
+		"PowerStorage" : {
+			"MaxPower" : 120,
+			"AvailablePower" : 120,
+			"Locked" : true,
 		},
 		"PowerGridNode" : {
 			"PowerLinkPointRelative" : "0, 0",
@@ -34,7 +42,7 @@
 		"Selectable" : {},
 		"Targetable" : {},
 		"Perishable" : {
-			"ParticleEffectOnPerish" : "Basic Explosion",
+			"ParticleEffectOnPerish" : "Epic Explosion",
 		},
 	},
 }

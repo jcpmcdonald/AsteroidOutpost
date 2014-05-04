@@ -23,14 +23,14 @@
 		},
 		{
 			"TexturePath" : "Snow&Ice\\SpaceNebula.png",
-			"Distance" : 35,
+			"Distance" : 15,
 			"Tint" : "200, 200, 200, 100",
 			"Scale" : 2.0,
 			"Position" : "-1500, -1500",
 		},
 		{
 			"TexturePath" : "Snow&Ice\\IcePlanet.png",
-			"Distance" : 20,
+			"Distance" : 10,
 			"Position" : "576, 500",
 		},
 	]

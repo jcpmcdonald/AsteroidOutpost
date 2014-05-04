@@ -71,6 +71,7 @@ namespace AsteroidOutpost
 		private readonly AIBasicSystem aiBasicSystem;
 		private readonly AIStrafeSystem aiStrafeSystem;
 		private readonly TargetingSystem targetingSystem;
+		private readonly ScienceVesselSystem scienceVesselSystem;
 
 		private MissionSystem missionSystem; // Created when world starts, instead of the world is created
 
@@ -128,6 +129,7 @@ namespace AsteroidOutpost
 			aiBasicSystem = new AIBasicSystem(game, this);
 			aiStrafeSystem = new AIStrafeSystem(game, this, projectileLauncherSystem);
 			targetingSystem = new TargetingSystem(game, this);
+			scienceVesselSystem = new ScienceVesselSystem(game, this, powerGridSystem);
 
 			awesomium = game.Awesomium;
 
@@ -168,6 +170,7 @@ namespace AsteroidOutpost
 			game.Components.Add(aiBasicSystem);
 			game.Components.Add(aiStrafeSystem);
 			game.Components.Add(targetingSystem);
+			game.Components.Add(scienceVesselSystem);
 		}
 
 
