@@ -27,7 +27,12 @@ namespace AsteroidOutpost.Components
 		/// <returns>Returns true if power was consumed, false otherwise</returns>
 		public bool GetPower(float amount)
 		{
-			if (!Locked && AvailablePower >= amount)
+			if(amount > 0 && !Locked && AvailablePower >= amount)
+			{
+				AvailablePower -= amount;
+				return true;
+			}
+			else if (amount < 0 && AvailablePower < MaxPower)
 			{
 				AvailablePower -= amount;
 				return true;

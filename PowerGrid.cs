@@ -251,7 +251,7 @@ namespace AsteroidOutpost
 				toVisit.RemoveAt(0);
 
 				PowerStorage storage = world.GetNullableComponent<PowerStorage>(cursor);
-				if (storage != null && !storage.Locked)
+				if (storage != null && (!storage.Locked || amount < 0))
 				{
 					float powerAfterUse = storage.AvailablePower - amount;
 					if (powerAfterUse >= 0 && powerAfterUse <= storage.MaxPower)
