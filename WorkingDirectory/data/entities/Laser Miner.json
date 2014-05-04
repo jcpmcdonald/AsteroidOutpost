@@ -28,7 +28,7 @@
 		},
 		"LaserMiner" : {
 			"MiningSourceOffset" : "0, 0",
-			"MiningRate" : 25,
+			"MiningRate" : 15,
 			"EnergyUsageRate" : 5,
 			"ChargeTime" : 3.0,
 			"MineTime" : 1.500,
