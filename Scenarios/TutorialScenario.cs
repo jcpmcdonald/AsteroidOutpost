@@ -123,7 +123,6 @@ namespace AsteroidOutpost.Scenarios
 				var miner = world.GetNullableComponent<LaserMiner>(args.EntityID);
 				if (miner != null)
 				{
-					// miner.ConnectedPowerSources().Count > 0 &&
 					if (miner.nearbyAsteroids.Count > 0)
 					{
 						minersBuilt++;

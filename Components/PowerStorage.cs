@@ -11,12 +11,14 @@ namespace AsteroidOutpost.Components
 		public PowerStorage(int entityID)
 			: base(entityID)
 		{
+			Locked = false;
 		}
 
 
 		public float MaxPower { get; set; }
 		public float AvailablePower { get; set; }
 
+		public bool Locked { get; set; }
 
 		/// <summary>
 		/// Gets the power from this producer if able. Returns true if power was consumed
@@ -25,7 +27,7 @@ namespace AsteroidOutpost.Components
 		/// <returns>Returns true if power was consumed, false otherwise</returns>
 		public bool GetPower(float amount)
 		{
-			if (AvailablePower >= amount)
+			if (!Locked && AvailablePower >= amount)
 			{
 				AvailablePower -= amount;
 				return true;
