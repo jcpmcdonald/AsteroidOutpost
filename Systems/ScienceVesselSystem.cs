@@ -23,6 +23,8 @@ namespace AsteroidOutpost.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			if (world.Paused) { return; }
+
 			var scienceVessels = world.GetComponents<ScienceVessel>();
 			foreach (var scienceVessel in scienceVessels)
 			{
