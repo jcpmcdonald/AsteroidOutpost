@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent>
   <Asset Type="ProjectMercury.ParticleEffect">
-    <Name>Missile Trail</Name>
+    <Name>Fire</Name>
     <Author>John McDonald</Author>
     <Description>Modified simple fireball effect.</Description>
     <Emitters>
@@ -9,7 +9,7 @@
         <Name>Smoke Trail</Name>
         <Budget>5000</Budget>
         <Term>1</Term>
-        <ReleaseQuantity>3</ReleaseQuantity>
+        <ReleaseQuantity>1</ReleaseQuantity>
         <Enabled>true</Enabled>
         <ReleaseSpeed>[5,5]</ReleaseSpeed>
         <ReleaseColour>
@@ -43,6 +43,10 @@
           </Modifier>
           <Modifier Type="ProjectMercury.Modifiers.RotationModifier">
             <RotationRate>0 0 1</RotationRate>
+          </Modifier>
+          <Modifier Type="ProjectMercury.Modifiers.LinearGravityModifier">
+            <GravityVector>0 -1 0</GravityVector>
+            <Strength>100</Strength>
           </Modifier>
         </Modifiers>
         <Controllers />
@@ -79,6 +83,10 @@
           <Modifier Type="ProjectMercury.Modifiers.RotationModifier">
             <RotationRate>0 0 1</RotationRate>
           </Modifier>
+          <Modifier Type="ProjectMercury.Modifiers.LinearGravityModifier">
+            <GravityVector>0 -1 0</GravityVector>
+            <Strength>500</Strength>
+          </Modifier>
         </Modifiers>
         <Controllers />
       </Item>
@@ -87,7 +95,7 @@
         <Budget>1000</Budget>
         <Term>1</Term>
         <ReleaseQuantity>4</ReleaseQuantity>
-        <Enabled>true</Enabled>
+        <Enabled>false</Enabled>
         <ReleaseSpeed>[40,60]</ReleaseSpeed>
         <ReleaseColour>
           <Red>[0.8,1]</Red>

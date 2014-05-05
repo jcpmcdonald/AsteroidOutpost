@@ -39,7 +39,7 @@ namespace AsteroidOutpost.Systems
 				if (scienceVessel.Overload)
 				{
 					HitPoints hitPoints = world.GetComponent<HitPoints>(scienceVessel);
-					hitPointSystem.InflictDamageOn(hitPoints, 100f * (float)gameTime.ElapsedGameTime.TotalSeconds);
+					hitPointSystem.InflictDamageOn(hitPoints, 50f * (float)gameTime.ElapsedGameTime.TotalSeconds);
 					continue;
 				}
 

@@ -23,8 +23,8 @@
 			"StoredPowerReplenishRate" : 10,
 		},
 		"PowerStorage" : {
-			"MaxPower" : 120,
-			"AvailablePower" : 120,
+			"MaxPower" : 250,
+			"AvailablePower" : 250,
 			"Locked" : true,
 		},
 		"PowerGridNode" : {
@@ -41,9 +41,7 @@
 		},
 		"Selectable" : {},
 		"Targetable" : {},
-		"Perishable" : {
-			"ParticleEffectOnPerish" : "Epic Explosion",
-		},
+		"Perishable" : {},
 	},
 }
 

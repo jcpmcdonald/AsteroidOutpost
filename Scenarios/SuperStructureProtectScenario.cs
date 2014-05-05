@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
+using AsteroidOutpost.Eventing;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
 
@@ -24,6 +25,7 @@ namespace AsteroidOutpost.Scenarios
 		private TimeSpan timeBetweenOverloadExplosions = TimeSpan.FromSeconds(0.3);
 		private TimeSpan nextOverloadExplosion = TimeSpan.Zero;
 		private bool epicExplosionDone = false;
+		private List<Vector2> overloadFires = new List<Vector2>();
 
 		public delegate bool OneOffCondition();
 		public delegate void OneOffAction();
@@ -31,6 +33,8 @@ namespace AsteroidOutpost.Scenarios
 
 		private Mission protectSuperStation = new Mission("protect", "Protect the super station", false);
 		private Mission prepareForRampUp = new Mission("prepare1", "Prepare for additional power needs", false);
+		private Mission prepareForRampUp2 = new Mission("prepare2", "More power!", false);
+		private Mission maintainPowerLevel = new Mission("maintain", "Maintain power level", false);
 
 		public SuperStructureProtectScenario()
 		{
@@ -111,6 +115,8 @@ namespace AsteroidOutpost.Scenarios
 			storage2.AvailablePower = storage2.MaxPower;
 			storage3.AvailablePower = storage3.MaxPower;
 
+			var superStationHitPoints = world.GetComponent<HitPoints>(superStation);
+			superStationHitPoints.ArmourChanged += SuperStationHitPointsOnArmourChanged;
 
 			world.HUD.FocusWorldPoint = startingPoint;
 
@@ -119,6 +125,9 @@ namespace AsteroidOutpost.Scenarios
 
 			GenerateAsteroidField(1000);
 		}
+
+
+		
 
 
 		private void StartMission()
@@ -169,6 +178,10 @@ namespace AsteroidOutpost.Scenarios
 						                 () => timeAlive.TotalSeconds > 90,
 						                 delegate()
 						                 {
+							                 prepareForRampUp.Done = true;
+							                 currentMission = prepareForRampUp2;
+							                 missions.Add(currentMission);
+							                 world.HUD.ShowConversation("Good job so far, but we need even more power. Keep the power flowing!");
 							                 scienceVessel.PowerConsumptionRate *= 1.40f;
 						                 }));
 
@@ -176,7 +189,18 @@ namespace AsteroidOutpost.Scenarios
 						                 () => timeAlive.TotalSeconds > 110,
 						                 delegate()
 						                 {
-							                 scienceVessel.PowerConsumptionRate *= 1.70f;
+							                 scienceVessel.PowerConsumptionRate *= 1.5f;
+						                 }));
+
+				oneOffEvents.Add(new Tuple<OneOffCondition, OneOffAction>(
+						                 () => timeAlive.TotalSeconds > 130,
+						                 delegate()
+						                 {
+							                 world.HUD.ShowConversation("The science vessel is opperating at maximum capacity. Maintain this and we can all go home early.");
+							                 scienceVessel.PowerConsumptionRate *= 1.5f;
+							                 prepareForRampUp2.Done = true;
+							                 currentMission = maintainPowerLevel;
+							                 missions.Add(currentMission);
 						                 }));
 			}
 		}
@@ -196,6 +220,20 @@ namespace AsteroidOutpost.Scenarios
 				}
 			}
 
+			if (overloadFires.Count > 0)
+			{
+				var scienceVessel = world.GetNullableComponent<ScienceVessel>(superStation);
+				if(scienceVessel != null)
+				{
+					ParticleEffectManager particleEffectManager = (ParticleEffectManager)theGame.Services.GetService(typeof (ParticleEffectManager));
+					var position = world.GetNullableComponent<Position>(scienceVessel);
+					foreach (var firePosition in overloadFires)
+					{
+						particleEffectManager.Trigger("Fire", position.Center + firePosition);
+					}
+				}
+			}
+
 
 			if (overloading)
 			{
@@ -205,20 +243,74 @@ namespace AsteroidOutpost.Scenarios
 				{
 					nextOverloadExplosion -= timeBetweenOverloadExplosions;
 
-					var scienceVessel = world.GetNullableComponent<ScienceVessel>(superStation);
-					if (scienceVessel != null)
-					{
-						var position = world.GetNullableComponent<Position>(scienceVessel);
-						HitPoints hitPoints = world.GetComponent<HitPoints>(scienceVessel);
-						theGame.ParticleEffectManager.Trigger("Basic Explosion", position.Center + new Vector2(GlobalRandom.Next(-50, 50), GlobalRandom.Next(-50, 50)));
-						if (hitPoints.Armour < 200 && !epicExplosionDone)
-						{
-							epicExplosionDone = true;
-							var perishable = world.GetNullableComponent<Perishable>(scienceVessel);
-							theGame.ParticleEffectManager.Trigger(perishable.ParticleEffectOnPerish, position.Center);
-						}
-					}
+					//overloadFires.Add(new Vector2(GlobalRandom.Next(-50, 50), GlobalRandom.Next(-50, 50)));
+
+					// EXPLOSION DEATH
+					//var scienceVessel = world.GetNullableComponent<ScienceVessel>(superStation);
+					//if (scienceVessel != null)
+					//{
+					//	var position = world.GetNullableComponent<Position>(scienceVessel);
+					//	HitPoints hitPoints = world.GetComponent<HitPoints>(scienceVessel);
+					//	theGame.ParticleEffectManager.Trigger("Fire", position.Center + new Vector2(GlobalRandom.Next(-50, 50), GlobalRandom.Next(-50, 50)));
+					//	if (hitPoints.Armour < 200 && !epicExplosionDone)
+					//	{
+					//		epicExplosionDone = true;
+					//		var perishable = world.GetNullableComponent<Perishable>(scienceVessel);
+					//		theGame.ParticleEffectManager.Trigger(perishable.ParticleEffectOnPerish, position.Center);
+					//	}
+					//}
 				}
+
+
+				// FIRE DEATH
+				
+				//if (scienceVessel != null)
+				//{
+				//	//ParticleEffectManager particleEffectManager = (ParticleEffectManager)theGame.Services.GetService(typeof(ParticleEffectManager));
+				//	//var position = world.GetNullableComponent<Position>(scienceVessel);
+				//	//foreach (var firePosition in overloadFires)
+				//	//{
+				//	//	particleEffectManager.Trigger("Fire2", position.Center + firePosition);
+				//	//}
+
+				//	HitPoints hitPoints = world.GetComponent<HitPoints>(scienceVessel);
+				//	if (hitPoints.Armour < 180 && !epicExplosionDone)
+				//	{
+				//		epicExplosionDone = true;
+				//		particleEffectManager.Trigger("Epic Explosion", position.Center);
+				//	}
+
+				//	if (hitPoints.Armour <= 0)
+				//	{
+				//		// You failed to protect the super station
+						
+				//	}
+				// }
+
+			}
+		}
+
+
+		private void SuperStationHitPointsOnArmourChanged(EntityArmourChangedEventArgs entityArmourChangedEventArgs)
+		{
+			//HitPoints hitPoints = (HitPoints)entityArmourChangedEventArgs.Component;
+			int desiredFires = Math.Max(0, (int)((250f - entityArmourChangedEventArgs.NewArmour) / 15f));
+			while (overloadFires.Count < desiredFires)
+			{
+				overloadFires.Add(new Vector2(GlobalRandom.Next(-50, 50), GlobalRandom.Next(-50, 50)));
+			}
+			while (overloadFires.Count > desiredFires)
+			{
+				overloadFires.RemoveAt(0);
+			}
+
+			if (entityArmourChangedEventArgs.NewArmour < 100 && !epicExplosionDone)
+			{
+				world.GetComponent<ScienceVessel>(superStation).Overload = true;
+				epicExplosionDone = true;
+				ParticleEffectManager particleEffectManager = (ParticleEffectManager)theGame.Services.GetService(typeof(ParticleEffectManager));
+				var position = world.GetComponent<Position>(superStation);
+				particleEffectManager.Trigger("Epic Explosion", position.Center);
 			}
 		}
 
@@ -228,6 +320,8 @@ namespace AsteroidOutpost.Scenarios
 			if (deadID == superStation)
 			{
 				// You failed to protect the super station
+				oneOffEvents.Clear();
+
 				world.GameOver(false);
 			}
 			base.World_EntityDied(deadID);
