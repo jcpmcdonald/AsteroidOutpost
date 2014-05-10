@@ -28,7 +28,7 @@
 		"ProjectileLauncher" : {
 			"ProjectileType" : "Missile",
 			"Range" : 300,
-			"FireRate" : 1500,
+			"FireRate" : 4000,
 			"Damage" : 10,
 			"FireMode" : "HoldFire",
 		},

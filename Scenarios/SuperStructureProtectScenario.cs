@@ -223,7 +223,7 @@ namespace AsteroidOutpost.Scenarios
 			if (overloadFires.Count > 0)
 			{
 				var scienceVessel = world.GetNullableComponent<ScienceVessel>(superStation);
-				if(scienceVessel != null)
+				if (scienceVessel != null)
 				{
 					ParticleEffectManager particleEffectManager = (ParticleEffectManager)theGame.Services.GetService(typeof (ParticleEffectManager));
 					var position = world.GetNullableComponent<Position>(scienceVessel);
@@ -232,61 +232,6 @@ namespace AsteroidOutpost.Scenarios
 						particleEffectManager.Trigger("Fire", position.Center + firePosition);
 					}
 				}
-			}
-
-
-			if (overloading)
-			{
-				nextOverloadExplosion += deltaTime;
-
-				if (nextOverloadExplosion > timeBetweenOverloadExplosions)
-				{
-					nextOverloadExplosion -= timeBetweenOverloadExplosions;
-
-					//overloadFires.Add(new Vector2(GlobalRandom.Next(-50, 50), GlobalRandom.Next(-50, 50)));
-
-					// EXPLOSION DEATH
-					//var scienceVessel = world.GetNullableComponent<ScienceVessel>(superStation);
-					//if (scienceVessel != null)
-					//{
-					//	var position = world.GetNullableComponent<Position>(scienceVessel);
-					//	HitPoints hitPoints = world.GetComponent<HitPoints>(scienceVessel);
-					//	theGame.ParticleEffectManager.Trigger("Fire", position.Center + new Vector2(GlobalRandom.Next(-50, 50), GlobalRandom.Next(-50, 50)));
-					//	if (hitPoints.Armour < 200 && !epicExplosionDone)
-					//	{
-					//		epicExplosionDone = true;
-					//		var perishable = world.GetNullableComponent<Perishable>(scienceVessel);
-					//		theGame.ParticleEffectManager.Trigger(perishable.ParticleEffectOnPerish, position.Center);
-					//	}
-					//}
-				}
-
-
-				// FIRE DEATH
-				
-				//if (scienceVessel != null)
-				//{
-				//	//ParticleEffectManager particleEffectManager = (ParticleEffectManager)theGame.Services.GetService(typeof(ParticleEffectManager));
-				//	//var position = world.GetNullableComponent<Position>(scienceVessel);
-				//	//foreach (var firePosition in overloadFires)
-				//	//{
-				//	//	particleEffectManager.Trigger("Fire2", position.Center + firePosition);
-				//	//}
-
-				//	HitPoints hitPoints = world.GetComponent<HitPoints>(scienceVessel);
-				//	if (hitPoints.Armour < 180 && !epicExplosionDone)
-				//	{
-				//		epicExplosionDone = true;
-				//		particleEffectManager.Trigger("Epic Explosion", position.Center);
-				//	}
-
-				//	if (hitPoints.Armour <= 0)
-				//	{
-				//		// You failed to protect the super station
-						
-				//	}
-				// }
-
 			}
 		}
 

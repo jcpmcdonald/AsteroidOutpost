@@ -31,13 +31,12 @@ namespace AsteroidOutpost.Systems
 
 
 		/// <summary>
-		/// This is where all entities should do any resource loading that will be required. This will be called once per game.
+		/// Called when graphics resources need to be loaded. Override this method to load any component-specific graphics resources.
 		/// </summary>
-		/// <param name="graphicsDevice">The graphics device</param>
-		/// <param name="content">The content manager</param>
 		protected override void LoadContent()
 		{
 			font = Game.Content.Load<SpriteFont>("Fonts\\ControlFont");
+			base.LoadContent();
 		}
 
 

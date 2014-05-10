@@ -998,6 +998,7 @@ namespace AsteroidOutpost
 			TimeSpan deltaTime = gameTime.ElapsedGameTime;
 			network.ProcessIncomingQueue(deltaTime);
 
+
 			if (!paused)
 			{
 				// Update the current scenario, if any
