@@ -1,0 +1,62 @@
+﻿
+.mission {
+	position: absolute;
+	z-index: -1;
+}
+
+.path {
+	background: url('../images/missions/path.png') repeat-x;
+	height:4px;
+	position: absolute;
+	transform-origin: 0% 0%;
+	z-index: -2;
+}
+
+
+#tutorial {
+	background-image: url('../images/missions/MarsSmall.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+	width: 100px;
+	height: 100px;
+
+	top: 100px;
+	left: 100px;
+}
+
+#tutorial.selected {
+	background-image: url('../images/missions/Selected.png'), url('../images/missions/MarsSmall.png');
+}
+
+
+#scenario1 {
+	background-image: url('../images/missions/IcePlanetSmall.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+	
+	width: 120px;
+	height: 120px;
+
+	top: 200px;
+	left: 300px;
+}
+
+#scenario1.selected {
+	background-image: url('../images/missions/Selected.png'), url('../images/missions/IcePlanetSmall.png');
+}
+
+
+#scenario2 {
+	background-image: url('../images/missions/EarthSmall.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+	width: 80px;
+	height: 80px;
+
+	top: 120px;
+	left: 470px;
+}
+
+#scenario2.selected {
+	background-image: url('../images/missions/Selected.png'), url('../images/missions/EarthSmall.png');
+}

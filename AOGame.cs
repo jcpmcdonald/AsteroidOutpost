@@ -192,7 +192,7 @@ namespace AsteroidOutpost
 
 
 			//#if UNLIMITED_FPS
-#if true
+#if false
 			graphics.SynchronizeWithVerticalRetrace = false;
 			IsFixedTimeStep = false;
 #endif
@@ -329,7 +329,8 @@ namespace AsteroidOutpost
 			ActiveProfile = new Profile();
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			sceneManager.SetScene("Sufista");
+			//sceneManager.SetScene("Sufista");
+			sceneManager.SetScene("Red Planet");
 
 
 			foreach (var soundFileName in Directory.EnumerateFiles(@"..\data\soundEffects\", "*.wav"))
@@ -341,7 +342,7 @@ namespace AsteroidOutpost
 
 			cursorTexture = Texture2DEx.FromStreamWithPremultAlphas(GraphicsDevice, File.OpenRead(@"..\data\images\Cursor.png"));
 
-			//ThreadPool.QueueUserWorkItem(delegate { EntityFactory.LoadContent(GraphicsDevice); });
+			//ThreadPool.QueueUserWorkItem(delegate { entityFactory.LoadContent(GraphicsDevice); upgradeFactory.LoadUpgradeTemplates(); });
 			//ThreadPool.QueueUserWorkItem(delegate { EllipseEx.LoadContent(GraphicsDevice); });
 			entityFactory.LoadContent(GraphicsDevice);
 			upgradeFactory.LoadUpgradeTemplates();

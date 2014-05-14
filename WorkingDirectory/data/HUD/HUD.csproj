@@ -83,6 +83,7 @@
     <Content Include="js\ServerBrowser.ts" />
     <Content Include="js\Table.ts" />
     <Content Include="MainMenu.html" />
+    <Content Include="MissionSelect.html" />
     <Content Include="ServerBrowser.html" />
     <Content Include="Singleplayer.html" />
     <Content Include="web.config" />

@@ -31,7 +31,8 @@
 		{
 			"TexturePath" : "Snow&Ice\\IcePlanet.png",
 			"Distance" : 10,
-			"Position" : "576, 500",
+			"Scale" : 0.9,
+			"Position" : "1176, 500",
 		},
 	]
 }

@@ -1,0 +1,28 @@
+{
+	"Name" : "Red Planet",
+	"Layers" : [
+		{
+			"TexturePath" : "Sufista\\main_stars.png",
+			"Distance" : 30,
+			"Scale" : 0.5
+		},
+		{
+			"TexturePath" : "Sufista\\main_dust.png",
+			"Distance" : 40,
+			"Scale" : 0.5
+		},
+		{
+			"TexturePath" : "Sufista\\main_clouds.png",
+			"Distance" : 70,
+			"Scale" : 0.5,
+			"Position" : "-200, 0",
+		},
+		{
+			"TexturePath" : "Red Planet\\redPlanet.png",
+			"Scale" : 0.5,
+			"Distance" : 10,
+			"Position" : "1176, 700",
+		},
+	]
+}
+

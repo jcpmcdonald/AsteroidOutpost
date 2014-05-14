@@ -14,7 +14,7 @@ namespace AsteroidOutpost
 		public const int PowerConductingDistance = 220;
 		internal readonly Dictionary<PowerGridNode, List<PowerGridNode>> powerNodes = new Dictionary<PowerGridNode, List<PowerGridNode>>(32);
 
-		internal List<Tuple<PowerGridNode, PowerGridNode>> recentlyActiveLinks = new List<Tuple<PowerGridNode, PowerGridNode>>();
+		internal Dictionary<Tuple<PowerGridNode, PowerGridNode>, float> recentlyActiveLinks = new Dictionary<Tuple<PowerGridNode, PowerGridNode>, float>();
 
 
 		public PowerGrid(World world)
@@ -121,14 +121,27 @@ namespace AsteroidOutpost
 				powerNodes[connectedNode].Remove(node);
 			}
 
-			for(int i = recentlyActiveLinks.Count - 1; i >= 0; i--)
+			List<Tuple<PowerGridNode, PowerGridNode>> deadLinks = new List<Tuple<PowerGridNode, PowerGridNode>>();
+			foreach (var recentlyActiveLink in recentlyActiveLinks.Keys)
 			{
-				var recentlyActiveLink = recentlyActiveLinks[i];
-				if(recentlyActiveLink.Item1 == node || recentlyActiveLink.Item2 == node)
+				if (recentlyActiveLink.Item1 == node || recentlyActiveLink.Item2 == node)
 				{
-					recentlyActiveLinks.RemoveAt(i);
+					deadLinks.Add(recentlyActiveLink);
 				}
 			}
+			foreach (var deadLink in deadLinks)
+			{
+				recentlyActiveLinks.Remove(deadLink);
+			}
+
+			//for(int i = recentlyActiveLinks.Count - 1; i >= 0; i--)
+			//{
+			//	var recentlyActiveLink = recentlyActiveLinks[i];
+			//	if(recentlyActiveLink.Item1 == node || recentlyActiveLink.Item2 == node)
+			//	{
+			//		recentlyActiveLinks.RemoveAt(i);
+			//	}
+			//}
 
 			powerNodes.Remove(node);
 		}
@@ -193,9 +206,17 @@ namespace AsteroidOutpost
 				{
 					var linkToAdd = new Tuple<PowerGridNode, PowerGridNode>(path[iNode - 1], path[iNode]);
 					var linkToAddVariant = new Tuple<PowerGridNode, PowerGridNode>(path[iNode], path[iNode - 1]);
-					if (!recentlyActiveLinks.Contains(linkToAdd) && !recentlyActiveLinks.Contains(linkToAddVariant))
+					if (recentlyActiveLinks.ContainsKey(linkToAdd))
 					{
-						recentlyActiveLinks.Add(linkToAdd);
+						recentlyActiveLinks[linkToAdd] += Math.Abs(amount);
+					}
+					else if (recentlyActiveLinks.ContainsKey(linkToAddVariant))
+					{
+						recentlyActiveLinks[linkToAddVariant] += Math.Abs(amount);
+					}
+					else
+					{
+						recentlyActiveLinks.Add(linkToAdd, Math.Abs(amount));
 					}
 				}
 

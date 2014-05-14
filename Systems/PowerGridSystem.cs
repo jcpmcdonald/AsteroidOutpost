@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Screens;
 using C3.XNA;
@@ -158,7 +159,7 @@ namespace AsteroidOutpost.Systems
 				// Draw all of the active links first
 				foreach (var linkToDraw in grid.recentlyActiveLinks)
 				{
-					if (!linksAlreadyDrawn.Contains(linkToDraw))
+					if (!linksAlreadyDrawn.Contains(linkToDraw.Key))
 					{
 						//color = new Color((int)(150 + world.Scale(50)), (int)(150 + world.Scale(50)), 0, (int)(150 + world.Scale(50)));
 						color = new Color(50, 50, (int)(200 + world.Scale(50)));
@@ -167,12 +168,13 @@ namespace AsteroidOutpost.Systems
 						//                     world.WorldToScreen(linkToDraw.Item2.PowerLinkPointAbsolute(world)),
 						//                     color);
 						DrawPowerLine(spriteBatch,
-						              world.WorldToScreen(linkToDraw.Item1.PowerLinkPointAbsolute(world)),
-						              world.WorldToScreen(linkToDraw.Item2.PowerLinkPointAbsolute(world)),
-						              color);
+						              world.WorldToScreen(linkToDraw.Key.Item1.PowerLinkPointAbsolute(world)),
+						              world.WorldToScreen(linkToDraw.Key.Item2.PowerLinkPointAbsolute(world)),
+						              color,
+									  1f + linkToDraw.Value);
 
-						linksAlreadyDrawn.Add(linkToDraw);
-						linksAlreadyDrawn.Add(new Tuple<PowerGridNode, PowerGridNode>(linkToDraw.Item2, linkToDraw.Item1));
+						linksAlreadyDrawn.Add(linkToDraw.Key);
+						linksAlreadyDrawn.Add(new Tuple<PowerGridNode, PowerGridNode>(linkToDraw.Key.Item2, linkToDraw.Key.Item1));
 					}
 				}
 
@@ -229,7 +231,7 @@ namespace AsteroidOutpost.Systems
 		}
 
 
-		private void DrawPowerLine(SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color)
+		private void DrawPowerLine(SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color, float flow = 1)
 		{
 			//spriteBatch.Draw(powerLineTexture, start, null, Color.White,
 			//                 (float)Math.Atan2(end.Y - start.Y, end.X - start.X),
@@ -237,7 +239,7 @@ namespace AsteroidOutpost.Systems
 			//                 new Vector2(Vector2.Distance(start, end) / powerLineTexture.Width, world.Scale(1f)),
 			//                 SpriteEffects.None, 0f);
 
-			List<Vector2> points = MakeLightning(new List<Vector2>{ start, end }, 3, world.Scale(0.5f));
+			List<Vector2> points = MakeLightning(new List<Vector2> { start, end }, 4, world.Scale(0.5f * Math.Min(2.5f, flow * flow)));
 
 			for (int i = 0; i < points.Count - 1; i++)
 			{
@@ -245,11 +247,16 @@ namespace AsteroidOutpost.Systems
 				//spriteBatch.DrawLine(points[i], points[i + 1], new Color(100, 100, 200, 0), world.Scale(2 + GlobalRandom.Next(0f, 0.5f)));
 				//spriteBatch.DrawLine(points[i], points[i + 1], Color.Blue, world.Scale(1));
 
-				spriteBatch.Draw(powerLineTexture, points[i], null, color,
-				                 (float)Math.Atan2(points[i + 1].Y - points[i].Y, points[i + 1].X - points[i].X),
+				spriteBatch.Draw(powerLineTexture,
+				                 points[i],
+				                 null,
+				                 color,
+				                 (float)Math.Atan2(points[i + 1].Y - points[i].Y,
+				                                   points[i + 1].X - points[i].X),
 				                 new Vector2(0f, (float)powerLineTexture.Height / 2),
-				                 new Vector2(Vector2.Distance(points[i], points[i + 1]) / powerLineTexture.Width, world.Scale(0.5f)),
-				                 SpriteEffects.None, 0f);
+				                 new Vector2(Vector2.Distance(points[i], points[i + 1]) / powerLineTexture.Width, world.Scale(0.5f * Math.Min(4, flow * flow))),
+				                 SpriteEffects.None,
+				                 0f);
 			}
 		}
 

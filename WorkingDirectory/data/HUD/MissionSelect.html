@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+
+<html ng-app>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="css/Style.css" type="text/css" />
+	<link rel="stylesheet" href="css/Menu.css" type="text/css" />
+	<link rel="stylesheet" href="css/MissionSelect.css" type="text/css" />
+
+	<script type="text/javascript" src="js/libs/jquery-latest.js"></script>
+	<script type="text/javascript" src="js/libs/jquery.fittext.js"></script>
+	<script type="text/javascript" src="js/libs/angular.min.js"></script>
+
+	<script type="text/javascript" src="js/KeyDefinitions.js"></script>
+	<script type="text/javascript" src="js/Common.js"></script>
+	<script type="text/javascript" src="js/Menu.js"></script>
+	<script type="text/javascript" src="js/ScenarioController.js"></script>
+</head>
+<body class="sufista">
+	<div id="Menu">
+		<!--img id="ao" src="images/main/ao.png">
+		<img id="logo" src="images/main/logo.png"-->
+		
+		<div style="margin-left: auto; margin-right: auto; width: 70%; position: relative;">
+			<img id="tutorial" class="mission" />
+			<img class="path" style="width: 250px; top: 150px; left: 150px; transform:rotate(28deg); "/>
+			<img id="scenario1" class="mission selected" />
+			<img class="path" style="width: 200px; top: 260px; left: 360px; transform:rotate(-35deg); z-index: -2;" />
+			<img id="scenario2" class="mission" />
+			<!--img src="images/missions/IcePlanetSmall.png" class="mission" style="width:14%; top: 100px; left: 400px; " />
+			<img src="images/missions/IcePlanetSmall.png" class="mission" style="width:5%; top: 100px; left: 800px; " /-->
+		</div>
+
+		<a href="MainMenu.html" call="xna.PlaySound('select_back');" style="bottom:0; position: absolute">
+			<div class="imgButtonWrap"><img src="images/main/button_null.png" class="imgButton" /><span class="buttontext fit">Back</span></div>
+		</a>
+
+	</div>
+</body>
+</html>
