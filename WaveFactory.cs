@@ -38,11 +38,29 @@ namespace AsteroidOutpost
 			{
 				// TODO: 2012-08-10 Fix spawning bad guys
 				// Make something
-				world.Create("Deserter", aiActor.PrimaryForce, new JObject{
-					{ "Position", new JObject{
-						{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", roughPosition.X + GlobalRandom.Next(-10, 10), roughPosition.Y + GlobalRandom.Next(-10, 10)) },
-					}}
-				});
+
+				if (pointValue >= 200 && GlobalRandom.NextDouble() > 0.3)
+				{
+					world.Create("Deserter", aiActor.PrimaryForce, new JObject{
+						{ "Position", new JObject{
+							{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", roughPosition.X + GlobalRandom.Next(-10, 10), roughPosition.Y + GlobalRandom.Next(-10, 10)) },
+						}}
+					});
+
+					aiCreated += 200;
+				}
+				else
+				{
+					world.Create("Spaceship", aiActor.PrimaryForce, new JObject{
+						{ "Position", new JObject{
+							{ "Center", String.Format(CultureInfo.InvariantCulture, "{0}, {1}", roughPosition.X + GlobalRandom.Next(-10, 10), roughPosition.Y + GlobalRandom.Next(-10, 10)) },
+						}}
+					});
+
+					aiCreated += 100;
+				}
+
+				
 				//new Dictionary<String, object>(){
 				//        { "Sprite.Scale", 0.7f },
 				//        { "Sprite.Set", null },
@@ -53,7 +71,6 @@ namespace AsteroidOutpost
 				//        { "OwningForce", aiActor.PrimaryForce }
 				//    });
 				//world.Add(new Ship1(world, world, aiActor.PrimaryForce, roughPosition));
-				aiCreated += 100;
 			}
 
 		}
