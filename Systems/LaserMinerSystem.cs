@@ -300,7 +300,7 @@ namespace AsteroidOutpost.Systems
 							spriteBatch.Draw(miningTexture, start, null, color,
 							                 (float)Math.Atan2(end.Y - start.Y, end.X - start.X),
 							                 new Vector2(0f, (float)miningTexture.Height / 2),
-							                 new Vector2(Vector2.Distance(start, end) / miningTexture.Width, world.Scale(0.5f)),
+							                 new Vector2(Vector2.Distance(start, end) / miningTexture.Width, world.Scale(0.25f)),
 							                 SpriteEffects.None, 0f);
 						}
 
@@ -344,7 +344,7 @@ namespace AsteroidOutpost.Systems
 						spriteBatch.Draw(miningTexture, start, null, color,
 						                 (float)Math.Atan2(end.Y - start.Y, end.X - start.X),
 						                 new Vector2(0f, (float)miningTexture.Height / 2),
-						                 new Vector2(Vector2.Distance(start, end) / miningTexture.Width, world.Scale(0.5f)),
+						                 new Vector2(Vector2.Distance(start, end) / miningTexture.Width, world.Scale(0.25f)),
 						                 SpriteEffects.None, 0f);
 
 						particleEffectManager.Trigger("Mining", minablePosition.Center + laserMiner.MiningDestinationOffset);
@@ -356,7 +356,7 @@ namespace AsteroidOutpost.Systems
 						spriteBatch.Draw(miningTexture, start, null, color,
 										 (float)Math.Atan2(end.Y - start.Y, end.X - start.X),
 										 new Vector2(0f, (float)miningTexture.Height / 2),
-										 new Vector2((Vector2.Distance(start, end) * percent) / miningTexture.Width, world.Scale(0.5f)),
+										 new Vector2((Vector2.Distance(start, end) * percent) / miningTexture.Width, world.Scale(0.25f)),
 										 SpriteEffects.None, 0f);
 					}
 

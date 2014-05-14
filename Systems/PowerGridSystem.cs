@@ -239,7 +239,7 @@ namespace AsteroidOutpost.Systems
 			//                 new Vector2(Vector2.Distance(start, end) / powerLineTexture.Width, world.Scale(1f)),
 			//                 SpriteEffects.None, 0f);
 
-			List<Vector2> points = MakeLightning(new List<Vector2> { start, end }, 4, world.Scale(0.5f * Math.Min(2.5f, flow * flow)));
+			List<Vector2> points = MakeLightning(new List<Vector2> { start, end }, 3, world.Scale(MathHelper.Max(1.5f - flow, 0)));
 
 			for (int i = 0; i < points.Count - 1; i++)
 			{
@@ -250,11 +250,11 @@ namespace AsteroidOutpost.Systems
 				spriteBatch.Draw(powerLineTexture,
 				                 points[i],
 				                 null,
-				                 color,
+				                 color * flow,
 				                 (float)Math.Atan2(points[i + 1].Y - points[i].Y,
 				                                   points[i + 1].X - points[i].X),
 				                 new Vector2(0f, (float)powerLineTexture.Height / 2),
-				                 new Vector2(Vector2.Distance(points[i], points[i + 1]) / powerLineTexture.Width, world.Scale(0.5f * Math.Min(4, flow * flow))),
+				                 new Vector2(Vector2.Distance(points[i], points[i + 1]) / powerLineTexture.Width, world.Scale(0.25f * Math.Min(4, flow * flow))),
 				                 SpriteEffects.None,
 				                 0f);
 			}
@@ -264,6 +264,7 @@ namespace AsteroidOutpost.Systems
 		private List<Vector2> MakeLightning(List<Vector2> points, int itterations, float noise)
 		{
 			if(itterations <= 0) { return points; }
+			if (noise <= 0){ return points; }
 
 			for (int i = points.Count - 1; i >= 1; i--)
 			{
