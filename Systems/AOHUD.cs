@@ -5,6 +5,7 @@ using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Entities.Eventing;
 using AsteroidOutpost.Eventing;
+using AsteroidOutpost.Extensions;
 using Awesomium.Core;
 using AwesomiumXNA;
 using Microsoft.Xna.Framework;

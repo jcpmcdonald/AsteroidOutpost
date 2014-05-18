@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using AsteroidOutpost.Components;
+using AsteroidOutpost.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using XNASpriteLib;

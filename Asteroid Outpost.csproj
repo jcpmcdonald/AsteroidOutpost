@@ -136,7 +136,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorEx.cs" />
+    <Compile Include="Extensions\ColorEx.cs" />
     <Compile Include="Components\AIBasic.cs" />
     <Compile Include="Components\AIStrafe.cs" />
     <Compile Include="Components\Animator.cs" />
@@ -168,7 +168,7 @@
     <Compile Include="Components\Accumulator.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\HitPoints.cs" />
-    <Compile Include="EllipseEx.cs" />
+    <Compile Include="Extensions\SpriteBatchEx.cs" />
     <Compile Include="EnhancedKeyboardState.cs" />
     <Compile Include="EnhancedMouseState.cs" />
     <Compile Include="ContextButton.cs" />
@@ -177,7 +177,7 @@
     <Compile Include="Entities\EntityFactory.cs" />
     <Compile Include="Entities\EntityTemplate.cs" />
     <Compile Include="Interfaces\IConstructible.cs" />
-    <Compile Include="JsonEx.cs" />
+    <Compile Include="Extensions\JsonEx.cs" />
     <Compile Include="ParticleEffectManager.cs" />
     <Compile Include="Profile.cs" />
     <Compile Include="Scenarios\MinerealCollectionScenario.cs" />
@@ -197,7 +197,7 @@
     <Compile Include="Components\Position.cs" />
     <Compile Include="GlobalRandom.cs" />
     <Compile Include="Interfaces\IWeapon.cs" />
-    <Compile Include="MathHelperEx.cs" />
+    <Compile Include="Extensions\MathHelperEx.cs" />
     <Compile Include="Networking\AOReflectiveIncomingMessage.cs" />
     <Compile Include="Networking\AOReflectiveOutgoingMessage.cs" />
     <Compile Include="Networking\ClientJoinedGameHandlerArgs.cs" />
@@ -239,7 +239,7 @@
     <Compile Include="Systems\PhysicsSystem.cs" />
     <Compile Include="Systems\PowerGridSystem.cs" />
     <Compile Include="Systems\RenderQuadTreeSystem.cs" />
-    <Compile Include="Texture2DEx.cs" />
+    <Compile Include="Extensions\Texture2DEx.cs" />
     <Compile Include="Screens\HeadsUpDisplay\Radar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

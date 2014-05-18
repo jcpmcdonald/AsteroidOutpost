@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using AsteroidOutpost.Entities;
+using AsteroidOutpost.Extensions;
 using AsteroidOutpost.Scenarios;
 using AsteroidOutpost.Scenes;
 using AsteroidOutpost.Screens;
@@ -346,7 +347,7 @@ namespace AsteroidOutpost
 			//ThreadPool.QueueUserWorkItem(delegate { EllipseEx.LoadContent(GraphicsDevice); });
 			entityFactory.LoadContent(GraphicsDevice);
 			upgradeFactory.LoadUpgradeTemplates();
-			EllipseEx.LoadContent(GraphicsDevice);
+			SpriteBatchEx.LoadContent(GraphicsDevice);
 
 			particleEffectManager = new ParticleEffectManager();
 			particleEffectManager.LoadParticles(graphics, Content);

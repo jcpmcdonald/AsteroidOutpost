@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AsteroidOutpost
+namespace AsteroidOutpost.Extensions
 {
-	static class EllipseEx
+	static class SpriteBatchEx
 	{
 		static Dictionary<String, Texture2D> textures = new Dictionary<string, Texture2D>(16);
+
+
+		static Texture2D laserTexture;
 
 
 		public static void LoadContent(GraphicsDevice graphicsDevice)
@@ -27,6 +26,8 @@ namespace AsteroidOutpost
 			textures.Add("ellipse50front", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\Ellipse50Front.png")));
 			textures.Add("ellipse100", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\Ellipse100.png")));
 			textures.Add("ellipse220", Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\Ellipse220.png")));
+
+			laserTexture = Texture2DEx.FromStreamWithPremultAlphas(graphicsDevice, File.OpenRead(@"..\data\images\WhitePowerBeam.png"));
 		}
 
 
@@ -155,6 +156,38 @@ namespace AsteroidOutpost
 					                     Color.White);
 				}
 			}
+		}
+
+
+		/// <summary>
+		///  This defines what a scaling function should look like
+		/// </summary>
+		/// <param name="val">The value to be scaled</param>
+		/// <returns>The scaled value</returns>
+		internal delegate float ScaleFunction(float val);
+
+
+		/// <summary>
+		/// Draw a laser beam
+		/// </summary>
+		/// <param name="spriteBatch">The spritebatch to use. This method can be invoked directly from the sprite batch</param>
+		/// <param name="start">The starting vector</param>
+		/// <param name="end">The ending vector</param>
+		/// <param name="color">The color of the beam</param>
+		/// <param name="scaleDelegate">The scaling function to use (tip: world.Scale)</param>
+		/// <param name="width">The width of the line. 1 is "normal" width, 0.5 is half that, 2 is twice that, etc</param>
+		/// <param name="percentLength">The percentage of the way between Start and End to draw. Defaults to 1  (100%)</param>
+		public static void DrawLaser(this SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color, ScaleFunction scaleDelegate, float width, float percentLength = 1f)
+		{
+			spriteBatch.Draw(laserTexture,
+			                 start,
+			                 null,
+			                 color,
+			                 (float)Math.Atan2(end.Y - start.Y, end.X - start.X),
+			                 new Vector2(0f, (float)laserTexture.Height / 2),
+			                 new Vector2((Vector2.Distance(start, end) * percentLength) / laserTexture.Width, scaleDelegate(0.25f)),
+			                 SpriteEffects.None,
+			                 0f);
 		}
 	}
 }

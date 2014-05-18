@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using AsteroidOutpost.Components;
-using AsteroidOutpost.Entities;
-using AsteroidOutpost.Screens;
 using Microsoft.Xna.Framework;
 
-namespace AsteroidOutpost
+namespace AsteroidOutpost.Extensions
 {
 	internal static class MathHelperEx
 	{

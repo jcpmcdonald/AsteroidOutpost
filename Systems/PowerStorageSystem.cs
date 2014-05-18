@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using AsteroidOutpost.Components;
+using AsteroidOutpost.Extensions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 

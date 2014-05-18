@@ -6,6 +6,7 @@ using System.Text;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Eventing;
+using AsteroidOutpost.Extensions;
 using AsteroidOutpost.Screens;
 using C3.XNA;
 using Microsoft.Xna.Framework;
