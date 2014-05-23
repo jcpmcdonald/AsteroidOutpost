@@ -185,7 +185,7 @@ namespace AsteroidOutpost.Extensions
 			                 color,
 			                 (float)Math.Atan2(end.Y - start.Y, end.X - start.X),
 			                 new Vector2(0f, (float)laserTexture.Height / 2),
-			                 new Vector2((Vector2.Distance(start, end) * percentLength) / laserTexture.Width, scaleDelegate(0.25f)),
+			                 new Vector2((Vector2.Distance(start, end) * percentLength) / laserTexture.Width, scaleDelegate(0.25f * width)),
 			                 SpriteEffects.None,
 			                 0f);
 		}

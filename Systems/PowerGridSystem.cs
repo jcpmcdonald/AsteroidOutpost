@@ -19,7 +19,6 @@ namespace AsteroidOutpost.Systems
 		private World world;
 		private SpriteBatch spriteBatch;
 		private Texture2D powerStarvedTexture;
-		private Texture2D powerLineTexture;
 
 		private readonly Dictionary<int, PowerGrid> powerGrid = new Dictionary<int, PowerGrid>(4);
 
@@ -34,8 +33,6 @@ namespace AsteroidOutpost.Systems
 		{
 			base.LoadContent();
 			powerStarvedTexture = Texture2D.FromStream(Game.GraphicsDevice, File.OpenRead(@"..\data\images\NoPowerSymbol.png"));
-			powerLineTexture = Texture2DEx.FromStreamWithPremultAlphas(Game.GraphicsDevice, File.OpenRead(@"..\data\images\WhitePowerBeam.png"));
-			
 		}
 
 
@@ -248,16 +245,19 @@ namespace AsteroidOutpost.Systems
 				//spriteBatch.DrawLine(points[i], points[i + 1], new Color(100, 100, 200, 0), world.Scale(2 + GlobalRandom.Next(0f, 0.5f)));
 				//spriteBatch.DrawLine(points[i], points[i + 1], Color.Blue, world.Scale(1));
 
-				spriteBatch.Draw(powerLineTexture,
-				                 points[i],
-				                 null,
-				                 color * flow,
-				                 (float)Math.Atan2(points[i + 1].Y - points[i].Y,
-				                                   points[i + 1].X - points[i].X),
-				                 new Vector2(0f, (float)powerLineTexture.Height / 2),
-				                 new Vector2(Vector2.Distance(points[i], points[i + 1]) / powerLineTexture.Width, world.Scale(0.25f * Math.Min(4, flow * flow))),
-				                 SpriteEffects.None,
-				                 0f);
+				Color newColor = color.Slerp(Color.Gray, Math.Min(3, (flow - 1) * (flow - 1)) / 3f);
+				spriteBatch.DrawLaser(points[i], points[i + 1], newColor, world.Scale, MathHelper.Clamp((flow - 1) * (flow - 1), 1, 3));
+
+				//spriteBatch.Draw(powerLineTexture,
+				//				 points[i],
+				//				 null,
+				//				 color * flow,
+				//				 (float)Math.Atan2(points[i + 1].Y - points[i].Y,
+				//								   points[i + 1].X - points[i].X),
+				//				 new Vector2(0f, (float)powerLineTexture.Height / 2),
+				//				 new Vector2(Vector2.Distance(points[i], points[i + 1]) / powerLineTexture.Width, world.Scale(0.25f * Math.Min(4, flow * flow))),
+				//				 SpriteEffects.None,
+				//				 0f);
 			}
 		}
 
