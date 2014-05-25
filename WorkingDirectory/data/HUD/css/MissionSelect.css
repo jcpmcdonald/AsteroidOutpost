@@ -1,22 +1,28 @@
 ﻿
 .mission {
 	position: absolute;
-	z-index: -1;
+	/*z-index: 1;*/
+	
+	background-repeat: no-repeat;
+	background-size: contain;
 }
 
 .path {
-	background: url('../images/missions/path.png') repeat-x;
+	background: url('../images/missions/dottedPath.png') repeat-x;
 	height:4px;
 	position: absolute;
 	transform-origin: 0% 0%;
+	-webkit-transform-origin: 0% 0%;
 	z-index: -2;
 }
 
+.path.complete {
+	background: url('../images/missions/path.png') repeat-x;
+}
 
-#tutorial {
+
+/*#tutorial {
 	background-image: url('../images/missions/MarsSmall.png');
-	background-repeat: no-repeat;
-	background-size: contain;
 	width: 100px;
 	height: 100px;
 
@@ -59,4 +65,4 @@
 
 #scenario2.selected {
 	background-image: url('../images/missions/Selected.png'), url('../images/missions/EarthSmall.png');
-}
+}*/

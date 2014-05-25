@@ -14,21 +14,142 @@
 	<script type="text/javascript" src="js/KeyDefinitions.js"></script>
 	<script type="text/javascript" src="js/Common.js"></script>
 	<script type="text/javascript" src="js/Menu.js"></script>
-	<script type="text/javascript" src="js/ScenarioController.js"></script>
+	<!--<script type="text/javascript" src="js/ScenarioController.js"></script>-->
+	
+	<script>
+		var selectedPlanet = null;
+		var selectedOrigBG = null;
+		var deselectMission = true;
+
+		function createMap(progress) {
+			var map = $("#map");
+
+			for (var i = 0; i < progress.length; i++) {
+				var scenario = progress[i];
+				$('<div class="mission" />').appendTo("#map").css({
+					top: scenario.top,
+					left: scenario.left,
+					width: scenario.width,
+					height: scenario.height,
+					"background-image": "url('images/missions/" + scenario.image + "')",
+				});
+
+				if (i > 0) {
+					// Draw a line between me and the next scenario
+					var origin = progress[i-1];
+					var start = {
+						x: origin.left + (origin.width / 2),
+						y: origin.top + (origin.height / 2),
+					};
+					var end = {
+						x: scenario.left + (scenario.width / 2),
+						y: scenario.top + (scenario.height / 2),
+					};
+
+					var deltaX = end.x - start.x;
+					var deltaY = end.y - start.y;
+					var distance = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
+					var angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+
+					$('<div class="path' + (scenario.complete ? ' complete' : '') + '" />').appendTo('#map').css({
+						width: distance,
+						top: start.y,
+						left: start.x,
+						transform: "rotate(" + angle + "deg)",
+						"-webkit-transform": "rotate(" + angle + "deg)"
+					});
+					
+				}
+			}
+
+			function selectMission(mission) {
+				if (selectedPlanet != null) {
+					selectedPlanet.css("background-image", selectedOrigBG);
+				}
+
+				selectedOrigBG = mission.css("background-image");
+				mission.css({
+					"background-image": "url('images/missions/Selected.png'), " + selectedOrigBG,
+				});
+				selectedPlanet = mission;
+			}
+
+
+			$(".mission").click(function () {
+				//deselectMission = false;
+				selectMission($(this));
+			});
+
+			$(".mission").mouseenter(function () {
+				//deselectMission = false;
+				selectMission($(this));
+			});
+
+
+			$("body").mouseup(function () {
+				if (deselectMission) {
+					if (selectedPlanet != null) {
+						selectedPlanet.css("background-image", selectedOrigBG);
+					}
+					selectedPlanet = null;
+					selectedOrigBG = null;
+				}
+				deselectMission = true;
+			});
+		}
+
+		var progress = [
+			{
+				scenario: "Tutorial",
+				description: "Learn how to fly",
+				complete: true,
+
+				image: "MarsSmall.png",
+				top: 100,
+				left: 100,
+				width: 70,
+				height: 70,
+			},
+			{
+				scenario: "Scenario1",
+				description: "Gather some minerals",
+				complete: true,
+
+				image: "IcePlanetSmall.png",
+				top: 250,
+				left: 300,
+				width: 150,
+				height: 150,
+			},
+			{
+				scenario: "Scenario2",
+				description: "Do something cool",
+				complete: false,
+
+				image: "EarthSmall.png",
+				top: 120,
+				left: 470,
+				width: 90,
+				height: 90,
+			}
+		];
+
+		$(document).ready(function() {
+			createMap(progress);
+		});
+	</script>
 </head>
 <body class="sufista">
 	<div id="Menu">
 		<!--img id="ao" src="images/main/ao.png">
 		<img id="logo" src="images/main/logo.png"-->
 		
-		<div style="margin-left: auto; margin-right: auto; width: 70%; position: relative;">
-			<img id="tutorial" class="mission" />
-			<img class="path" style="width: 250px; top: 150px; left: 150px; transform:rotate(28deg); "/>
+		<div id="map" style="margin-left: auto; margin-right: auto; width: 70%; position: relative;">
+			<!--<img id="tutorial" class="mission" />
+			<img class="path complete" style="width: 250px; top: 150px; left: 150px; transform:rotate(28deg); "/>
 			<img id="scenario1" class="mission selected" />
 			<img class="path" style="width: 200px; top: 260px; left: 360px; transform:rotate(-35deg); z-index: -2;" />
-			<img id="scenario2" class="mission" />
-			<!--img src="images/missions/IcePlanetSmall.png" class="mission" style="width:14%; top: 100px; left: 400px; " />
-			<img src="images/missions/IcePlanetSmall.png" class="mission" style="width:5%; top: 100px; left: 800px; " /-->
+			<img id="scenario2" class="mission" />-->
 		</div>
 
 		<a href="MainMenu.html" call="xna.PlaySound('select_back');" style="bottom:0; position: absolute">
