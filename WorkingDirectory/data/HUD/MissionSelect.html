@@ -64,6 +64,14 @@
 			}
 
 			function selectMission(mission) {
+
+				if (selectedPlanet == null || mission[0] != selectedPlanet[0]) {
+					console.log("bleep");
+					if (typeof xna !== 'undefined') {
+						xna.PlaySound("select_forward");
+					}
+				}
+
 				if (selectedPlanet != null) {
 					selectedPlanet.css("background-image", selectedOrigBG);
 					missionButton.remove();
@@ -110,10 +118,10 @@
 				if (deselectMission) {
 					if (selectedPlanet != null) {
 						selectedPlanet.css("background-image", selectedOrigBG);
+						missionButton.remove();
 					}
 					selectedPlanet = null;
 					selectedOrigBG = null;
-					missionButton.remove();
 				}
 				deselectMission = true;
 			});

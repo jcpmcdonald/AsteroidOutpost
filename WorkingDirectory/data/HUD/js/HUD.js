@@ -132,7 +132,7 @@ $(document).ready(function()
 		$(".btnResume").click( function (event){ SetPaused(false); });
 		
 		// Make the Main Menu button work (fakely)
-		$(".btnMainMenu").click( function (event){ window.location = "Singleplayer.html"; });
+		$(".btnMainMenu").click( function (event){ window.location.href = "MissionSelect.html"; });
 		
 		// Add some missions
 		AddMission("buildMiners", "Build 3 miners near asteroids", true);

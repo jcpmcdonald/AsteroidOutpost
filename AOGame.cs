@@ -523,7 +523,7 @@ namespace AsteroidOutpost
 		/// </summary>
 		public void DestroyWorld()
 		{
-			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\data\HUD\Singleplayer.html").ToUri();
+			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\data\HUD\MissionSelect.html").ToUri();
 			destroyWorld = true;
 
 			sceneManager.SetScene("Sufista");
