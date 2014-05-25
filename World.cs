@@ -10,6 +10,9 @@ using AsteroidOutpost.Eventing;
 using AsteroidOutpost.Interfaces;
 using AsteroidOutpost.Networking;
 using AsteroidOutpost.Scenarios;
+using AsteroidOutpost.Scenes;
+using AsteroidOutpost.Screens;
+using AsteroidOutpost.Screens.HeadsUpDisplay;
 using Awesomium.Core;
 using AwesomiumXNA;
 using C3.XNA;
@@ -47,10 +50,28 @@ namespace AsteroidOutpost
 		private AOHUD hud; // TODO: Why is this part of the world? Shouldn't it be part of the game?
 		private Scenario scenario;
 
+		private readonly AnimationSystem animationSystem;
+		private readonly AnimationSystemLayer2 animationSystemLayer2;
+		private readonly PhysicsSystem physicsSystem;
 		private readonly RenderQuadTreeSystem renderQuadTreeSystem;
 		private readonly PowerGridSystem powerGridSystem;
+		private readonly PowerStorageSystem powerStorageSystem;
+		private readonly PowerProductionSystem powerProductionSystem;
 		internal readonly ConstructionSystem constructionSystem;
+		private readonly LaserMinerSystem laserMinerSystem;
+		private readonly AccumulationSystem accumulationSystem;
+		private readonly LaserWeaponSystem laserWeaponSystem;
+		private readonly ProjectileLauncherSystem projectileLauncherSystem;
+		private readonly ProjectileSystem projectileSystem;
+		private readonly FlockingSystem movementSystem;
+		private readonly HitPointSystem hitPointSystem;
 		private readonly SelectionSystem selectionSystem;
+		private readonly ParticleEngine particleEngine;
+		private readonly AutoHealSystem autoHealSystem;
+		private readonly AIBasicSystem aiBasicSystem;
+		private readonly AIStrafeSystem aiStrafeSystem;
+		private readonly TargetingSystem targetingSystem;
+		private readonly ScienceVesselSystem scienceVesselSystem;
 
 		private MissionSystem missionSystem; // Created when world starts, instead of the world is created
 
@@ -87,28 +108,28 @@ namespace AsteroidOutpost
 			selectionSystem = new SelectionSystem(game, this);
 			hud = new AOHUD(game, this, selectionSystem);
 
-			AnimationSystem animationSystem = new AnimationSystem(game, this);
-			AnimationSystemLayer2 animationSystemLayer2 = new AnimationSystemLayer2(game, this, animationSystem);
-			PhysicsSystem physicsSystem = new PhysicsSystem(game, this);
+			animationSystem = new AnimationSystem(game, this);
+			animationSystemLayer2 = new AnimationSystemLayer2(game, this, animationSystem);
+			physicsSystem = new PhysicsSystem(game, this);
 			renderQuadTreeSystem = new RenderQuadTreeSystem(game, this);
-			HitPointSystem hitPointSystem = new HitPointSystem(game, this);
+			hitPointSystem = new HitPointSystem(game, this);
 
 			powerGridSystem = new PowerGridSystem(game, this);
-			PowerStorageSystem powerStorageSystem = new PowerStorageSystem(game, this);
-			PowerProductionSystem powerProductionSystem = new PowerProductionSystem(game, this, powerGridSystem);
+			powerStorageSystem = new PowerStorageSystem(game, this);
+			powerProductionSystem = new PowerProductionSystem(game, this, powerGridSystem);
 			constructionSystem = new ConstructionSystem(game, this, powerGridSystem);
-			LaserMinerSystem laserMinerSystem = new LaserMinerSystem(game, this, powerGridSystem);
-			AccumulationSystem accumulationSystem = new AccumulationSystem(game, this, 250);
-			LaserWeaponSystem laserWeaponSystem = new LaserWeaponSystem(game, this, powerGridSystem, hitPointSystem);
-			ProjectileLauncherSystem projectileLauncherSystem = new ProjectileLauncherSystem(game, this);
-			ProjectileSystem projectileSystem = new ProjectileSystem(game, this, hitPointSystem);
-			FlockingSystem movementSystem = new FlockingSystem(game, this);
-			ParticleEngine particleEngine = new ParticleEngine(game, this);
-			AutoHealSystem autoHealSystem = new AutoHealSystem(game, this, hitPointSystem);
-			AIBasicSystem aiBasicSystem = new AIBasicSystem(game, this);
-			AIStrafeSystem aiStrafeSystem = new AIStrafeSystem(game, this, projectileLauncherSystem);
-			TargetingSystem targetingSystem = new TargetingSystem(game, this);
-			ScienceVesselSystem scienceVesselSystem = new ScienceVesselSystem(game, this, powerGridSystem, hitPointSystem);
+			laserMinerSystem = new LaserMinerSystem(game, this, powerGridSystem);
+			accumulationSystem = new AccumulationSystem(game, this, 250);
+			laserWeaponSystem = new LaserWeaponSystem(game, this, powerGridSystem, hitPointSystem);
+			projectileLauncherSystem = new ProjectileLauncherSystem(game, this);
+			projectileSystem = new ProjectileSystem(game, this, hitPointSystem);
+			movementSystem = new FlockingSystem(game, this);
+			particleEngine = new ParticleEngine(game, this);
+			autoHealSystem = new AutoHealSystem(game, this, hitPointSystem);
+			aiBasicSystem = new AIBasicSystem(game, this);
+			aiStrafeSystem = new AIStrafeSystem(game, this, projectileLauncherSystem);
+			targetingSystem = new TargetingSystem(game, this);
+			scienceVesselSystem = new ScienceVesselSystem(game, this, powerGridSystem, hitPointSystem);
 
 			awesomium = game.Awesomium;
 
