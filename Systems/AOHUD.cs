@@ -25,7 +25,7 @@ namespace AsteroidOutpost.Systems
 	/// </summary>
 	public class AOHUD : DrawableGameComponent
 	{
-
+		[JsonIgnore]
 		private SpriteBatch spriteBatch;
 
 		private Vector2 focusWorldPoint;
@@ -35,6 +35,7 @@ namespace AsteroidOutpost.Systems
 		private EnhancedMouseState theMouse = new EnhancedMouseState();
 		private EnhancedKeyboardState theKeyboard = new EnhancedKeyboardState();
 
+		[JsonIgnore]
 		private readonly World world;
 		private readonly AwesomiumComponent awesomium;
 		private SelectionSystem selectionSystem;

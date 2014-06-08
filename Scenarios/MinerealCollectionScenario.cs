@@ -6,19 +6,25 @@ using System.Text;
 using AsteroidOutpost.Components;
 using Microsoft.Xna.Framework;
 using System.Globalization;
+using Newtonsoft.Json;
 
 namespace AsteroidOutpost.Scenarios
 {
 	// Creative name, I know
 	class MinerealCollectionScenario : Scenario
 	{
+		[JsonProperty]
 		private Vector2 startingPoint;
 
 		private static readonly TimeSpan timeBetweenWaves = TimeSpan.FromSeconds(60);
+
+		[JsonProperty]
 		private TimeSpan waveTimer = timeBetweenWaves;
+
+		[JsonProperty]
 		private int sequence = 0;
 
-		
+		[JsonProperty]
 		private Mission currentMission;
 		private Mission collectMinerals = new Mission("collectMinerals", "(0/2000) Collect 2000 minerals", false);
 

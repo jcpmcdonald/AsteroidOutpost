@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Xml.Serialization;
 using AsteroidOutpost.Components;
 using AsteroidOutpost.Entities;
 using AsteroidOutpost.Eventing;
@@ -20,6 +21,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using AsteroidOutpost.Systems;
 using System.Globalization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace AsteroidOutpost
@@ -39,15 +41,22 @@ namespace AsteroidOutpost
 		private AOGame theGame;
 		private readonly EntityFactory entityFactory;
 		private readonly UpgradeFactory upgradeFactory;
-		private SpriteBatch spriteBatch;
 
+		private SpriteBatch spriteBatch;
 		private QuadTree<Position> quadTree;
+
 		private AwesomiumComponent awesomium;
+
+		[JsonProperty]
 		private readonly Dictionary<int, List<Component>> entityDictionary = new Dictionary<int, List<Component>>(2000); // Note: This variable must be kept thread-safe
 		private readonly Dictionary<Type, List<Component>> componentDictionary = new Dictionary<Type, List<Component>>(10); // Note: This variable must be kept thread-safe
 		private readonly List<Component> deadComponents = new List<Component>();
+
+		[JsonProperty]
 		private readonly Dictionary<int, Force> owningForces = new Dictionary<int, Force>();
 		private AOHUD hud; // TODO: Why is this part of the world? Shouldn't it be part of the game?
+
+		[JsonProperty]
 		private Scenario scenario;
 
 		private readonly AnimationSystem animationSystem;
@@ -233,6 +242,7 @@ namespace AsteroidOutpost
 		/// <summary>
 		/// Gets or Sets the paused state of the game. While paused, drawing will still occur, but updates will be paused
 		/// </summary>
+		[JsonIgnore]
 		public bool Paused
 		{
 			get
@@ -755,6 +765,7 @@ namespace AsteroidOutpost
 		/// <summary>
 		/// Gets the width of the configured playing area. This is not a hard boundary
 		/// </summary>
+		[JsonIgnore]
 		public int MapWidth
 		{
 			get
@@ -767,6 +778,7 @@ namespace AsteroidOutpost
 		/// <summary>
 		/// Gets the height of the configured playing area. This is not a hard boundary
 		/// </summary>
+		[JsonIgnore]
 		public int MapHeight
 		{
 			get
@@ -822,6 +834,7 @@ namespace AsteroidOutpost
 		}
 
 
+		[JsonIgnore]
 		public Matrix WorldToScreenTransform
 		{
 			get
@@ -880,6 +893,7 @@ namespace AsteroidOutpost
 			}
 		}
 
+		[JsonIgnore]
 		public AOHUD HUD
 		{
 			get
@@ -1178,6 +1192,7 @@ namespace AsteroidOutpost
 		}
 
 
+		[JsonIgnore]
 		public int Width
 		{
 			get
@@ -1186,6 +1201,7 @@ namespace AsteroidOutpost
 			}
 		}
 
+		[JsonIgnore]
 		public int Height
 		{
 			get
@@ -1194,6 +1210,7 @@ namespace AsteroidOutpost
 			}
 		}
 
+		[JsonIgnore]
 		public QuadTree<Position> QuadTree
 		{
 			get
@@ -1201,6 +1218,8 @@ namespace AsteroidOutpost
 				return quadTree;
 			}
 		}
+
+
 
 
 		public void Serialize(BinaryWriter bw, bool serializeActors)

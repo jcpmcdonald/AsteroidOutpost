@@ -104,6 +104,7 @@
 	
 	<div id="gameMenu" class="modalPanel panel">
 		<span class="btnResume button menuButton" onClick="SetPaused(false); XNACall('hud.ResumeGame()');">Resume Game</span>
+		<span class="btnSave button menuButton" onclick="XNACall('xna.Save()');">Save</span>
 		<span class="btnMainMenu button menuButton" call="hud.ForfeitGame();  xna.PopulateScenarioList();" onClick="XNACall($(this));">Main Menu</span>
 		<span class="btnExit button menuButton" call="xna.Exit()" onClick="XNACall($(this));">Exit Game</span>
 	</div>

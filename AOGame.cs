@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -18,6 +19,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using ProjectMercury;
 using ProjectMercury.Renderers;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
@@ -32,7 +36,6 @@ namespace AsteroidOutpost
 	/// </summary>
 	public class AOGame : Game
 	{
-
 		#region user32 SetWindowPos
 
 		[DllImport("user32.dll", EntryPoint = "SetWindowPos")]
@@ -230,6 +233,7 @@ namespace AsteroidOutpost
 			JSObject jsXNA = awesomium.WebView.CreateGlobalJavascriptObject("xna");
 			jsXNA.Bind("StartWorld", false, StartWorld);
 			jsXNA.Bind("PopulateScenarioList", false, PopulateScenarioList);
+			jsXNA.Bind("Save", false, Save);
 			jsXNA.Bind("Exit", false, Exit);
 			jsXNA.Bind("PlaySound", false, PlaySound);
 
@@ -240,6 +244,42 @@ namespace AsteroidOutpost
 
 			//awesomium.WebView.Source = @"..\UI\MainMenu.html".ToUri();
 			awesomium.WebView.Source = (Environment.CurrentDirectory +  @"\..\data\HUD\MainMenu.html").ToUri();
+		}
+
+
+		private void Save(object sender, JavascriptMethodEventArgs e)
+		{
+			DirectoryInfo savePath = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Asteroid Outpost");
+			if (!savePath.Exists)
+			{
+				savePath.Create();
+			}
+
+
+			FileInfo saveFileInfo = new FileInfo(savePath + "\\AO " + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + ".sav");
+			var saveFile = new JsonTextWriter(new StreamWriter(new DeflateStream(saveFileInfo.Create(), CompressionMode.Compress)));
+
+#if DEBUG
+			var settings = new JsonSerializerSettings()
+			{
+				ContractResolver = new CustomContractResolver(),
+				Formatting = Formatting.Indented
+			};
+#else
+			var settings = new JsonSerializerSettings()
+			{
+				ContractResolver = new CustomContractResolver()
+			};
+#endif
+
+			saveFile.WriteStartObject();
+			saveFile.WritePropertyName("Profile");
+			saveFile.WriteRawValue(JsonConvert.SerializeObject(ActiveProfile, settings));
+			saveFile.WritePropertyName("World");
+			saveFile.WriteRawValue(JsonConvert.SerializeObject(world, settings));
+			saveFile.WriteEndObject();
+
+			saveFile.Close();
 		}
 
 
@@ -257,10 +297,7 @@ namespace AsteroidOutpost
 
 		private void PopulateScenarioList(object sender, JavascriptMethodEventArgs javascriptMethodEventArgs)
 		{
-			foreach (var availableScenarioName in ActiveProfile.GetAvailableScenarios())
-			{
-				ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "AddScenario(\"{0}\")", availableScenarioName));
-			}
+			ExecuteAwesomiumJS(String.Format(CultureInfo.InvariantCulture, "createMap({0})", JsonConvert.SerializeObject(ActiveProfile.progress)));
 		}
 
 

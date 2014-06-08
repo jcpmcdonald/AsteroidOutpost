@@ -136,6 +136,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomContractResolver.cs" />
     <Compile Include="Extensions\ColorEx.cs" />
     <Compile Include="Components\AIBasic.cs" />
     <Compile Include="Components\AIStrafe.cs" />
