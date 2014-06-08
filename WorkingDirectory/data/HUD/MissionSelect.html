@@ -33,7 +33,7 @@
 					width: scenario.width,
 					height: scenario.height,
 					"background-image": "url('images/missions/" + scenario.image + "')",
-				}).attr("scenarioName", scenario.scenario);
+				}).attr("scenarioName", scenario.scenarioName);
 
 				if (i > 0) {
 					// Draw a line between me and the next scenario
@@ -66,7 +66,6 @@
 			function selectMission(mission) {
 
 				if (selectedPlanet == null || mission[0] != selectedPlanet[0]) {
-					console.log("bleep");
 					if (typeof xna !== 'undefined') {
 						xna.PlaySound("select_forward");
 					}
@@ -127,9 +126,11 @@
 			});
 		}
 
+		// ##################################
+		// TEST DATA
 		var progress = [
 			{
-				scenario: "Tutorial",
+				scenarioName: "Tutorial",
 				description: "Learn how to fly",
 				complete: true,
 
@@ -140,7 +141,7 @@
 				height: 70,
 			},
 			{
-				scenario: "Mineral Grab",
+				scenarioName: "Mineral Grab",
 				description: "Gather some minerals",
 				complete: true,
 
@@ -151,7 +152,7 @@
 				height: 150,
 			},
 			{
-				scenario: "Super Station",
+				scenarioName: "Super Station",
 				description: "Do something cool",
 				complete: false,
 
@@ -162,9 +163,13 @@
 				height: 90,
 			}
 		];
+		// End Test Data
+		// ##################################
 
-		$(document).ready(function() {
-			createMap(progress);
+		$(document).ready(function () {
+			if (typeof xna === 'undefined') {
+				createMap(progress);
+			}
 		});
 	</script>
 </head>
